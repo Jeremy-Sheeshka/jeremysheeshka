@@ -1,0 +1,47 @@
+{
+  "title": "Colors",
+  "description": "Hex color codes that can be shared, cross-platform. They can be converted at point of usage, such as HSL for web or CMYK for print. neutral and vibrant colors are converted to color palettes, fixed colors are kept as they are",
+  "shades_neutral": [
+    {
+      "name": "Gray",
+      "value": "#6d6d6d"
+    }
+  ],
+  "shades_vibrant": [
+    {
+      "name": "Cinnabar",
+      "value": "#E54848"
+    },
+    {
+      "name": "Royal Blue",
+      "value": "#4862E5"
+    },
+    {
+      "name": "Mandy",
+      "value": "#E54867"
+    },
+    {
+      "name": "Bright Sun",
+      "value": "#F5CF38"
+    }
+  ],
+  "light_dark": [
+    {
+      "name": "Cinnabar",
+      "value": "#E54848"
+    },
+    {
+      "name": "Royal Blue",
+      "value": "#4862E5"
+    },
+    {
+      "name": "Mandy",
+      "value": "#E54867"
+    },
+    {
+      "name": "Bright Sun",
+      "value": "#F5CF38"
+    }
+  ],
+  "standalone": []
+}

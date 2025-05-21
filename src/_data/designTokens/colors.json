@@ -1,0 +1,218 @@
+{
+  "title": "Colors",
+  "description": "Hex color codes that can be shared, cross-platform. They can be converted at point of usage, such as HSL for web or CMYK for print. neutral and vibrant colors are converted to color palettes, fixed colors are kept as they are",
+  "items": [
+    {
+      "name": "Gray 100",
+      "value": "#f8f8f8"
+    },
+    {
+      "name": "Gray 200",
+      "value": "#e4e4e4"
+    },
+    {
+      "name": "Gray 300",
+      "value": "#aeaeae"
+    },
+    {
+      "name": "Gray 400",
+      "value": "#808080"
+    },
+    {
+      "name": "Gray 500",
+      "value": "#636363"
+    },
+    {
+      "name": "Gray 600",
+      "value": "#484848"
+    },
+    {
+      "name": "Gray 700",
+      "value": "#3a3a3a"
+    },
+    {
+      "name": "Gray 800",
+      "value": "#2e2e2e"
+    },
+    {
+      "name": "Gray 900",
+      "value": "#242424"
+    },
+    {
+      "name": "Cinnabar 100",
+      "value": "#fffaf9"
+    },
+    {
+      "name": "Cinnabar 200",
+      "value": "#ffd8d4"
+    },
+    {
+      "name": "Cinnabar 300",
+      "value": "#ffaaa2"
+    },
+    {
+      "name": "Cinnabar 400",
+      "value": "#fc837c"
+    },
+    {
+      "name": "Cinnabar 500",
+      "value": "#e34647"
+    },
+    {
+      "name": "Cinnabar 600",
+      "value": "#b81223"
+    },
+    {
+      "name": "Cinnabar 700",
+      "value": "#6e020e"
+    },
+    {
+      "name": "Cinnabar 800",
+      "value": "#351614"
+    },
+    {
+      "name": "Cinnabar 900",
+      "value": "#201413"
+    },
+    {
+      "name": "Royal Blue 100",
+      "value": "#f9fcff"
+    },
+    {
+      "name": "Royal Blue 200",
+      "value": "#d7e4ff"
+    },
+    {
+      "name": "Royal Blue 300",
+      "value": "#a9c2ff"
+    },
+    {
+      "name": "Royal Blue 400",
+      "value": "#87a5ff"
+    },
+    {
+      "name": "Royal Blue 500",
+      "value": "#5a78fc"
+    },
+    {
+      "name": "Royal Blue 600",
+      "value": "#3b51d3"
+    },
+    {
+      "name": "Royal Blue 700",
+      "value": "#1f2c7f"
+    },
+    {
+      "name": "Royal Blue 800",
+      "value": "#171f39"
+    },
+    {
+      "name": "Royal Blue 900",
+      "value": "#141721"
+    },
+    {
+      "name": "Mandy 100",
+      "value": "#fff9fa"
+    },
+    {
+      "name": "Mandy 200",
+      "value": "#ffd8db"
+    },
+    {
+      "name": "Mandy 300",
+      "value": "#ffa8b2"
+    },
+    {
+      "name": "Mandy 400",
+      "value": "#fb8291"
+    },
+    {
+      "name": "Mandy 500",
+      "value": "#e14464"
+    },
+    {
+      "name": "Mandy 600",
+      "value": "#b60f42"
+    },
+    {
+      "name": "Mandy 700",
+      "value": "#6c0123"
+    },
+    {
+      "name": "Mandy 800",
+      "value": "#34161a"
+    },
+    {
+      "name": "Mandy 900",
+      "value": "#201415"
+    },
+    {
+      "name": "Bright Sun 100",
+      "value": "#fdfcf6"
+    },
+    {
+      "name": "Bright Sun 200",
+      "value": "#eee5c6"
+    },
+    {
+      "name": "Bright Sun 300",
+      "value": "#d9c580"
+    },
+    {
+      "name": "Bright Sun 400",
+      "value": "#c6ab45"
+    },
+    {
+      "name": "Bright Sun 500",
+      "value": "#a78200"
+    },
+    {
+      "name": "Bright Sun 600",
+      "value": "#825e00"
+    },
+    {
+      "name": "Bright Sun 700",
+      "value": "#4b3400"
+    },
+    {
+      "name": "Bright Sun 800",
+      "value": "#272007"
+    },
+    {
+      "name": "Bright Sun 900",
+      "value": "#1a1810"
+    },
+    {
+      "name": "Cinnabar",
+      "value": "#E54848"
+    },
+    {
+      "name": "Cinnabar Subdued",
+      "value": "#d55b56"
+    },
+    {
+      "name": "Royal Blue",
+      "value": "#4862E5"
+    },
+    {
+      "name": "Royal Blue Subdued",
+      "value": "#4f68cf"
+    },
+    {
+      "name": "Mandy",
+      "value": "#E54867"
+    },
+    {
+      "name": "Mandy Subdued",
+      "value": "#d55b6e"
+    },
+    {
+      "name": "Bright Sun",
+      "value": "#F5CF38"
+    },
+    {
+      "name": "Bright Sun Subdued",
+      "value": "#eed066"
+    }
+  ]
+}

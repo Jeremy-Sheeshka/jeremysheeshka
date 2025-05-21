@@ -1,0 +1,39 @@
+---
+layout: base
+theme: bright-sun
+headerClass: row-1
+mainClass: row-1
+headerStyle: "--header-color-override: var(--color-gray-800);"
+---
+
+<header
+  class="section overflow-hidden full"
+  data-color="bright-sun"
+>
+  <div class="section__inner">
+    <div class="wrapper flow">
+      <div class="mascot" data-direction='rtl'>
+      <div class="flow region place-self-end text-gray-800" style="--region-space-top: var(--space-header-distance)">
+        <h1 class="fade-in-bottom">{{ title }}</h1>
+        <p class="flow-space-s">{{ description }}</p>
+      </div>
+      {% svg "mascot/blog" %}
+    </div>
+    </div>
+  </div>
+  {% svg 'divider/used-curve', null, 'seperator' %}
+</header>
+
+<div class="region">
+  <custom-masonry layout="50-50">
+		{% asyncEach item in pagination.items %}
+			{% include "partials/card-blog.njk" %}
+		{% endeach %}
+	</custom-masonry>
+
+  <!-- set collection to paginate -->
+  {% set collectionToPaginate = collections["blog_" + page.lang] %}
+  {% if collectionToPaginate.length > pagination.size %}
+    {% include 'partials/pagination.njk' %}
+  {% endif %}
+</div>

@@ -1,0 +1,12 @@
+---
+layout: base
+---
+
+<div class="region flow prose" style="--region-space-top: var(--space-xl-2xl)">
+  <h1 class="gradient-text">{{ title }}</h1>
+  {{ content | safe }}
+</div>
+
+{%- css "local" -%}
+  {%- include 'css/page.css' -%}
+{%- endcss -%}

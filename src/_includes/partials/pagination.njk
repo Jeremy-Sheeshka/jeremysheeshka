@@ -1,0 +1,44 @@
+{% set metaKey = metaKey | default("blog") %}
+
+<section class="region">
+  <nav role="navigation" aria-labelledby="pagination_label">
+    <span id="pagination_label" hidden>{{ translations[page.lang][metaKey].pagination.label }}</span>
+    <span id="prefix" hidden>{{ translations[page.lang][metaKey].pagination.page }}</span>
+    <ol class="pagination | cluster" role="list">
+      <li>
+        {% if pagination.href.previous %}
+          <a href="{{ pagination.href.previous }}">
+            {{ translations[page.lang][metaKey].pagination.previous }}
+          </a>
+        {% else %}
+          {{ translations[page.lang][metaKey].pagination.previous }}
+        {% endif %}
+      </li>
+      {% if meta[metaKey].paginationNumbers %}
+        {%- for pageEntry in pagination.pages -%}
+          <li>
+            <a
+              href="{{ pagination.hrefs[ loop.index0 ] }}"
+              id="link_{{ loop.index }}"
+              aria-labelledby="prefix link_{{ loop.index }}"
+              {% if page.url == pagination.hrefs[ loop.index0 ] %}aria-current="page"{% endif %}
+            >
+              {{ loop.index }}</a
+            >
+          </li>
+        {%- endfor -%}
+      {% endif %}
+      <li>
+        {% if pagination.href.next %}
+          <a href="{{ pagination.href.next }}">{{ translations[page.lang][metaKey].pagination.next }}</a>
+        {% else %}
+          {{ translations[page.lang][metaKey].pagination.next }}
+        {% endif %}
+      </li>
+    </ol>
+  </nav>
+</section>
+
+{% css "local" %}
+  {% include "css/pagination.css" %}
+{% endcss %}

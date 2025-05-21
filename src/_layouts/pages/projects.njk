@@ -1,0 +1,114 @@
+---
+layout: base
+theme: mandy
+headerClass: row-1
+mainClass: row-1
+---
+
+<header class="section overflow-hidden full" data-color="mandy">
+  <div class="section__inner">
+    <div class="wrapper flow">
+      <div class="mascot" data-direction="rtl">
+        <div class="flow region place-self-end" style="--region-space-top: var(--space-header-distance)">
+          <h1 class="fade-in-bottom">{{ title }}</h1>
+          <p class="flow-space-s">{{ lead }}</p>
+        </div>
+        {% svg "mascot/projects" %}
+      </div>
+    </div>
+  </div>
+  {% svg 'divider/used-tilt', null, 'seperator' %}
+</header>
+
+{% for project in projects %}
+  {% set i18n = project.translations[page.lang] %}
+  <article class="sidebar region items-start gutter-xl">
+    <div class="flow flow-space-xs vt-appear-bottom">
+      <div class="visual">
+        {% if loop.first %}
+          {% image project.image, i18n.alt or "", null, "eager" %}
+        {% else %}
+          {% image project.image, i18n.alt or "", null, "lazy" %}
+        {% endif %}
+      </div>
+
+      <!-- TODO: create a svg sprite sheet -->
+      <div class="meta | repel">
+        <ul role="list" class="cluster gutter-xs">
+          <h3 class="visually hidden">{{ translations[page.lang].a11y.tools }}</h3>
+          {% set uniqueId = project.name | slugify %}
+          {% for tool in project.tools %}
+            <li>
+              <div
+                popover="auto"
+                id="target-popover-{{ uniqueId }}-{{ loop.index }}"
+                class="target"
+                style="position-anchor: --anchor-btn-{{ uniqueId }}-{{ loop.index }}"
+              >
+                {{ (project.translations[page.lang][tool] or tools[page.lang][tool]) | markdownFormat | safe }}
+              </div>
+              <button
+                popovertarget="target-popover-{{ uniqueId }}-{{ loop.index }}"
+                id="anchor-popover-{{ uniqueId }}-{{ loop.index }}"
+                class="anchor icon-center"
+                style="anchor-name: --anchor-btn-{{ uniqueId }}-{{ loop.index }}"
+                data-sound-pop
+              >
+                {% svg 'tools/' + tool, tool, 'text-step-1' %}
+              </button>
+            </li>
+          {% endfor %}
+        </ul>
+
+        {% if project.collaboration %}
+          {% set partner = collaborators[project.collaboration] %}
+
+          <div
+            popover="auto"
+            data-direction="rtl"
+            id="target-popover-{{ uniqueId }}-{{ project.collaboration }}"
+            class="target"
+            style="position-anchor: --anchor-btn-{{ uniqueId }}-{{ project.collaboration }}"
+          >
+            <h3 class="visually hidden">{{ translations[page.lang].a11y.collaborations }}</h3>
+            {{ partner.description[page.lang] | markdownFormat | safe }}
+
+            <p>
+              <a href="{{ partner.url }}" rel="noopener"
+                >{{ partner.url | replace("https://www.", "") | replace("https://", "") }}</a
+              >
+            </p>
+          </div>
+
+          <button
+            popovertarget="target-popover-{{ uniqueId }}-{{ project.collaboration }}"
+            id="anchor-popover-{{ uniqueId }}-{{ project.collaboration }}"
+            class="anchor"
+            style="anchor-name: --anchor-btn-{{ uniqueId }}-{{ project.collaboration }}"
+            data-sound-pop
+          >
+            {% svg 'collaborators/' + project.collaboration, partner.name, 'text-step-0' %}
+          </button>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="description flow relative">
+      <h2 class="text-step-1">{{ project.name }}</h2>
+      {{ i18n.about | markdownFormat | safe }}
+      <div class="text-step-min-1">{{ i18n.peculiarities | markdownFormat | safe }}</div>
+
+      <a class="button no-indicator" href="{{ project.clientURL }}" rel="noopener" data-funky-button
+        >{{ project.clientURL | replace("https://www.", "") | replace("https://", "") }}</a
+      >
+    </div>
+  </article>
+{% endfor %}
+{% set show_cta = true %}
+{% include 'partials/cta.njk' %}
+
+{%- css "local" -%}
+  {%- include 'css/projects.css' -%}
+  {%- include 'css/anchor.css' -%}
+  {%- include 'css/view-transitions.css' -%}
+{%- endcss -%}

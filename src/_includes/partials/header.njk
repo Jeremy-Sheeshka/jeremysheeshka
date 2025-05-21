@@ -1,0 +1,19 @@
+<header class="wrapper {{ headerClass }}" {% if headerStyle %}style="{{ headerStyle }}"{% endif %}>
+  <a href="#main" class="skip-link">{{ translations[page.lang].a11y.skipMain }}</a>
+
+  <div class="repel ontop gutter-s row-1">
+    <a href="/{{ page.lang }}/" class="logo | cluster" {{ indicateActive }}>
+      <span class="font-display font-bold uppercase">{{ meta.siteName }}</span>
+    </a>
+    {% include "partials/main-nav.njk" %}
+  </div>
+
+  <div class="settings | full cluster gutter-s row-1 justify-self-end ontop">
+    {% include "partials/switch-theme.njk" %}
+    {% include "partials/switch-lang.njk" %}
+  </div>
+</header>
+
+{% js "defer" %}
+  {% include "scripts/sounds.js" %}
+{% endjs %}

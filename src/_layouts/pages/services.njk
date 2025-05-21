@@ -1,0 +1,37 @@
+---
+layout: base
+theme: royal-blue
+headerClass: row-1
+mainClass: row-1
+headerStyle: '--header-color-override: var(--color-gray-100);'
+---
+
+<header class="section overflow-hidden full" data-color="royal-blue">
+  <div class="section__inner">
+    <div class="wrapper flow">
+      <div class="mascot" data-direction="rtl">
+        <div
+          class="flow region place-self-end text-gray-100"
+          style="--region-space-top: var(--space-header-distance)"
+        >
+          <h1 class="fade-in-bottom">{{ title }}</h1>
+          <p class="flow-space-s">{{ lead }}</p>
+        </div>
+        {% svg "mascot/whatido" %}
+      </div>
+    </div>
+  </div>
+  {% svg 'divider/used-curve', null, 'seperator' %}
+</header>
+
+<article class="region">
+  <dl class="grid mt-l-xl gutter-xl" data-layout="thirds">
+    {% for tool in whatido[page.lang] %}
+      <div class="flow flow-space-l wrapper:text-center">
+        {% svg 'whatido/' + tool.key, null, 'text-step-4' %}
+        <dt class="text-step-1 font-display font-bold">{{ tool.title }}</dt>
+        <dd class="flow-space-s">{{ tool.summary | markdownFormat | safe }}</dd>
+      </div>
+    {% endfor %}
+  </dl>
+</article>

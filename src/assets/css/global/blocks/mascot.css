@@ -1,0 +1,102 @@
+/* mascot grid */
+
+.mascot {
+  grid-column: content;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: var(--space-l);
+}
+
+.mascot[data-direction='rtl'] {
+  grid-template-columns: 2fr 1fr;
+}
+
+@media screen(md) {
+  .mascot[data-direction='rtl'] {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media screen(wrapper) {
+  .mascot {
+    grid-column: content;
+  }
+}
+
+/* mascot grid settings per layout */
+
+@media screen(ltsm) {
+  :is(.projects, .blog, .services) .mascot div {
+    grid-column: 1 / -1;
+  }
+}
+
+/* mascot svg */
+
+.mascot svg {
+  inline-size: auto;
+  block-size: 100%;
+  height: auto;
+  width: clamp(10rem, 33vw, 30rem);
+  place-self: end;
+  z-index: 1;
+}
+
+.home .mascot.projects svg {
+  scale: 1.8;
+  translate: -25% -25%;
+}
+
+.cta .mascot svg {
+  scale: 1.7;
+  translate: 30% -10%;
+}
+
+:is(.projects, .blog, .services) .mascot svg {
+  grid-column: 1 / -1;
+}
+
+.services .mascot svg {
+  scale: -1.5 1.5;
+  translate: 0 var(--space-l);
+}
+
+.projects .mascot svg {
+  scale: 1.5;
+  translate: 0 var(--space-s);
+}
+
+.blog .mascot svg {
+  scale: 1.6;
+  translate: 0 var(--space-m);
+}
+
+@media screen(sm) {
+  .home .mascot.projects svg {
+    scale: 1.1;
+    translate: -10% 5%;
+  }
+
+  .cta .mascot svg {
+    scale: 1.1;
+    translate: -10% 5%;
+  }
+
+  :is(.projects, .blog, .services) .mascot svg {
+    scale: 1;
+    grid-column: 2;
+  }
+
+  .services .mascot svg {
+    scale: -1 1;
+    translate: 0 calc(var(--space-2xl) * 1.2);
+  }
+
+  .projects .mascot svg {
+    translate: 0 calc(var(--space-2xl) * 1.1);
+  }
+
+  .blog .mascot svg {
+    translate: 0 calc(var(--space-2xl) * 1.3);
+  }
+}

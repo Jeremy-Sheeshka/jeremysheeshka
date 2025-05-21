@@ -1,0 +1,55 @@
+---
+layout: base
+theme: bright-sun
+schema: BlogPosting
+---
+
+<div class="full region wrapper flow prose region-space-2xl">
+  <h1 class="gradient-text">{{ title }}</h1>
+
+  <dl class="cluster gutter-3xs text-step-min-1">
+    {%- if draft -%}<span class="text-step-min-1 text-cinnabar-500 font-regular">[draft]</span>{%- endif %}
+    {% set definedDate = date %}
+    <dt>{{ translations[page.lang].blog.published | capitalize }}</dt>
+    <dd>{% include "partials/date.njk" %}</dd>
+
+    {% if lastEdit %}
+      {% set definedDate = lastEdit %}
+      <dt>{{ translations[page.lang].blog.edited | capitalize }}</dt>
+      <dd>{% include "partials/date.njk" %}</dd>
+    {% endif %}
+
+    <dt>{{ translations[page.lang].blog.reading | capitalize }}</dt>
+    <dd>{{ content | readingTime }} {{ translations[page.lang].blog.unit }}</dd>
+  </dl>
+
+  {% if image %}
+    {% image image, alt or "", credit, "eager", "feature" %}
+  {% endif %}
+  {{ content | safe }}
+  {% include 'partials/edit-on.njk' %}
+</div>
+
+<!--  h-card infos: https://indieweb.org/authorship -->
+<div hidden class="h-entry">
+  <a class="u-url" href="{{ page.url | url | absoluteUrl(meta.url) }}">{{ title }}</a>
+  <a class="p-name u-url" rel="author" href="{{ meta.url }}">{{ meta.author.name }}</a>
+  <img
+    eleventy:ignore
+    class="u-author h-card"
+    src="{{ meta.author.avatar | url | absoluteUrl(meta.url) }}"
+    alt="{{ meta.author.name }}"
+  />
+</div>
+
+{% set webmentionUrl %}{{ page.url | url | absoluteUrl(meta.url) }}{% endset %}
+{% include "partials/webmentions.njk" %}
+{% include 'partials/cta.njk' %}
+
+{%- css "local" -%}
+  {%- include 'css/post.css' -%}
+  {%- include 'css/table.css' -%}
+  {%- include 'css/forms.css' -%}
+  {%- include 'css/webmentions.css' -%}
+  {%- include 'css/footnotes.css' -%}
+{%- endcss -%}

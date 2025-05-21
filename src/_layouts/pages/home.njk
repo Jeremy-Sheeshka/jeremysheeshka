@@ -1,0 +1,78 @@
+---
+layout: base
+theme: cinnabar
+headerClass: row-1
+mainClass: row-1
+---
+
+<header class="hero | relative">
+    <div class="welcome">
+        <h1 class="fade-in-bottom text-step-3">
+          {{ hero.title }}
+        </h1>
+    </div>
+    <div class="intro">
+      <div class="column">
+        {{ hero.intro }}
+      </div>
+    </div>
+    {% image hero.image, hero.alt, null, "eager" %}
+    {% svg "misc/arrow", null, "arrow whimsical-hi" %}
+    <div class="thisisme whimsical-hi">{{ hero.hi }}</div>
+</header>
+
+<article class="full region region-space-2xl">
+  <div class="wrapper flow prose">
+    <h2>{{ about.title }}</h2>
+    <div class="column flow prose">
+      {{ content | safe }}
+    </div>
+  </div>
+</article>
+
+<article
+  class="full section overflow-hidden" data-color="royal-blue">
+  {% svg "divider/used-curve", null, "seperator" %}
+  <div class="section__inner">
+    <div class="wrapper flow">
+      <div class="mascot projects">
+      {% svg "mascot/home-projects" %}
+      <div class="flow region pr-l text-gray-100">
+        <h2>{{ projects.title }}</h2>
+        <p>{{ projects.teaser }}</p>
+        <p>
+          <a href="{{ projects.goal }}" class="button" data-funky-button>{{ projects.button }}</a>
+        </p>
+      </div>
+    </div>
+    </div>
+  </div>
+</article>
+
+<section class="full | region">
+  <div class="wrapper flow prose">
+    <h2>{{ blog.title }}</h2>
+
+    {% if blog.intro %}
+      <p>{{ blog.intro }}</p>
+    {% endif %}
+
+    <div class="feature |  region region-space-l">
+      <custom-masonry layout="50-50">
+        {% set itemList = collections["blog_" + page.lang] | categoryFilter("blogpost") %}
+        {% asyncEach item in itemList.slice(0, 4) %}
+          {% set headingLevel = "h3" %}
+          {% include "partials/card-blog.njk" %}
+        {% endeach %}
+      </custom-masonry>
+    </div>
+  </div>
+</section>
+
+{% set show_cta = true %}
+{% include 'partials/cta.njk' %}
+
+{%- css "local" -%}
+  {%- include 'css/home.css' -%}
+  {%- include 'css/column.css' -%}
+{%- endcss -%}

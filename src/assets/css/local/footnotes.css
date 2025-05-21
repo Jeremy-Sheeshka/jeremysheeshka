@@ -1,0 +1,29 @@
+.footnotes {
+  font-size: var(--size-step-min-1);
+}
+
+.footnote-ref {
+  font-size: var(--size-step-min-2);
+  vertical-align: super;
+  margin-inline-start: 0.1ch;
+  color: var(--color-text-accent);
+}
+
+.footnote-ref a {
+  text-decoration: none;
+  padding: 0.3ch;
+  border-radius: 50%;
+  background-color: var(--color-accent);
+  font-weight: var(--font-bold);
+}
+
+.footnote-backref {
+  text-decoration: none;
+  background-color: var(--color-bg-accent);
+  border-radius: var(--border-radius-medium);
+  padding-inline: var(--space-xs);
+}
+
+.footnote-backref:hover {
+  color: var(--color-accent);
+}

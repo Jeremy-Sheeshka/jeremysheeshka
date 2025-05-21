@@ -1,0 +1,24 @@
+<div class="details flow">
+  <div class="control | cluster" aria-label="{{ translations[page.lang].details.aria }}">
+    <button id="expandAll" class="button" data-small-button>
+      {{ translations[page.lang].details.expand }}
+    </button>
+    <button id="collapseAll" class="button" data-small-button>
+      {{ translations[page.lang].details.collapse }}
+    </button>
+  </div>
+  {%- for item in itemList | alphabetic(items, 'summary') -%}
+    <details id="{{ item.summary | slugify }}">
+      <summary>{{ item.summary }}</summary>
+      {{- item.contents | markdownFormat | safe -}}
+    </details>
+  {%- endfor -%}
+</div>
+
+{% css "local" %}
+  {% include "css/details.css" %}
+{% endcss %}
+
+{% js "defer" %}
+  {% include "scripts/details.js" %}
+{% endjs %}
