@@ -9,13 +9,6 @@ import {splitStrings} from './filters/split-strings.js';
 import {splitlines} from './filters/splitlines.js';
 import {striptags} from './filters/striptags.js';
 import {slugifyString} from './filters/slugify.js';
-import {
-  webmentionGetForUrl,
-  webmentionSize,
-  webmentionByType,
-  webmentionisOwn,
-  webmentionSort
-} from './filters/webmentions.js';
 
 export default {
   categoryFilter,
@@ -30,9 +23,5 @@ export default {
   sortAlphabetically,
   splitStrings,
   slugifyString,
-  webmentionGetForUrl,
-  webmentionSize,
-  webmentionByType,
-  webmentionisOwn,
-  webmentionSort
+
 };

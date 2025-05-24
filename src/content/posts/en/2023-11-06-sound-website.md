@@ -1,150 +1,103 @@
 ---
-title: 'Recording, editing and integrating a sound for a click event'
-description: "Whimsical interaction sounds have found their back into personal websites in recent years, and I think that's wonderful."
+title: 'Task 1: Critical comparison of different research discovery tools'
+description: "A comparison of different research discovery tools including ChatGPT, UBC Library, and Google Scholar"
 category: blogpost
-key: 'audioswitch'
-date: 2023-11-06
-lastEdit: 2025-04-04 17:30:00
+key: 'ETEC 500'
+date: 2025-05-23
+lastEdit: 
 ---
+For this assignment, I chose to critically compare the results of generative AI (specifically ChatGPT) with those of the University of British Columbia’s library database and Google Scholar as research discovery tools. The focus of the research I sought was on how technology can support Indigenized music education content in elementary schools. I specifically selected this topic because I felt it is both relevant and directly applicable to my current practice as a non-Indigenous music educator working predominantly in Indigenous elementary school contexts situated on the traditional territory of the Tsimshian Nation. In addition to this topic being place-based for me, I believe that the scope of this question, including the broader efforts of educators to decolonize educational spaces and authentically incorporate Indigenous knowledge into curriculum-based practices, is important, especially as it relates to the use of digital tools in educational contexts.
 
-Who remembers the times when music or other nasty sounds randomly started playing as soon as you visited a website? I remember making sure to turn the speakers down before I went online (yes, I also remember consciously switching the internet on and off. That was expensive).
+## Experiences with Research Tools
+I began my inquiry by carefully considering the wording of the prompt I gave to ChatGPT. I wanted to be specific enough to get relevant results, but also broad enough to generate more than I needed in order to have options to choose from. I started with the prompt: “Give me a list of 10 recent and peer-reviewed academic research journals on the topic of how technology can support Indigenized music education content in elementary schools. Format the results in 7th Edition APA Style.”
 
-For a long time it was frowned upon to play any unsolicited sounds. The user rightfully should be in control to consciously play anything that triggers any kind of sound and moving image. Nevertheless, whimsical interaction sounds have found their back into personal websites in recent years, and I think that's wonderful. My site also makes a (hopefully) subtle sound in two places, namely when you switch between light and dark theme, and when you change the language. I'll explain below how you can implement a sound yourself that has a click event as a trigger.
+The results provided enough options for me to choose from, but they they required some filtering on my part. Not all of the sources included all three elements I desired: Indigenous content, technology, and music education. Although I felt my prompt was clear, it took several iterations of asking for more results before I was satisfied with the content provided. Initially, I thought the process was time-efficient and productive, but I later had second thoughts about using ChatGPT as a research discovery tool when I found that some of the DOI links it provided didn’t work, and the accuracy of the APA citations was questionable. In the end, these were the titles of the sources I selected from ChatGPT for this assignment:
 
-## Record your sound
+  Sources Suggested by ChatGPT:
+    • Walking Carefully Towards Bridging the Gap
+    • The Impact of New Technologies on the Musical Learning of Indigenous Australian Children
+    • ICT and Music Technology During COVID-19
+    • Employing Mobile Learning in Music Education
+    • On Embedding Indigenous Musics in Schools
 
-That's easy! Nowadays we always have a sound recorder with us. So I stand next to my old light switch and record its crackling sound with my phone.
+Next, I turned to UBC’s library search engine to find sources related to my research question. I used the "peer-reviewed" filter and experimented with various keyword combinations until I got results that I could work with. My search process looked like this:
 
-{% image "./src/assets/images/blog/wall.jpg", "A white wall with an old push-button switch", "My light switch, which was used for my theme switcher sound (Yes, I was standing there recording my light switch). So in a way, you actually switch my light on and off." %}
+    1. "digital tools Indigenous music elementary education" – 0 results
+    2. "technology Indigenous music elementary" – 6 results
+    3. "Indigenous music education digital tool" – 17 results
+    4. "technology Indigenous education music" – 109 results
 
-Now send the sound to your computer, and here we have to cut it up. A free and easy-to-use tool is _Audacity_.
+Unlike ChatGPT, finding relevant results using UBC’s library required more effort, especially at first. After identifying two appropriate sources, I continued my search using Google Scholar.
 
-## Install and use Audacity
+I began with the search term: “technology Indigenous education music,” which yielded a vast array of results. Because Google Scholar does not offer a peer-reviewed filter, I manually sifted through various pages to find credible, peer-reviewed sources relevant to my question. In the end, I chose these five sources from Google Scholar and UBC’s library:
 
-My system runs on Ubuntu, I installed it via snap store:
+   Sources I Selected:
+    • Digilogue Zone
+    • Micro-Level Language Planning and YouTube Comments
+    • Shifting from Offline to Online Collaborative Music-Making, Teaching and Learning
+    • Sharing Indigenous Knowledge Through Intergenerational Digital Storytelling
+    • Music and Performance Arts of Taiwan’s Indigenous Peoples
 
-```bash
-sudo apt update
-sudo apt install snapd
-sudo snap install audacity
-```
+## Comparing and Analyzing the Results
+This research exercise revealed several key differences between the discovery tools I used. While my research question was thoughtful and relevant to my practice, I found that its complexity, requiring the integration of music education, technology, and Indigenous cultural content, was somewhat difficult for generative AI to fully grasp. One issue I encountered with ChatGPT was its tendency to offer sources that lacked one or more essential elements of my query (e.g., focusing on music and technology but omitting Indigenous perspectives). Another trend I noticed was a limited cultural scope of the generative AI as three of the sources I ended up choosing were Australian in origin.
 
-You can find the downloads for all operating systems on their website: https://www.audacityteam.org/download/
+Despite these limitations, I was pleased to see names of former mentors appear in ChatGPT’s suggestions, both of whom are leaders in this field: Dr. Anita Prest (Associate Professor of Music Education at UVic) and Dr. Scott Goble (Associate Professor and Chair of Music Education at UBC).
 
-Once you have Audacity running, drag your audio file into the editing window. In my case I got an `.ogg` file from my mobile phone.
+In contrast, UBC’s library produced sources with greater cultural and academic depth, though many were slightly older and not always directly aligned with the criteria of my research topic. Still, the academic integrity, cultural depth, and comprehensive nature of these sources gave them value.
 
-{% image "./src/assets/images/blog/audacity.jpg", "Audacity interface with the sound file loaded", "The Audacity interface looks a bit busy, but you don't need most of the stuff" %}
+Google Scholar, for me, represented a productive middle ground between the other two discovery tools for my research topic. While it required manual sorting to find peer-reviewed and culturally relevant sources, the content offered felt more contemporary and aligned with the intersection of technology, Indigenous-focus, and music education which I desired.
 
-Now you can select an area for your audio clip and then separate it from the rest of the file via "Edit" > "Clip Boundaries" > "Split".
+## Final Reflection
+This process illuminated both the advantages and limitations of generative AI in academic research and highlighted the comparative value and use cases of traditional discovery tools for me. While ChatGPT provided a useful starting point, the sources I found through UBC’s library and Google Scholar ultimately aligned more closely with the depth and contemporary cultural relevance I sought. As one of the first assignments of the UBC’s MET program I have encountered, this experience has influenced the way in which I approach research moving forward, particularly when exploring interdisciplinary or culturally sensitive topics.  
 
-You now have three areas.
 
-{% image "./src/assets/images/blog/audacity-three-areas.jpg", "Audacity interface with the audio file split into three areas, the middle one is the selection we will export" %}
+{% image "./src/assets/images/blog/butzetrail.jpg", "Butze Rapids Trail in Prince Rupert BC" %}
 
-You can mark and delete the areas you don't want. Make sure that the sound starts quite quickly, as an audible delay after the click event does not seem natural.
 
-On the left side of the cutting area you can adjust the volume. My original sound is a bit too loud and intense for my taste, especially as you probably don't expect the action to trigger an audible sound. Adjust it down a bit until it sounds pleasant in relation to your normal volume for music playback (people don't turn down their speakers nowadays).
+{% asideReadmore %}## References
 
-You have some more effects available you can try, but I'm happy with my recording now.
+<br>
 
-Go to "File" > "Export" and select "Export as mp3". You will be asked for the save location and can add metadata.
+Akuno, E. A. (2018). Digilogue zone: Indigenous and contemporary media and technology in Higher Music Education in Kenya. Action, Criticism, and Theory for Music Education, 17(1), 81–96. https://doi.org/10.22176/act17.1.81 
 
-My file is 3.9kb in size.
+<br>
 
-## Better use .wav?
+Cru, J. (2018a). Micro-level language planning and YouTube comments: Destigmatising indigenous languages through rap music. Current Issues in Language Planning, 19(4), 434–452. https://doi.org/10.1080/14664208.2018.1468960 
 
-`.mp3` is smaller and good for long audio or streaming, but `.wav` might actually better for short UI sounds. It does have a better quality and no gap or latency. Export both and compare quality and file size - with very short sounds it often does not make much difference.
+<br>
 
-## Add the sound to your site
+Gibson, S.-J. (2021). Shifting from offline to online collaborative music-making, teaching and learning: Perceptions of ethno artistic mentors. Music Education Research, 23(2), 151–166. https://doi.org/10.1080/14613808.2021.1904865 
 
-For this to work you don't need a static site generator (a tool that creates web pages in advance, making them faster and more secure, as they don't rely on server-side processing), you can just put your sound in a folder of your choice.
+<br>
 
-In my project I add `light-on.mp3` to a folder located in `src/assets/sounds`.
+Hausknecht, S., Freeman, S., Martin, J., Nash, C., & Skinner, K. (2021). Sharing indigenous knowledge through intergenerational digital storytelling: Design of a workshop engaging elders and youth. Educational Gerontology, 47(7), 285–296. https://doi.org/10.1080/03601277.2021.1927484 
 
-I built this website with [Eleventy](https://www.11ty.dev/), and I need a build step that transfers everything from my input folder to the output folder.
+<br>
 
-I use [Passthrough File Copy](https://www.11ty.dev/docs/copy/) in my [Eleventy config file](/en/blog/organizing-the-eleventy-config-file/) to ensure that the folder and its contents are copied.
+Joseph, D., & Merrick, B. (2023). Walking carefully towards bridging the gap: Exploring Australian music educator voices about teaching Indigenous Music. Australian Journal of Teacher Education, 48(7). https://doi.org/10.14221/1835-517x.6457 
 
-```js
-eleventyConfig.addPassthroughCopy('src/assets/sounds/');
-```
+<br>
 
-In your HTML you must define the area to listen for the click. In my case, that's a `button` next to my name and navigation.
+Kirkwood, S., & Miller, A. (2014). The impact of new technologies on musical learning of indigenous Australian children. Australasian Journal of Early Childhood, 39(1), 94–101. https://doi.org/10.1177/183693911403900113 
 
-```html
-<button type="button" data-sound-switch>
-  <!-- svg icon, for example -->
-</button>
-```
+<br>
 
-## Using the HTMLAudioElement: Audio() constructor
+Lu, L.-S., & Lin, C.-L. (2023). Music and Performance Arts of Taiwan’s indigenous peoples: Review of existing development and proposal for integration with Digital Technology. Lecture Notes in Computer Science, 297–308. https://doi.org/10.1007/978-3-031-34732-0_23 
 
-As part of a theme switch, the relevant part in the JavaScript is:
+<br>
 
-```js
-let switchSound;
+Merrick, B., & Joseph, D. (2022). ICT and music technology during COVID-19: Australian music educator perspectives. Research Studies in Music Education, 45(1), 189–210. https://doi.org/10.1177/1321103x221092927 
 
-document.addEventListener('DOMContentLoaded', () => {
-  switchSound = new Audio('/assets/sounds/light-on.mp3');
-  switchSound.load();
-});
+<br>
 
-const onClick = () => {
-  if (switchSound) {
-    switchSound.play();
-  }
-};
+Ouyang, M. (2022). Employing mobile learning in music education. Education and Information Technologies, 28(5), 5241–5257. https://doi.org/10.1007/s10639-022-11353-5 
 
-window.onload = () => {
-  document.querySelector('[data-sound-switch]').addEventListener('click', onClick);
-};
-```
+<br>
 
-The first line declares a variable called `switchSound` without initializing it. Being defined at a higher scope it can be accessed by different parts of the code. We then listen for the `DOMContentLoaded` event, which is fired when the HTML document has been completely loaded and parsed, but external resources like stylesheets and images may not have been fully loaded yet. This is to make sure that the loading of the sound does not block any important assets.
+Prest, A., Goble, J. S., & Vazquez-Cordoba, H. (2022). On embedding indigenous musics in schools: Examining the applicability of possible models to one school district’s approach. Update: Applications of Research in Music Education, 41(2), 60–69. https://doi.org/10.1177/87551233221085739 
 
-Within the event listener for `DOMContentLoaded`, I create the new `Audio` object and assign it to the `switchSound` variable. The actual playing of the sound (using the `HTMLMediaElement` `play()` method) - takes place in the function expression `onClick`.
 
-The `load` event for the `window` object is triggered when the entire page, including styles, images and other resources, is loaded. It is available via the `onload` property.
-I make it listen for clicks on the `button` with an `attr` of `data-sound-switch`.
 
-## Using the Web Audio API
 
-The above code works fine for basic needs - Web Audio API allows for better better performance and control.
+{% endasideReadmore %}
 
-```js
-document.addEventListener('DOMContentLoaded', async () => {
-  const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-  let switchBuffer = null;
-
-  async function loadSwitchSound() {
-    const response = await fetch('/assets/sounds/light-on.mp3');
-    const arrayBuffer = await response.arrayBuffer();
-    switchBuffer = await audioContext.decodeAudioData(arrayBuffer);
-  }
-
-  await loadSwitchSound();
-
-  function playSwitch() {
-    if (!switchBuffer) return;
-    const source = audioContext.createBufferSource();
-    source.buffer = switchBuffer;
-    source.connect(audioContext.destination);
-    source.start(0);
-  }
-
-  document.querySelector('[data-sound-switch]')?.addEventListener('click', () => {
-    if (audioContext.state === 'suspended') {
-      audioContext.resume();
-    }
-    playSwitch();
-  });
-});
-```
-
-Instead of creating a new `Audio` object each time, we fetch and decode the `.mp3` file once and store the decoded audio in `switchBuffer`. `AudioContext` gives us sample-level control over audio playback. This means it exposes audio as raw digital data, actual waveforms: Now we can do thigs like fading in and out, control volume, change playback speed, etc. [Look into the mdn docs](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API) to see what's possible. To control the volume, we can do this:
-
-```js
-const gainNode = audioContext.createGain()
-gainNode.gain.value = 0.5
-source.connect(gainNode).connect(audioContext.destination)
-```

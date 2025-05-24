@@ -18,7 +18,7 @@ projects:
   goal: '/en/projects/'
   button: 'Projects'
 about:
-  title: About the way I work
+  title: About my approach 
 blog:
   title: 'Blog'
   intro: "I'm writing about things related to music, education, technology and things I have learned that I want to share."
@@ -28,19 +28,4 @@ cta:
   lead: "Feel free to reach out to me at [hello@jeremysheeshka.ca](mailto:hello@jeremysheeshka.ca) whether you have a project in mind, an opportunity to share, or just want to connect. I'm always happy to chat."
 ---
 
-I design and build fast, accessible websites from scratch — no templates, no shortcuts — using clean, reliable code shaped by my background in music, guitar, and education. Just like in jazz, I value structure, clarity, and flow, whether I’m helping someone navigate a learning platform, share their creative work, or explore new technologies for teaching and music-making. My goal is to make tools that are intuitive, sustainable, and genuinely helpful for learners, educators, and artists alike.
-
-<!-- 
-
-I make sure that a website is fast and loads only what is necessary. Everyone should be able to find their way around immediately and a website should be ==accessible and usable for as many people as possible.==
-
-I do not create websites based on premade templates/themes and I do not use website builders. I plan, design and program all websites from scratch, usually using a foundation (“starter”) I have developed for the basics.
-
-This approach has various advantages:
-
-1. No image is too big, no code is too much - and the website runs error-free and extremely fast.
-2. I am independent of third parties, both from persons or external code: I react to problems and necessary updates myself.
-3. I create semantically structured websites with human-written, approachable contents that are highly discoverable without the need for additional SEO efforts.
-4. Truly, we can realize almost anything you can imagine!
-
--->
+I consider my approach to music, education, and technology to be human-centric; placing people, their goals, and their needs at the forefront of my practice. This philosophy guides my designs decisions, and informs my practice towards developing meaningful experiences and responsive applications of technology. Whether I’m helping someone navigate a learning platform, sharing a creative project, or supporting others in using technology, I aim to to make the process intuitive, sustainable, and genuinely helpful for learners, educators, and artists alike.

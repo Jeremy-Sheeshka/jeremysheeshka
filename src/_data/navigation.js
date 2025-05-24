@@ -18,16 +18,7 @@ export default {
         url: '/en/blog/'
       }
     ],
-    bottom: [
-      {
-        text: 'Imprint',
-        url: '/en/imprint/'
-      },
-      {
-        text: 'Privacy',
-        url: '/en/privacy/'
-      }
-    ]
+  
   },
 
   es: {

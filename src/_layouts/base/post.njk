@@ -27,10 +27,9 @@ schema: BlogPosting
     {% image image, alt or "", credit, "eager", "feature" %}
   {% endif %}
   {{ content | safe }}
-  {% include 'partials/edit-on.njk' %}
+ 
 </div>
 
-<!--  h-card infos: https://indieweb.org/authorship -->
 <div hidden class="h-entry">
   <a class="u-url" href="{{ page.url | url | absoluteUrl(meta.url) }}">{{ title }}</a>
   <a class="p-name u-url" rel="author" href="{{ meta.url }}">{{ meta.author.name }}</a>
@@ -41,15 +40,12 @@ schema: BlogPosting
     alt="{{ meta.author.name }}"
   />
 </div>
-
-{% set webmentionUrl %}{{ page.url | url | absoluteUrl(meta.url) }}{% endset %}
-{% include "partials/webmentions.njk" %}
 {% include 'partials/cta.njk' %}
 
 {%- css "local" -%}
   {%- include 'css/post.css' -%}
   {%- include 'css/table.css' -%}
   {%- include 'css/forms.css' -%}
-  {%- include 'css/webmentions.css' -%}
+
   {%- include 'css/footnotes.css' -%}
 {%- endcss -%}

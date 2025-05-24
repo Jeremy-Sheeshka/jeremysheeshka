@@ -1,7 +1,0 @@
-{% if meta.viewRepo.allow %}
-  <hr />
-  <p class="text-step-min-1">
-    {{ translations[page.lang].blog.githubEdit }}
-    <a href="{{ pkg.repository.url | url | replace('.git', '/tree/main/') }}{{ page.inputPath }}">GitHub</a>.
-  </p>
-{% endif %}

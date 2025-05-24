@@ -55,7 +55,6 @@ export default async function (eleventyConfig) {
   eleventyConfig.addPlugin(plugins.drafts);
 
   eleventyConfig.addPlugin(plugins.EleventyRenderPlugin);
-  eleventyConfig.addPlugin(plugins.rss);
   eleventyConfig.addPlugin(plugins.syntaxHighlight);
 
   eleventyConfig.addPlugin(plugins.webc, {
@@ -103,12 +102,16 @@ export default async function (eleventyConfig) {
   eleventyConfig.addFilter('alphabetic', filters.sortAlphabetically);
   eleventyConfig.addFilter('split', filters.splitStrings);
   eleventyConfig.addFilter('slugify', filters.slugifyString);
-  eleventyConfig.addFilter('webmentionGetForUrl', filters.webmentionGetForUrl);
-  eleventyConfig.addFilter('webmentionSize', filters.webmentionSize);
-  eleventyConfig.addFilter('webmentionByType', filters.webmentionByType);
-  eleventyConfig.addFilter('webmentionisOwn', filters.webmentionisOwn);
-  eleventyConfig.addFilter('webmentionSort', filters.webmentionSort);
 
+
+  // Custom filter to fix "filter not found: absoluteUrl" error
+  eleventyConfig.addFilter("absoluteUrl", function (url, base) {
+    if (!url) return "";
+    if (url.startsWith("http")) return url;
+    return base ? base + url : url;
+  });
+
+  
   // --------------------- Shortcodes
   eleventyConfig.addPairedShortcode('asideInfo', shortcodes.asideInfo);
   eleventyConfig.addPairedShortcode('asideReadmore', shortcodes.asideReadmore);
