@@ -6,7 +6,7 @@ key: 'ETEC 500'
 tags: ETEC 500
 date: 2025-05-23
 ---
-For this assignment, I chose to critically compare the results of generative AI (specifically ChatGPT) with those of the University of British Columbia’s library database and Google Scholar as research discovery tools. The focus of the research I sought was on how technology can support Indigenized music education content in elementary schools. I selected this topic because I felt it is both relevant and directly applicable to my current practice as a non-Indigenous music educator working predominantly in Indigenous elementary school contexts situated on the traditional territory of the Tsimshian Nation. In addition to this topic being place-based for me, I believe that the scope of this question, including the broader efforts of educators to decolonize educational spaces and authentically incorporate Indigenous knowledge into curriculum-based practices, is important, especially as it relates to the use of digital tools in educational contexts.
+For this assignment, I chose to critically compare the results of generative AI (specifically ChatGPT) with those of the University of British Columbia’s library database and Google Scholar as research discovery tools. The focus of the research I sought was on how technology can support Indigenized music education content in elementary schools. I selected this topic because I felt it is both relevant and directly applicable to my current practice as a non-Indigenous music educator working predominantly in Indigenous elementary school contexts situated on the traditional territory of the Tsimshian Nation. In addition to this topic being place-based for me, I believe that the scope of this question, including the broader efforts of educators to decolonize educational spaces and authentically incorporate Indigenous knowledge into curriculum-based practices is important in many ways.
 
 ## Experiences with Research Tools
 I began my inquiry by carefully considering the wording of the prompt I gave to ChatGPT. I wanted to be specific enough to get relevant results, but also broad enough to generate more than I needed in order to have options to choose from. I started with the prompt: “Give me a list of 10 recent and peer-reviewed academic research journals on the topic of how technology can support Indigenized music education content in elementary schools. Format the results in 7th Edition APA Style.”
@@ -21,7 +21,7 @@ The results provided enough options for me to choose from, but they they require
 &nbsp;&nbsp;&nbsp;&nbsp;- *On Embedding Indigenous Musics in Schools*
 
 
-Next, I turned to UBC’s library search engine to find sources related to my research question. I used the "peer-reviewed" filter and experimented with various keyword combinations until I got results that I could work with. My search process looked like this:
+Next, I turned to UBC’s library search engine to find sources related to my research question. I used the peer-reviewed filter and experimented with various keyword combinations until I got results that I could work with. My search process looked like this:
 
   &nbsp;&nbsp;&nbsp;&nbsp;1. "digital tools Indigenous music elementary education" – 0 results
    &nbsp;&nbsp;&nbsp;&nbsp;2. "technology Indigenous music elementary" – 6 results

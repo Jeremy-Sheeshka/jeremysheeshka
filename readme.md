@@ -1,13 +1,2 @@
-# jermeysheeshka.ca
-
-## TOC
-
-- [jeremysheeshka.ca](#jeremysheeshkaca)
-  - [TOC](#toc)
-  - [License](#license)
-  - [Credits and Thank yous](#credits-and-thank-yous)
-
-## License
-
-This is my personal website. It is a work in process. This is a project in learning new web-platform technologies including Tailwind, Nunjucks, Eleventy, and other new languages. 
-
+# jermeysheeshka.ca 
+This is my personal website intended to provide a platform and starting point for me to hone my abilities in working with different web-platform technologies including Tailwind, Nunjucks, Eleventy, HTML, CSS and Javascript.
