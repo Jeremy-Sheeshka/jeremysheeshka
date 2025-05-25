@@ -15,7 +15,7 @@ The results provided enough options for me to choose from, but they they require
 
  **Sources Suggested by ChatGPT:**
   &nbsp;&nbsp;&nbsp;&nbsp;- *Walking Carefully Towards Bridging the Gap*
-  &nbsp;&nbsp;&nbsp;&nbsp;- *The Impact of New Technologies on the Musical Learning of Indigenous* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Australian Children*
+  &nbsp;&nbsp;&nbsp;&nbsp;- *The Impact of New Technologies on the Musical Learning of* <br> &nbsp;&nbsp;&nbsp;&nbsp;*Indigenous Australian Children*
   &nbsp;&nbsp;&nbsp;&nbsp;- *ICT and Music Technology During COVID-19*
  &nbsp;&nbsp;&nbsp;&nbsp;- *Employing Mobile Learning in Music Education*
 &nbsp;&nbsp;&nbsp;&nbsp;- *On Embedding Indigenous Musics in Schools*
