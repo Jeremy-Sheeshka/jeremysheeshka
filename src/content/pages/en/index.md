@@ -21,10 +21,9 @@ about:
   title: About my approach 
 blog:
   title: 'Blog'
-  intro: "I'm writing about things related to music, education, technology and things I have learned that I want to share."
+  intro: "I write things related to music, technology and my understanding of things I have learned and want to share."
 cta:
   title: "Let's talk!"
-  desktop: 'A project becomes successful on the Internet when it looks good, feels good and works with clean, secure technology. Since 2008 I create compelling web experiences with attention to detail.'
   lead: "Feel free to reach out to me at [hello@jeremysheeshka.ca](mailto:hello@jeremysheeshka.ca) whether you have a project in mind, an opportunity to share, or just want to connect. I'm always happy to chat."
 ---
 

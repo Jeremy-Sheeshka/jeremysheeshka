@@ -11,7 +11,7 @@ export const base64Format = async imagePath => {
     const ext = imagePath.split('.').pop().toLowerCase();
 
     if (!mimeTypes[ext]) {
-      console.error('Unsupported image format:', ext);
+      console.error('Unsupported image format:', ext);''
       return null;
     }
 

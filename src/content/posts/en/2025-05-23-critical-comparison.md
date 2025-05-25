@@ -1,42 +1,43 @@
 ---
-title: 'Task 1: Critical comparison of different research discovery tools'
+title: 'ETEC 500 #1: Critical comparison of different research discovery tools'
 description: "A comparison of different research discovery tools including ChatGPT, UBC Library, and Google Scholar"
 category: blogpost
 key: 'ETEC 500'
+tags: ETEC 500
 date: 2025-05-23
-lastEdit: 
 ---
-For this assignment, I chose to critically compare the results of generative AI (specifically ChatGPT) with those of the University of British Columbia’s library database and Google Scholar as research discovery tools. The focus of the research I sought was on how technology can support Indigenized music education content in elementary schools. I specifically selected this topic because I felt it is both relevant and directly applicable to my current practice as a non-Indigenous music educator working predominantly in Indigenous elementary school contexts situated on the traditional territory of the Tsimshian Nation. In addition to this topic being place-based for me, I believe that the scope of this question, including the broader efforts of educators to decolonize educational spaces and authentically incorporate Indigenous knowledge into curriculum-based practices, is important, especially as it relates to the use of digital tools in educational contexts.
+For this assignment, I chose to critically compare the results of generative AI (specifically ChatGPT) with those of the University of British Columbia’s library database and Google Scholar as research discovery tools. The focus of the research I sought was on how technology can support Indigenized music education content in elementary schools. I selected this topic because I felt it is both relevant and directly applicable to my current practice as a non-Indigenous music educator working predominantly in Indigenous elementary school contexts situated on the traditional territory of the Tsimshian Nation. In addition to this topic being place-based for me, I believe that the scope of this question, including the broader efforts of educators to decolonize educational spaces and authentically incorporate Indigenous knowledge into curriculum-based practices, is important, especially as it relates to the use of digital tools in educational contexts.
 
 ## Experiences with Research Tools
 I began my inquiry by carefully considering the wording of the prompt I gave to ChatGPT. I wanted to be specific enough to get relevant results, but also broad enough to generate more than I needed in order to have options to choose from. I started with the prompt: “Give me a list of 10 recent and peer-reviewed academic research journals on the topic of how technology can support Indigenized music education content in elementary schools. Format the results in 7th Edition APA Style.”
 
 The results provided enough options for me to choose from, but they they required some filtering on my part. Not all of the sources included all three elements I desired: Indigenous content, technology, and music education. Although I felt my prompt was clear, it took several iterations of asking for more results before I was satisfied with the content provided. Initially, I thought the process was time-efficient and productive, but I later had second thoughts about using ChatGPT as a research discovery tool when I found that some of the DOI links it provided didn’t work, and the accuracy of the APA citations was questionable. In the end, these were the titles of the sources I selected from ChatGPT for this assignment:
 
-  Sources Suggested by ChatGPT:
-    • Walking Carefully Towards Bridging the Gap
-    • The Impact of New Technologies on the Musical Learning of Indigenous Australian Children
-    • ICT and Music Technology During COVID-19
-    • Employing Mobile Learning in Music Education
-    • On Embedding Indigenous Musics in Schools
+ **Sources Suggested by ChatGPT:**
+  &nbsp;&nbsp;&nbsp;&nbsp;- *Walking Carefully Towards Bridging the Gap*
+  &nbsp;&nbsp;&nbsp;&nbsp;- *The Impact of New Technologies on the Musical Learning of Indigenous* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Australian Children*
+  &nbsp;&nbsp;&nbsp;&nbsp;- *ICT and Music Technology During COVID-19*
+ &nbsp;&nbsp;&nbsp;&nbsp;- *Employing Mobile Learning in Music Education*
+&nbsp;&nbsp;&nbsp;&nbsp;- *On Embedding Indigenous Musics in Schools*
+
 
 Next, I turned to UBC’s library search engine to find sources related to my research question. I used the "peer-reviewed" filter and experimented with various keyword combinations until I got results that I could work with. My search process looked like this:
 
-    1. "digital tools Indigenous music elementary education" – 0 results
-    2. "technology Indigenous music elementary" – 6 results
-    3. "Indigenous music education digital tool" – 17 results
-    4. "technology Indigenous education music" – 109 results
+  &nbsp;&nbsp;&nbsp;&nbsp;1. "digital tools Indigenous music elementary education" – 0 results
+   &nbsp;&nbsp;&nbsp;&nbsp;2. "technology Indigenous music elementary" – 6 results
+  &nbsp;&nbsp;&nbsp;&nbsp;3. "Indigenous music education digital tool" – 17 results
+  &nbsp;&nbsp;&nbsp;&nbsp;4. "technology Indigenous education music" – 109 results
 
 Unlike ChatGPT, finding relevant results using UBC’s library required more effort, especially at first. After identifying two appropriate sources, I continued my search using Google Scholar.
 
 I began with the search term: “technology Indigenous education music,” which yielded a vast array of results. Because Google Scholar does not offer a peer-reviewed filter, I manually sifted through various pages to find credible, peer-reviewed sources relevant to my question. In the end, I chose these five sources from Google Scholar and UBC’s library:
 
-   Sources I Selected:
-    • Digilogue Zone
-    • Micro-Level Language Planning and YouTube Comments
-    • Shifting from Offline to Online Collaborative Music-Making, Teaching and Learning
-    • Sharing Indigenous Knowledge Through Intergenerational Digital Storytelling
-    • Music and Performance Arts of Taiwan’s Indigenous Peoples
+   **Sources I Selected:**
+    &nbsp;&nbsp;&nbsp;&nbsp;- *Digilogue Zone*
+    &nbsp;&nbsp;&nbsp;&nbsp;- *Micro-Level Language Planning and YouTube Comments*
+    &nbsp;&nbsp;&nbsp;&nbsp;- *Shifting from Offline to Online Collaborative Music-Making, Teaching &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and Learning*
+    &nbsp;&nbsp;&nbsp;&nbsp;- *Sharing Indigenous Knowledge Through Intergenerational Digital Storytelling*
+    &nbsp;&nbsp;&nbsp;&nbsp;- *Music and Performance Arts of Taiwan’s Indigenous Peoples*
 
 ## Comparing and Analyzing the Results
 This research exercise revealed several key differences between the discovery tools I used. While my research question was thoughtful and relevant to my practice, I found that its complexity, requiring the integration of music education, technology, and Indigenous cultural content, was somewhat difficult for generative AI to fully grasp. One issue I encountered with ChatGPT was its tendency to offer sources that lacked one or more essential elements of my query (e.g., focusing on music and technology but omitting Indigenous perspectives). Another trend I noticed was a limited cultural scope of the generative AI as three of the sources I ended up choosing were Australian in origin.

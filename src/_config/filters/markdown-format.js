@@ -1,9 +1,10 @@
-// by Chris Burnell: https://chrisburnell.com/article/some-eleventy-filters/#markdown-format
-
 import markdownParser from 'markdown-it';
 
 const markdown = markdownParser();
 
-export const markdownFormat = string => {
+export const markdownFormat = (string) => {
+  if (!string || typeof string !== "string") {
+    return ""; // or return string if you want to preserve non-string inputs
+  }
   return markdown.render(string);
 };

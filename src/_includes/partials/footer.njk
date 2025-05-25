@@ -3,8 +3,8 @@
     <div class="cluster gutter-xs">
       <nav class="cluster text-step-min-1" aria-label="{{ translations[page.lang].a11y.navFooterAria }}">
         &copy; {% year %}
-        <a class="rounded-small" href="/{{ page.lang }}/" {{ indicateActive }}
-          ><span class="font-display">{{ meta.siteName }}</span> <small>{{ pkg.version }}</small>
+        <a class="rounded-small" href="/{{ page.lang }}/" {{ indicateActive }}>
+          <span class="font-display">{{ meta.siteName }}</span> 
         </a>
 
         {% for item in navigation[page.lang].bottom %}
@@ -17,8 +17,7 @@
               |
               safe
             }}
-            >{{ item.text }}</a
-          >
+          >{{ item.text }}</a>
         {% endfor %}
       </nav>
 
@@ -27,20 +26,11 @@
         <nav class="language-nojs" aria-label="{{ translations[page.lang].a11y.navLangAria }}">
           <ul role="list" class="cluster text-step-min-1">
             {% for lang, details in translations %}
-              {%
-                set
-                translatedUrl = "/" + lang + "/"
-              %}
-              {%
-                set selectedState = "true" if lang == page.lang else
-                "false"
-              %}
+              {% set translatedUrl = "/" + lang + "/" %}
+              {% set selectedState = "true" if lang == page.lang else "false" %}
 
               {% for item in collections.all %}
-                {%
-                  if item.data.translationKey == translationKey and item.data.page.lang ==
-                  lang
-                %}
+                {% if item.data.translationKey == translationKey and item.data.page.lang == lang %}
                   {% set translatedUrl = item.url %}
                 {% endif %}
               {% endfor %}
@@ -55,34 +45,19 @@
                   <span lang="{{ lang }}"> {{ details.name }} </span>
                 </a>
               </li>
-              {% if loop.last %}{% endif %}
             {% endfor %}
           </ul>
         </nav>
       </is-land>
 
-      <nav class="cluster" aria-label="{{ translations[page.lang].a11y.navPlatformAria }}">
-        <!-- gets the first item from the feed loop set in meta -->
-        <a
-          href="/{{ page.lang }}{{ meta.blog.feedLinks[0].url }}"
-          rel="alternate"classclass
-          type="{{ meta.blog.feedLinks[0].type }}"
-          class="icon-center"
-        >
-          <span class="visually-hidden">{{ meta.blog.feedLinks[0].title }}</span>
-          {% svg "misc/rss" %}
-        </a>
-
-        {% for key, value in personal.platforms %}
-          {% if value != "" %}
-            <!-- regular platforms -->
-            <a class="no-indicator icon-center" href="{{ value }}" rel="me">
-              <span class="visually-hidden">{{ key | capitalize }}</span>
-              {% svg 'platform/' + key %}
-            </a>
-          {% endif %}
-        {% endfor %}
-      </nav>
-    </div>
-  </div>
-</footer>
+<nav class="cluster" aria-label="{{ translations[page.lang].a11y.navPlatformAria }}">
+  {% for key, value in personal.platforms %}
+    {% if value != "" %}
+      <!-- regular platforms -->
+      <a class="no-indicator icon-center" href="{{ value }}" rel="me">
+        <span class="visually-hidden">{{ key | capitalize }}</span>
+        {% svg 'platform/' + key %}
+      </a>
+    {% endif %}
+  {% endfor %}
+</nav>

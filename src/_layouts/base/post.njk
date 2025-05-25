@@ -20,7 +20,6 @@ schema: BlogPosting
     {% endif %}
 
     <dt>{{ translations[page.lang].blog.reading | capitalize }}</dt>
-    <dd>{{ content | readingTime }} {{ translations[page.lang].blog.unit }}</dd>
   </dl>
 
   {% if image %}
