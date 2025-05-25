@@ -15,7 +15,7 @@ The results provided enough options for me to choose from, but they they require
 
  **Sources Suggested by ChatGPT:**
   &nbsp;&nbsp;&nbsp;&nbsp;- *Walking Carefully Towards Bridging the Gap*
-  &nbsp;&nbsp;&nbsp;&nbsp;- *The Impact of New Technologies on the Musical Learning of* <br> &nbsp;&nbsp;&nbsp;&nbsp;*Indigenous Australian Children*
+  &nbsp;&nbsp;&nbsp;&nbsp;- *The Impact of New Technologies on the Musical Learning of* <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Indigenous Australian Children*
   &nbsp;&nbsp;&nbsp;&nbsp;- *ICT and Music Technology During COVID-19*
  &nbsp;&nbsp;&nbsp;&nbsp;- *Employing Mobile Learning in Music Education*
 &nbsp;&nbsp;&nbsp;&nbsp;- *On Embedding Indigenous Musics in Schools*
@@ -35,7 +35,7 @@ I began with the search term: “technology Indigenous education music,” which
    **Sources I Selected:**
     &nbsp;&nbsp;&nbsp;&nbsp;- *Digilogue Zone*
     &nbsp;&nbsp;&nbsp;&nbsp;- *Micro-Level Language Planning and YouTube Comments*
-    &nbsp;&nbsp;&nbsp;&nbsp;- *Shifting from Offline to Online Collaborative Music-Making, Teaching &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and Learning*
+    &nbsp;&nbsp;&nbsp;&nbsp;- *Shifting from Offline to Online Collaborative Music-Making,* <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Teaching and Learning*
     &nbsp;&nbsp;&nbsp;&nbsp;- *Sharing Indigenous Knowledge Through Intergenerational Digital Storytelling*
     &nbsp;&nbsp;&nbsp;&nbsp;- *Music and Performance Arts of Taiwan’s Indigenous Peoples*
 
