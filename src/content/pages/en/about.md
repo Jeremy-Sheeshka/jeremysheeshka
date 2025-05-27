@@ -8,7 +8,7 @@ lead: "I'm a jazz guitarist and educator based out of Prince Rupert, B.C."
 image: './src/assets/images/jeremy/desktop.jpg'
 alt: 'Where the magic happens'
 breakout:
-  title: 'Based out of BC, Canada'
+  title: '♪ ♫'
   intro: 'Since 2016, I have been working as a K-12 Music Educator specializing in secondary school music education and jazz guitar.'
 
 faq:
