@@ -23,8 +23,8 @@ cta:
   title: "Let's talk!"
   lead: "Feel free to reach out to me at [hello@jeremysheeshka.ca](mailto:hello@jeremysheeshka.ca) whether you have a project in mind, an opportunity to share, or just want to connect. I'm always happy to chat."
 ---
-As a Musician, my music aims to pay tribute to both traditional idioms and emerging trends inspired by musical innovations and contemporary technologies that lend itself to a variety of popular and experimental forms and stylistic mediums.
+As a musician, my music aims to pay tribute to both traditional idioms and emerging trends inspired by musical innovations and contemporary technologies that lend itself to a variety of popular and experimental forms and stylistic mediums.
 
 I seek to create music that explores and draws upon relationships between people and places, improvisation and composition, as well as the familiar and abstract.
 
-In the role of educator, Jeremy believes that learning is a lifelong journey and that the best way to reinforce ones’ understanding of something is through sharing with others, whether that be through music, art, electronics, or web friendly technologies. My work strives to inspire and invigorate new understandings for <sparkly-text class="pl-5xs" number-of-sparkles="5" style="--sparkly-text-color: var(--color-accent)"> creative minds everywhere.</sparkly-text>
+As an educator, I believe that learning is a lifelong journey and that the best way to reinforce ones’ understanding of something is through sharing with others, whether that be through music, art, electronics, or web friendly technologies. My work strives to inspire and invigorate new understandings for &nbsp;<sparkly-text class="pl-5xs" number-of-sparkles="5" style="--sparkly-text-color: var(--color-accent)"> creative minds everywhere.</sparkly-text>
