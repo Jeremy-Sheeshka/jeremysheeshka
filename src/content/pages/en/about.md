@@ -27,4 +27,4 @@ As a Musician, my music aims to pay tribute to both traditional idioms and emerg
 
 I seek to create music that explores and draws upon relationships between people and places, improvisation and composition, as well as the familiar and abstract.
 
-In the role of educator, Jeremy believes that learning is a lifelong journey and that the best way to reinforce ones’ understanding of something is through sharing with others, whether that be through music, art, electronics, or web friendly technologies. My work strives to inspire and invigorate new understandings for <sparkly-text class="pl-5xs" number-of-sparkles="5" style="--sparkly-text-color: var(--color-accent)">creative minds everywhere.</sparkly-text>
+In the role of educator, Jeremy believes that learning is a lifelong journey and that the best way to reinforce ones’ understanding of something is through sharing with others, whether that be through music, art, electronics, or web friendly technologies. My work strives to inspire and invigorate new understandings for <sparkly-text class="pl-5xs" number-of-sparkles="5" style="--sparkly-text-color: var(--color-accent)"> creative minds everywhere.</sparkly-text>
