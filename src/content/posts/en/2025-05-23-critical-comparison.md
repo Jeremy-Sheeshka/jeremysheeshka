@@ -35,7 +35,7 @@ I began with the search term: “technology Indigenous education music,” which
    **Sources I Selected:**
     &nbsp;&nbsp;&nbsp;&nbsp;- *Digilogue Zone*
     &nbsp;&nbsp;&nbsp;&nbsp;- *Micro-Level Language Planning and YouTube Comments*
-    &nbsp;&nbsp;&nbsp;&nbsp;- *Shifting from Offline to Online Collaborative Music-Making,* <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Teaching and Learning*
+    &nbsp;&nbsp;&nbsp;&nbsp;- *Shifting from Offline to Online Collaborative Music-Making,* <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Teaching and Learning*
     &nbsp;&nbsp;&nbsp;&nbsp;- *Sharing Indigenous Knowledge Through Intergenerational Digital Storytelling*
     &nbsp;&nbsp;&nbsp;&nbsp;- *Music and Performance Arts of Taiwan’s Indigenous Peoples*
 
