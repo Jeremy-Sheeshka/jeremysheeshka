@@ -30,7 +30,7 @@
 
     <!-- 7 defer  -->
     {% include "head/js-defer.njk" %}
-    <script data-domain="lenesaile.com" src="https://plausible.io/js/plausible.js" defer></script>
+    <script data-domain="jeremysheeshka.ca" src="https://plausible.io/js/plausible.js" defer></script>
     {%- if sparkle -%}
       <script type="module" src="/assets/scripts/components/sparkly-text.js"></script>
     {%- endif -%}
@@ -54,6 +54,8 @@
 
     <main id="main" class="flow {{ mainClass }}" tabindex="-1">{{ content | safe }}</main>
 
-    {% include "partials/footer.njk" %}
+    {%- if bodyClass == "blogpost" -%}
+    <script src="/assets/scripts/blogtitle-color.js" defer></script>
+    {%- endif -%}
   </body>
 </html>

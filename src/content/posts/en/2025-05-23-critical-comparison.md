@@ -4,6 +4,7 @@ description: "A comparison of different research discovery tools including ChatG
 category: blogpost
 key: 'ETEC 500'
 tags: ETEC 500
+
 date: 2025-05-23
 ---
 For this assignment, I chose to critically compare the results of generative AI (specifically ChatGPT) with those of the University of British Columbia’s library database and Google Scholar as research discovery tools. The focus of the research I sought was on how technology can support Indigenized music education content in elementary schools. I selected this topic because I felt it is both relevant and directly applicable to my current practice as a non-Indigenous music educator working predominantly in Indigenous elementary school contexts situated on the traditional territory of the Tsimshian Nation. In addition to this topic being place-based for me, I believe that the scope of this question, including the broader efforts of educators to decolonize educational spaces and authentically incorporate Indigenous knowledge into curriculum-based practices is important in many ways.

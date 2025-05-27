@@ -122,6 +122,7 @@ export default {
       });
     }),
 
+
     // Generates custom utility classes
     plugin(function ({addUtilities, config}) {
       const currentConfig = config();
