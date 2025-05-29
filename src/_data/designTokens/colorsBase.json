@@ -23,6 +23,10 @@
     {
       "name": "Bright Sun",
       "value": "#F5CF38"
+    },
+    {
+      "name": "Emerald",
+      "value": "#22C55E"
     }
   ],
   "light_dark": [
@@ -41,6 +45,10 @@
     {
       "name": "Bright Sun",
       "value": "#F5CF38"
+    },
+    {
+      "name": "Emerald",
+      "value": "#22C55E"
     }
   ],
   "standalone": []
