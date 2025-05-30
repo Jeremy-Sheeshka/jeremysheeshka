@@ -11,7 +11,7 @@ hero:
 
   image: './src/assets/images/jeremy/sheeshka1400w.jpg'
   alt: 'Jeremy sitting in classroom with a guitar smiling'
-  hi: 'Hey, this is me!.'
+
 projects:
   title: Check out some of my projects!
   teaser: 'My work is inspired by music, a love of learning, and a curiosity for how technology can support creative expression, education, and meaningful experiences.'
