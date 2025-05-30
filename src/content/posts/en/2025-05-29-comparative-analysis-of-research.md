@@ -1,6 +1,5 @@
-
 ---
-title: 'ETEC 500 #2: Compare Contradictory Research Studies '
+title: 'ETEC 500 #2: Compare Contradictory Research Studies'
 description: "Comparing contradictions in research"
 category: blogpost
 key: 'ETEC 500'
@@ -8,7 +7,6 @@ tags: ETEC 500
 
 date: 2025-05-28
 ---
-
 
 Upon browsing the “Most Read” category on the publisher’s website for the Music Educators Journal, I stumbled across two different articles on Artificial Intelligence; one being about implications and the other about practical application. Being intrigued, I then searched “artificial intelligence” directly in the Music Educators Journal with the filters “research articles” and “2022–2025.” The second result was: M. Guarriello’s “Idea Bank: Exploring Applications of Artificial Intelligence in Music Education: A Focus on Creativity and Composition” (2024). I felt that the optimistic and pro-technology stance offered in this study would make for an interesting comparison to that of another article.
 <br>
