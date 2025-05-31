@@ -24,7 +24,7 @@ While the findings of both journals were not directly contrasting in regard to t
 
 
 
-{% image "./src/assets/images/blog/tools.jpg", "Tools for building a cedar fence" %}
+{% image "./src/assets/images/blog/tomatoapple.jpg", "a tomato and an apple" %}
 
 
 {% asideReadmore %}## References
