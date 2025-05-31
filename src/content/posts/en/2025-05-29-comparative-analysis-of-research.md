@@ -46,8 +46,3 @@ Guarriello, M. (2024). Idea bank: Exploring applications of artificial intellige
 
 
 
-
-References: 
-
-Cheng, L. (2025). The impact of Generative AI on School Music Education: Challenges and recommendations. Arts Education Policy Review, 1–8. https://doi.org/10.1080/10632913.2025.2451373 
-Guarriello, M. (2024). Idea bank: Exploring applications of artificial intelligence in music education: A focus on creativity and composition. Music Educators Journal, 111(1), 11–15. https://doi.org/10.1177/00274321241280970 
