@@ -5,10 +5,19 @@
 
   <div class="repel ontop gutter-s row-1">
     <a href="/{{ page.lang }}/" class="logo | cluster" {{ indicateActive }}>
-      <span class="font-display font-bold uppercase">{{ meta.siteName }}</span>
+      <span class="homemade-apple-regular font-bold ">{{ meta.siteName }}</span>
     </a>
     {% include "partials/main-nav.njk" %}
   </div>
+
+  <style>
+    .homemade-apple-regular {
+      font-family: "Homemade Apple", cursive;
+      font-weight: 600;
+      font-style: bold;
+      font-size: 200%;
+    }
+  </style>
 
   <div class="settings | full cluster gutter-s row-1 justify-self-end ontop">
     {% include "partials/switch-theme.njk" %}

@@ -3,7 +3,7 @@ export const url = process.env.URL || 'http://localhost:8080';
 export const domain = new URL(url).hostname;
 
 export const webmentionDomain = 'www.jeremysheeshka.ca';
-export const siteName = 'Jeremy Sheeshka';
+export const siteName = 'Jeremy\u00A0\u00A0Sheeshka';
 export const siteType = 'Person'; // schema
 
 export const author = {
