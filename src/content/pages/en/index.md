@@ -9,7 +9,7 @@ hero:
   title: Building creative understandings through technology.
   intro: I’ve worked as an educator in elementary and high schools since 2016. As a musician and lifelong learner, I bring a creative approach to technology. Whether teaching guitar or building digital tools, I focus on clarity and structure. I design user-friendly websites and interactive experiences that prioritize performance, accessibility, and simplicity for individuals, educators, artists, and organizations.
 
-  image: './src/assets/images/jeremy/sheeshkaguitaredit.jpg'
+  image: './src/assets/images/jeremy/sheeshka1400w.jpg'
   alt: 'Jeremy sitting in classroom with a guitar smiling'
 
 projects:
