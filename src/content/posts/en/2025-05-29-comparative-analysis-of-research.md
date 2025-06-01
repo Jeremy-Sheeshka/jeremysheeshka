@@ -1,6 +1,6 @@
 ---
 title: 'ETEC 500 #2: Compare Contradictory Research Studies'
-description: "Comparing contradictions in research"
+description: "Taking two journals on generative AI in music education and comparing the findings"
 category: blogpost
 key: 'ETEC 500'
 tags: ETEC 500
