@@ -1,11 +1,18 @@
 <header class="wrapper {{ headerClass }}" {% if headerStyle %}style="{{ headerStyle }}"{% endif %}>
-
-
   <a href="#main" class="skip-link">{{ translations[page.lang].a11y.skipMain }}</a>
 
   <div class="repel ontop gutter-s row-1">
     <a href="/{{ page.lang }}/" class="logo | cluster" {{ indicateActive }}>
-      <span class="homemade-apple-regular font-bold ">{{ meta.siteName }}</span>
+      <div id="name" class="homemade-apple-regular">
+        {% set name = "Jeremy Sheeshka" %}
+        {% for char in name | split('') %}
+          {% if char == " " %}
+            <span>&nbsp;</span>
+          {% else %}
+            <span style="animation-delay: {{ 5000 + loop.index0 * 100 }}ms">{{ char }}</span>
+          {% endif %}
+        {% endfor %}
+      </div>
     </a>
     {% include "partials/main-nav.njk" %}
   </div>
@@ -13,15 +20,32 @@
   <style>
     .homemade-apple-regular {
       font-family: "Homemade Apple", cursive;
-      font-weight: 600;
-      font-style: bold;
-      font-size: 200%;
+      font-weight: bold;
+      font-style: normal;
+      font-size: 150%;
+      
+      letter-spacing: -0.2rem;
+    }
+    #name span {
+     
+      animation: highlight 160s linear;
+      display: inline-block;
+    }
+
+    @keyframes highlight {
+   
+      14%  { color: red; }
+      28%  { color: orange; }
+      42%  { color: gold; }
+      56%  { color: green; }
+      70%  { color: blue; }
+      84%  { color: indigo; }
+      100% { color: violet; }
     }
   </style>
 
   <div class="settings | full cluster gutter-s row-1 justify-self-end ontop">
     {% include "partials/switch-theme.njk" %}
-   
   </div>
 </header>
 
