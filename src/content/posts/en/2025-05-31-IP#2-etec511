@@ -1,0 +1,35 @@
+---
+title: 'ETEC 511 IP#2:  Artificial Intelligence'
+description: " Artificial Intelligence"
+category: blogpost
+key: 'ETEC 511'
+tags: ETEC 511
+
+date: 2025-05-231
+---
+
+Future Blogpost goes here 
+
+
+{% image "./src/assets/images/blog/tomatoapple.jpg", "a tomato and an apple" %}
+
+
+{% asideReadmore %}## References
+
+<br>
+
+Cheng, L. (2025). The impact of Generative AI on School Music Education: Challenges and recommendations. Arts Education Policy Review, 1–8. https://doi.org/10.1080/10632913.2025.2451373 
+
+<br>
+
+
+Guarriello, M. (2024). Idea bank: Exploring applications of artificial intelligence in music education: A focus on creativity and composition. Music Educators Journal, 111(1), 11–15. https://doi.org/10.1177/00274321241280970 
+
+
+<br>
+
+{% endasideReadmore %}
+
+
+
+
