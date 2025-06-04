@@ -1,11 +1,9 @@
 <!doctype html>
-<html lang="{{ page.lang }}" dir="ltr" data-color="{{ theme or 'cinnabar' }}">
+<html lang="{{ page.lang }}" dir="ltr" data-color="{{ theme or 'royal-blue' }}">
   <head>
-    <!-- 1 charset/viewport -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- 2 title -->
     <title>
       {%- if title -%}
         {{- title -}}
@@ -16,46 +14,38 @@
 
     <base href="{{ page.url }}" />
 
-    <!-- 3 theme settings   -->
     {% include "head/meta-theme.njk" %}
-
-    <!-- 4 synchronous js  -->
     {% include "head/js-inline.njk" %}
-
-    <!-- 5 CSS  -->
     {% include "head/css-inline.njk" %}
-
-    <!-- 6 preloads  -->
     {% include "head/preloads.njk" %}
-
-    <!-- 7 defer  -->
     {% include "head/js-defer.njk" %}
     <script data-domain="jeremysheeshka.ca" src="https://plausible.io/js/plausible.js" defer></script>
     {%- if sparkle -%}
       <script type="module" src="/assets/scripts/components/sparkly-text.js"></script>
     {%- endif -%}
-
-    <!-- 8 meta tags, icons, open graph etc.  -->
     {% include "head/meta-info.njk" %}
-
-    <!-- 9 schema -->
     {% include "head/schema.njk" %}
   </head>
 
   <body class="wrapper {{ layout }} {{ bodyClass }}">
-    {%- if easterEggs.nakedCssDay %}{% include "easter-eggs/naked-css-day.njk" %}{% endif %}
+    {%- if easterEggs.nakedCssDay %}
+      {% include "easter-eggs/naked-css-day.njk" %}
+    {%- endif %}
 
     {% set indicateActive %}
       {% if page.url == "/" + page.lang + "/" %}
         aria-current=page
       {% endif %}
     {% endset %}
-    {% include "partials/header.njk" %}
 
+    {% include "partials/header.njk" %}
     <main id="main" class="flow {{ mainClass }}" tabindex="-1">{{ content | safe }}</main>
 
     {%- if bodyClass == "blogpost" -%}
-    <script src="/assets/scripts/blogtitle-color.js" defer></script>
+      <script src="/assets/scripts/blogtitle-color.js" defer></script>
     {%- endif -%}
+
+ 
+    {% include "partials/footer.njk" %}
   </body>
 </html>
