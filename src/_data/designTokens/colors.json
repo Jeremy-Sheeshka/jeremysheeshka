@@ -223,6 +223,15 @@
     {
    "name": "Green Subdued",
    "value": "#60B978"
+    },
+
+    {
+  "name": "Cool Grey",
+  "value": "#8C92AC"
+    },
+    {
+  "name": "Cool Grey Subdued",
+  "value": "#797F99"
     }
 
 

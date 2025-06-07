@@ -23,25 +23,43 @@
       font-weight: bold;
       font-style: normal;
       font-size: 150%;
-      
       letter-spacing: -0.2rem;
     }
+    
     #name span {
-     
-      animation: highlight 160s linear;
-      display: inline-block;
+    animation: highlight 160s linear;
+    display: inline-block;
     }
+    
 
-    @keyframes highlight {
-   
-      14%  { color: red; }
-      28%  { color: orange; }
-      42%  { color: gold; }
-      56%  { color: green; }
-      70%  { color: blue; }
-      84%  { color: indigo; }
-      100% { color: violet; }
-    }
+html[data-theme="dark"] #name span {
+  animation-name: highlight-subdued;
+}
+
+/* Light theme vibrant colors - starts and ends with black */
+@keyframes highlight {
+  0%     { color: #000000; }
+  14.28% { color: #E54848; }
+  28.56% { color: #3BBE58; }
+  42.84% { color: #4862E5; }
+  57.12% { color: #F5CF38; }
+  71.4%  { color: #E54867; }
+  85.68% { color: #60B978; }
+  100%   { color: #000000; }
+}
+
+/* Dark theme subdued colors - starts and ends with white */
+@keyframes highlight-subdued {
+  0%     { color: #ffffff; }
+  14.28% { color: #C76C6C; }
+  28.56% { color: #78C992; }
+  42.84% { color: #7F8DE0; }
+  57.12% { color: #E6D36F; }
+  71.4%  { color: #D97085; }
+  85.68% { color: #93C4A4; }
+  100%   { color: #ffffff; }
+}
+
   </style>
 
   <div class="settings | full cluster gutter-s row-1 justify-self-end ontop">

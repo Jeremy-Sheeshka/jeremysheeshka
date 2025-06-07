@@ -27,14 +27,14 @@
     {
     "name": "Green",
    "value": "#3BBE58"
-    },
-
-    {
-   "name": "Green Subdued",
-   "value": "#60B978"
+    },   
+      {
+  "name": "Cool Grey",
+  "value": "#8C92AC"
     }
 
   ],
+
   "light_dark": [
     {
       "name": "Cinnabar",
@@ -54,7 +54,11 @@
     },
     {
     "name": "Green",
-   "value": "#3BBE58"
+    "value": "#3BBE58"
+    },
+      {
+  "name": "Cool Grey",
+  "value": "#8C92AC"
     }
   ],
   "standalone": []
