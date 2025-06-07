@@ -1,0 +1,33 @@
+[33mcommit 3264b984370071cd9fa77e4bc78334cf618db46a[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m)[m
+Author: Jeremy Sheeshka <Jsheeshka@gmail.com>
+Date:   Sat Jun 7 14:14:00 2025 -0700
+
+    Revert "Revert "cool-grey theme implemented""
+    
+    This reverts commit f54b98d8fa42ea8b13c3bd86a90ebf4b0c7c4c65.
+
+[33mcommit f54b98d8fa42ea8b13c3bd86a90ebf4b0c7c4c65[m
+Author: Jeremy Sheeshka <Jsheeshka@gmail.com>
+Date:   Sat Jun 7 14:13:45 2025 -0700
+
+    Revert "cool-grey theme implemented"
+    
+    This reverts commit 6e65fc8a7b9c8afafc2f0623e9633c72f7bbaac3.
+
+[33mcommit 6e65fc8a7b9c8afafc2f0623e9633c72f7bbaac3[m[33m ([m[1;31morigin/main[m[33m)[m
+Author: Jeremy Sheeshka <Jsheeshka@gmail.com>
+Date:   Sat Jun 7 13:57:41 2025 -0700
+
+    cool-grey theme implemented
+
+[33mcommit 1da22de297a69d2a13d536fdedba61fcaf9afc19[m
+Author: Jeremy Sheeshka <Jsheeshka@gmail.com>
+Date:   Sat Jun 7 13:04:09 2025 -0700
+
+    name change animations
+
+[33mcommit 4dcebaf2cb3787cb5763ecf2101b6afd614d93e9[m
+Author: Jeremy Sheeshka <Jsheeshka@gmail.com>
+Date:   Sat Jun 7 11:25:53 2025 -0700
+
+    home
