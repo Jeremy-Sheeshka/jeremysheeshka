@@ -213,6 +213,18 @@
     {
       "name": "Bright Sun Subdued",
       "value": "#eed066"
+    },
+
+    {
+    "name": "Green",
+   "value": "#3BBE58"
+    },
+
+    {
+   "name": "Green Subdued",
+   "value": "#60B978"
     }
+
+
   ]
 }

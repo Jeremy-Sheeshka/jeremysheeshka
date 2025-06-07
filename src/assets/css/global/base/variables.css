@@ -19,6 +19,9 @@
   --color-light: var(--color-gray-100);
   --color-dark: var(--color-gray-800);
   --color-mid: var(--color-gray-400);
+  
+  --color-green: #3BBE58;
+  --color-green-subdued: #2d9446;
 }
 
 /* fallbacks: if light-dark is not supported */
@@ -67,6 +70,7 @@
   --color-accent: var(--color-cinnabar-subdued);
   --color-mark: var(--color-royal-blue-subdued);
 }
+
 /* fallbacks end */
 
 @supports (color: light-dark(white, black)) {
@@ -132,5 +136,13 @@
 
   [data-color='gray'] {
     --color-accent: light-dark(var(--color-gray-200), var(--color-gray-700));
+  }
+
+  [data-color='green'] {
+    --color-accent: light-dark(var(--color-green), var(--color-green-subdued));
+    --color-active: light-dark(
+      color-mix(in oklab, var(--color-green) 90%, var(--color-bg)),
+      color-mix(in oklab, var(--color-green-subdued) 90%, var(--color-text))
+    );
   }
 }

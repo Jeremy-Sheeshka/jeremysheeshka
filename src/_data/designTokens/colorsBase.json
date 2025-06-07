@@ -25,9 +25,15 @@
       "value": "#F5CF38"
     },
     {
-      "name": "Emerald",
-      "value": "#22C55E"
+    "name": "Green",
+   "value": "#3BBE58"
+    },
+
+    {
+   "name": "Green Subdued",
+   "value": "#60B978"
     }
+
   ],
   "light_dark": [
     {
@@ -47,8 +53,8 @@
       "value": "#F5CF38"
     },
     {
-      "name": "Emerald",
-      "value": "#22C55E"
+    "name": "Green",
+   "value": "#3BBE58"
     }
   ],
   "standalone": []
