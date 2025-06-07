@@ -7,7 +7,7 @@ key: 'home'
 layout: home
 hero:
   title: Building creative understandings through technology.
-  intro: I’ve worked as an educator in elementary and high schools since 2016. As a musician and lifelong learner, I bring a creative approach to technology. Whether teaching guitar or working with technology, I value clarity and structure.
+  intro: I’ve worked as an educator in elementary and high schools since 2016. As a musician and music educator, I bring a creative approach to educational technology. Whether teaching guitar or working with technology, I value clarity and structure.
 
   image: './src/assets/images/jeremy/sheeshka1400w.jpg'
   alt: 'Jeremy sitting in classroom with a guitar smiling'

@@ -10,20 +10,19 @@ date: 2025-06-06
 
 ## Action Research <br>
 As my personal aspirations are toward becoming a better jazz guitarist and music educator, I chose to compare action research methodologies and the intentional development of technical competencies on an instrument.
-<br>
+
 To me, the jazz musician who continually reassesses their own musical abilities in collaborative settings (such as live performances, clinician feedback, session work, jams, etc.) utilizes the concept of action research to improve their musical capacities. The cyclical process of focusing, implementing, analyzing, and reflecting, can be applied to one's self-efficacy in instructing themselves and practicing on their instrument to better understand musical achievements, deficiencies, and performance metrics in real-time contexts (Suter, 2012).
-<br>
+
 {% image "./src/assets/images/blog/whatisthisthingcalledlove.png" , "What is this thing called love leadsheet" %}
   <figcaption>
     What is this thing called love - Cole Porter. 
   </figcaption>
 
 This might look like a guitarist identifying that they struggle to play jazz vocabulary over minor 7♭5 chords in standards with faster tempos. They recognize this issue and proceed with corrective measures by transcribing licks and practicing patterns over this type of chord while gradually increasing the tempo with a metronome. They get feedback on their performance from colleagues at the next jam session and proceed to re-evaluate their growth by reiterating the process. This cycle of pragmatic action and reflection fits Creswell’s research design framework, as it mirrors his knowledge claim through a mixed-method approach by analyzing both quantitative data (peer feedback) and qualitative data (using the metronome as a data metric) (Creswell, 2002).
-<br>
+
 For resources to share, I have chosen two article submissions from the Music Educators Journal. The first, titled "Developing Self-Efficacy to Improve Music Achievement," is not explicitly about action research, but it supports the process I have described by showing how musicians build belief in their capabilities through cyclical refinement through using successes and failures to adjust practice strategies and improve effectiveness. Zelenak’s research targets secondary school musicians in particular and mirrors a mixed-method approach by referencing examples of peer feedback along with a quantitative music performance self-efficacy scale to empirically gauge improvements.
-<br>
+
 The second resource is an article titled "Empowering the Music Educator Through Action Research." In this research, Laprise provides strategies and steps toward practical, evidence-based improvements, using concrete and clear examples for the music educator. I have found this work to be an accessible tool in conceptualizing the forms action research may take through the straightforward, relatable examples and suggestions that could be potentially applied across many classroom subjects and areas and not just music.
-<br>
 
 
 
