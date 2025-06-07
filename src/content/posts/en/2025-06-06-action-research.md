@@ -35,11 +35,11 @@ The second resource is an article titled "Empowering the Music Educator Through 
 
 <br>
 Creswell, J. W. (2003). Research design: Qualitative, quantitative, and mixed methods approaches (2nd ed.). Sage Publications.
-<br> 
+<br> <br>
 Laprise, R. (2017). Empowering the Music Educator through Action Research. Music Educators Journal, 104(1), 28-33. https://doi.org/10.1177/0027432117708012 
-<br> 
+<br> <br>
 Suter, W. N. (2012). Introduction to educational research: A critical thinking approach (2nd ed.). Sage. https://doi.org/10.4135/9781483384443
-<br>
+<br><br>
 Zelenak, M. S. (2020). Developing self-efficacy to improve music achievement. Music Educators Journal, 107(2), 41–46. https://doi.org/10.1177/00274321209
 
 <br>
