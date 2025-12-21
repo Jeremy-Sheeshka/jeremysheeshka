@@ -1,0 +1,154 @@
+---
+title: 'ETEC 510: Gen Exchange'
+description: "Stories. Skills. Connection. A website created aimed at empowering the exchange of skills and stories."
+category: blogpost
+key: 'ETEC 510'
+tags: ETEC 510
+date: 2025-12-23
+---
+<style>
+
+    * {
+        letter-spacing: normal;
+    }
+
+
+</style>
+
+## [Gen Exchange](https://sites.google.com/view/genexchange/home?authuser=0)
+**A project by: Kim Carson, Adrienne Dechief, Dahlea Janes, Katherine Correia, Jeremy Sheeshka**
+<br>
+
+<div class="reflection-dropdown-menu">
+  <div class="dropdown-item">
+    <dt class="dropdown-question">About the Project</dt>
+    <dd class="dropdown-answer">
+    <p>
+    <br>
+GenExchange is a participatory, constructivist, and community-centered learning program that connects teenagers (ages 13–18) with older adults (ages 65+) through reciprocal teaching, storytelling, and co-creation. The project encourages digital literacy, intergenerational empathy, and social connection.
+<br><br>
+The initiative uses a hybrid approach that combines in-person collaboration at local community maker spaces with digital documentation and sharing via a Google Site. The site acts as a central hub where participants can connect, learn about the initiative's purpose and importance, showcase their projects, and engage in a public discussion board. 
+<br><br>
+The intended participants come from diverse backgrounds with a variety of creative, academic, and professional skills. Teens can participate through school programs, youth organizations, or volunteer initiatives. They should be motivated by community service, skills development, mentorship opportunities, and creative digital collaboration. Older adults can participate through senior centers or community groups. They should be driven by social connection, sharing personal stories, and learning new digital tools. 
+<br><br>
+The goal of GenExchange is to connect and create community by swapping stories and skills. Youth and older adults will spend time building relationships to nurture a new community, sharing their stories and their skills to create a digital artifact.
+    </p>
+    </dd>
+  </div>
+</div>
+
+
+<br>
+
+<div class="reflection-dropdown-menu">
+  <div class="dropdown-item">
+    <dt class="dropdown-question">Individual Reflection</dt>
+    <dd class="dropdown-answer">
+    <br>
+Working on this project provided a great opportunity to collaborate and build something that felt both creative and practical. Collectively, we each brought different strengths such that we were able to design and implement a hybrid participatory learning environment where teens and older adults could connect through storytelling, skill-sharing, and co-creation. My main role in the group centered around the technological functionality of the project where I helped translate and manifest our group’s ideas into a functional proof-of-concept within Google Sites. My contributions included embedding Firebase code to establish interactive upload features for intro-videos and artifacts, as well as designing an embedded graffiti wall in our site so that visitors could directly draw, and interact with the site itself without relying on external websites or tools. I had never attempted this level of interactivity in a Google Sites before, so taking this on was a good stretch of my technical capacity and abilities that was within my own Zone of Proximal Development (ZPD).
+<br><br>
+Through this process, I was able to gain a clearer understanding of what it takes to design a technology-supported learning environment that is truly constructivist in practice, and not just in theory. The interactive features we were able to create on GenEx were essential in allowing participants to build and share their own creations within a community space. Beyond this, my contribution for this project also included manifesting three sample artifacts as well as all of the introductory videos in order to demonstrate the type of cross-generational stories and skills we imagined participants contributing.
+<br><br>
+As related to ETEC 510, one of the strongest conceptual anchors for this project was the idea of reciprocal mentorship. Rather than assuming teens are “digital natives” and seniors are “novices,” we were able to frame the learning relationship and environment more mutually reciprocal. Depending on the digital tool or storytelling task taken on by either participant, this platform aligns with reciprocal learning and cognitive apprenticeship to take place through exercising Vygotsky’s ZPD. Through conceptualizing our platform with varying skills, and digital/analog expertise in mind, we were able to make our project intergenerational in scope and counter assumptions about aging and technology by bridging the two together.
+<br><br>
+By planning for a hybrid learning environment and learning model, we were able to encourage a diverse set of collaborations where learners might potentially move between in-person and online interactions. In this way, our Google Site itself serves as the digital extension of that physical space by supporting the ongoing documentation, reflection, and ongoing connection between participants. This blend of learning environments and the intentional integration between digital and physical spaces is core to our project and allowed for us to utilize technology to create shared learning experiences rather than a simple supplementation of learning (Vaughan et al., 2013).
+<br><br>
+Finally, our project’s emphasis on co-creation and playful exploration resonated with ideas from ETEC 510 and game-based learning through how cross-generational collaboration is framed as an opportunity to challenge stereotypes and build shared experiences through making an artifact. Even though GenExchange is not a game in itself, it does draw upon the same spirit of intergenerational play, experimentation, and meaning-making.
+<br><br>
+Overall in my reflection of this project, this experience helped me grow as a digital collaborator and instructional designer. Our group was able to make this happen across four different time zones, through coordinating our efforts using Slack, Google Docs, and Zoom, to build something functional within the constraints and affordances of Google Sites. If the project were to expand further, I would like to see it as it's own domain for stronger moderation, customization, and security between participants and interactive functions. That said, as a proof of concept, I feel our team created something thoughtful, functional, and aligned with the core concepts and learning theories of ETEC 510. 
+<br><br>
+
+{#% asideReadmore {#%#}
+## References  
+<br>
+Kafai, Y. B., & Peppler, K. A. (2011). Youth, technology, and DIY: Developing participatory competencies in creative media production. Review of Research in Education, 35, 89–119.
+<br><br>
+Vaughan, N. D., Cleveland-Innes, M., & Garrison, D. R. (2013). Teaching in blended learning environments: Creating and sustaining communities of inquiry. AU Press.
+<br><br>
+{#% endasideReadmore {#%#}
+<br>
+    </dd>
+  </div>
+</div>
+<br>
+<br>
+<br> 
+<br>
+
+
+<br>
+
+<style>
+.reflection-dropdown-menu {
+  width: 100%;
+  max-width: 100%;
+  font-family: Arial, sans-serif;
+}
+
+.reflection-dropdown-menu,
+.reflection-dropdown-menu p,
+.reflection-dropdown-menu li {
+  letter-spacing: normal;
+}
+
+
+.dropdown-item {
+  width: 100%;
+  display: block;
+  margin-bottom: 1rem;
+  box-sizing: border-box;
+}
+
+.dropdown-item:last-child {
+  margin-bottom: 0;
+}
+
+.dropdown-question {
+  width: 100%;
+  display: block;
+  background-color: #2E6F40;
+  color: white;
+  padding: 1rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.3s;
+  box-sizing: border-box;
+  border-radius: 8px;
+}
+
+.dropdown-question:hover {
+  background-color: #006400;
+}
+
+.dropdown-answer {
+  width: 100%;
+  max-height: 0;
+  overflow: hidden;
+  line-height: 1.6;
+  transition: all 0.3s ease-out;
+  padding: 0 1rem;
+  box-sizing: border-box;
+}
+
+.dropdown-answer img {
+  max-width: 100%;
+  height: 100%;
+}
+
+.dropdown-item.active .dropdown-answer {
+  max-height: 100%;
+  padding: 1rem;
+}
+</style>
+
+<script>
+document.querySelectorAll('.dropdown-question').forEach((question) => {
+  question.addEventListener('click', () => {
+    const item = question.parentElement;
+    item.classList.toggle('active');
+  });
+});
+</script>
+
+
+

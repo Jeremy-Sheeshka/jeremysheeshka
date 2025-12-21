@@ -1,0 +1,45 @@
+:root {
+  --dynamic-color: var(--color-gray-100);
+  --background-theme-light: var(--color-gray-100);
+  --background-theme-dark: var(--color-gray-800);
+}
+
+html[data-theme="light"] {
+  --dynamic-color: var(--color-gray-100);
+  --theme-background: var(--background-theme-light);
+}
+
+html[data-theme="dark"] {
+  --dynamic-color: var(--color-gray-800);
+  --theme-background: var(--background-theme-dark);
+}
+
+.header-banner {
+  background-color: var(--theme-background); /* 🔹 background goes all the way */
+  color: var(--dynamic-color);
+  width: 100%;
+}
+
+.result {
+  /* existing layout rules… */
+  position: relative;
+  width: 100vw;
+  overflow: hidden;
+  margin: 0; padding: 0;
+  color: var(--dynamic-color);
+
+  /* <<< new static placeholder: >>> */
+  background: 
+    url("data:image/svg+xml;charset=UTF-8,PASTE_YOUR_ENCODED_SVG_HERE")
+    top/cover no-repeat;
+}
+
+.result svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.header-content {
+  padding-top: 4rem;
+}

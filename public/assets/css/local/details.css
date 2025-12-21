@@ -1,0 +1,89 @@
+.details .control {
+  --gutter: var(--space-xs-s);
+  --cluster-horizontal-alignment: flex-end;
+  padding-block-start: var(--space-xs);
+}
+
+/* Hide without JS */
+is-land:not(:defined) .details .control {
+  display: none;
+}
+
+.details details > * + * {
+  margin-block-start: var(--flow-space, 1em);
+}
+
+.details details[open] + details {
+  margin-block-start: var(--space-2xl);
+}
+
+.details details > p:last-child {
+  margin-block-end: var(--space-l);
+}
+
+.details summary {
+  grid-column: content;
+}
+
+.details summary {
+  display: flex;
+  align-items: center;
+  line-height: var(--leading-fine);
+  gap: 0 1ch;
+  cursor: pointer;
+  list-style: none;
+  font-weight: var(--font-bold);
+  font-size: var(--size-step-1);
+  position: relative;
+  margin-inline-start: var(--space-l);
+  border-radius: var(--border-radius-small);
+
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+.details summary::before {
+  content: '+';
+  position: absolute;
+  inset-block-start: 0.3em;
+  inset-inline-start: calc(var(--space-l) * -1);
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-size: var(--size-step-1);
+  font-weight: var(--font-regular);
+  line-height: 0.5;
+  transform-origin: right bottom;
+}
+
+.details details[open] summary::before {
+  content: '–';
+}
+
+.details details > :is(h2, h3) {
+  font-weight: var(--font-bold);
+  font-size: var(--size-step-0);
+  border-block-end: var(--stroke);
+  padding-block-end: var(--space-xs);
+}
+
+.details details > :is(h2, h3) {
+  font-weight: var(--font-bold);
+  font-size: var(--size-step-0);
+  border-block-end: var(--stroke);
+  padding-block-end: var(--space-xs);
+}
+
+/* Hide default marker */
+.details summary::-webkit-details-marker,
+.details summary::marker {
+  content: '';
+  display: none;
+}
+
+.details summary + * {
+  margin-block-start: var(--space-s-m);
+}
+
+.details details > * + * {
+  margin-inline-start: var(--space-l);
+}

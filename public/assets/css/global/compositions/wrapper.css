@@ -1,0 +1,64 @@
+/* © Ryan Mulligan - https://ryanmulligan.dev/blog/layout-breakouts/ */
+
+.wrapper {
+  --gap: clamp(1rem, 6vw, 3rem);
+  --full: minmax(var(--gap), 1fr);
+  --content: min(var(--wrapper-width, 85rem), 100% - var(--gap) * 2);
+  --popout: minmax(0, 2rem);
+  --feature: minmax(0, 5rem);
+
+  display: grid;
+  grid-template-columns:
+    [full-start] var(--full)
+    [feature-start] var(--feature)
+    [popout-start] var(--popout)
+    [content-start] var(--content) [content-end]
+    var(--popout) [popout-end]
+    var(--feature) [feature-end]
+    var(--full) [full-end];
+}
+
+.wrapper > * {
+  grid-column: content;
+}
+
+/* use subgrid to inherit the grid columns for header, main, footer */
+
+body.wrapper {
+  /* default behaviour for the 3 children */
+  grid-template-rows: max-content auto max-content;
+}
+
+/* if first two children share a row */
+.wrapper:has(> .row-1 + .row-1) {
+  grid-template-rows: auto max-content;
+}
+
+body.wrapper > * {
+  grid-column: full;
+  display: grid;
+  grid-template-columns: subgrid;
+  align-self: start;
+}
+
+/* for all direct children of header, main, footer: default to content column */
+body.wrapper > * > * {
+  grid-column: content;
+}
+
+/* utility for sharing the same row in the wrapper (hero overlapping header) */
+.row-1 {
+  grid-row: 1;
+}
+
+.popout {
+  grid-column: popout !important;
+}
+
+.feature {
+  grid-column: feature !important;
+}
+
+.full {
+  grid-column: full !important;
+}

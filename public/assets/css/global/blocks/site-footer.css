@@ -1,0 +1,15 @@
+.site-footer {
+  --cluster-horizontal-alignment: center;
+}
+
+.site-footer a {
+  padding: var(--space-xs);
+}
+
+.language-nojs {
+  display: none;
+}
+
+is-land:not(:defined) .language-nojs {
+  display: block;
+}

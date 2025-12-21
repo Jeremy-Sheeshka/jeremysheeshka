@@ -1,0 +1,68 @@
+.anchor {
+  cursor: cursor;
+  z-index: 1;
+  padding: var(--space-xs);
+  height: auto;
+  display: grid;
+  place-content: center;
+}
+
+.anchor svg {
+  inline-size: auto;
+}
+
+.target {
+  inline-size: min(25ch, calc(100% - var(--gap)));
+  background-color: var(--target-bg, var(--color-text));
+  color: var(--target-color, var(--color-bg));
+  border: 2px solid var(--target-border, var(--color-text));
+  font-size: var(--target-font-size, var(--size-step-min-1));
+  overflow: visible;
+  border-radius: var(--border-radius-small);
+  padding: var(--space-s) var(--space-m);
+}
+
+.target .meta {
+  font-size: var(--size-step-min-1);
+}
+
+.target nav svg {
+  font-size: var(--size-step-1);
+}
+
+@supports (position-anchor: --anchor-el) {
+  .target {
+    inset: unset;
+    inset-block-end: anchor(top);
+    inset-inline-start: anchor(left);
+    margin: 0;
+    position: absolute;
+    translate: calc(var(--size-step-1) / -1) -0.7em;
+  }
+
+  .target::before {
+    block-size: 0;
+    content: '';
+    border: solid transparent;
+    border-top-color: var(--target-bg, var(--color-text));
+    border-width: calc(calc(var(--size-step-1) / 3) + 0.1em);
+    inline-size: 0;
+    inset-block-start: 100%;
+    inset-inline-start: 0;
+    pointer-events: none;
+    position: absolute;
+    translate: calc(var(--size-step-1) + calc(var(--space-xs) / 1)) 0;
+  }
+
+  .target[data-direction='rtl'] {
+    translate: var(--size-step-1) -0.7em;
+    inset-inline-start: auto;
+    inset-inline-end: anchor(right);
+  }
+
+  .target[data-direction='rtl']::before {
+    inset-inline-end: 0;
+    inset-inline-start: auto;
+    translate: calc(var(--size-step-2) / -1) 0;
+  }
+}

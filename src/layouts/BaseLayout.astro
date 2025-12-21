@@ -1,0 +1,32 @@
+---
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+
+const {
+  title = "Jeremy Sheeshka",
+  bodyClass = "",
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Global site styles (Eleventy → Astro) -->
+    <link rel="stylesheet" href="/assets/css/global/global.compiled.css" />
+
+    <title>{title}</title>
+  </head>
+
+  <body class={`wrapper ${bodyClass}`}>
+    <Header />
+
+    <main id="main" class="flow" tabindex="-1">
+      <slot />
+    </main>
+
+    <Footer />
+  </body>
+</html>

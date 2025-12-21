@@ -1,0 +1,67 @@
+/* Hide without JS */
+is-land:not(:defined) .language-select {
+  display: none;
+}
+
+.language-nav-button[aria-expanded='true'] svg {
+  rotate: -15deg;
+}
+
+.language-items {
+  position: absolute;
+  margin-block-start: 0;
+  inset-inline-end: var(--space-xs);
+  inset-block-start: var(--space-2xl);
+  visibility: hidden;
+  inline-size: calc(var(--space-2xl) * 2);
+}
+
+[aria-expanded='true'] + .language-items {
+  visibility: visible;
+}
+
+[aria-expanded='true'] + .language-items a {
+  color: var(--color-text);
+  justify-content: center;
+  margin-block-start: -3px;
+  transform-origin: right center;
+  background-color: var(--color-bg);
+  border: 2px solid var(--color-text);
+  display: grid;
+  block-size: var(--space-xl);
+  translate: calc(var(--offset) * 5px) 0;
+  rotate: calc(-0.01turn * var(--offset) + 0.02turn);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  [aria-expanded='true'] + .language-items a {
+    transition-delay: calc(var(--offset) * 50ms + 100ms);
+  }
+}
+
+[aria-expanded='true'] + .language-items a:hover {
+  background: var(--color-bg-accent);
+  color: var(--color-text);
+  transition-delay: 0ms;
+}
+
+[aria-expanded='true'] + .language-items [aria-selected='true'] {
+  background: var(--color-active);
+  color: var(--color-dark);
+}
+
+[aria-expanded='true'] + .language-items [aria-selected='true']:hover {
+  background: var(--color-active);
+  background: color-mix(in oklab, var(--color-active) 95%, var(--color-dark));
+  color: var(--color-dark);
+}
+
+@media screen(md) {
+  .language-items {
+    inline-size: calc(var(--space-2xl) * 2);
+  }
+
+  [aria-expanded='true'] + .language-items a {
+    block-size: var(--space-xl);
+  }
+}
