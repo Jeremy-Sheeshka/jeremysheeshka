@@ -1,0 +1,20 @@
+---
+import { getCollection } from "astro:content";
+const { lang } = Astro.params;
+
+const posts = (await getCollection("posts"))
+  .filter(p => p.slug.startsWith(`${lang}/`))
+  .sort((a, b) => b.data.date - a.data.date);
+---
+
+<h1>Posts</h1>
+
+<ul>
+{posts.map(post => (
+  <li>
+    <a href={`/posts/${lang}/${post.slug.split("/").pop()}/`}>
+      {post.data.title}
+    </a>
+  </li>
+))}
+</ul>
