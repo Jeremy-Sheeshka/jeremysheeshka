@@ -1,5 +1,12 @@
 ---
 import { getCollection } from "astro:content";
+
+export async function getStaticPaths() {
+  return [
+    { params: { lang: "en" } },
+  ];
+}
+
 const { lang } = Astro.params;
 
 const posts = (await getCollection("posts"))

@@ -7,6 +7,10 @@ tags: ETEC 511
 
 date: 2025-05-31
 ---
+
+import PostImage from "../../../components/content/PostImage.astro";
+import AsideReadMore from "../../../components/content/AsideReadMore.astro";
+
 <style>
 body {
   line-height: 1.6;
@@ -346,7 +350,6 @@ const responses = {
   ]
 };
 
-
   // Attach event listener to all buttons
   document.querySelectorAll('.analysis-button').forEach(button => {
     button.addEventListener('click', () => {
@@ -363,13 +366,7 @@ const responses = {
   });
 </script>
 
-
-
-
-
-
 ## Thinking about language
-
 
 Machine languages fundamentally differ from human languages in that they rely on strict predefined structures, do not evolve organically, and are not influenced by cultural considerations. They are systems of symbols and rules designed to enable humans to control a machine's actions and output. In contrast, human languages take many forms and convey subtle nuances including body language, spoken language, and tonal or emotional inflections, all of which can vary widely in interpretation. While both machine and human languages serve the purpose of communication, machine languages are deterministic and task-oriented, while human languages are expressive, flexible, and shaped by social and cultural contexts (Harris, 2018).
 
@@ -377,38 +374,22 @@ Machine languages fundamentally differ from human languages in that they rely on
 
 ## Thinking about intelligence
 
-
 Unlike human intelligence, machine intelligence seems to be directly proportional to the confines of its programming and data. The output of machine intelligence depends entirely on pre-existing inputs, leaving little room for creativity and abstract reasoning. Comparatively speaking, machines cannot transfer knowledge or develop new and original ideas, thereby making AI inherently limited in depth and adaptability in foreign contexts (Crawford, 2021). AI reasoning also struggles to conceptualize beyond patterns and generate thoughts outside predefined parameters, including the inability to draw upon prior experiences to navigate unfamiliar situations (Chollet, 2019). While AI may outperform humans in repetitive tasks, logic or games, these achievements reflect programmed skill and algorithmic decision-making, which ultimately do not equate to true intelligence or understanding.
-
-
 
 ## Machine Learning vs Human Learning
 
 Human learning is multidimensional and shaped by sensory input, experiences, and social contexts that collectively influence how our knowledge and understanding of the world develop. In contrast, machine learning occurs in two main ways: by encoding prior knowledge directly into the system or by training it on large datasets to improve task-specific objectives (Chollet, 2019). The effectiveness of machine learning and its ability to decipher or generate information depend heavily on the quality of the data on which the machine is trained (Heilweil, 2020). While both humans and machines are influenced by the contexts of their training and information biases, machines lack an adaptive depth of understanding and the same reasoning processes that humans possess. As a result, machine learning can significantly amplify systemic issues due to biased programming and datasets (Crawford, 2021).
 
-
-
-
 ## How are my responses different than AI?
-
 
 In working through the questions above, my approach differed from that of a machine as I was able to explore multiple sources and make my own judgments rather than rely on narrowly focused or surface-level materials and understandings. This broader engagement allowed me to practice higher-level thinking, evaluating, and synthesizing of information in ways that, in many respects, transcends the quality of reflective reasoning ChatGPT typically demonstrates. In addition, generative AI often struggles to provide direct citations and references while simultaneously lacking the ability to engage with abstract ideas or conceptual nuances in a humanistic way.
 
 While AI depends on structured data and human-codified search parameters, it does not reflect on its own biases or adapt its approach when responding to questions. In contrast, I made conscious choices about which information to include, how to present it, and revised my answers over time as my understanding of machine intelligence deepened. This refinement of self-awareness through writing is inherently a human based process which is something I believe generative AI will never be able to fully replicate. In conclusion, the reflective scaffolding of thought that I was able to develop and convey across these questions is something AI cannot fully realize in the same way humans do.
 
-
-
-
-
-
-
-
-
 {#% image "./src/assets/images/blog/rainbow.jpg", "a beautiful rainbow" {#%#}
 <br>
 
 {#% asideReadmore {#%#}## References
-
 
 <br>
 
@@ -432,7 +413,6 @@ Crawford, K. (2021). Atlas of AI: Power, politics, and the planetary costs of ar
 <br>
 
 Dick, S. (2019, July 1). Artificial Intelligence. Harvard Data Science Review. https://hdsr.mitpress.mit.edu/pub/0aytgrau/release/3 
-
 
 <br>
 

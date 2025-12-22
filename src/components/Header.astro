@@ -1,19 +1,14 @@
 ---
-const name = "Jeremy Sheeshka".split("");
+import LanguageSwitcher from "./LanguageSwitcher.astro";
+const { lang = "en" } = Astro.props;
 ---
 
-<header class="wrapper">
-  <a href="#main" class="skip-link">Skip to main content</a>
-
-  <div class="repel ontop gutter-s row-1">
-    <a href="/" class="logo cluster">
-      <div id="name" class="homemade-apple-regular">
-        {name.map((char, i) => (
-          <span style={`animation-delay: ${i * 120}ms`}>
-            {char === " " ? " " : char}
-          </span>
-        ))}
-      </div>
-    </a>
-  </div>
+<header class="site-header">
+  <nav>
+    <a href={`/${lang}/`}>Home</a>
+    <a href={`/${lang}/about`}>About</a>
+    <a href={`/${lang}/projects`}>Projects</a>
+    <a href="/posts">Blog</a>
+    <LanguageSwitcher lang={lang} />
+  </nav>
 </header>

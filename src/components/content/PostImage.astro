@@ -1,0 +1,39 @@
+---
+const {
+  src,
+  alt = "",
+  caption,
+  width,
+  height,
+} = Astro.props;
+---
+
+<figure class="post-image">
+  <img
+    src={src}
+    alt={alt}
+    loading="lazy"
+    width={width}
+    height={height}
+  />
+
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
+
+<style>
+.post-image {
+  margin: 2rem 0;
+}
+
+.post-image img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.post-image figcaption {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  margin-top: 0.5rem;
+}
+</style>

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
+import LanguageSwitcher from "../../../components/LanguageSwitcher.astro";
 import { getCollection } from "astro:content";
 
 export async function getStaticPaths() {
@@ -19,8 +20,9 @@ const { Content } = await post.render();
 ---
 
 <BaseLayout title={post.data.title} bodyClass="blogpost">
-  <article>
+  <article class="prose">
     <h1>{post.data.title}</h1>
+    <LanguageSwitcher lang={Astro.params.lang} slug={Astro.params.slug} />
     <p><small>{post.data.date.toDateString()}</small></p>
     <Content />
   </article>

@@ -1,0 +1,23 @@
+---
+const { title = "Read more" } = Astro.props;
+---
+
+<aside class="aside-readmore">
+  <strong>{title}</strong>
+  <div class="content">
+    <slot />
+  </div>
+</aside>
+
+<style>
+.aside-readmore {
+  border-left: 4px solid var(--accent, #0a7);
+  padding: 1rem;
+  margin: 2rem 0;
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.aside-readmore .content {
+  margin-top: 0.5rem;
+}
+</style>
