@@ -1,0 +1,12 @@
+---
+// src/layouts/BlogPost.astro
+import Webmentions from "@/components/webmentions/index.astro";
+const { post } = Astro.props;
+---
+<article>
+    <h1>{post.data.title}</h1>
+    <div class="prose">
+        <slot /> </div>
+    
+    <Webmentions /> 
+</article>

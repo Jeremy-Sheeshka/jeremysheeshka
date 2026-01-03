@@ -34,16 +34,11 @@ const readingTime: string = remarkPluginFrontmatter.readingTime;
             <div class="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
                 <div class="flex flex-col lg:flex-row lg:gap-8">
                     <div class="flex-1 min-w-0">
-                        {/* CONTENT SECTION: 
-                           Keep the slot in the prose div, 
-                           but move Webmentions outside to avoid styling conflicts.
+                        {/* MODIFIED: Added dark:prose-invert 
+                            MODIFIED: Removed sm:prose-headings:before:content-['#'] 
                         */}
                         <div class="prose dark:prose-invert prose-sm prose-headings:font-semibold max-w-none">
                             <slot />
-                        </div>
-
-                        {/* WEBMENTIONS: Placed after content for a clean list look */}
-                        <div class="mt-16">
                             <WebMentions />
                         </div>
                     </div>
@@ -62,21 +57,33 @@ const readingTime: string = remarkPluginFrontmatter.readingTime;
         </div>
     </article>
 
-    {/* Back to Top Button */}
     <button
         class="hover:border-link fixed end-4 bottom-8 z-90 flex h-10 w-10 translate-y-28 cursor-pointer items-center justify-center rounded-full border-2 border-transparent bg-zinc-200 text-3xl opacity-0 transition-all transition-discrete duration-300 data-[show=true]:translate-y-0 data-[show=true]:opacity-100 sm:end-8 sm:h-12 sm:w-12 dark:bg-zinc-700"
         data-show="false"
         id="to-top-btn"
     >
         <span class="sr-only">Back to top</span>
-        <svg aria-hidden="true" class="h-6 w-6" fill="none" focusable="false" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <svg
+            aria-hidden="true"
+            class="h-6 w-6"
+            fill="none"
+            focusable="false"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+        >
             <path d="M4.5 15.75l7.5-7.5 7.5 7.5" stroke-linecap="round" stroke-linejoin="round"></path>
         </svg>
     </button>
 </BaseLayout>
 
 <style is:global>
-    /* ... (Your existing styles remain exactly the same) ... */
+    /* FORCE THEME COLORS: 
+       Ensures titles inside the Masthead and custom headers in Markdown
+       both respect the dark/light mode toggle.
+    */
+    
     #blog-hero h1, 
     #blog-hero .title,
     .fake-h1,
@@ -85,19 +92,20 @@ const readingTime: string = remarkPluginFrontmatter.readingTime;
         transition: color 0.3s ease;
     }
 
+    /* Target the actual Markdown headings if prose-invert is acting up */
     .dark .prose h1, 
     .dark .prose h2, 
     .dark .prose h3 {
         color: #ffffff !important;
     }
 
+    /* Optional: Ensure custom dropdown text inside markdown also flips */
     .dropdown-answer, .reflection-body {
         color: var(--theme-text);
     }
 </style>
 
 <script>
-    /* ... (Your existing script remains exactly the same) ... */
     const scrollBtn = document.getElementById("to-top-btn") as HTMLButtonElement;
     const targetHeader = document.getElementById("blog-hero") as HTMLDivElement;
 

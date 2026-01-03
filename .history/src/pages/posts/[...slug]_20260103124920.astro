@@ -3,8 +3,7 @@ import { render } from "astro:content";
 import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 import { getAllPosts } from "@/data/post";
 import BlogPost from "@/layouts/BlogPost.astro";
-// Notice the capital M here
-import WebMentions from "@/components/blog/webmentions/index.astro";
+import Webmentions from "@/components/webmentions/index.astro";
 
 export const getStaticPaths = (async () => {
     const blogEntries = await getAllPosts();
@@ -25,6 +24,5 @@ const { Content } = await render(post);
         <Content />
     </div>
     
-    {/* Use the capital M here to match the import above */}
-    <WebMentions />
+    <Webmentions />
 </BlogPost>

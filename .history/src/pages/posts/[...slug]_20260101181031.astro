@@ -3,12 +3,11 @@ import { render } from "astro:content";
 import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 import { getAllPosts } from "@/data/post";
 import BlogPost from "@/layouts/BlogPost.astro";
-// Notice the capital M here
-import WebMentions from "@/components/blog/webmentions/index.astro";
 
 export const getStaticPaths = (async () => {
     const blogEntries = await getAllPosts();
     return blogEntries.map((post) => ({
+        // We use post.id because you are using the 'glob' loader
         params: { slug: post.id },
         props: { post },
     }));
@@ -21,10 +20,5 @@ const { Content } = await render(post);
 ---
 
 <BlogPost post={post}>
-    <div class="prose-base dark:prose-invert max-w-none">
-        <Content />
-    </div>
-    
-    {/* Use the capital M here to match the import above */}
-    <WebMentions />
+    <Content />
 </BlogPost>
