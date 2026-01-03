@@ -23,6 +23,9 @@ importers:
       '@astrojs/sitemap':
         specifier: 3.6.0
         version: 3.6.0
+      '@stefanjudis/sparkly-text':
+        specifier: ^1.1.2
+        version: 1.1.2
       '@tailwindcss/vite':
         specifier: 4.1.17
         version: 4.1.17(vite@6.4.1(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.30.2)(yaml@2.8.2))
@@ -901,6 +904,9 @@ packages:
     resolution: {integrity: sha512-3NgmNyH3l/Hv6EvsWJbsvpcpUba6R8IREQ83nH83cyakCw7uM1arZKNfHwv1Wz6jgqrF/j4x5ELvR6PnK9nTcA==}
     engines: {node: '>= 8.0.0'}
     hasBin: true
+
+  '@stefanjudis/sparkly-text@1.1.2':
+    resolution: {integrity: sha512-2TFUbs9IBP4f348AmtMMQwWV/CJdL1nb7B1hVvVvaD5KgFyUrVyO6kl7/I+hdVuSHXXNQXJfZm1oD+2f/YA9pA==}
 
   '@swc/helpers@0.5.17':
     resolution: {integrity: sha512-5IKx/Y13RsYd+sauPb2x+U/xZikHjolzfuDgTAl/Tdf3Q8rslRvC19NKDLgAJQ6wsqADk10ntlv08nPFw/gO/A==}
@@ -4001,6 +4007,8 @@ snapshots:
     dependencies:
       fflate: 0.7.4
       string.prototype.codepointat: 0.2.1
+
+  '@stefanjudis/sparkly-text@1.1.2': {}
 
   '@swc/helpers@0.5.17':
     dependencies:
