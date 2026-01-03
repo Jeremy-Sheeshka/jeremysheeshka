@@ -1,0 +1,48 @@
+/* --- ROOT VARIABLES --- */
+:root {
+	/* 1. Cream Theme (Light Mode) 
+       Effect: Bright white top light fading into Chris's #EDF1E7 cream 
+    */
+	--theme-cream-bg: radial-gradient(circle at 50% 0%, #ffffff 0%, #edf1e7 50%, #e3e8dc 100%);
+	--theme-cream-text: #2e2e2e;
+
+	/* 2. Standard Colors */
+	--theme-cinnabar: #e54848;
+	--theme-royal-blue: #4862e5;
+	--theme-bright-sun: #f5cf38;
+	--theme-green: #3bbe58;
+}
+
+/* --- DARK MODE OVERRIDES --- */
+:root[data-theme="dark"],
+.dark {
+	/* Cream Theme becomes Warm Dark (Dark Mode)
+       Effect: Warm spotlight on dark grey. 
+       Starts with lighter charcoal (#2c2a24) at top, fading to deep warm black.
+    */
+	--theme-cream-bg: radial-gradient(circle at 50% 0%, #2c2a24 0%, #1a1810 50%, #110f0b 100%);
+	--theme-cream-text: #ffffff;
+
+	/* Subdued Standard Colors */
+	--theme-cinnabar: #d55b56;
+	--theme-royal-blue: #4f68cf;
+	--theme-bright-sun: #eed066;
+	--theme-green: #60b978;
+
+	/* ... existing component styles ... */
+
+	/* CSS-only Noise Texture */
+	.bg-texture {
+		position: relative;
+	}
+	.bg-texture::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		z-index: -1; /* Sits behind content but on top of background-color */
+		opacity: 0.35; /* Adjust subtlety of grain here */
+		pointer-events: none;
+		background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+		mix-blend-mode: overlay;
+	}
+}

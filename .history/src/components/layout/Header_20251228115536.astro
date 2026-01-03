@@ -1,0 +1,171 @@
+---
+import Search from "@/components/Search.astro";
+import ThemeToggle from "@/components/ThemeToggle.astro";
+import { menuLinks } from "@/site.config";
+
+// We define the name here to split it for the animation
+const logoText = "Jeremy Sheeshka";
+---
+
+<header class="group relative mb-28 flex items-center sm:ps-18" id="main-header">
+    <div class="flex sm:flex-col">
+        <a
+            aria-current={Astro.url.pathname === "/" ? "page" : false}
+            class="inline-flex items-center sm:relative sm:inline-block"
+            href="/"
+        >
+            
+            {/* Rainbow Text Animation */}
+            <div id="name" class="homemade-apple-regular text-xl sm:text-2xl">
+                {
+                    logoText.split("").map((char, index) => {
+                        if (char === " ") {
+                            return <span>&nbsp;</span>;
+                        }
+                        // Calculate delay: 5000ms + (index * 100ms)
+                        const delay = `${5000 + index * 100}ms`;
+                        return <span style={{ animationDelay: delay }}>{char}</span>;
+                    })
+                }
+            </div>
+
+        </a>
+        <nav
+            aria-label="Main menu"
+            class="bg-global-bg absolute -inset-x-4 top-12 hidden flex-col divide-y px-2 py-4 group-[.menu-open]:z-50 group-[.menu-open]:flex sm:static sm:z-auto sm:-ms-4 sm:mt-1 sm:flex sm:flex-row sm:divide-x sm:divide-y-0 sm:bg-transparent sm:p-0"
+            id="navigation-menu"
+        >
+            {
+                menuLinks.map((link) => (
+                    <a
+                        aria-current={Astro.url.pathname === link.path ? "page" : false}
+                        class="text-accent px-2 py-4 font-semibold sm:px-4 sm:py-0 sm:underline-offset-2 sm:hover:underline"
+                        href={link.path}
+                    >
+                        {link.title}
+                    </a>
+                ))
+            }
+        </nav>
+    </div>
+    <Search />
+    <ThemeToggle />
+    <mobile-button>
+        <button
+            aria-expanded="false"
+            aria-haspopup="menu"
+            class="group relative ms-4 h-7 w-7 sm:invisible sm:hidden"
+            id="toggle-navigation-menu"
+            type="button"
+        >
+            <span class="sr-only">Open main menu</span>
+            <svg
+                aria-hidden="true"
+                class="absolute start-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 transition-all group-aria-expanded:scale-0 group-aria-expanded:opacity-0"
+                fill="none"
+                focusable="false"
+                id="line-svg"
+                stroke="currentColor"
+                stroke-width="1.5"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+            >
+                <path d="M3.75 9h16.5m-16.5 6.75h16.5" stroke-linecap="round" stroke-linejoin="round"
+                ></path>
+            </svg>
+            <svg
+                aria-hidden="true"
+                class="text-accent absolute start-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 scale-0 opacity-0 transition-all group-aria-expanded:scale-100 group-aria-expanded:opacity-100"
+                class="text-accent"
+                fill="none"
+                focusable="false"
+                id="cross-svg"
+                stroke="currentColor"
+                stroke-width="1.5"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+            >
+                <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+        </button>
+    </mobile-button>
+</header>
+
+<style>
+    /* 1. Font Styling */
+    .homemade-apple-regular {
+        font-family: "Homemade Apple", cursive;
+        font-weight: bold;
+        font-style: normal;
+        letter-spacing: -0.1rem; 
+    }
+
+    /* 2. Define CSS Variables for Colors */
+    
+    /* LIGHT MODE (Default) - Starts Black */
+    :root {
+        --rb-0: #000000;
+        --rb-1: #E54848;
+        --rb-2: #3BBE58;
+        --rb-3: #4862E5;
+        --rb-4: #F5CF38;
+        --rb-5: #E54867;
+        --rb-6: #60B978;
+        --rb-7: #000000;
+    }
+
+    /* DARK MODE OVERRIDE - Starts White */
+    /* Checks for 'dark' class OR 'data-theme="dark"' */
+    :global(.dark),
+    :global([data-theme="dark"]) {
+        --rb-0: #ffffff;  /* <-- Forces White Start */
+        --rb-1: #C76C6C;
+        --rb-2: #78C992;
+        --rb-3: #7F8DE0;
+        --rb-4: #E6D36F;
+        --rb-5: #D97085;
+        --rb-6: #93C4A4;
+        --rb-7: #ffffff;  /* <-- Forces White End */
+    }
+
+    /* 3. The Single Animation */
+    #name span {
+        animation: highlight-unified 160s linear infinite; 
+        display: inline-block;
+        /* Force color to use the variable immediately */
+        color: var(--rb-0); 
+    }
+
+    /* 4. Unified Keyframes */
+    @keyframes highlight-unified {
+        0%      { color: var(--rb-0); }
+        14.28%  { color: var(--rb-1); }
+        28.56%  { color: var(--rb-2); }
+        42.84%  { color: var(--rb-3); }
+        57.12%  { color: var(--rb-4); }
+        71.4%   { color: var(--rb-5); }
+        85.68%  { color: var(--rb-6); }
+        100%    { color: var(--rb-7); }
+    }
+</style>
+
+<script>
+    import { toggleClass } from "@/utils/domElement";
+
+    class MobileNavBtn extends HTMLElement {
+        #menuOpen: boolean = false;
+
+        connectedCallback() {
+            const headerEl = document.getElementById("main-header")!;
+            const mobileButtonEl = this.querySelector<HTMLButtonElement>("button");
+
+            mobileButtonEl?.addEventListener("click", () => {
+                if (headerEl) toggleClass(headerEl, "menu-open");
+                this.#menuOpen = !this.#menuOpen;
+                mobileButtonEl.setAttribute("aria-expanded", this.#menuOpen.toString());
+            });
+        }
+    }
+
+    customElements.define("mobile-button", MobileNavBtn);
+</script>

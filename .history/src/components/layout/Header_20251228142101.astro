@@ -1,0 +1,113 @@
+---
+import Search from "@/components/Search.astro";
+import ThemeToggle from "@/components/ThemeToggle.astro";
+import { menuLinks } from "@/site.config";
+
+// Accept the themeColor prop from BaseLayout
+interface Props {
+    themeColor?: "cinnabar" | "royal-blue" | "bright-sun" | "green";
+}
+
+const { themeColor = "cinnabar" } = Astro.props;
+const logoText = "Jeremy Sheeshka";
+
+// Map the prop string to the global CSS class
+const bgClass = `bg-theme-${themeColor}`;
+---
+
+<header class={`w-full ${bgClass} px-6 md:px-12 py-6 flex justify-between items-center relative z-40`} id="main-header">
+    
+    <a aria-current={Astro.url.pathname === "/" ? "page" : false} class="inline-flex items-center group" href="/">
+        <div id="name" class="homemade-apple-regular text-2xl sm:text-3xl relative z-10" style="color: inherit;">
+            {
+                logoText.split("").map((char, index) => {
+                    if (char === " ") return <span>&nbsp;</span>;
+                    const delay = `${5000 + index * 100}ms`;
+                    return <span style={{ animationDelay: delay }}>{char}</span>;
+                })
+            }
+        </div>
+    </a>
+
+    <div class="flex items-center gap-6">
+        <nav aria-label="Main menu" class="hidden sm:flex items-center gap-6" id="desktop-menu">
+            {
+                menuLinks.map((link) => (
+                    <a
+                        aria-current={Astro.url.pathname === link.path ? "page" : false}
+                        class="text-base font-bold transition-colors uppercase tracking-wide opacity-90 hover:opacity-100"
+                        style="color: inherit;"
+                        href={link.path}
+                    >
+                        {link.title}
+                    </a>
+                ))
+            }
+        </nav>
+
+        <div class="flex items-center gap-2" style="color: inherit;">
+            <Search />
+            <ThemeToggle />
+        </div>
+
+        <mobile-button>
+            <button
+                aria-expanded="false"
+                aria-haspopup="menu"
+                class="group relative h-7 w-7 sm:hidden flex items-center justify-center"
+                style="color: inherit;"
+                id="toggle-navigation-menu"
+                type="button"
+            >
+                <span class="sr-only">Open main menu</span>
+                <svg aria-hidden="true" class="absolute transition-all group-aria-expanded:scale-0 group-aria-expanded:opacity-0" fill="none" focusable="false" stroke="currentColor" stroke-width="1.5" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3.75 9h16.5m-16.5 6.75h16.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+                <svg aria-hidden="true" class="absolute scale-0 opacity-0 transition-all group-aria-expanded:scale-100 group-aria-expanded:opacity-100" fill="none" focusable="false" stroke="currentColor" stroke-width="1.5" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+            </button>
+        </mobile-button>
+    </div>
+</header>
+
+<nav id="mobile-drawer" class="fixed inset-x-0 top-[76px] bg-global-bg border-b border-textColor/10 p-4 hidden flex-col gap-4 sm:hidden z-50 shadow-lg">
+    {
+        menuLinks.map((link) => (
+            <a href={link.path} class="text-lg font-medium text-gray-600 dark:text-gray-300 hover:text-accent">
+                {link.title}
+            </a>
+        ))
+    }
+</nav>
+
+<style>
+    .homemade-apple-regular { font-family: "Homemade Apple", cursive; font-weight: bold; letter-spacing: -0.1rem; }
+    
+    /* Animation: Inherits color from parent (Red/Blue/Yellow) */
+    #name span { animation: highlight-unified 160s linear infinite; display: inline-block; color: inherit; }
+    @keyframes highlight-unified { 
+        0% { color: inherit; } 
+        14.28% { color: inherit; opacity: 0.8; } 
+        100% { color: inherit; } 
+    }
+</style>
+
+<script>
+    import { toggleClass } from "@/utils/domElement";
+    class MobileNavBtn extends HTMLElement {
+        connectedCallback() {
+            const headerEl = document.getElementById("main-header")!;
+            const drawerEl = document.getElementById("mobile-drawer")!;
+            const mobileButtonEl = this.querySelector<HTMLButtonElement>("button");
+            mobileButtonEl?.addEventListener("click", () => {
+                toggleClass(headerEl, "menu-open");
+                toggleClass(drawerEl, "hidden");
+                toggleClass(drawerEl, "flex");
+                const isExpanded = mobileButtonEl.getAttribute("aria-expanded") === "true";
+                mobileButtonEl.setAttribute("aria-expanded", (!isExpanded).toString());
+            });
+        }
+    }
+    customElements.define("mobile-button", MobileNavBtn);
+</script>

@@ -1,0 +1,66 @@
+---
+import { menuLinks } from "@/site.config";
+
+interface Props {
+    themeColor?: "cinnabar" | "royal-blue" | "bright-sun" | "green" | "cream";
+}
+
+const { themeColor = "cinnabar" } = Astro.props;
+const logoText = "Jeremy Sheeshka";
+---
+<header id="main-header" class="group relative mb-8 flex items-center justify-between py-4 lg:grid lg:grid-cols-5 lg:gap-4">
+  
+  <div class="flex lg:col-span-1">
+    <a href="/" class="text-xl font-bold p-2">
+      Your Site Title
+    </a>
+  </div>
+
+  <nav 
+    id="nav-menu"
+    class="hidden lg:flex lg:col-start-4 lg:items-center lg:justify-center gap-x-6"
+    aria-label="Main menu"
+  >
+    <a href="/about" class="hover:underline hover:text-accent">About</a>
+    <a href="/posts" class="hover:underline hover:text-accent">Blog</a>
+    <a href="/projects" class="hover:underline hover:text-accent">Projects</a>
+  </nav>
+
+  <div class="flex items-center gap-4 lg:col-start-5 lg:justify-end">
+    <ThemeToggle /> 
+    
+    <button id="mobile-menu-btn" class="p-2 lg:hidden" aria-label="Open Menu">
+      <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+    </button>
+  </div>
+
+</header>
+
+<script is:inline>
+    const duration = 160000; 
+    const offset = Date.now() % duration;
+    document.documentElement.style.setProperty('--anim-sync', `-${offset}ms`);
+</script>
+
+<style>
+    .homemade-apple-regular { font-family: "Homemade Apple", cursive; font-weight: bold; letter-spacing: -0.1rem; }
+
+    /* Animation Logic */
+    #name span {
+        display: inline-block;
+        color: var(--header-text); 
+        animation: highlight-unified 160s linear infinite;
+        animation-delay: calc(var(--anim-sync) + 5000ms + (var(--char-index) * 100ms));
+    }
+
+    @keyframes highlight-unified {
+        0%      { color: var(--header-text); }
+        14.28%  { color: var(--rb-1); }
+        28.56%  { color: var(--rb-2); }
+        42.84%  { color: var(--rb-3); }
+        57.12%  { color: var(--rb-4); }
+        71.4%   { color: var(--rb-5); }
+        85.68%  { color: var(--rb-6); }
+        100%    { color: var(--header-text); }
+    }
+</style>

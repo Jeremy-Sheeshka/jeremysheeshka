@@ -1,0 +1,148 @@
+---
+import type { GetStaticPaths, Page } from "astro";
+import type { CollectionEntry } from "astro:content";
+import { Image } from "astro:assets"; 
+import PostPreview from "@/components/blog/PostPreview.astro";
+import Pagination from "@/components/Paginator.astro";
+import { getAllPosts, getUniqueTags, groupPostsByYear } from "@/data/post";
+import PageLayout from "@/layouts/Base.astro";
+import { collectionDateSort } from "@/utils/date";
+import blogImg from "@/assets/jeremy/clayman.jpg"; // You can swap this for a more abstract 'writing' image later
+
+export const getStaticPaths = (async ({ paginate }) => {
+    const MAX_POSTS_PER_PAGE = 10;
+    const allPosts = await getAllPosts();
+    const allPostsByDate = allPosts.sort(collectionDateSort);
+    const uniqueTags = getUniqueTags(allPosts).slice(0, 7);
+    const pinnedPosts = allPostsByDate.filter((p) => p.data.pinned).slice(0, 3);
+    return paginate(allPostsByDate, {
+        pageSize: MAX_POSTS_PER_PAGE,
+        props: { uniqueTags, pinnedPosts },
+    });
+}) satisfies GetStaticPaths;
+
+interface Props {
+    page: Page<CollectionEntry<"post">>;
+    uniqueTags: string[];
+    pinnedPosts: CollectionEntry<"post">[];
+}
+
+const { page, uniqueTags, pinnedPosts } = Astro.props;
+const groupedByYear = groupPostsByYear(page.data);
+const descYearKeys = Object.keys(groupedByYear).sort((a, b) => +b - +a);
+
+const meta = { title: "Posts", description: "Read my collection of posts" };
+const paginationProps = {
+    ...(page.url.prev && { prevUrl: { text: "← Previous", url: page.url.prev } }),
+    ...(page.url.next && { nextUrl: { text: "Next →", url: page.url.next } }),
+};
+---
+
+<PageLayout meta={meta} themeColor="cream">
+    
+    {/* HERO SECTION: Magazine Style 
+        Different from About/Projects. 
+        Uses a large, overlapping layout where text sits on top of a subtle backdrop.
+    */}
+    <div class="relative w-full bg-[var(--theme-bright-sun)] text-[var(--theme-text)] overflow-hidden">
+        {/* Background Pattern/Texture */}
+        <div class="absolute inset-0 opacity-10 pointer-events-none">
+            <svg class="h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <path d="M0 100 C 20 0 50 0 100 100 Z" fill="currentColor" />
+            </svg>
+        </div>
+
+        <div class="max-w-6xl mx-auto px-6 md:px-12 py-20 md:py-32 relative z-10">
+            <h1 class="text-6xl md:text-9xl font-bold tracking-tighter mb-6" style="font-family: var(--font-display);">
+                The Blog
+            </h1>
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 border-t-4 border-current pt-6">
+                <p class="text-xl md:text-2xl max-w-xl font-medium leading-tight">
+                    Thoughts on web development, music education, and the creative process.
+                </p>
+                <div class="text-sm font-bold uppercase tracking-widest opacity-70">
+                    Est. {new Date().getFullYear()}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {/* MAIN CONTENT AREA */}
+    <div class="max-w-6xl mx-auto px-6 md:px-12 py-16">
+        <div class="grid lg:grid-cols-[1fr_300px] gap-16">
+            
+            {/* COLUMN 1: The Feed */}
+            <div>
+                {/* Pinned Posts (Highlighted) */}
+                {pinnedPosts.length > 0 && (
+                    <section class="mb-20">
+                        <div class="flex items-center gap-2 mb-8 text-[var(--theme-bright-sun)]">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6"><path d="M16 2H8C4.691 2 2 4.691 2 8v13a1 1 0 0 0 1 1h13c3.309 0 6-2.691 6-6V8c0-3.309-2.691-6-6-6zm4 14c0 2.206-1.794 4-4 4H4V8c0-2.206 1.794-4 4-4h8c2.206 0 4 1.794 4 4v8z"/></svg>
+                            <h2 class="font-bold text-lg uppercase tracking-wider text-global-text">Editor's Choice</h2>
+                        </div>
+                        
+                        <ul class="grid gap-8">
+                            {pinnedPosts.map((p) => (
+                                <li class="bg-gray-50 dark:bg-zinc-900 p-6 rounded-2xl hover:bg-[var(--theme-bright-sun)] hover:text-black transition-colors duration-300 group">
+                                    <PostPreview post={p} withDesc /> 
+                                    {/* Make sure your PostPreview component can handle 'withDesc' or similar if you want summaries here */}
+                                </li>
+                            ))}
+                        </ul>
+                    </section>
+                )}
+
+                {/* Chronological Feed */}
+                {descYearKeys.map((yearKey) => (
+                    <section class="mb-16 relative">
+                        {/* Sticky Year Label on Mobile/Desktop */}
+                        <h2 class="text-4xl font-bold text-gray-200 dark:text-gray-800 absolute -left-4 -top-8 -z-10 select-none">
+                            {yearKey}
+                        </h2>
+                        
+                        <ul class="space-y-10 border-l-2 border-gray-100 dark:border-gray-800 pl-6 ml-2">
+                            {groupedByYear[yearKey]?.map((p) => (
+                                <li class="relative">
+                                    {/* Timeline Dot */}
+                                    <div class="absolute -left-[31px] top-2 w-3 h-3 rounded-full bg-gray-300 dark:bg-gray-700"></div>
+                                    <PostPreview post={p} />
+                                </li>
+                            ))}
+                        </ul>
+                    </section>
+                ))}
+                
+                <div class="mt-12">
+                    <Pagination {...paginationProps} />
+                </div>
+            </div>
+
+            {/* COLUMN 2: Sidebar (Sticky) 
+                Moves to bottom on mobile, side on desktop.
+            */}
+            <aside class="lg:block">
+                <div class="sticky top-24 p-6 border border-gray-200 dark:border-gray-800 rounded-2xl">
+                    <h2 class="font-bold text-xl mb-6">Topics</h2>
+                    <ul class="flex flex-wrap gap-2">
+                        {uniqueTags.map((tag) => (
+                            <li>
+                                <a 
+                                    class="inline-block px-3 py-1 text-sm bg-gray-100 dark:bg-zinc-800 rounded-full hover:bg-[var(--theme-bright-sun)] hover:text-black transition-colors" 
+                                    href={`/tags/${tag}/`}
+                                >
+                                    #{tag}
+                                </a>
+                            </li>
+                        ))}
+                    </ul>
+                    <div class="mt-8 pt-8 border-t border-dashed border-gray-200 dark:border-gray-700">
+                        <a href="/tags/" class="text-sm font-bold hover:text-[var(--theme-bright-sun)] transition-colors">
+                            View all tags →
+                        </a>
+                    </div>
+                </div>
+            </aside>
+
+        </div>
+    </div>
+</PageLayout>

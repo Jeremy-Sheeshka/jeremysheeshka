@@ -1,0 +1,63 @@
+---
+import { render } from "astro:content";
+import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
+import { getAllPosts } from "@/data/post";
+import PageLayout from "@/layouts/Base.astro";
+
+export const getStaticPaths = (async () => {
+    const blogEntries = await getAllPosts();
+    return blogEntries.map((post) => ({
+        // For 'glob' loader, post.id is the filename/path which serves as the slug
+        params: { slug: post.id },
+        props: { post },
+    }));
+}) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const meta = {
+	title: post.data.title,
+	description: post.data.description,
+	articleDate: post.data.publishDate?.toISOString(),
+};
+---
+
+<PageLayout meta={meta}>
+    <div class="max-w-3xl mx-auto px-6 py-12 md:py-20">
+        
+        {/* Post Header */}
+        <div class="mb-10 text-center">
+            <h1 class="text-4xl md:text-6xl font-bold mb-4 text-[var(--theme-bright-sun)]">
+                {post.data.title}
+            </h1>
+            
+            {post.data.publishDate && (
+                <time 
+                    datetime={post.data.publishDate.toISOString()}
+                    class="text-stone-500 dark:text-zinc-400 font-medium"
+                >
+                    {post.data.publishDate.toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                    })}
+                </time>
+            )}
+        </div>
+
+        {/* Main Content */}
+        <article class="prose prose-lg dark:prose-invert mx-auto break-words hover:prose-a:text-[var(--theme-bright-sun)] prose-a:no-underline">
+            <Content />
+        </article>
+
+        {/* Back Button */}
+        <div class="mt-16 text-center">
+            <a href="/blog" class="px-4 py-2 border border-zinc-300 dark:border-zinc-700 rounded-lg hover:bg-stone-100 dark:hover:bg-zinc-800 transition-colors">
+                ← Back to Blog
+            </a>
+        </div>
+    </div>
+</PageLayout>

@@ -1,0 +1,43 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { getFormattedDate } from "@/utils/date";
+
+interface Props {
+    post: CollectionEntry<"post">;
+    withDesc?: boolean;
+}
+
+const { post, withDesc = true } = Astro.props;
+const date = new Date(post.data.publishDate);
+const dateTimeOptions: Intl.DateTimeFormatOptions = {
+    month: "short",
+};
+---
+
+<div class="flex flex-col sm:flex-row gap-2 sm:gap-6 md:gap-8 group">
+    <time 
+        datetime={date.toISOString()} 
+        class="min-w-[120px] text-gray-500 text-sm font-mono shrink-0 mt-1 transition-colors group-hover:text-textColor"
+    >
+        {getFormattedDate(date, dateTimeOptions)}
+    </time>
+
+    <div class="flex flex-col gap-2">
+        <h2 class="text-xl font-bold leading-tight">
+            <a 
+                href={`/posts/${post.slug}/`} 
+                class="hover:text-accent transition-colors underline-offset-4 decoration-2 hover:underline"
+                data-astro-prefetch
+            >
+                {post.data.title}
+            </a>
+        </h2>
+        
+        {withDesc && post.data.description && (
+            <p class="text-textColor/80 text-base leading-relaxed text-pretty">
+                {post.data.description}
+            </p>
+        )}
+        
+        </div>
+</div>

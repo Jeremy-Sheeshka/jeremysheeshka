@@ -1,0 +1,61 @@
+---
+import { getAllPosts } from "@/data/post";
+import PageLayout from "@/layouts/Base.astro";
+
+export async function getStaticPaths() {
+	const posts = await getAllPosts();
+	return posts.map((post) => ({
+		params: { slug: post.slug },
+		props: { post },
+	}));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+
+const meta = {
+	title: post.data.title,
+	description: post.data.description,
+	articleDate: post.data.publishDate?.toISOString(),
+};
+---
+
+<PageLayout meta={meta}>
+	<div class="max-w-3xl mx-auto px-6 py-12 md:py-20">
+		{/* Post Header */}
+		<div class="mb-10 text-center">
+			<h1 class="text-4xl md:text-6xl font-bold mb-4 text-[var(--theme-bright-sun)]">
+				{post.data.title}
+			</h1>
+			
+			{/* Date Check - displays only if a date exists */}
+			{post.data.publishDate && (
+				<time 
+					datetime={post.data.publishDate.toISOString()}
+					class="text-stone-500 dark:text-zinc-400 font-medium"
+				>
+					{post.data.publishDate.toLocaleDateString("en-US", {
+						year: "numeric",
+						month: "long",
+						day: "numeric",
+					})}
+				</time>
+			)}
+		</div>
+
+		{/* Main Content 
+            'prose' classes allow Tailwind to automatically style 
+            your H1, H2, lists, bolding, etc. inside markdown 
+        */}
+		<article class="prose prose-lg dark:prose-invert mx-auto break-words hover:prose-a:text-[var(--theme-bright-sun)] prose-a:no-underline">
+			<Content />
+		</article>
+
+        {/* Back Button */}
+        <div class="mt-16 text-center">
+            <a href="/blog" class="px-4 py-2 border border-zinc-300 dark:border-zinc-700 rounded-lg hover:bg-stone-100 dark:hover:bg-zinc-800 transition-colors">
+                ← Back to Blog
+            </a>
+        </div>
+	</div>
+</PageLayout>

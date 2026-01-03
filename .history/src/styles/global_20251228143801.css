@@ -1,0 +1,131 @@
+/* would like to ignore ./src/pages/og-image/[slug].png.ts */
+@import "tailwindcss";
+/* config for tailwindcss-typography plugin */
+@config "../../tailwind.config.ts";
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* --- 1. DEFINE VARIABLES (The Source of Truth) --- */
+@theme {
+	--color-global-bg: oklch(98.48% 0 0);
+	--color-global-text: oklch(26.99% 0.0096 235.05);
+	--color-link: oklch(55.44% 0.0431 185.69);
+	--color-accent: oklch(55.27% 0.195 19.06);
+	--color-accent-2: oklch(18.15% 0 0);
+	--color-quote: oklch(55.27% 0.195 19.06);
+}
+
+:root {
+	/* DEFAULT (Light Mode) Colors */
+	--theme-cinnabar: #e54848;
+	--theme-royal-blue: #4862e5;
+	--theme-bright-sun: #f5cf38;
+	--theme-green: #3bbe58;
+
+	/* Text colors on top of backgrounds */
+	--text-on-cinnabar: #ffffff;
+	--text-on-blue: #ffffff;
+	--text-on-yellow: #2e2e2e;
+}
+
+/* DARK MODE OVERRIDES */
+/* This updates the variables when the theme is dark */
+:root[data-theme="dark"],
+.dark {
+	--theme-cinnabar: #d55b56; /* Darker Red */
+	--theme-royal-blue: #4f68cf; /* Darker Blue */
+	--theme-bright-sun: #eed066; /* Darker Yellow */
+	--theme-green: #60b978;
+
+	--text-on-yellow: #1a1810;
+}
+
+@layer base {
+	html {
+		color-scheme: light dark;
+		accent-color: var(--color-accent);
+		scrollbar-gutter: stable;
+
+		&[data-theme="light"] {
+			color-scheme: light;
+		}
+
+		&[data-theme="dark"] {
+			color-scheme: dark;
+			--color-global-bg: oklch(23.64% 0.0045 248);
+			--color-global-text: oklch(83.54% 0 264);
+			--color-link: oklch(70.44% 0.1133 349);
+			--color-accent: oklch(70.91% 0.1415 163.7);
+			--color-accent-2: oklch(94.66% 0 0);
+			--color-quote: oklch(94.8% 0.106 136.49);
+		}
+	}
+
+	:target {
+		scroll-margin-block: 5ex;
+	}
+	@view-transition {
+		navigation: auto;
+	}
+
+	:where([data-astro-image]) {
+		object-fit: var(--fit);
+		object-position: var(--pos);
+	}
+	[data-astro-image="full-width"] {
+		width: 100%;
+	}
+	[data-astro-image="constrained"] {
+		max-width: 100%;
+	}
+}
+
+@layer components {
+	@import "./components/admonition.css";
+	@import "./components/github-card.css";
+
+	.cactus-link {
+		@apply hover:decoration-link underline underline-offset-2 hover:decoration-2;
+	}
+	.title {
+		@apply text-accent-2 text-2xl font-semibold;
+	}
+}
+
+@utility prose {
+	--tw-prose-body: var(--color-global-text);
+	--tw-prose-bold: var(--color-global-text);
+	--tw-prose-headings: var(--color-accent-2);
+	--tw-prose-hr: 0.5px dashed #666;
+	--tw-prose-links: var(--color-global-text);
+	--tw-prose-quotes: var(--color-quote);
+	--tw-prose-th-borders: #666;
+}
+
+/* --- 2. UTILITY CLASSES USING VARIABLES --- */
+/* These classes now just reference the variable. 
+   The variable does the hard work of switching colors. */
+
+.bg-theme-cinnabar {
+	background-color: var(--theme-cinnabar);
+	color: var(--text-on-cinnabar);
+	transition: background-color 0.3s ease;
+}
+
+.bg-theme-royal-blue {
+	background-color: var(--theme-royal-blue);
+	color: var(--text-on-blue);
+	transition: background-color 0.3s ease;
+}
+
+.bg-theme-bright-sun {
+	background-color: var(--theme-bright-sun);
+	color: var(--text-on-yellow);
+	transition: background-color 0.3s ease;
+}
+
+.bg-theme-green {
+	background-color: var(--theme-green);
+	color: #ffffff;
+	transition: background-color 0.3s ease;
+}

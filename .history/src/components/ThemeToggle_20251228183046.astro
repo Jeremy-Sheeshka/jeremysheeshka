@@ -1,0 +1,144 @@
+---
+---
+
+<custom-lightbulb class="relative block w-14 h-auto z-50 -mt-5" style="--color-primary: #ffd700">
+    <button aria-label="Switch theme" aria-pressed="false" class="group cursor-pointer focus:outline-none bg-transparent border-none p-0 w-full">
+        
+        <svg width="100%" viewBox="0 0 133 281" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="lightbulb transform-origin-top">
+            <g id="bulb">
+                <ellipse id="lightcircle" cx="66.5" cy="213.5" rx="66.5" ry="67.5" fill="var(--color-primary)"></ellipse>
+                
+                <path id="Line 1" stroke="currentColor" stroke-width="2" d="M73 -100 v 279"></path>
+                
+                <g id="mainbulb">
+                    <path id="innerbulb" d="M57.278 213.158c0 8.475 6.87 15.345 15.345 15.345 8.474 0 15.344-6.869 15.344-15.345 0-5.511-3.67-10.111-4.551-11.688-.882-1.579-1.56-4.058-1.681-5.574-.4-4.957-4.08-9.113-9.112-9.113-5.031 0-8.392 4.076-9.111 9.113-.215 1.507-.64 3.996-1.681 5.574-1.014 1.537-4.553 6.177-4.553 11.688Z" fill="var(--color-primary)"></path>
+                    
+                    <g id="regular">
+                        <path d="M66.523 183.78s-.663-6.329 5.167-6.435c5.83-.107 8.587 2.745 8.017 3.885-.57 1.141-.692 1.595-.692 1.595s2.584 1.407 1.163 3.138c-1.422 1.731-2.278 2.491-2.278 2.491s-2.475-2.675-5.277-1.671c-2.802 1.006-5.959 2.712-5.959 2.712s-3.153-3.547-.14-5.715Z" fill="var(--color-bg-toggle)"></path>
+                        <path d="M67.385 177.356c-.346-1.695 1.683-3.539 4.531-4.121 2.849-.582 5.437.319 5.784 2.013.346 1.694-1.495 1.607-4.342 2.189-2.848.582-5.627 1.613-5.973-.081Z" fill="currentColor"></path>
+                        <path d="M65.145 188.523c-.515-2.791 2.368-5.192 6.738-6.002 4.264-.79 8.087.135 8.601 2.923" stroke="currentColor" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
+                        <path d="M85.614 208.644c0 9.822-7.962 17.784-17.784 17.784a17.697 17.697 0 0 1-9.897-3.008c3.192 4.757 8.618 7.887 14.776 7.887 9.822 0 17.784-7.962 17.784-17.784 0-6.158-3.13-11.584-7.886-14.776a17.695 17.695 0 0 1 3.007 9.897Z" fill="var(--color-bg-toggle)"></path>
+                        <path d="M78.773 189.094s1.325-.769 1.405-3.131c.056-1.699-1.163-3.138-1.163-3.138s.927-1.038.538-2.743c-.521-2.292-3.99-3.529-7.863-2.737-3.871.791-6.022 2.328-5.931 4.678.039 1.023.765 1.757.765 1.757s-1.455 1.159-1.455 3.285c0 1.85 1.728 2.029 1.728 2.029" stroke="currentColor" stroke-width="3" stroke-miterlimit="10"></path>
+                        <path d="M66.169 187.925c-1.736 1.767-2.871 4.433-3.264 7.187-.23 1.607-.683 4.263-1.794 5.946-1.082 1.639-4.856 6.589-4.856 12.468 0 9.04 7.328 16.367 16.368 16.367s16.367-7.328 16.367-16.367c0-5.879-3.915-10.785-4.856-12.468-.94-1.683-1.663-4.327-1.793-5.946-.233-2.89-1.513-5.527-3.502-7.322" stroke="currentColor" stroke-width="2" stroke-miterlimit="10" stroke-linejoin="round"></path>
+                        <path d="M82.766 197.078c-.439-5.582-4.47-10.265-9.98-10.265-5.512 0-9.194 4.594-9.981 10.265" stroke="currentColor" stroke-width="1.8" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
+                        <path d="M70.159 187.868v16.263l-3.992 8.498H79.08l-3.992-8.498v-16.263" stroke="currentColor" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </g>
+                    
+                    <g id="lightlines" stroke="currentColor" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M98.005 212.106h5.351"></path>
+                        <path d="M42.293 212.106h5.351"></path>
+                        <path d="m90.63 229.912 3.784 3.784"></path>
+                        <path d="m51.235 190.515 3.784 3.786"></path>
+                        <path d="m55.02 229.912-3.785 3.784"></path>
+                        <path d="m94.414 190.515-3.784 3.786"></path>
+                    </g>
+                </g>
+            </g>
+        </svg>
+    </button>
+</custom-lightbulb>
+
+<style>
+    /* 1. Bulb Casing Background Color */
+    :root { --color-bg-toggle: #ffffff; }
+    :global([data-theme="dark"]) { --color-bg-toggle: #1a1810; }
+
+    /* 2. Light Mode Styles (Show everything) */
+    .light .lightbulb #lightcircle { opacity: 1; }
+    .light .lightbulb #lightlines { opacity: 1; }
+    
+    /* 3. Dark Mode Styles (Hide the glow and lines, make glass transparent) */
+    .dark .lightbulb #lightcircle { opacity: 0; }
+    .dark .lightbulb #lightlines { opacity: 0; }
+    .dark .lightbulb #innerbulb { fill: transparent; stroke: currentColor; stroke-width: 2px; opacity: 0.5; }
+
+    /* 4. Pendulum Animation (Triggered by script) */
+    .pendulum {
+        animation: swing 1s ease-in-out forwards;
+        transform-origin: 50% 0; /* Pivot from the top of the wire */
+    }
+
+    @keyframes swing {
+        0% { transform: rotate(0deg); }
+        25% { transform: rotate(15deg); }
+        50% { transform: rotate(-10deg); }
+        75% { transform: rotate(5deg); }
+        100% { transform: rotate(0deg); }
+    }
+
+    /* 5. Hover Effect */
+    /* Gentle movement on hover to hint interactivity */
+    button:hover .lightbulb {
+        transform: rotate(3deg);
+    }
+</style>
+
+<script>
+    class CustomLightbulb extends HTMLElement {
+        constructor() {
+            super();
+            this.button = this.querySelector("button");
+            this.svg = this.querySelector("svg");
+            // Random bright colors for Light Mode "On" state
+            this.colors = ["#ffd700","#ebdf22","#d5e73f","#bded59","#a2f372","#82f88b","#5cfca3","#1cfebc","#00ffd3","#00fde9","#00fbfc","#00f6ff","#67eeff","#8ae8ff","#9ee3ff","#ace0ff","#b7dcff","#c1d9ff","#cad6ff","#d3d2ff","#ddceff","#e8c9ff","#f6c3ff","#ffbaff","#ffbbf8","#ffbee8","#ffc0dc","#ffc2d1","#ffc3c7","#ffc5be","#ffc6b4","#ffc7a9","#ffc99b","#ffca8a","#ffcc6f","#ffcf35"];
+        }
+
+        connectedCallback() {
+            // Check initial theme preference
+            const theme = localStorage.getItem("theme-preference") || 
+                         (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+            
+            this.setTheme(theme, false);
+
+            this.button.addEventListener("click", () => {
+                const current = document.documentElement.getAttribute("data-theme");
+                const next = current === "light" ? "dark" : "light";
+                this.setTheme(next, true);
+            });
+
+            // Listen for system changes
+            window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
+                this.setTheme(e.matches ? "dark" : "light", true);
+            });
+        }
+
+        setTheme(theme, animate) {
+            // 1. Update HTML attribute
+            document.documentElement.setAttribute("data-theme", theme);
+            
+            // 2. Manage CSS classes for Tailwind and the Component
+            if (theme === 'dark') {
+                document.documentElement.classList.add('dark');
+                this.svg.classList.add('dark');
+                this.svg.classList.remove('light');
+            } else {
+                document.documentElement.classList.remove('dark');
+                this.svg.classList.add('light');
+                this.svg.classList.remove('dark');
+            }
+
+            // 3. Save preference
+            localStorage.setItem("theme-preference", theme);
+            this.button.setAttribute("aria-pressed", theme === "dark");
+            
+            // 4. Set random color if Light Mode
+            if (theme === "light") {
+                const randomColor = this.colors[Math.floor(Math.random() * this.colors.length)];
+                this.style.setProperty("--color-primary", randomColor);
+                
+                // Also update the meta theme color for mobile browsers
+                const metaTheme = document.querySelector('meta[name="theme-color"]');
+                if (metaTheme) metaTheme.setAttribute("content", randomColor);
+            }
+
+            // 5. Trigger Pendulum Animation
+            if (animate && this.svg) {
+                this.svg.classList.remove("pendulum");
+                // Trigger reflow to restart animation
+                void this.svg.offsetWidth; 
+                this.svg.classList.add("pendulum");
+            }
+        }
+    }
+    customElements.define("custom-lightbulb", CustomLightbulb);
+</script>

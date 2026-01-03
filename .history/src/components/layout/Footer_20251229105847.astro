@@ -1,0 +1,79 @@
+---
+import { siteConfig } from "@/site.config";
+
+const year = new Date().getFullYear();
+
+// Social Links Configuration
+// I've used the email from your index.astro. Update the GitHub URL as needed.
+const socialLinks = [
+	{
+		name: "RSS",
+		url: "/rss.xml",
+		iconPath: "M12.75 18.74c0-4.047-2.7-6.745-6.75-6.745m13.5 6.745c0-8.094-5.4-13.49-13.5-13.49m0 13.5.01-.01",
+		iconType: "stroke", // Some icons use stroke, some fill
+	},
+	{
+		name: "Github",
+		url: "https://github.com/jeremysheeshka", 
+		iconPath: "M14.778 19.014v-2.007a2.285 2.285 0 0 0-.137-.983 2.345 2.345 0 0 0-.542-.841c2.268-.245 4.651-1.077 4.651-4.894a3.74 3.74 0 0 0-1.083-2.621 3.44 3.44 0 0 0-.065-2.636s-.852-.244-2.824 1.035a9.972 9.972 0 0 0-5.056 0c-1.971-1.28-2.824-1.035-2.824-1.035a3.44 3.44 0 0 0-.065 2.636A3.738 3.738 0 0 0 5.75 10.31c0 3.79 2.383 4.621 4.651 4.894-.237.237-.42.52-.538.832-.117.31-.165.641-.14.971v2.007 M9.75 17.797c-2.143.579-3.929 0-5-1.783",
+		iconType: "stroke",
+	},
+	{
+		name: "Mail",
+		url: "mailto:hello@jeremysheeshka.ca",
+		// The mail icon from Chris W. uses two paths and fills, so I handled it slightly differently below
+		isMail: true, 
+	},
+];
+---
+
+<footer
+	class="mt-auto flex w-full flex-col items-center justify-center gap-y-2 pt-20 pb-4 text-center align-top font-semibold opacity-80 sm:flex-row sm:justify-between sm:text-xs hover:opacity-100 transition-opacity"
+	style="color: inherit;"
+>
+	<div class="me-0 sm:me-4">
+		&copy; {siteConfig.author}
+		{year}.<span class="inline-block">&nbsp;🚀&nbsp;{siteConfig.title}</span>
+	</div>
+
+	<nav
+		aria-label="Social links"
+		class="flex gap-x-4 sm:gap-x-6 items-center"
+	>
+		{socialLinks.map((link) => (
+			<a 
+				href={link.url} 
+				class="group flex items-center gap-1.5 hover:text-accent transition-colors"
+				target={link.url.startsWith("http") ? "_blank" : "_self"}
+				rel={link.url.startsWith("http") ? "noreferrer noopener" : ""}
+			>
+				{/* Icon Logic */}
+				<svg 
+					xmlns="http://www.w3.org/2000/svg" 
+					viewBox="0 0 24 24" 
+					class="w-5 h-5"
+					fill="none"
+					aria-hidden="true"
+				>
+					{link.isMail ? (
+						<>
+							<path fill="currentColor" fill-rule="evenodd" d="M7 4.25A2.75 2.75 0 0 0 4.25 7v1.25H5A2.25 2.25 0 0 1 6.677 12 2.25 2.25 0 0 1 5 15.75h-.75V17A2.75 2.75 0 0 0 7 19.75h13A2.75 2.75 0 0 0 22.75 17V7A2.75 2.75 0 0 0 20 4.25H7Zm2.416 4.126a.75.75 0 0 0-.832 1.248l4.5 3a.75.75 0 0 0 .832 0l4.5-3a.75.75 0 0 0-.832-1.248L13.5 11.099 9.416 8.376Z" clip-rule="evenodd"></path>
+							<path fill="currentColor" fill-rule="evenodd" d="M5.75 13.5a.75.75 0 0 1-.75.75H3a.75.75 0 1 1 0-1.5h2a.75.75 0 0 1 .75.75Zm0-3a.75.75 0 0 1-.75.75H1a.75.75 0 1 1 0-1.5h4a.75.75 0 0 1 .75.75Z" clip-rule="evenodd"></path>
+						</>
+					) : (
+						<path 
+							stroke="currentColor" 
+							stroke-linecap="round" 
+							stroke-linejoin="round" 
+							stroke-width={link.name === "RSS" ? "3" : "2"} 
+							d={link.iconPath} 
+						/>
+					)}
+				</svg>
+				
+				{/* Text Label - matches the style you liked */}
+				<span class="hidden sm:inline-block">{link.name}</span>
+			</a>
+		))}
+	</nav>
+</footer>

@@ -1,0 +1,162 @@
+---
+import Search from "@/components/Search.astro";
+import ThemeToggle from "@/components/ThemeToggle.astro";
+import { menuLinks } from "@/site.config";
+
+// We define the name here to split it for the animation
+const logoText = "Jeremy Sheeshka";
+---
+
+<header class="group relative mb-28 flex items-center sm:ps-18" id="main-header">
+    <div class="flex sm:flex-col">
+        <a
+            aria-current={Astro.url.pathname === "/" ? "page" : false}
+            class="inline-flex items-center sm:relative sm:inline-block sm:grayscale sm:hover:filter-none"
+            href="/"
+        >
+            
+            {/* --- RESTORED: Rainbow Text Animation --- */}
+            <div id="name" class="homemade-apple-regular text-xl sm:text-2xl">
+                {
+                    logoText.split("").map((char, index) => {
+                        if (char === " ") {
+                            return <span>&nbsp;</span>;
+                        }
+                        // Calculate delay: 5000ms + (index * 100ms)
+                        const delay = `${5000 + index * 100}ms`;
+                        return <span style={{ animationDelay: delay }}>{char}</span>;
+                    })
+                }
+            </div>
+
+        </a>
+        <nav
+            aria-label="Main menu"
+            class="bg-global-bg absolute -inset-x-4 top-12 hidden flex-col divide-y px-2 py-4 group-[.menu-open]:z-50 group-[.menu-open]:flex sm:static sm:z-auto sm:-ms-4 sm:mt-1 sm:flex sm:flex-row sm:divide-x sm:divide-y-0 sm:bg-transparent sm:p-0"
+            id="navigation-menu"
+        >
+            {
+                menuLinks.map((link) => (
+                    <a
+                        aria-current={Astro.url.pathname === link.path ? "page" : false}
+                        class="text-accent px-2 py-4 font-semibold sm:px-4 sm:py-0 sm:underline-offset-2 sm:hover:underline"
+                        href={link.path}
+                    >
+                        {link.title}
+                    </a>
+                ))
+            }
+        </nav>
+    </div>
+    <Search />
+    <ThemeToggle />
+    <mobile-button>
+        <button
+            aria-expanded="false"
+            aria-haspopup="menu"
+            class="group relative ms-4 h-7 w-7 sm:invisible sm:hidden"
+            id="toggle-navigation-menu"
+            type="button"
+        >
+            <span class="sr-only">Open main menu</span>
+            <svg
+                aria-hidden="true"
+                class="absolute start-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 transition-all group-aria-expanded:scale-0 group-aria-expanded:opacity-0"
+                fill="none"
+                focusable="false"
+                id="line-svg"
+                stroke="currentColor"
+                stroke-width="1.5"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+            >
+                <path d="M3.75 9h16.5m-16.5 6.75h16.5" stroke-linecap="round" stroke-linejoin="round"
+                ></path>
+            </svg>
+            <svg
+                aria-hidden="true"
+                class="text-accent absolute start-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 scale-0 opacity-0 transition-all group-aria-expanded:scale-100 group-aria-expanded:opacity-100"
+                class="text-accent"
+                fill="none"
+                focusable="false"
+                id="cross-svg"
+                stroke="currentColor"
+                stroke-width="1.5"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+            >
+                <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+        </button>
+    </mobile-button>
+</header>
+
+<style>
+    /* 1. Font Styling */
+    .homemade-apple-regular {
+        font-family: "Homemade Apple", cursive;
+        font-weight: bold;
+        font-style: normal;
+        /* Adjusted letter-spacing slightly for mobile legibility */
+        letter-spacing: -0.1rem; 
+    }
+
+    /* 2. Animation Basics */
+    #name span {
+        animation: highlight 160s linear infinite; /* Added infinite so it loops */
+        display: inline-block;
+        color: var(--theme-text); /* Default start color */
+    }
+
+    /* 3. Dark Mode Override */
+    /* Checks for 'dark' class on HTML or 'data-theme="dark"' */
+    :global(.dark) #name span,
+    :global([data-theme="dark"]) #name span {
+        animation-name: highlight-subdued;
+    }
+
+    /* 4. Keyframes (Light Theme) */
+    @keyframes highlight {
+        0%      { color: #000000; }
+        14.28%  { color: #E54848; }
+        28.56%  { color: #3BBE58; }
+        42.84%  { color: #4862E5; }
+        57.12%  { color: #F5CF38; }
+        71.4%   { color: #E54867; }
+        85.68%  { color: #60B978; }
+        100%    { color: #000000; }
+    }
+
+    /* 5. Keyframes (Dark Theme) */
+    @keyframes highlight-subdued {
+        0%      { color: #ffffff; }
+        14.28%  { color: #C76C6C; }
+        28.56%  { color: #78C992; }
+        42.84%  { color: #7F8DE0; }
+        57.12%  { color: #E6D36F; }
+        71.4%   { color: #D97085; }
+        85.68%  { color: #93C4A4; }
+        100%    { color: #ffffff; }
+    }
+</style>
+
+<script>
+    import { toggleClass } from "@/utils/domElement";
+
+    class MobileNavBtn extends HTMLElement {
+        #menuOpen: boolean = false;
+
+        connectedCallback() {
+            const headerEl = document.getElementById("main-header")!;
+            const mobileButtonEl = this.querySelector<HTMLButtonElement>("button");
+
+            mobileButtonEl?.addEventListener("click", () => {
+                if (headerEl) toggleClass(headerEl, "menu-open");
+                this.#menuOpen = !this.#menuOpen;
+                mobileButtonEl.setAttribute("aria-expanded", this.#menuOpen.toString());
+            });
+        }
+    }
+
+    customElements.define("mobile-button", MobileNavBtn);
+</script>

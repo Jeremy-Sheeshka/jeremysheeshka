@@ -1,0 +1,120 @@
+---
+import ThemeToggle from "@/components/ThemeToggle.astro";
+import { menuLinks } from "@/site.config";
+
+interface Props {
+    themeColor?: "cinnabar" | "royal-blue" | "bright-sun" | "green";
+}
+
+const { themeColor = "cinnabar" } = Astro.props;
+const logoText = "Jeremy Sheeshka";
+const bgClass = `bg-theme-${themeColor}`;
+---
+
+<header class={`w-full ${bgClass} px-6 md:px-12 py-5 flex flex-wrap justify-between items-center relative z-40 overflow-hidden transition-all duration-300`} id="main-header">
+    
+    <a
+        aria-current={Astro.url.pathname === "/" ? "page" : false}
+        class="inline-flex items-center group order-1"
+        href="/"
+    >
+        <div id="name" class="homemade-apple-regular text-2xl sm:text-3xl relative z-10 whitespace-nowrap">
+            {
+                logoText.split("").map((char, index) => {
+                    if (char === " ") return <span>&nbsp;</span>;
+                    return <span style={{ "--char-index": index }}>{char}</span>;
+                })
+            }
+        </div>
+    </a>
+
+    <div class="flex items-center transition-colors duration-300 ease-in-out order-2 sm:order-3" style="color: var(--anim-start);">
+        <ThemeToggle />
+    </div>
+
+    <nav
+        aria-label="Main menu"
+        class="flex items-center gap-6 order-3 w-full sm:w-auto sm:order-2 mt-4 sm:mt-0 justify-start sm:justify-center"
+        id="desktop-menu"
+    >
+        {
+            menuLinks.map((link) => (
+                <a
+                    aria-current={Astro.url.pathname === link.path ? "page" : false}
+                    class="text-sm sm:text-base font-bold uppercase tracking-wide opacity-90 hover:opacity-100 transition-colors duration-300 ease-in-out"
+                    style="color: var(--anim-start);" 
+                    href={link.path}
+                >
+                    {link.title}
+                </a>
+            ))
+        }
+    </nav>
+
+</header>
+
+<script is:inline>
+    const duration = 160000; 
+    const offset = Date.now() % duration;
+    document.documentElement.style.setProperty('--anim-sync', `-${offset}ms`);
+</script>
+
+<style>
+    .homemade-apple-regular { 
+        font-family: "Homemade Apple", cursive; 
+        font-weight: bold; 
+        letter-spacing: -0.1rem; 
+    }
+
+    /* --- 1. DEFAULT RAINBOW PALETTE (Light Mode) --- */
+    :root {
+        --rb-1: #E54848; --rb-2: #E54867; --rb-3: #4862E5; 
+        --rb-4: #60B978; --rb-5: #3BBE58; --rb-6: #F5CF38;
+        --anim-start: #ffffff; 
+    }
+
+    /* --- 2. DARK MODE PALETTE --- */
+    :global(.dark), :global([data-theme="dark"]) {
+        --rb-1: #C76C6C; --rb-2: #D97085; --rb-3: #7F8DE0; 
+        --rb-4: #93C4A4; --rb-5: #78C992; --rb-6: #E6D36F;
+        --anim-start: #000000; 
+    }
+
+    /* --- 3. PAGE-SPECIFIC CAMOUFLAGE FIXES --- */
+    header.bg-theme-cinnabar { --rb-1: #FFD1C9; } 
+    :global(.dark) header.bg-theme-cinnabar { --rb-1: #FFE0D9; }
+
+    header.bg-theme-royal-blue { --rb-3: #BAE6FD; }
+    :global(.dark) header.bg-theme-royal-blue { --rb-3: #D0F0FF; }
+
+    header.bg-theme-green { --rb-5: #D1FAE5; }
+    :global(.dark) header.bg-theme-green { --rb-5: #E0FFF0; }
+
+    header.bg-theme-bright-sun { 
+        --anim-start: #2e2e2e; 
+        --rb-6: #EA580C; 
+    }
+    :global(.dark) header.bg-theme-bright-sun { 
+        --anim-start: #1a1810; 
+        --rb-6: #C2410C; 
+    }
+
+    /* --- 4. ANIMATION LOGIC --- */
+    #name span {
+        display: inline-block;
+        color: var(--anim-start); 
+        animation: highlight-unified 160s linear infinite;
+        animation-delay: calc(var(--anim-sync) + 5000ms + (var(--char-index) * 100ms));
+    }
+
+    @keyframes highlight-unified {
+        0%      { color: var(--anim-start); }
+        14.28%  { color: var(--rb-1); }
+        28.56%  { color: var(--rb-2); }
+        42.84%  { color: var(--rb-3); }
+        57.12%  { color: var(--rb-4); }
+        71.4%   { color: var(--rb-5); }
+        85.68%  { color: var(--rb-6); }
+        100%    { color: var(--anim-start); }
+    }
+</style>

@@ -1,0 +1,66 @@
+---
+import { getAllPosts, getUniqueTagsWithCount } from "@/data/post";
+import PageLayout from "@/layouts/Base.astro";
+
+const allPosts = await getAllPosts();
+const allTags = getUniqueTagsWithCount(allPosts);
+
+// 1. Logic for sizing the Cloud
+const counts = allTags.map(([_, val]) => val);
+const minCount = Math.min(...counts);
+const maxCount = Math.max(...counts);
+
+// You can adjust these values to make the text bigger or smaller
+const minSize = 1; // 1rem
+const maxSize = 4; // 4rem
+
+const meta = {
+	description: "A visual cloud of all the topics I've written about",
+	title: "All Tags",
+};
+---
+
+<PageLayout meta={meta}>
+	<h1 class="title mb-12">Tags</h1>
+	
+	<ul class="flex flex-wrap items-center justify-center gap-x-10 gap-y-8 py-10">
+		{
+			allTags.map(([tag, val]) => {
+				// Linear scale formula to determine font size
+				const size = maxCount === minCount 
+					? minSize 
+					: minSize + ((val - minCount) * (maxSize - minSize)) / (maxCount - minCount);
+
+				// Opacity calculation (more posts = more solid color)
+				const opacity = 0.5 + (val / maxCount) * 0.5;
+
+				return (
+					<li class="inline-block">
+						<a
+							class="cactus-link inline-block transition-all duration-300 hover:text-accent hover:scale-110 font-bold leading-none"
+							href={`/tags/${tag}/`}
+							title={`View ${val} posts with the tag: ${tag}`}
+							style={`font-size: ${size}rem; opacity: ${opacity};`}
+						>
+							<span class="opacity-30 text-[0.6em] mr-0.5">#</span>{tag}
+						</a>
+					</li>
+				);
+			})
+		}
+	</ul>
+</PageLayout>
+
+<style>
+	/* Ensures the tags wrap beautifully and don't overflow on mobile */
+	ul {
+		list-style: none;
+		padding: 0;
+		text-align: center;
+	}
+
+	a {
+		white-space: nowrap;
+		text-decoration: none !important;
+	}
+</style>

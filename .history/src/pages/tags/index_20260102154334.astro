@@ -1,0 +1,71 @@
+---
+import { getAllPosts, getUniqueTagsWithCount } from "@/data/post";
+import PageLayout from "@/layouts/Base.astro";
+
+const allPosts = await getAllPosts();
+const allTags = getUniqueTagsWithCount(allPosts);
+
+const counts = allTags.map(([_, val]) => val);
+const minCount = Math.min(...counts);
+const maxCount = Math.max(...counts);
+
+const minSize = 1.1; 
+const maxSize = 4.2; 
+
+const meta = {
+	description: "A visual cloud of all the topics I've written about",
+	title: "All Tags",
+};
+---
+
+<PageLayout meta={meta}>
+	<h1 class="title mb-12">Tags</h1>
+	
+	<ul class="flex flex-wrap items-center justify-center gap-x-10 gap-y-10 py-10 min-h-[60vh]">
+		{
+			allTags.map(([tag, val]) => {
+				const size = maxCount === minCount 
+					? minSize 
+					: minSize + ((val - minCount) * (maxSize - minSize)) / (maxCount - minCount);
+
+				// Frequency percentage (0 to 1)
+				const frequency = (val - minCount) / (maxCount - minCount || 1);
+				
+				// Slower rotation for a professional look: between -6 and +6 degrees
+				// We only rotate about 30% of the tags to keep it readable
+				const rotation = Math.random() > 0.7 ? (Math.random() * 12 - 6) : 0;
+
+				return (
+					<li class="inline-block transition-transform hover:scale-110 active:scale-95">
+						<a
+							class="cactus-link inline-block font-bold leading-none"
+							href={`/tags/${tag}/`}
+							title={`View ${val} posts with the tag: ${tag}`}
+							style={`
+								font-size: ${size}rem; 
+								opacity: ${0.4 + (frequency * 0.6)};
+								transform: rotate(${rotation}deg);
+								color: ${frequency > 0.6 ? 'var(--theme-accent)' : frequency > 0.3 ? 'var(--theme-link)' : 'inherit'};
+							`}
+						>
+							<span class="opacity-20 text-[0.5em] mr-0.5">#</span>{tag}
+						</a>
+					</li>
+				);
+			})
+		}
+	</ul>
+</PageLayout>
+
+<style>
+	ul {
+		list-style: none;
+		padding: 0;
+		text-align: center;
+	}
+	a {
+		white-space: nowrap;
+		text-decoration: none !important;
+		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	}
+</style>

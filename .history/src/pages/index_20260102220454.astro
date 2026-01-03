@@ -1,0 +1,87 @@
+---
+import { Image } from "astro:assets";
+import { type CollectionEntry } from "astro:content";
+import { getAllPosts } from "@/data/post";
+import PageLayout from "@/layouts/Base.astro";
+import { collectionDateSort } from "@/utils/date";
+import homeImg from "@/assets/jeremy/sheeshka1400w.jpg";
+import PostPreview from "@/components/blog/PostPreview.astro";
+
+const roles = ["Hello there!"];
+const cta = { email: "hello@jeremysheeshka.ca" };
+
+const MAX_POSTS = 5; 
+const allPosts = await getAllPosts();
+const allPostsByDate = allPosts.sort(collectionDateSort) as CollectionEntry<"post">[];
+const latestPosts = allPostsByDate.slice(0, MAX_POSTS);
+---
+
+<PageLayout meta={{ title: "Home" }} themeColor="cream">
+    <div class="w-full relative z-10 overflow-hidden">
+        <div class="max-w-6xl mx-auto px-6 md:px-12 py-8 md:py-16 flex flex-col md:grid md:grid-cols-[1.5fr_1fr] md:grid-rows-[auto_auto] gap-x-12 gap-y-6 items-start relative z-10">
+            <h1 class="text-3xl sm:text-6xl font-bold leading-[1.1] tracking-tight order-1 md:col-start-1 md:row-start-1">
+                {roles.map((role) => (
+                    <span class="block">{role}</span>
+                ))}
+            </h1>
+            <div class="order-2 md:col-start-2 md:row-start-1 md:row-span-2 flex justify-center md:justify-end w-full">
+                <Image 
+                    src={homeImg} 
+                    alt="Jeremy Sheeshka" 
+                    class="lene-filter w-full rounded-xl shadow-2xl object-cover aspect-[3/2] md:aspect-[585/371] lg:aspect-[4/5] lg:max-w-xl"
+                    loading="eager"
+                />
+            </div>
+            <div class="order-3 md:col-start-1 md:row-start-2">
+                <p class="text-xl md:text-2xl max-w-xl font-medium leading-tight opacity-90 text-pretty">
+                     I'm a musician, educator, technologist who occasionally writes. Inspired by jazz guitar, education, and technology, I build tools and experiences to help design understandings.
+                </p>             
+            </div>
+        </div>
+    </div>
+    <div class="w-full">
+        <div class="max-w-3xl mx-auto px-6 md:px-12 py-16">
+            <article class="relative mb-20">
+                <h2 class="text-xl font-bold mb-8 text-stone-500 uppercase tracking-wide">Some recent articles</h2>
+                <ul class="space-y-4">
+                    {latestPosts.map((p) => (
+                        <li class="group relative">
+                            {/* Updated container: Forced text-zinc-900 for light mode visibility */}
+                            <div class="relative transition-all duration-300 group-hover:translate-x-1 border border-transparent hover:border-stone-200/60 p-6 rounded-2xl bg-transparent hover:bg-stone-100/40 dark:hover:bg-zinc-900/40 text-zinc-900 dark:text-zinc-100">
+                                <a href={`/posts/${p.id}/`} class="absolute inset-0 z-0" aria-label={`Read ${p.data.title}`}></a>
+                                <div class="relative z-10 pointer-events-none custom-post-preview">
+                                    <PostPreview post={p} />
+                                </div>
+                            </div>
+                        </li>
+                    ))}
+                </ul>
+                <div class="mt-12">
+                    <a href="/posts/" class="inline-flex items-center gap-2 font-bold hover:text-accent transition-colors">
+                        See all posts
+                        <svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 26 24" class="w-5 h-5"><path d="M23 12H2"></path><path d="m17 6 7 6-7 6"></path></svg>
+                    </a>
+                </div>
+            </article>
+        </div>
+    </div>
+</PageLayout>
+
+<style is:global>
+    /* Date styling - muted stone for both modes */
+    .custom-post-preview time {
+        @apply text-stone-400 dark:text-stone-500 font-medium text-sm transition-colors duration-300;
+    }
+
+    /* Slight darken/lighten of the date on hover for feedback */
+    .group:hover .custom-post-preview time {
+        @apply text-stone-600 dark:text-stone-300;
+    }
+
+    /* Ensuring the PostPreview title stays dark in light mode */
+    .custom-post-preview a, 
+    .custom-post-preview h2,
+    .custom-post-preview h3 {
+        @apply text-zinc-900 dark:text-white;
+    }
+</style>

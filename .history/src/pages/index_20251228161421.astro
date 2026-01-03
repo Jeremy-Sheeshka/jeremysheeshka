@@ -1,0 +1,151 @@
+---
+import { Image } from "astro:assets";
+import { type CollectionEntry } from "astro:content";
+import { getAllPosts } from "@/data/post";
+import PageLayout from "@/layouts/Base.astro";
+import { collectionDateSort } from "@/utils/date";
+import homeImg from "@/assets/jeremy/sheeshka1400w.jpg";
+
+// --- DATA ---
+const roles = [
+    "Musician.",
+    "Educator.",
+    "Technologist."
+];
+
+const hero = {
+    intro: "Inspired by music, learning, and creative expression, I build tools and experiences that explore new ways of understanding through technology."
+};
+
+const cta = {
+    email: "hello@jeremysheeshka.ca"
+};
+
+// --- POSTS LOGIC ---
+const MAX_POSTS = 5; 
+const allPosts = await getAllPosts();
+const allPostsByDate = allPosts.sort(collectionDateSort) as CollectionEntry<"post">[];
+const latestPosts = allPostsByDate.slice(0, MAX_POSTS);
+
+// --- DATE FORMATTER ---
+const formatDate = (date: Date) => {
+    return new Intl.DateTimeFormat("en-GB", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+    }).format(date);
+};
+---
+
+<PageLayout meta={{ title: "Home" }} themeColor="cinnabar">
+    
+    <div class="w-full bg-theme-cinnabar relative z-10 overflow-hidden">
+        <div class="max-w-6xl mx-auto px-6 md:px-12 py-16 md:py-28 grid md:grid-cols-[1.5fr_1fr] gap-12 items-center">
+            
+            <div class="order-2 md:order-1">
+                <h1 class="text-5xl sm:text-7xl lg:text-8xl font-bold leading-[1] mb-8 tracking-tight" style="color: inherit;">
+                    {roles.map((role) => (
+                        <span class="block">{role}</span>
+                    ))}
+                </h1>
+                <p class="text-xl sm:text-2xl leading-relaxed opacity-90 max-w-2xl text-pretty" style="color: inherit;">
+                    {hero.intro}
+                </p>
+            </div>
+
+            <div class="order-1 md:order-2 flex justify-center md:justify-end">
+                <Image 
+                    src={homeImg} 
+                    alt="Jeremy Sheeshka" 
+                    class="lene-filter w-full max-w-md rounded-2xl shadow-2xl object-cover aspect-[4/5]"
+                    loading="eager"
+                />
+            </div>
+
+        </div>
+    </div>
+
+    <div class="max-w-3xl mx-auto px-6 md:px-12 py-20">
+        
+        <article class="relative mb-24">
+            
+            <div aria-hidden="true" class="triangle"></div>
+
+            <h2 class="text-xl font-bold mb-10 text-accent uppercase tracking-wide">Some recent articles</h2>
+
+            <ul class="space-y-8">
+                {latestPosts.map((p) => (
+                    <li class="group flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-8">
+                        <time datetime={p.data.publishDate.toISOString()} class="text-gray-500 text-sm font-mono w-32 shrink-0 transition-colors group-hover:text-textColor">
+                            {formatDate(p.data.publishDate)}
+                        </time>
+                        
+                        <h3 class="text-xl font-bold leading-tight">
+                            <a href={`/posts/${p.slug}/`} class="hover:text-accent transition-colors underline-offset-4 decoration-2 hover:underline">
+                                {p.data.title}
+                            </a>
+                        </h3>
+                    </li>
+                ))}
+            </ul>
+
+            <div class="mt-16">
+                <a href="/posts/" class="inline-flex items-center gap-2 font-bold hover:text-accent transition-colors text-lg">
+                    See all posts
+                    <svg fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true" viewBox="0 0 26 24" class="w-5 h-5">
+                        <path d="M23 12H2" class="arrow-tail" pathLength="100"></path>
+                        <path d="m17 6 7 6-7 6"></path>
+                    </svg>
+                </a>
+            </div>
+        </article>
+
+        <article class="border-t border-dashed border-textColor/20 pt-12">
+            <h2 class="text-3xl font-bold mb-4">Get in touch</h2>
+            <p class="text-xl">
+                For enquiries please email 
+                <a href={`mailto:${cta.email}`} class="font-bold border-b-2 border-accent hover:text-accent transition-colors ml-1">
+                    {cta.email}
+                </a>
+            </p>
+        </article>
+
+    </div>
+
+</PageLayout>
+
+<style>
+    /* Lene Saile Image Filter */
+    .lene-filter {
+        filter: sepia(0.3) grayscale(0.7) brightness(1.2);
+        transition: filter 0.5s ease;
+    }
+    
+    /* Optional: Remove filter on hover for a nice effect */
+    .lene-filter:hover {
+        filter: sepia(0) grayscale(0) brightness(1);
+    }
+
+    .text-global-bg { color: var(--color-global-bg); }
+    
+    /* Chris Williams Triangle */
+    .triangle {
+        display: none; 
+        background-image: linear-gradient(
+            rgba(244, 162, 97, 0.4), 
+            rgba(231, 111, 81, 0.4), 
+            rgba(157, 78, 221, 0.4)
+        );
+        filter: blur(20px);
+        height: 150px;
+        width: 150px;
+        position: absolute;
+        right: -20px;
+        top: 0;
+        z-index: 0;
+        -webkit-mask: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 157 136'%3E%3Cpath fill='currentColor' fill-rule='evenodd' d='m10.395 17.154 6.351 11L32.794.359H20.092zM12.01.359H.699l5.655 9.795zm15.13 45.795-6.351-11L40.876.359h12.702l-26.44 45.795Zm4.04 7 6.352 11L74.363.359H61.66zm16.744 29-6.35-11L82.445.359h12.701zm4.041 7 6.351 11L115.932.359H103.23L51.964 89.154Zm16.744 29-6.351-11L124.015.359h12.701L68.708 118.154Zm4.041 7 5.892 10.205 77.942-135H144.8z' clip-rule='evenodd'/%3E%3C/svg%3E") no-repeat center / contain;
+        mask: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 157 136'%3E%3Cpath fill='currentColor' fill-rule='evenodd' d='m10.395 17.154 6.351 11L32.794.359H20.092zM12.01.359H.699l5.655 9.795zm15.13 45.795-6.351-11L40.876.359h12.702l-26.44 45.795Zm4.04 7 6.352 11L74.363.359H61.66zm16.744 29-6.35-11L82.445.359h12.701zm4.041 7 6.351 11L115.932.359H103.23L51.964 89.154Zm16.744 29-6.351-11L124.015.359h12.701L68.708 118.154Zm4.041 7 5.892 10.205 77.942-135H144.8z' clip-rule='evenodd'/%3E%3C/svg%3E") no-repeat center / contain;
+    }
+
+    @media(min-width: 768px) { .triangle { display: block; } }
+</style>

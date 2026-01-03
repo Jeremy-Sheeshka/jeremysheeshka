@@ -1,0 +1,111 @@
+---
+import { getAllPosts, getUniqueTagsWithCount } from "@/data/post";
+import PageLayout from "@/layouts/Base.astro";
+
+const allPosts = await getAllPosts();
+const rawTags = getUniqueTagsWithCount(allPosts);
+
+// 1. Shuffle the tags so they appear in different spots every refresh
+// We keep a copy to find the maxCount first
+const counts = rawTags.map(([_, val]) => val);
+const maxCount = Math.max(...counts);
+const minCount = Math.min(...counts);
+
+// Fisher-Yates Shuffle Logic
+const shuffledTags = [...rawTags];
+for (let i = shuffledTags.length - 1; i > 0; i--) {
+	const j = Math.floor(Math.random() * (i + 1));
+	[shuffledTags[i], shuffledTags[j]] = [shuffledTags[j], shuffledTags[i]];
+}
+
+const minSize = 1.1; 
+const maxSize = 5.0; // Increased for a stronger center focal point
+
+const meta = {
+	description: "An organic wordle cloud of blog topics",
+	title: "All Tags",
+};
+---
+
+<PageLayout meta={meta}>
+	<div class="flex flex-col items-center justify-center min-h-[80vh] w-full px-6 overflow-hidden">
+		
+		<ul class="tag-wordle flex flex-wrap items-center justify-center gap-x-6 gap-y-2 max-w-4xl mx-auto relative">
+			{
+				shuffledTags.map(([tag, val]) => {
+					const isMax = val === maxCount;
+					
+					// Calculate Size
+					const size = maxCount === minCount 
+						? minSize 
+						: minSize + ((val - minCount) * (maxSize - minSize)) / (maxCount - minCount);
+
+					const frequency = (val - minCount) / (maxCount - minCount || 1);
+
+					// Random orientation: vertical vs horizontal
+					// We keep the biggest tags horizontal for readability
+					const isVertical = !isMax && Math.random() > 0.8;
+					
+					// Random subtle rotation
+					const rotation = isMax ? 0 : (Math.random() * 12 - 6).toFixed(2);
+
+					return (
+						<li 
+							class={`flex items-center justify-center p-4 transition-all duration-500 hover:scale-125 hover:z-50 ${isVertical ? 'vertical-tag' : ''}`}
+							style={`order: ${isMax ? 0 : Math.floor(Math.random() * 10)};`}
+						>
+							<a
+								class="cactus-link font-bold tracking-tighter text-center leading-none select-none"
+								href={`/tags/${tag}/`}
+								style={`
+									font-size: ${size}rem; 
+									opacity: ${0.3 + (frequency * 0.7)};
+									transform: rotate(${rotation}deg);
+									color: ${isMax ? 'var(--theme-accent)' : frequency > 0.5 ? 'var(--theme-link)' : 'inherit'};
+									text-shadow: ${isMax ? '0 0 20px var(--theme-accent-opacity-20)' : 'none'};
+								`}
+							>
+								{tag}
+							</a>
+						</li>
+					);
+				})
+			}
+		</ul>
+	</div>
+</PageLayout>
+
+<style>
+	.tag-wordle {
+		list-style: none;
+		padding: 0;
+		perspective: 1000px;
+	}
+
+	li {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		/* The 'order' property helps mix items around the center */
+	}
+
+	.vertical-tag a {
+		writing-mode: vertical-rl;
+		text-orientation: mixed;
+	}
+
+	a {
+		display: inline-block;
+		text-decoration: none !important;
+		white-space: nowrap;
+		/* Transition for the scale and rotation */
+		transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
+	}
+
+	/* Prevent tags from clumping too much on tiny screens */
+	@media (max-width: 640px) {
+		.tag-wordle {
+			gap: 1rem;
+		}
+	}
+</style>

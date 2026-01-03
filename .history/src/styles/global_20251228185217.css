@@ -1,0 +1,31 @@
+/* --- ROOT VARIABLES --- */
+:root {
+	/* 1. Cream Theme (Light Mode) 
+       Effect: Bright white top light fading into Chris's #EDF1E7 cream 
+    */
+	--theme-cream-bg: radial-gradient(circle at 50% 0%, #ffffff 0%, #edf1e7 50%, #e3e8dc 100%);
+	--theme-cream-text: #2e2e2e;
+
+	/* 2. Standard Colors */
+	--theme-cinnabar: #e54848;
+	--theme-royal-blue: #4862e5;
+	--theme-bright-sun: #f5cf38;
+	--theme-green: #3bbe58;
+}
+
+/* --- DARK MODE OVERRIDES --- */
+:root[data-theme="dark"],
+.dark {
+	/* Cream Theme becomes Warm Dark (Dark Mode)
+       Effect: Warm spotlight on dark grey. 
+       Starts with lighter charcoal (#2c2a24) at top, fading to deep warm black.
+    */
+	--theme-cream-bg: radial-gradient(circle at 50% 0%, #2c2a24 0%, #1a1810 50%, #110f0b 100%);
+	--theme-cream-text: #ffffff;
+
+	/* Subdued Standard Colors */
+	--theme-cinnabar: #d55b56;
+	--theme-royal-blue: #4f68cf;
+	--theme-bright-sun: #eed066;
+	--theme-green: #60b978;
+}

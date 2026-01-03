@@ -1,0 +1,179 @@
+@import "tailwindcss";
+@config "../../tailwind.config.ts";
+
+/* Base Theme Config */
+@theme {
+	--color-global-bg: oklch(98.48% 0 0);
+	--color-global-text: oklch(26.99% 0.0096 235.05);
+	--color-link: oklch(55.44% 0.0431 185.69);
+	--color-accent: oklch(55.27% 0.195 19.06);
+	--color-accent-2: oklch(18.15% 0 0);
+	--color-quote: oklch(55.27% 0.195 19.06);
+}
+
+/* --- ROOT VARIABLES --- */
+:root {
+	/* 1. Cream Theme (Light Mode) */
+	--theme-cream-bg: radial-gradient(circle at 50% 0%, #ffffff 0%, #edf1e7 60%, #e3e8dc 100%);
+
+	/* 2. Standard Colors */
+	--theme-cinnabar: #e54848;
+	--theme-royal-blue: #4862e5;
+	--theme-bright-sun: #f5cf38;
+	--theme-green: #3bbe58;
+
+	/* Rainbow Default Colors */
+	--rb-1: #e54848;
+	--rb-2: #e54867;
+	--rb-3: #4862e5;
+	--rb-4: #60b978;
+	--rb-5: #3bbe58;
+	--rb-6: #f5cf38;
+
+	/* Default Header Text */
+	--header-text: #ffffff;
+}
+
+/* --- DARK MODE OVERRIDES --- */
+:root[data-theme="dark"],
+.dark {
+	/* Cream Theme (Dark Mode) */
+	--theme-cream-bg: radial-gradient(circle at 50% 0%, #2c2a24 0%, #1a1810 60%, #110f0b 100%);
+
+	/* Subdued Standard Colors */
+	--theme-cinnabar: #d55b56;
+	--theme-royal-blue: #4f68cf;
+	--theme-bright-sun: #eed066;
+	--theme-green: #60b978;
+
+	--header-text: #000000;
+}
+
+@layer base {
+	html {
+		color-scheme: light dark;
+		accent-color: var(--color-accent);
+	}
+
+	body {
+		/* Apply the variable set by the theme classes below */
+		color: var(--theme-text);
+		transition:
+			color 0.3s ease,
+			background-color 0.3s ease;
+		min-height: 100vh;
+	}
+}
+
+@layer components {
+	@import "./components/admonition.css";
+	@import "./components/github-card.css";
+
+	.cactus-link {
+		@apply hover:decoration-link underline underline-offset-2 transition-all hover:decoration-2;
+	}
+	.title {
+		@apply text-accent-2 text-2xl font-semibold;
+	}
+
+	/* Noise Texture: Low Opacity (0.15) */
+	.bg-texture::before {
+		content: "";
+		position: fixed;
+		inset: 0;
+		z-index: -1;
+		opacity: 0.15;
+		pointer-events: none;
+		background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+		mix-blend-mode: overlay;
+	}
+
+	/* Image Filter: Mild */
+	.lene-filter {
+		filter: sepia(0.15) grayscale(0.4) brightness(1.05);
+		transition: filter 0.3s ease;
+	}
+	.lene-filter:hover {
+		filter: none;
+	}
+}
+
+@utility prose {
+	--tw-prose-body: var(--theme-text);
+	--tw-prose-bold: var(--theme-text);
+	--tw-prose-headings: var(--theme-text);
+	--tw-prose-hr: 0.5px dashed currentColor;
+	--tw-prose-links: var(--theme-text);
+	--tw-prose-quotes: var(--theme-text);
+}
+
+/* --- THEME LOGIC (CLEAN VARIABLES) --- */
+
+/* 1. CREAM THEME */
+body.bg-theme-cream {
+	background-image: var(--theme-cream-bg);
+	background-color: #edf1e7;
+	background-attachment: fixed;
+	background-size: cover;
+
+	/* Light Mode Text: Dark Grey */
+	--theme-text: #2e2e2e;
+	--header-text: #2e2e2e;
+}
+
+/* Dark Mode Logic for Cream Theme */
+:global(.dark) body.bg-theme-cream,
+:global([data-theme="dark"]) body.bg-theme-cream {
+	/* Dark Mode Text: Pure White */
+	--theme-text: #ffffff;
+	--header-text: #ffffff;
+}
+
+/* 2. BRIGHT SUN */
+body.bg-theme-bright-sun {
+	background-color: var(--theme-bright-sun);
+	--theme-text: #1a1810;
+	--header-text: #1a1810;
+	--rb-6: #1a1810;
+}
+:global(.dark) body.bg-theme-bright-sun {
+	--theme-text: #1a1810;
+	--header-text: #1a1810;
+}
+
+/* 3. CINNABAR */
+body.bg-theme-cinnabar {
+	background-color: var(--theme-cinnabar);
+	--theme-text: #ffffff;
+	--rb-1: #ffffff;
+}
+:global(.dark) body.bg-theme-cinnabar {
+	--rb-1: #000000;
+}
+
+/* 4. ROYAL BLUE */
+body.bg-theme-royal-blue {
+	background-color: var(--theme-royal-blue);
+	--theme-text: #ffffff;
+	--rb-3: #ffffff;
+}
+:global(.dark) body.bg-theme-royal-blue {
+	--rb-3: #000000;
+}
+
+/* 5. GREEN */
+body.bg-theme-green {
+	background-color: var(--theme-green);
+	--theme-text: #ffffff;
+	--rb-5: #ffffff;
+}
+:global(.dark) body.bg-theme-green {
+	--rb-5: #000000;
+}
+/* Dark Mode Logic for Cream Theme */
+:global(.dark) body.bg-theme-cream,
+:global([data-theme="dark"]) body.bg-theme-cream {
+	/* Dark Mode Text: Pure White */
+	--theme-text: #ffffff;
+	--header-text: #ffffff;
+}

@@ -1,0 +1,33 @@
+---
+// ... imports ...
+// (Keep your imports exactly as they were)
+
+// ... getStaticPaths ...
+// (Keep your getStaticPaths exactly as it was)
+
+// ... props ...
+const { page, uniqueTags, pinnedPosts } = Astro.props;
+
+// Pass "bright-sun" (Yellow) here
+---
+
+<PageLayout meta={{ title: "Posts" }} themeColor="bright-sun">
+    
+    <div class="w-full bg-theme-bright-sun pb-0 pt-0 relative z-10">
+        <div class="max-w-3xl mx-auto px-6 md:px-12 py-16 md:py-24">
+            <h1 class="font-bold text-5xl md:text-7xl mb-8 tracking-tight" style="font-family: var(--font-display);">
+                Blog
+            </h1>
+            <p class="text-xl md:text-2xl leading-relaxed max-w-2xl opacity-90 text-pretty">
+                I'm writing about things related to web development, music, and education. 
+                Projects, approaches and observations, things I have learned or consider important.
+            </p>
+        </div>
+        <svg class="w-full h-auto text-global-bg block" style="margin-bottom: -1px; display: block;" preserveAspectRatio="none" viewBox="0 0 1440 320" aria-hidden="true">
+            <path class="fill-current" d="m0 192 34.3-5.3C68.6 181 137 171 206 181.3 274.3 192 343 224 411 240c69 16 138 16 206 26.7 68.7 10.3 137 32.3 206 32 68.4.3 137-21.7 206-32 68.1-10.7 137-10.7 205-26.7 68.9-16 137-48 172-64l34-16V0H0Z"></path>
+        </svg>
+    </div>
+
+    <div class="max-w-3xl mx-auto px-6 md:px-12 pb-24 mt-12">
+       </div>
+</PageLayout>

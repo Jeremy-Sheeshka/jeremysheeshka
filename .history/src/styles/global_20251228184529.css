@@ -1,0 +1,101 @@
+@import "tailwindcss";
+@config "../../tailwind.config.ts";
+
+/* Base Theme Config */
+@theme {
+	--color-global-bg: oklch(98.48% 0 0);
+	--color-global-text: oklch(26.99% 0.0096 235.05);
+	--color-link: oklch(55.44% 0.0431 185.69);
+	--color-accent: oklch(55.27% 0.195 19.06);
+	--color-accent-2: oklch(18.15% 0 0);
+	--color-quote: oklch(55.27% 0.195 19.06);
+}
+
+/* --- ROOT VARIABLES --- */
+:root {
+	/* 1. Cream Theme (Light Mode) */
+	--theme-cream-bg: linear-gradient(135deg, #edf1e7 0%, #e6eadd 100%);
+	--theme-cream-text: #2e2e2e;
+
+	/* 2. Standard Colors */
+	--theme-cinnabar: #e54848;
+	--theme-royal-blue: #4862e5;
+	--theme-bright-sun: #f5cf38;
+	--theme-green: #3bbe58;
+}
+
+/* --- DARK MODE OVERRIDES --- */
+:root[data-theme="dark"],
+.dark {
+	/* Cream Theme becomes Warm Dark Grey */
+	--theme-cream-bg: linear-gradient(135deg, #1a1810 0%, #24211a 100%);
+	--theme-cream-text: #ffffff;
+
+	/* Subdued Standard Colors */
+	--theme-cinnabar: #d55b56;
+	--theme-royal-blue: #4f68cf;
+	--theme-bright-sun: #eed066;
+	--theme-green: #60b978;
+}
+
+@layer base {
+	html {
+		color-scheme: light dark;
+		accent-color: var(--color-accent);
+	}
+
+	body {
+		@apply bg-global-bg text-global-text transition-colors duration-300;
+	}
+}
+
+@layer components {
+	@import "./components/admonition.css";
+	@import "./components/github-card.css";
+
+	.cactus-link {
+		@apply hover:decoration-link underline underline-offset-2 transition-all hover:decoration-2;
+	}
+	.title {
+		@apply text-accent-2 text-2xl font-semibold;
+	}
+}
+
+@utility prose {
+	--tw-prose-body: var(--color-global-text);
+	--tw-prose-bold: var(--color-global-text);
+	--tw-prose-headings: var(--color-accent-2);
+	--tw-prose-hr: 0.5px dashed #666;
+	--tw-prose-links: var(--color-global-text);
+	--tw-prose-quotes: var(--color-quote);
+}
+
+/* --- THEME UTILITY CLASSES --- */
+
+/* CREAM THEME (Applies to Header & Hero) */
+.bg-theme-cream {
+	background-image: var(--theme-cream-bg); /* Use Gradient */
+	background-color: #edf1e7; /* Fallback */
+	color: var(--theme-cream-text);
+	transition:
+		background-image 0.3s ease,
+		color 0.3s ease;
+}
+
+/* STANDARD THEMES (Solid Colors) */
+.bg-theme-cinnabar {
+	background-color: var(--theme-cinnabar);
+	color: white;
+}
+.bg-theme-royal-blue {
+	background-color: var(--theme-royal-blue);
+	color: white;
+}
+.bg-theme-bright-sun {
+	background-color: var(--theme-bright-sun);
+	color: #1a1810;
+}
+.bg-theme-green {
+	background-color: var(--theme-green);
+	color: white;
+}
