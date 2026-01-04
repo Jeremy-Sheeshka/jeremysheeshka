@@ -22,4 +22,9 @@ pnpm-debug.log*
 # misc
 *.pem
 .cache
-.astro
+.
+
+# Editor history / backups
+.history/
+.env
+.env.*
