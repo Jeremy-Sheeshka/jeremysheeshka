@@ -1,0 +1,125 @@
+---
+// File: src/pages/search.astro
+import PageLayout from "@/layouts/Base.astro";
+import { getAllPosts } from "@/data/post";
+
+const allPosts = await getAllPosts();
+
+const meta = {
+    title: "Search Results",
+    description: "Search results for the blog",
+};
+---
+
+<PageLayout meta={meta} themeColor="cream">
+    <div id="search-page-container" class="max-w-3xl mx-auto px-6 py-12 min-h-[60vh]">
+        
+        <h1 class="page-heading text-4xl font-bold mb-8 flex items-center gap-3 text-zinc-900 dark:text-white">
+            Search Results
+        </h1>
+        
+        <div class="relative mb-12">
+            <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+            </div>
+
+            <input 
+                type="text" 
+                id="search-input"
+                placeholder="Search posts..." 
+                class="w-full pl-14 pr-6 py-4 text-lg border-2 border-transparent rounded-2xl focus:border-[var(--theme-bright-sun)] outline-none bg-zinc-900/50 text-white placeholder-zinc-400 transition-colors"
+            />
+        </div>
+
+        <div id="search-results" class="space-y-4">
+            <div class="status-msg animate-pulse text-zinc-900 dark:text-white">Searching...</div>
+        </div>
+
+        <template id="result-template">
+            <a href="" class="result-card block group p-6 rounded-2xl border-2 border-transparent transition-all duration-300 hover:translate-x-1 hover:border-[var(--theme-bright-sun)]/50 hover:bg-stone-100/10 dark:bg-zinc-900/50 hover:dark:bg-zinc-900/80 dark:hover:border-[var(--theme-bright-sun)]">
+                <h2 class="result-title text-2xl font-bold mb-2 text-white"></h2>
+                <p class="result-desc line-clamp-2 text-white"></p>
+                <div class="result-date mt-4 text-xs font-bold uppercase tracking-wider text-[var(--theme-bright-sun)]"></div>
+            </a>
+        </template>
+    </div>
+</PageLayout>
+
+<style>
+    /* CSS OVERRIDES
+       I removed the override for .page-heading so Tailwind controls the Black/White switch.
+       I kept the Result Title/Desc overrides to ensure they stay white on the dark grey cards.
+    */
+    
+    #search-page-container .result-title { 
+        color: #ffffff !important; 
+        text-decoration: none !important;
+    }
+
+    #search-page-container .result-desc {
+        color: #ffffff !important;
+    }
+
+    #search-input {
+        color: #ffffff !important;
+    }
+
+    /* Dark Mode Defaults */
+    :global(.dark) #search-page-container .result-title { color: #ffffff !important; }
+    :global(.dark) #search-page-container .result-desc { color: #ffffff !important; }
+</style>
+
+<script is:inline define:vars={{ posts: allPosts }}>
+    const searchInput = document.getElementById("search-input");
+    const resultsContainer = document.getElementById("search-results");
+    const template = document.getElementById("result-template");
+    const urlParams = new URLSearchParams(window.location.search);
+    const query = urlParams.get("q") || "";
+
+    searchInput.value = query;
+
+    function performSearch(searchQuery) {
+        if (!searchQuery) {
+            resultsContainer.innerHTML = '<p class="status-msg italic text-zinc-900 dark:text-white">Enter a term to search...</p>';
+            return;
+        }
+
+        const lowerQuery = searchQuery.toLowerCase();
+        const filtered = posts.filter(post => {
+            const title = post.data.title.toLowerCase();
+            const desc = (post.data.description || "").toLowerCase();
+            return title.includes(lowerQuery) || desc.includes(lowerQuery);
+        });
+
+        resultsContainer.innerHTML = "";
+
+        if (filtered.length === 0) {
+            resultsContainer.innerHTML = `<p class="status-msg text-lg text-zinc-900 dark:text-white">No results found for "<strong>${searchQuery}</strong>".</p>`;
+            return;
+        }
+
+        filtered.forEach(post => {
+            const clone = template.content.cloneNode(true);
+            const link = clone.querySelector("a");
+            link.href = `/posts/${post.id}/`;
+            clone.querySelector(".result-title").textContent = post.data.title;
+            clone.querySelector(".result-desc").textContent = post.data.description;
+            const dateObj = new Date(post.data.updatedDate || post.data.publishDate);
+            clone.querySelector(".result-date").textContent = dateObj.toLocaleDateString('en-US', {
+                year: 'numeric', month: 'long', day: 'numeric'
+            });
+            resultsContainer.appendChild(clone);
+        });
+    }
+
+    performSearch(query);
+
+    searchInput.addEventListener("input", (e) => {
+        const newUrl = new URL(window.location);
+        newUrl.searchParams.set("q", e.target.value);
+        window.history.pushState({}, "", newUrl);
+        performSearch(e.target.value);
+    });
+</script>

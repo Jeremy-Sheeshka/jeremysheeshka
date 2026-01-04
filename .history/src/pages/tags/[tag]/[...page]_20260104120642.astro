@@ -1,0 +1,113 @@
+---
+// File: src/pages/tags/[tag].astro
+import { render } from "astro:content";
+import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
+import { Icon } from "astro-icon/components";
+import PostPreview from "@/components/blog/PostPreview.astro";
+import Pagination from "@/components/Paginator.astro";
+import { getAllPosts, getTagMeta, getUniqueTags } from "@/data/post";
+import PageLayout from "@/layouts/Base.astro";
+import { collectionDateSort } from "@/utils/date";
+
+export const getStaticPaths = (async ({ paginate }) => {
+    const allPosts = await getAllPosts();
+    const sortedPosts = allPosts.sort(collectionDateSort);
+    const uniqueTags = getUniqueTags(sortedPosts);
+
+    return uniqueTags.flatMap((tag) => {
+        const postsWithTag = sortedPosts.filter((post) => post.data.tags.includes(tag));
+        return paginate(postsWithTag, {
+            pageSize: 10,
+            params: { tag },
+        });
+    });
+}) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { page } = Astro.props as Props;
+const { tag } = Astro.params;
+const tagMeta = await getTagMeta(tag);
+
+const TagContent = tagMeta ? (await render(tagMeta)).Content : null;
+
+const meta = {
+    description: tagMeta?.data.description ?? `View all posts with the tag - ${tag}`,
+    title: tagMeta?.data.title ?? `Posts about ${tag}`,
+};
+
+const paginationProps = {
+    ...(page.url.prev && {
+        prevUrl: {
+            text: "← Previous Tags",
+            url: page.url.prev,
+        },
+    }),
+    ...(page.url.next && {
+        nextUrl: {
+            text: "Next Tags →",
+            url: page.url.next,
+        },
+    }),
+};
+---
+
+<PageLayout meta={meta}>
+    <div class="mx-auto max-w-3xl w-full px-6 py-8">
+        
+        <nav class="mb-6" aria-label="Breadcrumbs">
+            <ul class="flex items-center text-sm opacity-70">
+                <li class="flex items-center">
+                    <a class="cactus-link" href="/tags/">Tags</a>
+                    <Icon aria-hidden="true" name="mdi:chevron-right" class="mx-1.5 h-4 w-4" />
+                </li>
+                <li aria-current="page" class="font-semibold">
+                    <span aria-hidden="true" class="text-accent">#</span>{tag}
+                </li>
+            </ul>
+        </nav>
+
+        <h1 id="tag-heading" class="title mb-4 text-3xl capitalize">
+            {tagMeta?.data.title ?? `Posts about ${tag}`}
+        </h1>
+
+        <div class="prose prose-sm prose-cactus mb-12 max-w-none">
+            {tagMeta?.data.description && <p>{tagMeta.data.description}</p>}
+            {TagContent && <TagContent />}
+        </div>
+
+        <ul class="space-y-8">
+            {
+                page.data.map((p) => (
+                    <li class="flex flex-col gap-x-2 sm:flex-row">
+                        <PostPreview as="h2" post={p} />
+                    </li>
+                ))
+            }
+        </ul>
+
+        <div class="mt-16">
+            <Pagination {...paginationProps} />
+        </div>
+        
+    </div>
+</PageLayout>
+
+<style>
+    /* 1. FORCE HEADER COLOR (Overrides Theme Defaults) */
+    #tag-heading {
+        color: #18181b !important; /* Force Black in Light Mode */
+    }
+
+    :global(.dark) #tag-heading {
+        color: #ffffff !important; /* Force White in Dark Mode */
+    }
+
+    /* 2. Link Styles */
+    .cactus-link {
+        text-decoration: none !important;
+    }
+    .cactus-link:hover {
+        text-decoration: underline !important;
+    }
+</style>

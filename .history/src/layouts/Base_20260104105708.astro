@@ -1,0 +1,38 @@
+---
+import type { SiteMeta } from "@/types";
+import BaseHead from "@/components/BaseHead.astro";
+import Footer from "@/components/layout/Footer.astro";
+import Header from "@/components/layout/Header.astro";
+import ThemeProvider from "@/components/ThemeProvider.astro";
+import { siteConfig } from "@/site.config";
+// 1. Import the new Hanging Lightbulb Component
+import ThemeToggle from "@/components/ThemeToggle.astro";
+
+interface Props {
+	meta: SiteMeta;
+	themeColor?: "cinnabar" | "royal-blue" | "bright-sun" | "green" | "cream";
+}
+
+const {
+	meta: { articleDate, description = siteConfig.description, ogImage, title },
+	themeColor = "cream",
+} = Astro.props;
+
+const themeClass = `bg-theme-${themeColor}`;
+---
+
+<html lang={siteConfig.lang} class="scroll-smooth">
+	<head>
+		<BaseHead articleDate={articleDate} description={description} ogImage={ogImage} title={title} />
+	</head>
+	<body class={`flex min-h-screen flex-col ${themeClass} bg-texture`}>
+		<ThemeProvider />
+		{/* 2. Add the Toggle here so it hangs from the top of the page */}
+		<ThemeToggle />
+		<Header themeColor={themeColor} />
+		<main class="flex-grow w-full" id="main">
+			<slot />
+		</main>
+		<Footer themeColor={themeColor} />
+	</body>
+</html>

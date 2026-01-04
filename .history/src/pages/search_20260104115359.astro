@@ -1,0 +1,58 @@
+---
+import PageLayout from "@/layouts/Base.astro";
+import Search from "@/components/Search.astro";
+
+const meta = {
+	title: "Search",
+	description: "Search the blog posts",
+};
+---
+
+<PageLayout meta={meta}>
+	<div class="space-y-6">
+		<h1 class="title mb-6 text-3xl font-bold text-white">Search</h1>
+		
+		<Search />
+	</div>
+</PageLayout>
+
+<style is:global>
+	/* 1. Make the Search Input look like the blog style (Dark Mode ready) */
+	.pagefind-ui__search-input {
+		background-color: transparent !important; /* Matches site background */
+		color: white !important; /* Input text color */
+		border: 1px solid #52525b !important; /* Zinc-600 border */
+		border-radius: 0.375rem !important; /* Rounded corners */
+		padding: 0.75rem 1rem !important;
+	}
+
+	.pagefind-ui__search-input:focus {
+		outline: 2px solid #2dd4bf !important; /* Optional: Teal focus ring */
+		border-color: transparent !important;
+	}
+
+	/* 2. Make the Result Title White */
+	.pagefind-ui__result-title,
+	.pagefind-ui__result-link {
+		color: white !important;
+		text-decoration: none;
+	}
+
+	/* 3. Make the Blog Post Preview Text (Excerpt) White */
+	.pagefind-ui__result-excerpt {
+		color: #e4e4e7 !important; /* Zinc-200 (almost white) for readability */
+		font-weight: 400;
+	}
+
+	/* 4. Style the "Clear" button (X) */
+	.pagefind-ui__search-clear {
+		background-color: transparent !important;
+		color: white !important;
+	}
+
+	/* 5. Optional: Highlighted text color within search results */
+	.pagefind-ui__result-excerpt mark {
+		background-color: rgba(45, 212, 191, 0.3) !important; /* Teal highlight */
+		color: white !important;
+	}
+</style>
