@@ -4,6 +4,7 @@ description: "Testing out Firebase in my Grade 2 classroom through the squiggle 
 publishDate: 2025-12-02
 tags: ["Classroom Art"]
 showToc: false
+draft: true
 ---
 
 <style>
