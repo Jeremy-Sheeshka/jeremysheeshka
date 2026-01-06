@@ -1,0 +1,12 @@
+---
+const {
+  as = "div",
+  class: className = "",
+} = Astro.props;
+
+const Tag = as;
+---
+
+<Tag class={`rounded-2xl border border-border bg-card text-card-foreground shadow-sm ${className}`}>
+  <slot />
+</Tag>

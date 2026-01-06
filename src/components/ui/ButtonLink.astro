@@ -1,0 +1,27 @@
+---
+const {
+  href = "#",
+  variant = "default",
+  class: className = "",
+  target,
+  rel,
+} = Astro.props;
+
+const variants = {
+  default: "bg-primary text-primary-foreground hover:opacity-90",
+  secondary: "bg-secondary text-secondary-foreground hover:opacity-90",
+  outline: "bg-transparent border border-border hover:bg-muted",
+};
+
+const v = variants[variant] ?? variants.default;
+const computedRel = target === "_blank" ? (rel ?? "noreferrer noopener") : rel;
+---
+
+<a
+  href={href}
+  target={target}
+  rel={computedRel}
+  class={`inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold transition ${v} ${className}`}
+>
+  <slot />
+</a>

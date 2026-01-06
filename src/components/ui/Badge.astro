@@ -1,0 +1,14 @@
+---
+const { variant = "default", class: className = "" } = Astro.props;
+
+const variants = {
+  default: "bg-muted text-muted-foreground border-border",
+  accent: "bg-accent text-accent-foreground border-border",
+  outline: "bg-transparent text-foreground border-border",
+};
+const v = variants[variant] ?? variants.default;
+---
+
+<span class={`inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-medium ${v} ${className}`}>
+  <slot />
+</span>

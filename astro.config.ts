@@ -19,6 +19,8 @@ import { remarkGithubCard } from "./src/plugins/remark-github-card";
 import { remarkReadingTime } from "./src/plugins/remark-reading-time";
 import { expressiveCodeOptions, siteConfig } from "./src/site.config";
 
+import react from "@astrojs/react";
+
 export default defineConfig({
     site: siteConfig.url,
     image: {
@@ -26,43 +28,42 @@ export default defineConfig({
         domains: ["webmention.io"],
     },
     integrations: [
-        expressiveCode(expressiveCodeOptions),
-        icon(),
-        sitemap(),
-
-        // ✅ Ensure MDX uses the same Markdown pipeline (remark/rehype) as .md
-        mdx({
-            remarkPlugins: [remarkReadingTime, remarkDirective, remarkGithubCard, remarkAdmonitions],
-            rehypePlugins: [
-                rehypeHeadingIds,
-                [rehypeAutolinkHeadings, { behavior: "wrap", properties: { className: ["not-prose"] } }],
-                [rehypeExternalLinks, { rel: ["noreferrer", "noopener"], target: "_blank" }],
-                rehypeUnwrapImages,
-            ],
-        }),
-
-        robotsTxt(),
-        webmanifest({
-            name: siteConfig.title,
-            short_name: "Astro_Cactus",
-            description: siteConfig.description,
-            lang: siteConfig.lang,
-            icon: "public/icon.svg",
-            icons: [
-                { src: "icons/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
-                { src: "icons/icon-192.png", sizes: "192x192", type: "image/png" },
-                { src: "icons/icon-512.png", sizes: "512x512", type: "image/png" },
-            ],
-            start_url: "/",
-            background_color: "#1d1f21",
-            theme_color: "#2bbc8a",
-            display: "standalone",
-            config: {
-                insertFaviconLinks: false,
-                insertThemeColorMeta: false,
-                insertManifestLink: false,
-            },
-        }),
+      expressiveCode(expressiveCodeOptions),
+      icon(),
+      sitemap(),
+      // ✅ Ensure MDX uses the same Markdown pipeline (remark/rehype) as .md
+      mdx({
+          remarkPlugins: [remarkReadingTime, remarkDirective, remarkGithubCard, remarkAdmonitions],
+          rehypePlugins: [
+              rehypeHeadingIds,
+              [rehypeAutolinkHeadings, { behavior: "wrap", properties: { className: ["not-prose"] } }],
+              [rehypeExternalLinks, { rel: ["noreferrer", "noopener"], target: "_blank" }],
+              rehypeUnwrapImages,
+          ],
+      }),
+      robotsTxt(),
+      webmanifest({
+          name: siteConfig.title,
+          short_name: "Astro_Cactus",
+          description: siteConfig.description,
+          lang: siteConfig.lang,
+          icon: "public/icon.svg",
+          icons: [
+              { src: "icons/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+              { src: "icons/icon-192.png", sizes: "192x192", type: "image/png" },
+              { src: "icons/icon-512.png", sizes: "512x512", type: "image/png" },
+          ],
+          start_url: "/",
+          background_color: "#1d1f21",
+          theme_color: "#2bbc8a",
+          display: "standalone",
+          config: {
+              insertFaviconLinks: false,
+              insertThemeColorMeta: false,
+              insertManifestLink: false,
+          },
+      }),
+      react()
     ],
     markdown: {
         rehypePlugins: [

@@ -1,0 +1,57 @@
+---
+interface Props {
+  title?: string;
+  tabs: { id: string; label: string; body: string }[];
+}
+const { title, tabs } = Astro.props;
+const uid = `tabs-${Math.random().toString(36).slice(2)}`;
+---
+<div id={uid} class="my-8 rounded-xl border bg-white shadow-sm dark:bg-gray-900 dark:border-gray-700">
+  {title && <div class="px-4 py-3 font-semibold border-b bg-gray-50 dark:bg-gray-800 dark:border-gray-700">{title}</div>}
+  
+  <div class="flex border-b overflow-x-auto dark:border-gray-700">
+    {tabs.map((tab, idx) => (
+      <button 
+        data-tab-btn={tab.id}
+        class={`px-4 py-2 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${idx === 0 ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
+      >
+        {tab.label}
+      </button>
+    ))}
+  </div>
+  
+  <div class="p-4">
+    {tabs.map((tab, idx) => (
+      <div 
+        data-tab-content={tab.id} 
+        class={idx === 0 ? 'block animate-in fade-in duration-300' : 'hidden'}
+      >
+        <p class="leading-relaxed">{tab.body}</p>
+      </div>
+    ))}
+  </div>
+</div>
+
+<script define:vars={{ uid }}>
+  const root = document.getElementById(uid);
+  if (root) {
+    const btns = root.querySelectorAll('[data-tab-btn]');
+    const contents = root.querySelectorAll('[data-tab-content]');
+
+    btns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-tab-btn');
+        btns.forEach(b => {
+            b.classList.remove('border-blue-500', 'text-blue-600');
+            b.classList.add('border-transparent', 'text-gray-500');
+        });
+        contents.forEach(c => c.classList.add('hidden'));
+        btn.classList.remove('border-transparent', 'text-gray-500');
+        btn.classList.add('border-blue-500', 'text-blue-600');
+        const activeContent = root.querySelector(`[data-tab-content="${id}"]`);
+        activeContent.classList.remove('hidden');
+        activeContent.classList.add('block', 'animate-in', 'fade-in');
+      });
+    });
+  }
+</script>

@@ -1,0 +1,10 @@
+---
+const { cite, class: className = "" } = Astro.props;
+---
+
+<figure class={`my-6 rounded-2xl border border-border bg-card p-5 ${className}`}>
+  <blockquote class="text-base italic leading-relaxed">
+    <slot />
+  </blockquote>
+  {cite ? <figcaption class="mt-3 text-sm opacity-80">— {cite}</figcaption> : null}
+</figure>

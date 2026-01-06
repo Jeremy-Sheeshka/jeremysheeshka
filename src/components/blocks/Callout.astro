@@ -1,0 +1,17 @@
+---
+const { title = "Note", variant = "note", class: className = "" } = Astro.props;
+
+const variants = {
+  note: "border-l-[6px] border-l-ring bg-muted/40",
+  tip: "border-l-[6px] border-l-chart-2 bg-muted/40",
+  warning: "border-l-[6px] border-l-destructive bg-muted/40",
+};
+const v = variants[variant] ?? variants.note;
+---
+
+<aside class={`rounded-2xl border border-border p-4 ${v} ${className}`}>
+  <div class="font-bold mb-2">{title}</div>
+  <div class="text-sm leading-relaxed">
+    <slot />
+  </div>
+</aside>

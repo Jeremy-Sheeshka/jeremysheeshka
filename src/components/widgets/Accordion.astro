@@ -1,0 +1,52 @@
+---
+const {
+  title,
+  items = [],
+  single = true,
+  openId,
+  class: className = "",
+} = Astro.props;
+
+const uid = `acc-${Math.random().toString(36).slice(2)}`;
+const safeItems = Array.isArray(items) ? items : [];
+const initial = openId ?? safeItems[0]?.id ?? null;
+---
+
+<div id={uid} class={`rounded-lg border p-4 ${className}`} data-single={single ? "true" : "false"}>
+  {title && <div class="font-semibold mb-3">{title}</div>}
+
+  <div class="grid gap-3">
+    {safeItems.map((it) => (
+      <details class="group rounded-md border p-4" data-acc-item={it.id} open={initial === it.id}>
+        <summary class="flex justify-between items-center cursor-pointer font-semibold select-none list-none">
+            <span>{it.title}</span>
+            <span class="transform group-open:rotate-180 transition-transform duration-200 opacity-50">▼</span>
+        </summary>
+        <div class="mt-3 leading-7 opacity-90">{it.body}</div>
+      </details>
+    ))}
+  </div>
+</div>
+
+<script define:vars={{ uid }}>
+  const root = document.getElementById(uid);
+  if (root) {
+    const single = root.getAttribute("data-single") === "true";
+    
+    if (single) {
+      const items = Array.from(root.querySelectorAll("details[data-acc-item]"));
+      items.forEach((d) => {
+        d.addEventListener("toggle", () => {
+          if (!d.open) return;
+          items.forEach((other) => {
+            if (other !== d) other.open = false;
+          });
+        });
+      });
+    }
+  }
+</script>
+
+<style>
+    summary::-webkit-details-marker { display: none; }
+</style>

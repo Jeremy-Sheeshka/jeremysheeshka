@@ -1,0 +1,21 @@
+---
+const { items = [] } = Astro.props;
+---
+<div id="references" class="mt-12 border-t pt-8">
+  <h3 class="text-lg font-bold mb-6">References</h3>
+  <div class="space-y-4">
+    {items.map((item) => (
+      <div class="flex gap-4 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+        <div class="flex-none font-bold text-gray-900 dark:text-gray-100">[{item.n}]</div>
+        <div class="m-0">
+          <span dangerouslySetInnerHTML={{ __html: item.text }} />
+          {item.url && (
+            <a href={item.url} target="_blank" class="ml-1 text-blue-600 hover:underline">
+              [Link]
+            </a>
+          )}
+        </div>
+      </div>
+    ))}
+  </div>
+</div>

@@ -1,0 +1,10 @@
+---
+const { term, class: className = "" } = Astro.props;
+---
+
+<div class={`my-6 rounded-2xl border border-border bg-muted/30 p-5 ${className}`}>
+  <div class="font-bold">{term}</div>
+  <div class="mt-2 text-sm leading-relaxed">
+    <slot />
+  </div>
+</div>

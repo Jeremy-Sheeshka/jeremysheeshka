@@ -1,0 +1,52 @@
+---
+interface Props {
+  question: string;
+  options: { id: string; label: string }[];
+  storageKey: string;
+}
+const { question, options, storageKey } = Astro.props;
+const uid = `poll-${Math.random().toString(36).slice(2)}`;
+---
+<div id={uid} class="my-8 rounded-lg border p-6 bg-gray-50 dark:bg-gray-800/50">
+  <h4 class="mb-4 font-bold text-lg">{question}</h4>
+  <div class="space-y-2 poll-options">
+    {options.map((opt) => (
+      <button 
+        data-opt-id={opt.id}
+        class="w-full text-left px-4 py-3 rounded border bg-white hover:bg-gray-50 transition-colors dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
+      >
+        {opt.label}
+      </button>
+    ))}
+  </div>
+  <div class="hidden poll-results mt-4 font-mono text-sm text-green-600 dark:text-green-400">
+    Thanks for voting!
+  </div>
+</div>
+
+<script define:vars={{ uid, storageKey }}>
+  const root = document.getElementById(uid);
+  if (root) {
+    const saved = localStorage.getItem(storageKey);
+    const optionsDiv = root.querySelector('.poll-options');
+    const resultsDiv = root.querySelector('.poll-results');
+    const buttons = root.querySelectorAll('button');
+
+    if (saved) {
+      optionsDiv.classList.add('opacity-50', 'pointer-events-none');
+      const selectedBtn = root.querySelector(`[data-opt-id="${saved}"]`);
+      if (selectedBtn) selectedBtn.classList.add('ring-2', 'ring-blue-500');
+      resultsDiv.classList.remove('hidden');
+    }
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-opt-id');
+        localStorage.setItem(storageKey, id);
+        optionsDiv.classList.add('opacity-50', 'pointer-events-none');
+        btn.classList.add('ring-2', 'ring-blue-500');
+        resultsDiv.classList.remove('hidden');
+      });
+    });
+  }
+</script>

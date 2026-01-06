@@ -1,0 +1,11 @@
+---
+const { src, title, caption } = Astro.props;
+---
+<figure class="my-8 rounded-xl border bg-gray-50 p-4 dark:bg-gray-800/50">
+  {title && <div class="mb-3 font-semibold text-sm flex items-center gap-2">
+    <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+    {title}
+  </div>}
+  <audio controls class="w-full h-10 block" src={src}></audio>
+  {caption && <figcaption class="mt-3 text-xs text-center opacity-70 font-mono">{caption}</figcaption>}
+</figure>

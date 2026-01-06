@@ -1,0 +1,27 @@
+---
+const { start = 0, label = "Counter" } = Astro.props;
+---
+<div class="my-6 flex items-center gap-4 rounded-lg border p-4 bg-gray-50 dark:bg-gray-800">
+  <div class="font-bold">{label}:</div>
+  <div class="flex items-center gap-3">
+    <button class="btn-dec h-8 w-8 rounded bg-white shadow hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600">-</button>
+    <span class="count-val font-mono text-xl w-8 text-center">{start}</span>
+    <button class="btn-inc h-8 w-8 rounded bg-white shadow hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600">+</button>
+  </div>
+</div>
+
+<script>
+  const counters = document.querySelectorAll('.count-val');
+  counters.forEach(span => {
+    const parent = span.parentElement;
+    let count = parseInt(span.textContent);
+    parent.querySelector('.btn-dec').addEventListener('click', () => {
+      count--;
+      span.textContent = count.toString();
+    });
+    parent.querySelector('.btn-inc').addEventListener('click', () => {
+      count++;
+      span.textContent = count.toString();
+    });
+  });
+</script>

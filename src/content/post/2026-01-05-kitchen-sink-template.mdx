@@ -1,0 +1,385 @@
+---
+title: "Kitchen Sink Template (Astro-First Reference)"
+description: "Demonstration post: blocks + UI primitives + Astro widgets + blog-friendly HTML/Tailwind patterns."
+publishDate: "2026-01-05"
+tags: ["template", "components", "reference", "astro"]
+showToc: true
+---
+
+import Prose from "../../components/blocks/Prose.astro";
+import Callout from "../../components/blocks/Callout.astro";
+import Quote from "../../components/blocks/Quote.astro";
+import Figure from "../../components/blocks/Figure.astro";
+import Definition from "../../components/blocks/Definition.astro";
+import Aside from "../../components/blocks/Aside.astro";
+
+import Card from "../../components/ui/Card.astro";
+import Badge from "../../components/ui/Badge.astro";
+import ButtonLink from "../../components/ui/ButtonLink.astro";
+
+import Reveal from "../../components/widgets/Reveal.astro";
+import Counter from "../../components/widgets/Counter.astro";
+import TabsMini from "../../components/widgets/TabsMini.astro";
+import QuickPoll from "../../components/widgets/QuickPoll.astro";
+import Accordion from "../../components/widgets/Accordion.astro";
+import PullQuote from "../../components/widgets/PullQuote.astro";
+import Steps from "../../components/widgets/Steps.astro";
+import Step from "../../components/widgets/Step.astro";
+import Cite from "../../components/widgets/Cite.astro";
+import GalleryGrid from "../../components/widgets/GalleryGrid.astro";
+import Timeline from "../../components/widgets/Timeline.astro";
+import AudioPlayer from "../../components/widgets/AudioPlayer.astro";
+
+<Prose>
+
+# Kitchen Sink Template (Astro-First Reference)
+
+This is your "copy chunks from here" post for future writing.
+
+---
+
+## 0) UI primitives: Card / Badge / ButtonLink
+
+<Card class="p-6 mb-8">
+  <div class="flex flex-wrap items-center gap-2 mb-3">
+    <Badge>default</Badge>
+    <Badge variant="accent">accent</Badge>
+    <Badge variant="outline">outline</Badge>
+  </div>
+
+  <p class="m-0 leading-7">
+    Use <strong>Card</strong> to group content modules, summaries, or "mini sections" inside longer posts.
+  </p>
+
+  <div class="mt-4 flex flex-wrap gap-3">
+    <ButtonLink href="/blog" variant="default">Primary link</ButtonLink>
+    <ButtonLink href="/tags" variant="secondary">Secondary link</ButtonLink>
+    <ButtonLink href="https://etr.mathology.ca/" target="_blank" variant="outline">External link</ButtonLink>
+  </div>
+</Card>
+
+---
+
+## 1) Callouts (blocks)
+
+<Callout title="Note" variant="note">
+Use callouts for "this is different from the main paragraph" sections: key ideas, constraints, prompts, or instructor-facing signposts.
+</Callout>
+
+<Callout title="Tip" variant="tip">
+Design takeaways, "try this next," or small workflow hints.
+</Callout>
+
+<Callout title="Warning" variant="warning">
+Limitations, common mistakes, equity concerns, or "don't do this" reminders.
+</Callout>
+
+---
+
+## 2) Quotes + Pull quotes
+
+### 2A) Quote block component
+
+<Quote cite="ETEC 511 draft (example)">
+School closures didn't just move learning online — they changed what "hands-on" meant and who could participate in it.
+</Quote>
+
+### 2B) PullQuote component (nice pacing mid-post)
+
+<PullQuote cite="Draft note">
+Innovation in education is never neutral — it reorganizes power, labour, and visibility.
+</PullQuote>
+
+---
+
+## 3) Definitions (blocks)
+
+<Definition term="Tipping point">
+A moment where a new tool stops being optional and starts reorganizing routines, expectations, and assessment.
+</Definition>
+
+<Definition term="Differentiated instruction">
+Planning and teaching that adapts the learning experience based on learner needs, often guided by evidence and feedback.
+</Definition>
+
+---
+
+## 4) Asides (blocks)
+
+<Aside title="Aside: why blocks are worth it">
+Blocks reduce repetition. You stop reinventing HTML+CSS every time you want the same rhetorical move in a post.
+</Aside>
+
+---
+
+## 5) Figures (blocks)
+
+<Figure
+  src="/assets/images/blog/mathologylogo.png"
+  alt="Mathology logo"
+  caption="Example Figure: a single image + caption, styled consistently."
+/>
+
+---
+
+## 6) Citations (inline) + full references
+
+<p class="leading-7">
+  The shift to online learning amplified inequities in access and participation
+  <Cite n={1} title="Sievertsen & Burgess (2020) — inequality impacts of school closures" />
+  and forced teachers to redesign "hands-on" work as screen-based routines.
+</p>
+
+<p class="leading-7">
+  As critique of platform power reminds us, educational innovation tends to redistribute labour and authority
+  <Cite n={2} title="Crawford (2021) — systems of power behind tech" />
+  even when the tool feels "helpful" at the classroom level.
+</p>
+
+<Callout title="How to use Cite" variant="note">
+Use <code>&lt;Cite /&gt;</code> for quick inline references, then put the full items in the <code>References</code> section later.
+</Callout>
+
+---
+
+## 7) Essential HTML/Tailwind patterns (no component needed)
+
+### 7A) Inline highlight
+
+<p class="leading-7">
+  Mathology reorganizes
+  <mark class="px-1 rounded bg-yellow-200/60 dark:bg-yellow-400/20">teacher labour</mark>
+  by bundling lesson prep, delivery, and assessment into one workflow.
+</p>
+
+### 7B) Tag chips
+
+<div class="flex flex-wrap gap-2 my-6">
+  <a class="inline-flex items-center rounded-full border px-3 py-1 text-sm hover:opacity-90" href="/tags/ETEC-511">#ETEC-511</a>
+  <a class="inline-flex items-center rounded-full border px-3 py-1 text-sm hover:opacity-90" href="/tags/sustainability">#sustainability</a>
+  <a class="inline-flex items-center rounded-full border px-3 py-1 text-sm hover:opacity-90" href="/tags/ux">#ux</a>
+</div>
+
+### 7C) Native dropdown (details)
+
+<details class="rounded-lg border p-4 my-6">
+  <summary class="cursor-pointer font-semibold">Native dropdown (details)</summary>
+  <div class="mt-3 leading-7 opacity-90">
+    This is the simplest accordion for posts. Accessible, no JS required.
+  </div>
+</details>
+
+---
+
+## 8) Accordion component (single-open accordion)
+
+<Accordion
+  title="Accordion (single open at a time)"
+  single={true}
+  items={[
+    {
+      id: "what",
+      title: "What is Mathology?",
+      body: "Mathology is a blended print + digital resource with interactive activities, little books, and assessment supports.",
+    },
+    {
+      id: "disp",
+      title: "What does it displace?",
+      body: "It can displace worksheets and fragmented routines by bundling planning, delivery, and assessment into one workflow.",
+    },
+    {
+      id: "equity",
+      title: "Equity hinge",
+      body: "If access is uneven, differentiation benefits can concentrate among learners with reliable devices + internet.",
+    },
+  ]}
+/>
+
+---
+
+## 9) Steps component (procedures / methods)
+
+<Steps title="A repeatable writing workflow">
+  <Step><b>Name</b> the old practice you're describing.</Step>
+  <Step><b>Describe</b> the new tool and what it bundles.</Step>
+  <Step><b>Identify</b> what gets displaced (materials, routines, assessments).</Step>
+  <Step><b>Analyze</b> the labour shift (teacher + student work).</Step>
+  <Step><b>Flag</b> the equity hinge: who benefits, who gets excluded.</Step>
+  <Step><b>Conclude</b> with tradeoffs + references.</Step>
+</Steps>
+
+---
+
+## 10) Astro widgets (no React)
+
+### 10A) Reveal
+
+<Reveal label="Reveal: teacher note">
+During COVID-era remote instruction, digital workflows became the "default," which can turn access problems into learning problems.
+</Reveal>
+
+### 10B) Counter
+
+<Counter start={2} label="Counter demo" />
+
+### 10C) Tabs
+
+<TabsMini
+  title="Analyze through different lenses"
+  tabs={[
+    {
+      id: "cog",
+      label: "Cognitive",
+      body: "Focus on attention, feedback, load, and practice. Ask: what does the learner repeatedly do and get feedback on?",
+    },
+    {
+      id: "soc",
+      label: "Sociocultural",
+      body: "Focus on participation, identity, norms, and community meaning-making. Ask: who is recognized as competent and why?",
+    },
+    {
+      id: "con",
+      label: "Constructionist",
+      body: "Focus on making, sharing, remixing, and reflection. Ask: what artifact is produced and how is it iterated with others?",
+    },
+  ]}
+/>
+
+### 10D) QuickPoll
+
+<QuickPoll
+  storageKey="kitchen-sink-poll-1"
+  question="Do interactive widgets help you understand a concept better?"
+  options={[
+    { id: "yes", label: "Yes" },
+    { id: "no", label: "No" },
+    { id: "depends", label: "It depends" },
+  ]}
+/>
+
+### 10E) Audio Player
+
+<AudioPlayer 
+  src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" 
+  title="Student Composition Example (Gr. 2)"
+  caption="Recorded Oct 2025" 
+/>
+
+---
+
+## 11) GalleryGrid (image clusters)
+
+<GalleryGrid
+  cols={2}
+  images={[
+    { src: "/assets/images/blog/mathologyfig1.png", alt: "Mathology figure 1", caption: "Example gallery image 1" },
+    { src: "/assets/images/blog/mathologyfig2.png", alt: "Mathology figure 2", caption: "Example gallery image 2" },
+  ]}
+/>
+
+---
+
+## 12) Timeline (research narrative)
+
+<Timeline
+  title="Timeline example: a tipping point story"
+  items={[
+    {
+      date: "2019",
+      title: "Prototype era",
+      body: "Early testing and feature development begins before widespread adoption.",
+    },
+    {
+      date: "2020",
+      title: "Pandemic acceleration",
+      body: "Remote learning forces rapid adoption of digital resources and reshapes expectations of 'hands-on'.",
+    },
+    {
+      date: "Post-2020",
+      title: "Normalization",
+      body: "Digital workflows persist even after in-person return; routines and assessment practices remain reorganized.",
+    },
+  ]}
+/>
+
+---
+
+## 13) Slides (no component; scroll-snap carousel)
+
+<div class="my-8 overflow-x-auto">
+  <div class="flex gap-4 snap-x snap-mandatory overflow-x-auto pb-4">
+    <div class="min-w-[85%] snap-center rounded-xl border p-6">
+      <h3 class="mt-0">Slide 1 — The shift</h3>
+      <p class="mb-0 leading-7">
+        A tipping point happens when a tool stops being optional and starts reorganizing routines and expectations.
+      </p>
+    </div>
+    <div class="min-w-[85%] snap-center rounded-xl border p-6">
+      <h3 class="mt-0">Slide 2 — What gets displaced</h3>
+      <p class="mb-0 leading-7">
+        Worksheets and standalone manipulatives may be replaced by bundled digital workflows.
+      </p>
+    </div>
+    <div class="min-w-[85%] snap-center rounded-xl border p-6">
+      <h3 class="mt-0">Slide 3 — Equity hinge</h3>
+      <p class="mb-0 leading-7">
+        If access is uneven, differentiation benefits can concentrate among learners with reliable devices and internet.
+      </p>
+    </div>
+  </div>
+  <p class="text-sm opacity-70 mt-2">Tip: scroll horizontally (trackpad / shift+scroll).</p>
+</div>
+
+---
+
+## 14) Media embeds (responsive)
+
+<div class="my-8">
+  <div class="w-full aspect-video rounded-xl overflow-hidden border">
+    <iframe
+      class="w-full h-full"
+      src="https://www.youtube.com/embed/6-dFTmdX1kU?start=360"
+      title="YouTube video"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      referrerpolicy="strict-origin-when-cross-origin"
+      allowFullScreen
+    ></iframe>
+  </div>
+  <p class="text-sm opacity-70 mt-2">Example embed pattern.</p>
+</div>
+
+---
+
+## 15) Code blocks (always close fences)
+
+```bash
+# example: create a new post file
+touch src/content/post/2026-01-05-my-new-post.mdx
+```
+---
+
+## 16) Image & References
+
+<Figure src="/assets/images/blog/fogust.jpg" alt="Fogust on the Skeena River" caption="A foggy day on the Skeena River" />
+
+<div class="mt-8 border-t border-gray-200 dark:border-gray-700 pt-8"> <div class="flex flex-col gap-4">
+
+{/* Reference 1 */}
+<div id="ref-1" class="flex gap-3 text-sm">
+  <div class="flex-none w-6 text-right font-mono text-xs text-gray-400 pt-1 select-none">[1]</div>
+  <div class="leading-relaxed text-gray-700 dark:text-gray-300">
+    <b>Bohil, C. J., Alicea, B., & Biocca, F. A. (2011).</b> Virtual reality in neuroscience research and therapy. <i>Nature Reviews Neuroscience</i>, 12(12), 752-762.
+  </div>
+</div>
+
+{/* Reference 2 */}
+<div id="ref-2" class="flex gap-3 text-sm">
+  <div class="flex-none w-6 text-right font-mono text-xs text-gray-400 pt-1 select-none">[2]</div>
+  <div class="leading-relaxed text-gray-700 dark:text-gray-300">
+    <b>Fletcher, T. (2023, May 24).</b> From science fiction to classroom reality: How UBC instructors are using AI as a teaching tool. <i>UBC News</i>.
+  </div>
+</div>
+
+</div> </div>
+
+</Prose>

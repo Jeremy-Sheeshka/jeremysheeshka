@@ -1,0 +1,12 @@
+---
+const { n, title } = Astro.props;
+---
+<sup class="inline-block translate-y-[-2px]">
+  <a 
+    href="#references" 
+    title={title}
+    class="ml-0.5 inline-flex h-4 w-4 items-center justify-center rounded-full bg-gray-200 text-[10px] font-bold text-gray-700 hover:bg-blue-600 hover:text-white dark:bg-gray-700 dark:text-gray-300"
+  >
+    {n}
+  </a>
+</sup>

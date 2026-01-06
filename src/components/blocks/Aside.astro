@@ -1,0 +1,10 @@
+---
+const { title = "Aside", class: className = "" } = Astro.props;
+---
+
+<aside class={`my-6 rounded-2xl border border-border bg-muted/20 p-5 ${className}`}>
+  <div class="font-semibold mb-2">{title}</div>
+  <div class="text-sm leading-relaxed">
+    <slot />
+  </div>
+</aside>
