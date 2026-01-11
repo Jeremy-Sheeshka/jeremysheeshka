@@ -1,12 +1,16 @@
 ---
 const { n, title } = Astro.props;
+const citeId = `cite-${n}`;
+const refId = `ref-${n}`;
 ---
-<sup class="inline-block translate-y-[-2px]">
-  <a 
-    href="#references" 
+
+<span id={citeId} class="inline-flex align-super scroll-mt-24">
+  <a
+    href={`#${refId}`}
+    class="text-xs font-mono text-blue-600 hover:underline ml-1"
     title={title}
-    class="ml-0.5 inline-flex h-4 w-4 items-center justify-center rounded-full bg-gray-200 text-[10px] font-bold text-gray-700 hover:bg-blue-600 hover:text-white dark:bg-gray-700 dark:text-gray-300"
+    aria-label={title ? `Jump to reference ${n}: ${title}` : `Jump to reference ${n}`}
   >
-    {n}
+    [{n}]
   </a>
-</sup>
+</span>

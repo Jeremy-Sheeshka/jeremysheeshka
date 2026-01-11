@@ -1,28 +1,117 @@
 ---
 title: "ETEC 544 – IP#1"
-description: "My notes and reflections for IP1."
-publishDate: 2026-01-05
+description: "My notes and reflections for IP1: A 3-2-1 analysis of James Paul Gee's work on games and learning."
+publishDate: "2026-01-05"
 tags: ["etec544"]
-showToc: false
 ---
 
-<blockquote>
-  "Do you believe there is a cause for concern regarding the development of AI and its potential to outsmart or overpower humans?" (ETEC 512 Thought Paper #2)
-</blockquote>
+import Prose from "../../components/blocks/Prose.astro";
+import Callout from "../../components/blocks/Callout.astro";
+import Card from "../../components/ui/Card.astro";
+import Cite from "../../components/widgets/Cite.astro";
+import Figure from "../../components/blocks/Figure.astro";
 
-...your paragraphs...
+<Prose>
+<details class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 mb-8 bg-gray-50 dark:bg-gray-800/50 open:bg-white dark:open:bg-gray-900 transition-colors">
+  <summary class="font-bold cursor-pointer flex items-center gap-2 select-none text-gray-900 dark:text-gray-100">
+    <span class="text-lg">Assignment Task:</span>
+  </summary>
 
-<br />
+  <div class="mt-4 space-y-4">
+    <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+      To help you engage with these two papers on games and learning, write a short summary of each using the "3-2-1" method. Then, write a 2-sentence bridge that identifies common ground or linkages, disagreements or differences, between these two sets of ideas.
+    </p>
 
-<img src="/assets/images/blog/fogust.jpg" alt="Fogust on the Skeena River" />
-<figcaption align="center">A foggy day on the Skeena River</figcaption>
+    <Figure
+      src="/assets/images/blog/321.jpg"
+      alt="3-2-1 method example handout"
+      caption="Example: The 3-2-1 method structure used for this assignment."
+    />
+  </div>
+</details>
 
-<br /><br />
+---
 
-<div class="reference-box">
-  <span class="reference-title">References</span>
+## 1. Cats and Portals: Video Games, Learning, and Play <Cite n={1} title="Gee (2008)" />
 
-  <p><b>Bohil, C. J., Alicea, B., & Biocca, F. A. (2011).</b> Virtual reality in neuroscience research and therapy. <i>Nature Reviews Neuroscience</i>, 12(12), 752-762.</p>
+### Descriptive
+In this article, Gee argues that good commercial video games foster deep learning by functioning as "learning engines" that adapt to the player, much like the way cats play to explore and probe their environments. He distinguishes between "problem games" and "world games," using *Portal* as a prime example of a hybrid that gives players a "smart tool" (the portal gun) to surmise new possibilities and solve physics-based problems within a rich narrative world. The author extends this to discuss how digital tools help young people become "Pro-Ams"—amateurs with professional-level passion and expertise—who develop complex literacy skills often unrecognized by formal schooling.
 
-  <p><b>Fletcher, T. (2023, May 24).</b> From science fiction to classroom reality: How UBC instructors are using AI as a teaching tool. <i>UBC News</i>.</p>
+### Analytical
+Gee effectively uses the "portal gun" as a metaphor for how all knowledge tools (like microscopes or technical language) train our vision to see specific problem-solving possibilities, reframing game-based learning as a shift in perspective rather than just content acquisition. However, while he champions the "tacit understandings" players gain through gameplay, he assumes this naturally transfers to the explicit "logic talk" required in schools, without fully addressing how educators might bridge the gap for students who cannot independently articulate what they know.
+
+<Callout title="Burning Question" variant="note">
+If the learning in games like *Portal* is primarily tacit and experiential, how can we as educators design assessments that capture this competence without forcing it into a rigid academic format that kills the very spirit of "play as discovery"?
+</Callout>
+
+---
+
+## 2. Games as Distributed Teaching and Learning Systems <Cite n={2} title="Gee & Gee (2017)" />
+
+### Descriptive
+The authors argue that we must stop viewing video games as isolated tools and instead see them as part of "Distributed Teaching and Learning" (DTAL) systems inherent to online communities and social interactions. They suggest that humans learn through embodied "conversations with the world," where games serve as a unique technology that allows the world to "talk back" during turn-taking simulations, much like face-to-face conversation. Through the contrasting case studies of two students, Marco and Amanda, the authors illustrate how access to these systems is not equitable; Marco’s supportive home environment allows him to leverage the game into a passion for physics, while Amanda’s lack of resources leads to disengagement.
+
+### Analytical
+This framework significantly evolves the earlier work by shifting focus from the individual’s interaction with software to the "learning ecology" of the sociotechnical system, acknowledging that the "real action" happens in the network rather than the game itself. Yet, the authors’ own example of Amanda reveals a critical tension: while they describe DTAL systems as "self-organizing" and democratic, they inadvertently highlight that without the right social capital or tools, these systems can reproduce the very educational stratification they are meant to disrupt.
+
+<Callout title="Burning Question" variant="warning">
+Given that DTAL systems are described as organic and "bottom-up," what specific mechanisms can educators employ to support equitable access for students like Amanda without imposing top-down institutional control that might undermine the passion-driven nature of these spaces?
+</Callout>
+
+---
+
+## Bridging Thoughts
+
+<Card class="bg-gray-50 dark:bg-gray-800 border-l-4 border-l-blue-500 p-6">
+These two articles demonstrate a clear evolution in thinking: moving from a 2008 focus on the individual learner using a tool for discovery to a 2017 ecological view where the game is just one part of a complex, distributed social system. Despite this shift, both works remain grounded in the belief that deep learning is rooted in embodied experience—"running simulations"—where we learn best by acting on the world and reflecting on how it responds.
+</Card>
+
+---
+
+## References
+
+<div class="mt-8 border-t border-gray-200 dark:border-gray-700 pt-8">
+  <div class="flex flex-col gap-4">
+
+    {/* Reference 1 */}
+    <div id="ref-1" class="flex gap-3 text-sm scroll-mt-24 group">
+      <a
+        href="#cite-1"
+        class="flex-none w-6 text-right font-mono text-xs text-blue-600 pt-1 hover:underline hover:font-bold"
+        title="Jump back to citation"
+      >
+        [1]
+      </a>
+      <div class="leading-relaxed text-gray-700 dark:text-gray-300">
+        <b>Gee, J. P. (2008).</b> Cats and portals: Video games, learning, and play. <i>American Journal of Play</i>, 1(2), 229.&nbsp;
+        <a href="https://www.journalofplay.org/sites/www.journalofplay.org/files/pdf-articles/1-2-article-cats-and-portals.pdf" target="_blank" class="inline-block align-middle text-blue-600 hover:text-blue-800 transition-colors" aria-label="Open external link">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    {/* Reference 2 */}
+    <div id="ref-2" class="flex gap-3 text-sm scroll-mt-24 group">
+      <a
+        href="#cite-2"
+        class="flex-none w-6 text-right font-mono text-xs text-blue-600 pt-1 hover:underline hover:font-bold"
+        title="Jump back to citation"
+      >
+        [2]
+      </a>
+      <div class="leading-relaxed text-gray-700 dark:text-gray-300">
+        <b>Gee, E., & Gee, J. P. (2017).</b> Games as distributed teaching and learning systems. <i>Teachers College Record</i>, 119(11).&nbsp;
+        <a href="https://www.tcrecord.org/" target="_blank" class="inline-block align-middle text-blue-600 hover:text-blue-800 transition-colors" aria-label="Open external link">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+          </svg>
+        </a>
+      </div>
+    </div>
+
+  </div>
 </div>
+
+</Prose>

@@ -3,6 +3,15 @@ const { src, alt, caption, class: className = "" } = Astro.props;
 ---
 
 <figure class={`my-8 ${className}`}>
-  <img src={src} alt={alt} loading="lazy" class="w-full rounded-2xl border border-border" />
-  {caption ? <figcaption class="mt-3 text-center text-sm opacity-80">{caption}</figcaption> : null}
+  <img
+    src={src}
+    alt={alt}
+    loading="lazy"
+    class="block w-full h-auto rounded-2xl border border-gray-200 dark:border-gray-700"
+  />
+  {caption ? (
+    <figcaption class="mt-3 text-center text-sm text-gray-600 dark:text-gray-400">
+      {caption}
+    </figcaption>
+  ) : null}
 </figure>

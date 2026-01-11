@@ -4,6 +4,7 @@ description: "Demonstration post: blocks + UI primitives + Astro widgets + blog-
 publishDate: "2026-01-05"
 tags: ["template", "components", "reference", "astro"]
 showToc: true
+draft: true
 ---
 
 import Prose from "../../components/blocks/Prose.astro";
@@ -34,7 +35,7 @@ import AudioPlayer from "../../components/widgets/AudioPlayer.astro";
 
 # Kitchen Sink Template (Astro-First Reference)
 
-This is your "copy chunks from here" post for future writing.
+This is a mashup of different imports and UI components - astro and react - to use in future posts 
 
 ---
 
@@ -139,6 +140,23 @@ Blocks reduce repetition. You stop reinventing HTML+CSS every time you want the 
 <Callout title="How to use Cite" variant="note">
 Use <code>&lt;Cite /&gt;</code> for quick inline references, then put the full items in the <code>References</code> section later.
 </Callout>
+
+An examination of the development of technological, pedagogical, and content knowledge (TPACK) related to music education <Cite n={6} title="Mishra & Koehler (2006) — Technological Pedagogical Content Knowledge" />.
+
+{/* Reference 6 - TPACK */}
+    <div id="ref-6" class="flex gap-3 text-sm scroll-mt-20 group">
+      <a href="#cite-6" class="flex-none w-6 text-right font-mono text-xs text-blue-600 pt-1 hover:underline hover:font-bold" title="Jump back to text">
+        [6]
+      </a>
+      <div class="leading-relaxed text-gray-700 dark:text-gray-300">
+        <b>Mishra, P., & Koehler, M. J. (2006).</b> Technological Pedagogical Content Knowledge: A Framework for Teacher Knowledge. <i>Teachers College Record</i>, 108(6), 1017–1054.
+        <a href="https://doi.org/10.1111/j.1467-9620.2006.00684.x" target="_blank" class="inline-flex align-middle ml-1 text-blue-600 hover:text-blue-800 transition-colors" aria-label="Open external link">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+            </svg>
+        </a>
+      </div>
+    </div>
 
 ---
 
@@ -356,30 +374,27 @@ During COVID-era remote instruction, digital workflows became the "default," whi
 # example: create a new post file
 touch src/content/post/2026-01-05-my-new-post.mdx
 ```
+
+<Quote cite="Patton (2002, p. 104)">
+{/* JUMP POINT FOR CITATION 3 */}
+This study's goal was "to describe 'the meaning, structure, and essence of the lived experience . . .' for this group of preservice teachers" <a id="cite-3" href="#ref-3" class="no-underline text-blue-600 hover:underline"><sup>[3]</sup></a>.
+</Quote>
+
 ---
 
 ## 16) Image & References
 
 <Figure src="/assets/images/blog/fogust.jpg" alt="Fogust on the Skeena River" caption="A foggy day on the Skeena River" />
 
-<div class="mt-8 border-t border-gray-200 dark:border-gray-700 pt-8"> <div class="flex flex-col gap-4">
 
-{/* Reference 1 */}
-<div id="ref-1" class="flex gap-3 text-sm">
-  <div class="flex-none w-6 text-right font-mono text-xs text-gray-400 pt-1 select-none">[1]</div>
-  <div class="leading-relaxed text-gray-700 dark:text-gray-300">
-    <b>Bohil, C. J., Alicea, B., & Biocca, F. A. (2011).</b> Virtual reality in neuroscience research and therapy. <i>Nature Reviews Neuroscience</i>, 12(12), 752-762.
-  </div>
-</div>
-
-{/* Reference 2 */}
-<div id="ref-2" class="flex gap-3 text-sm">
-  <div class="flex-none w-6 text-right font-mono text-xs text-gray-400 pt-1 select-none">[2]</div>
-  <div class="leading-relaxed text-gray-700 dark:text-gray-300">
-    <b>Fletcher, T. (2023, May 24).</b> From science fiction to classroom reality: How UBC instructors are using AI as a teaching tool. <i>UBC News</i>.
-  </div>
-</div>
-
-</div> </div>
+   {/* Reference 3 */}
+    <div id="ref-3" class="flex gap-3 text-sm scroll-mt-20 group">
+      <a href="#cite-3" class="flex-none w-6 text-right font-mono text-xs text-blue-600 pt-1 hover:underline hover:font-bold" title="Jump back to text">
+        [3]
+      </a>
+      <div class="leading-relaxed text-gray-700 dark:text-gray-300">
+        <b>Patton, M. Q. (2002).</b> <i>Qualitative research & evaluation methods</i>. Sage.
+      </div>
+    </div>
 
 </Prose>
