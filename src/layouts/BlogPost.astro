@@ -4,6 +4,8 @@ import Masthead from "@/components/blog/Masthead.astro";
 import WebMentions from "@/components/blog/webmentions/index.astro";
 import BaseLayout from "./Base.astro";
 import { collectionDateSort } from "@/utils/date";
+// 1. ADD THIS IMPORT
+import { getAllPosts } from "@/data/post"; 
 
 interface Props {
     post: CollectionEntry<"post">;
@@ -14,12 +16,12 @@ const { ogImage, title, description, updatedDate, publishDate } = post.data;
 const socialImage = ogImage ?? `/og-image/${post.id}.png`;
 const articleDate = updatedDate?.toISOString() ?? publishDate.toISOString();
 
-// ⬇️ headings are still computed (harmless, used by remark plugins like readingTime)
 const { headings, remarkPluginFrontmatter } = await render(post);
 const readingTime: string = remarkPluginFrontmatter.readingTime;
 
 // --- NEXT / PREV NAVIGATION LOGIC ---
-const allPosts = await getCollection("post");
+// 2. USE THE HELPER INSTEAD OF MANUAL FILTERING
+const allPosts = await getAllPosts();
 const sortedPosts = allPosts.sort(collectionDateSort); 
 const currentIndex = sortedPosts.findIndex((p) => p.id === post.id);
 

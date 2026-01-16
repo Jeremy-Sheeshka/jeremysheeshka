@@ -13,7 +13,8 @@ import Figure from "../../components/blocks/Figure.astro";
 
 <Prose>
 
-<details class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 mb-8 bg-gray-50 dark:bg-gray-800/50 open:bg-white dark:open:bg-gray-900 transition-colors">
+{/* Added hover:bg-gray-100 and dark:hover:bg-gray-800 for subtle interaction */}
+<details class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 mb-8 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800/50 dark:hover:bg-gray-800 open:bg-white dark:open:bg-gray-900 transition-colors">
   <summary class="font-bold cursor-pointer flex items-center gap-2 select-none text-gray-900 dark:text-gray-100">
     <span class="text-lg">Assignment Task:</span>
   </summary>
@@ -21,15 +22,19 @@ import Figure from "../../components/blocks/Figure.astro";
     <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
       To help engage with these two papers on games and learning, we were asked to write a short summary of each using the "3-2-1" method, followed by a 2-sentence bridge that identifies common ground, linkages, or tensions between the two sets of ideas.
     </p>
-    <Figure
-      src="/assets/images/blog/321.jpg"
-      alt="3-2-1 method example handout"
-      caption="Example: The 3-2-1 method structure used for this assignment."
-    />
+    
+    <div class="max-w-md mx-auto">
+      <Figure
+        src="/assets/images/blog/3-2-1method.png"
+        alt="3-2-1 method example handout"
+        caption="Example: The 3-2-1 method structure used for this assignment."
+      />
+    </div>
   </div>
 </details>
 
 ---
+
 ## 1. Cats and Portals: Video Games, Learning, and Play <Cite n={1} title="Gee (2008)" />
 
 In *Cats and Portals*, Gee argues that well-designed video games operate as powerful learning spaces by weaving problem-solving, tool use, and mastery into discovery-driven play. Using the game *Portal* as an example, Gee shows how the portal gun functions as a “smart tool” that reshapes players’ perception, enabling them to surmise new possibilities in their environment much like cats exploring the world through embodied experimentation. He extends this argument beyond games to describe how young people use digital tools to become amateur experts (Pro-Ams) and develop deep expertise and sophisticated literacies outside formal schooling.
