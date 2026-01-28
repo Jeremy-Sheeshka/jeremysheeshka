@@ -25,6 +25,8 @@ jobs:
       - name: Install, build, and upload your site
         uses: withastro/action@v3
         with:
+          # Use a Node version that supports Object.groupBy (Node 21+)
+          node-version: 22
           # Fixes the "No pnpm version specified" error
           package-manager: pnpm@latest
         # This pulls in your secrets during the build process
