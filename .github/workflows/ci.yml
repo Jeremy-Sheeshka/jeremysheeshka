@@ -24,12 +24,11 @@ jobs:
 
       - name: Install, build, and upload your site
         uses: withastro/action@v3
-        with:
-          # This pulls in your secrets during the build process
-          env:
-            WEBMENTION_API_KEY: ${{ secrets.WEBMENTION_API_KEY }}
-            WEBMENTION_URL: ${{ secrets.WEBMENTION_URL }}
-            WEBMENTION_PINGBACK: ${{ secrets.WEBMENTION_PINGBACK }}
+        # This pulls in your secrets during the build process
+        env:
+          WEBMENTION_API_KEY: ${{ secrets.WEBMENTION_API_KEY }}
+          WEBMENTION_URL: ${{ secrets.WEBMENTION_URL }}
+          WEBMENTION_PINGBACK: ${{ secrets.WEBMENTION_PINGBACK }}
 
   deploy:
     needs: build
