@@ -1,23 +1,21 @@
 name: Deploy to GitHub Pages
 
 on:
-  # Trigger on every push to the main branch
   push:
     branches: [main]
-  # Automatically rebuild once a day at midnight to pull in new webmentions
   schedule:
     - cron: "0 0 * * *"
-  # Allows you to manually trigger this from the "Actions" tab in GitHub
   workflow_dispatch:
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout your repository
         uses: actions/checkout@v4
@@ -25,11 +23,8 @@ jobs:
       - name: Install, build, and upload your site
         uses: withastro/action@v3
         with:
-          # Use a Node version that supports Object.groupBy (Node 21+)
           node-version: 22
-          # Fixes the "No pnpm version specified" error
           package-manager: pnpm@latest
-        # This pulls in your secrets during the build process
         env:
           WEBMENTION_API_KEY: ${{ secrets.WEBMENTION_API_KEY }}
           WEBMENTION_URL: ${{ secrets.WEBMENTION_URL }}
@@ -38,6 +33,9 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
