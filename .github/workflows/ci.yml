@@ -24,6 +24,9 @@ jobs:
 
       - name: Install, build, and upload your site
         uses: withastro/action@v3
+        with:
+          # Fixes the "No pnpm version specified" error
+          package-manager: pnpm@latest
         # This pulls in your secrets during the build process
         env:
           WEBMENTION_API_KEY: ${{ secrets.WEBMENTION_API_KEY }}
