@@ -1,0 +1,105 @@
+---
+title: "Board Game Analysis - Carcassonne"
+description: "Fullerton's exercise 6.3: Board Game Analysis - Jeremy - (Carcassonne by Klaus-Jurgen Wrede)"
+publishDate: "2026-02-07"
+tags: ["etec544"]
+---
+
+import Prose from "../../components/blocks/Prose.astro";
+import Callout from "../../components/blocks/Callout.astro";
+import Card from "../../components/ui/Card.astro";
+import Cite from "../../components/widgets/Cite.astro";
+import Figure from "../../components/blocks/Figure.astro";
+
+<Prose>
+
+<details class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 mb-8 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800/50 dark:hover:bg-gray-800 open:bg-white dark:open:bg-gray-900 transition-colors">
+  <summary class="font-bold cursor-pointer flex items-center gap-2 select-none text-gray-900 dark:text-gray-100">
+    <span class="text-lg">Assignment:</span>
+  </summary>
+  <div class="mt-4 space-y-4">
+    <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+      Choose one of the games listed above and play it with a group of friends. Write your analysis of the formal, dramatic, and dynamic elements of the game in your game journal. Now find another group of players who have not played the game before. Have them play the game while you watch and take notes. Do not help them learn the rules. Note the steps of their group learning process as well as their impressions of the game in your analysis.
+    </p>
+  </div>
+</details>
+
+---
+
+## Elements of Carcassonne
+
+<div class="max-w-3xl mx-auto my-8">
+  <video 
+    controls 
+    class="w-full rounded-lg shadow-lg"
+    poster="/assets/images/blog/collegeOfCarcassonne.jpg"
+  >
+    <source src="/assets/videos/blog/CarcassonneGamePlayCompressed.mp4" type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
+  <p class="text-center text-sm text-gray-500 mt-2 italic">
+    Video of gameplay
+  </p>
+</div>
+
+### Formal Elements
+
+Carcassonne's underlying system and mechanics of the game centers around tile placement and resource management. Players randomly draw landscape tiles that they must connect and match to existing tiles and terrain. After placing a tile, players can choose to claim a landscape "feature" to build off of. As Fullerton had noted in chapter 6, formal elements constitute "the underlying system and mechanics of the game" (p. 189). <Cite n={1} title="Fullerton (n.d.)" /> The limited supply of game pieces, along with the requirement to match landscape tiles together strategically creates fun but tense gameplay. The scoring system reinforces this tension by returning game pieces to players only when features are completed.
+
+### Dramatic Elements
+
+While Carcassonne doesn't have a pre-scripted story, there is a natural narrative that emerges through the gameplay as players compete to complete or sabotage their opponents' features. The randomness and the territorial complexity that comes with staking claim to landscape features create dramatic stakes where a single tile can shift control or trap opponent pieces in an unfinishable feature.
+
+### Dynamic Elements
+
+Dynamic elements emerge in Carcassonne through the balance of randomness and strategic tile placement each turn. The unpredictable tile draw forces players to consider both long-term and short-term placement of their game pieces in order to score the most points. A sense of urgency develops as tiles run low that influences players' strategy towards scoring points.
+
+---
+
+## My Reflection
+
+While it appears quite simple in nature and concept, the formal elements and scoring mechanics of Carcassonne are actually quite complex. The dramatic elements experienced through playing the game come from the excitement of closing a feature and earning points, the friendly competition of preventing an opponent from finishing a section, and the strategy of knowing which features on the tiles do or do not exist. The randomness and unpredictability of each player's tile placement create a fun dynamic that keeps excitement high as features are completed.
+
+---
+
+## Observing the Learning Process
+
+<div class="max-w-2xl mx-auto my-8">
+  <Figure
+    src="/assets/images/blog/collegeOfCarcassonne.jpg"
+    alt="Students playing Carcassonne"
+  />
+  <p class="text-center text-sm text-gray-500 mt-2 italic">
+    Observing young players navigate Carcassonne's learning process through tactile exploration and pattern recognition.
+  </p>
+</div>
+
+### First Impressions
+
+For these participants, the learning process was largely a tactile and exploratory process characterized by pattern recognition. Initially as the players began interpreting the different landscape tiles and game pieces, there was some confusion about how to initiate the game and what the different coloured game pieces were for. As the participants began turning over the tiles and building on the various landscape features, the learning process of the game quickly evolved into a collaborative "puzzle-solving" mindset from the group rather than a competitive one. In resisting the urge to jump in and guide the players myself, I was able to take note of how the group utilized visual cues and individual tile artwork to decode the game's formal elements. To me, this suggested that reading the rules were a barrier for this group in the learning process, and therefore the tile art was the way for the game to self-correct and coordinate the user to help the player understand the formal elements of the game (even if the idea of scoring points still remained elusive).
+
+### Analysis of Student Impressions and Engagement
+
+Observing the players first impressions of Carcassonne, I found that participants' decisions were primarily driven by visual cues and collective understandings of the landscape tiles. The player's engagement with the game was highest during the tile placement phase each round when a player had to determine the orientation of a tile and connect it to an existing tile. The act of joining the pieces seemed to provide a dramatic sense of suspense, excitement, and accomplishment for each player during their turn. However, the delay between placing a tile and seeing momentum on the scoreboard caused these young players to overlook the competitive elements of the game, leading them to focus instead on the creative aspect of building the map. Without reading the instructions before learning to play the game, the collective impression of Carcassonne from this group was that it was more of a "building toy" in formal structure than a competitive game. This led to an interesting observation of how a game's visual qualities, combined with its formal elements, influence how players perceive and engage with learning a game in a social context. The learning process observed by these young players reinforces how a game's aesthetic and tactile qualities are not merely secondary considerations of a game, but fundamental towards how a player understands and gives meaning to more complex and dynamic elements.
+
+---
+
+## References
+
+<div class="mt-8 border-t border-gray-200 dark:border-gray-700 pt-8">
+  <div class="flex flex-col gap-6">
+
+    {/* Reference 1 */}
+    <div id="ref-1" class="flex items-start gap-4 text-sm scroll-mt-24 group justify-between">
+      <div class="flex gap-3">
+        <a href="#cite-1" class="flex-none w-6 text-right font-mono text-xs text-blue-600 pt-1 hover:underline hover:font-bold" title="Jump back to citation">[1]</a>
+        <div class="leading-relaxed text-gray-700 dark:text-gray-300">
+          <b>Fullerton, T. (n.d.).</b> Chapter 6: Conceptualization. In <i>Game design workshop</i> (pp. 169-201).
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</Prose>
