@@ -1,0 +1,608 @@
+---
+title: "Field Note Taking Assignment: Drain Simulator"
+description: "A pre and post game analysis exploring the tension between real-world trades expertise, gamified labour, and distributed learning within the digital environment of Drain Simulator."
+publishDate: "2026-03-14"
+tags: ["etec544"]
+---
+
+import EmblaCarousel from "../../components/ui/EmblaCarousel.jsx";
+import Prose from "../../components/blocks/Prose.astro";
+import Callout from "../../components/blocks/Callout.astro";
+import Card from "../../components/ui/Card.astro";
+import Cite from "../../components/widgets/Cite.astro";
+import Figure from "../../components/blocks/Figure.astro";
+
+<Prose>
+
+<details class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 mb-8 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800/50 dark:hover:bg-gray-800 open:bg-white dark:open:bg-gray-900 transition-colors">
+  <summary class="font-bold cursor-pointer flex items-center gap-2 select-none text-gray-900 dark:text-gray-100">
+    <span class="text-lg">Assignment:</span>
+  </summary>
+  <div class="mt-4 space-y-4">
+    <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+      This assignment consisted of three field note phases followed by one written synthesis:
+    </p>
+    <ul class="list-none space-y-2 text-gray-700 dark:text-gray-300">
+      <li class="flex items-start gap-3">
+        <span class="font-bold text-gray-500 dark:text-gray-400 min-w-[1.5rem]">1.</span>
+        <span><b>Pre-Game Analysis:</b> Capturing prior knowledge before playing the game, expectations, and initial theoretical speculations.</span>
+      </li>
+      <li class="flex items-start gap-3">
+        <span class="font-bold text-gray-500 dark:text-gray-400 min-w-[1.5rem]">2.</span>
+        <span><b>Playthrough:</b> Documenting observations and emerging interpretations in real time throughout the gameplay.</span>
+      </li>
+      <li class="flex items-start gap-3">
+        <span class="font-bold text-gray-500 dark:text-gray-400 min-w-[1.5rem]">3.</span>
+        <span><b>Twitch Observation:</b> Watching a more experienced player engage in gameplay, noting differences in fluency, strategy and approach.</span>
+      </li>
+      <li class="flex items-start gap-3">
+        <span class="font-bold text-gray-500 dark:text-gray-400 min-w-[1.5rem]">4.</span>
+        <span><b>Post Game Analysis:</b> Synthesizing all three phases into a cohesive interpretive analysis about what the game teaches, how it teaches it, and what it omits.</span>
+      </li>
+    </ul>
+  </div>
+</details>
+
+---
+
+## Section 1: Anticipating the Gameplay
+
+<div class="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-6 my-8 items-start">
+  <div>
+    <img
+      src="/assets/images/blog/princerupertdrain.jpg"
+      alt="Prince Rupert context image"
+      style="width: 100%; display: block; border-radius: 0.5rem;"
+    />
+    <div style="margin-top: -1rem;">
+      <a href="https://www.facebook.com" target="_blank" rel="noreferrer noopener" style="font-size: 0.8rem; color: #9ca3af; font-style: italic; text-decoration: none; line-height: 1.5; display: block;">
+        Living in Prince Rupert, a game about drains felt oddly close to home. Source: Facebook.com ↗
+      </a>
+    </div>
+  </div>
+  <div class="flex flex-col gap-1">
+
+    <details class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800/50 dark:hover:bg-gray-800 open:bg-white dark:open:bg-gray-900 transition-colors">
+      <summary class="font-bold cursor-pointer flex items-center gap-1 select-none text-gray-900 dark:text-gray-100">
+        <span class="text-lg">What will I like / dislike about it?</span>
+      </summary>
+      <div class="mt-4 space-y-4">
+        <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+          I expect I'll like the use of specialty plumbing tools and anything that captures the unpredictably messy situations that come with real trades work. 
+          Having once accidentally cut through a live water line inside my bathroom wall (pre-bathroom reno that is), I've developed an appreciation of plumbing work and drainage systems in residential contexts.
+          I feel that if DrainSim is able to capture the complexities involved within the plumbing trade, I'll be happy as a clam. That said, a concern I might have is that my prior knowledge and experiences might make the game feel shallow if it ends up falling short of technical knowledge and trades-related jargon. 
+          I am curious to see if DrainSim will be a game disguised as technical training on how basic tools work, and how it actually acknowledges residential-trades work in various drainage contexts.
+        </p>
+      </div>
+    </details>
+
+    <details class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800/50 dark:hover:bg-gray-800 open:bg-white dark:open:bg-gray-900 transition-colors">
+      <summary class="font-bold cursor-pointer flex items-center gap-1 select-none text-gray-900 dark:text-gray-100">
+        <span class="text-lg">What will I find interesting about it / boring or tedious about it?</span>
+      </summary>
+      <div class="mt-4 space-y-4">
+        <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+          Living in Prince Rupert now for about a decade, I feel I have experienced a lot of various situations that might be relevant to this game: basement walls leaking from hydrostatic pressure, redoing my perimeter drainage, 
+          working with sump pumps, seeing water mains burst around town. I'm ready! Most of the work involved with exterior water problems and leak remediation is often a repetitive and physically strenuous. 
+          I am curious as to how the game navigates this without being too tedious and boring for the player. 
+          If you've ever overtightened a plumbing fitting accidentally causing it to leak, or had to work on water lines on the third floor of a building, you will know that turning on and off valves in the basement to check for leaks can get old fast. 
+          Additionally, I wonder how the game will touch upon any civil or residential responsibilities involved with exterior drainage and if there is any real diagnostic work involved (like tracing a leak hidden inside a wall) or if it is mostly about remediating disaster-type situations.
+          Sometimes with exterior drainage, there is an overlap between different trades like plumbing, electrical, gas, and carpentry. I am interested to see if or how this is navigated at all.
+          </p>
+      </div>
+    </details>
+
+    <details class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800/50 dark:hover:bg-gray-800 open:bg-white dark:open:bg-gray-900 transition-colors">
+      <summary class="font-bold cursor-pointer flex items-center gap-1 select-none text-gray-900 dark:text-gray-100">
+        <span class="text-lg">What will I need to do in it?</span>
+      </summary>
+      <div class="mt-4 space-y-4">
+        <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+          I am under the impression that this will be about some form of flood and drainage management: unclogging drains, fixing pipes, dealing with water where it shouldn't be.
+          I imagine that the majority of this game will take place in residential and commercial settings and predominantly dealing with above ground water (flooding) and potentially sewer systems backing up. 
+          I'm anticipating the use of basic hand and power tools and quick-minded problem solving of some kind.
+        </p>
+      </div>
+    </details>
+
+    <details class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800/50 dark:hover:bg-gray-800 open:bg-white dark:open:bg-gray-900 transition-colors">
+      <summary class="font-bold cursor-pointer flex items-center gap-1 select-none text-gray-900 dark:text-gray-100">
+        <span class="text-lg">What will I need to learn within it?</span>
+      </summary>
+      <div class="mt-4 space-y-4">
+        <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+          How the game portrays and combines various tools, the hotkeys associated to do different things in-game, and learning how it expects the user to choose between tools. 
+          Just because one can cut a water line or cast-iron drain with a hacksaw, doesn't necessarily mean one should. This leads me to think about: even with some prior knowledge I'll still need to learn how the game expects me to interact with things.
+          To me that would mean learning about how to approach using the game's own logic for using various tools and how tasks are sequenced.
+          I'm curious how the game will scaffold the players abilities and knowledge in different contexts. 
+          I'm also interested in what gameplay knowledge of the trades I will have to relearn in order to accommodate the game's expectations of me. 
+          What will it stay true to in real-world plumbing and drainage systems and what will it simplify. 
+          The gap between real-world knowledge and gameplay simulation might be revealing about what the game is actually trying to teach versus what the game is using as an aesthetic.
+        </p>
+      </div>
+    </details>
+
+    <details class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800/50 dark:hover:bg-gray-800 open:bg-white dark:open:bg-gray-900 transition-colors">
+      <summary class="font-bold cursor-pointer flex items-center gap-1 select-none text-gray-900 dark:text-gray-100">
+        <span class="text-lg">What will it be like / similar to (other games I have played)?</span>
+      </summary>
+      <div class="mt-4 space-y-4">
+        <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+          I haven't played video games in probably ten or fifteen years (I think the last game I was into was the dinosaur survival game ARK), so I don't have a very strong recent comparison to reference. 
+          That said, I would assume this game will be similar to a first person "shooter-style" game but with plumbing tools instead of weapons. 
+        </p>
+      </div>
+    </details>
+
+  </div>
+</div>
+
+<div class="flex flex-col gap-1 mb-8">
+
+  <details class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800/50 dark:hover:bg-gray-800 open:bg-white dark:open:bg-gray-900 transition-colors">
+    <summary class="font-bold cursor-pointer flex items-center gap-1 select-none text-gray-900 dark:text-gray-100">
+      <span class="text-lg">Observational Notes</span>
+    </summary>
+    <div class="mt-4 space-y-4">
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+        Before beginning the game, I think that one of the most notable things I bring to my pre-game observation is how much prior context of hands-on renovation work and experiences of living in a rainy place I bring. 
+        Prince Rupert has some serious rainfall and old infrastructure (my house is from 1916!) so I feel that with a game like DrainSim, I'm in an unusual position as a player as I've already lived through a few floods and messy situations.
+        I'm sure I'll be paying attention to how the game approaches the usage of tools of the trade and how it aligns with or diverges from what I already know. 
+      </p>
+    </div>
+  </details>
+
+  <details class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800/50 dark:hover:bg-gray-800 open:bg-white dark:open:bg-gray-900 transition-colors">
+    <summary class="font-bold cursor-pointer flex items-center gap-1 select-none text-gray-900 dark:text-gray-100">
+      <span class="text-lg">Affective Notes</span>
+    </summary>
+    <div class="mt-4 space-y-4">
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+        I'd say that prior to starting the game I was in a genuinely good and optimistic headspace. I am intrigued at the concept of DrainSim as a game and feel that the chaos will be lighthearted, humorous, and low-stakes in comparison to experiencing real disastrous and time consuming situations in real life.
+        There's something I find a bit funny (but also a natural irony) about choosing a drain simulator for this assignment given where I am in life. Just the other day I came across the City of Prince Rupert putting out a notice for residents to be aware of clogged drainage basins and so something about this choice feels like it fits. 
+        I've spent enough time over the past few years planning out kitchen and bathroom renovations, working in crawlspaces, laying down perimeter drainage rock and pipe, and dealing with flooded basements that this was a weirdly familiar game that sparked my curiosity.
+      </p>
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+        Despite having some troubles installing steam and running this game in a windows compatibility layer on my Linux Thinkpad setup (I'm using Endeavour OS with Hyprland as a Desktop Environment) I'm in good spirits despite having a slow start.
+      </p>
+    </div>
+  </details>
+
+  <details class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800/50 dark:hover:bg-gray-800 open:bg-white dark:open:bg-gray-900 transition-colors">
+    <summary class="font-bold cursor-pointer flex items-center gap-1 select-none text-gray-900 dark:text-gray-100">
+      <span class="text-lg">Analytic Notes</span>
+    </summary>
+    <div class="mt-4 space-y-4">
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+        My instinct going into this game is that there will be subtle statements about: the unglamorous nature of physical labour work, the types of rough-around-the-edges people and humour that come with trades work, as well as other depictions of stereotypical norms (ie. the portrayal of gender roles or apparel) that are stereotypical to the trades. 
+        A lot of times it seems that this type of trades work doesn't get celebrated in the way that other trades do despite being a necessity in everyday life. I'm curious whether the game actually engages with any of this at all, or whether it just gamifies the surface of it.
+      </p>
+    </div>
+  </details>
+
+  <details class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800/50 dark:hover:bg-gray-800 open:bg-white dark:open:bg-gray-900 transition-colors">
+    <summary class="font-bold cursor-pointer flex items-center gap-1 select-none text-gray-900 dark:text-gray-100">
+      <span class="text-lg">Summary</span>
+    </summary>
+    <div class="mt-4 space-y-4">
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+        Since my expectations going into have been primarily shaped by my own experiences (and problems) with plumbing and drainage systems due to living in Prince Rupert, I'm excited to try the game out and see how DrainSim aligns with real world complexities and problems. 
+      </p>
+    </div>
+  </details>
+
+</div>
+
+---
+## Section 2: Playing the Game
+
+<div class="grid grid-cols-1 md:grid-cols-[1fr_1fr] gap-6 my-8 items-start">
+  <div>
+    <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+      My first impressions were that this game was less about learning tools and plumbing knowledge and more about learning to navigate the environment well enough to know what needed doing. The most important skill through the first level turned out to be sequencing: knowing what order to tackle problems in, which the game taught directly through instruction before gradually stepping back and leaving the player to figure things out on their own.
+    </p>
+    <p>
+      With that said, I noticed a gap between what the game presented as skilled trades work and what that work actually involves in a real-world situation. No health bar, not much in the way of PPE, no consideration of bylaw or building codes, and tools that appeared out of nowhere when the game decided you needed them. If I never had to put gas in a generator, avoid gross grey-water, or go find my own tools, trades work would be a lot easier. It was interesting to see what was omitted and how straightforward some things were made to be.
+    </p>
+  </div>
+
+  <div class="sticky top-8">
+    <EmblaCarousel
+      client:visible
+      images={[
+        { src: "/assets/images/blog/drainsimmenu2.jpg", caption: "Drain Simulator.", sharedCaption: "Screenshots from my playthrough of DrainSim." },
+        { src: "/assets/images/blog/drainsim1.jpg", caption: "First look at level one." },
+        { src: "/assets/images/blog/drainsim2.jpg", caption: "Flood water map." },
+        { src: "/assets/images/blog/drainsim3.jpg", caption: "Found the first clogged drain." },
+        { src: "/assets/images/blog/drainsim4.jpg", caption: "Inside the flooded basement." },
+        { src: "/assets/images/blog/drainsim5.jpg", caption: "Tightening a broken pipe." },
+        { src: "/assets/images/blog/drainsim6.jpg", caption: "Vacuuming up water next to the submersible pump." },
+        { src: "/assets/images/blog/drainsim7.jpg", caption: "Digging a trench from the flooded backyard." },
+        { src: "/assets/images/blog/ddrainsim3.jpg", caption: "Making water flow towards the neighbour." },
+        { src: "/assets/images/blog/drainsim8.jpg", caption: "Completion of the first level." },
+      ]}
+    />
+  </div>
+</div>
+
+<div class="flex flex-col gap-1 mb-8">
+
+  <details class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800/50 dark:hover:bg-gray-800 open:bg-white dark:open:bg-gray-900 transition-colors">
+    <summary class="font-bold cursor-pointer flex items-center gap-1 select-none text-gray-900 dark:text-gray-100">
+      <span class="text-lg">Descriptive Notes</span>
+    </summary>
+    <div class="mt-4 space-y-4">
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+        The first scene begins with a TV news report setting the story: the town is blocked off by a torrential flood and city workers cannot get to the flooded areas.
+        A middle-aged white guy wearing coveralls holding a plunger leaves his bathroom and walks out his front door looking out onto a flooded street during a storm.
+        The starting home has an American flag hanging outside of it giving the impression that this is somewhere in a residential neighbourhood amongst the lower states in a potential flood zone.
+      </p>
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+        The tone of this story objectively appeared as the kind of disaster situation that would cause real fear and panic for people, city workers, and insurance companies alike, yet one of the first things heard upon starting the game is the flush of a toilet, indicating a kind of lighthearted humour.
+        There's a deliberate contrast right away portrayed in seeing an abandoned car amongst a flooded road alongside some guy with a plunger attached to his belt.
+      </p>
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+        As previously mentioned, there is no health bar or wellness status for the character, instead there is a water level indicator.
+        This portrays the game not necessarily as a survival game, but rather solely about water mitigation.
+        I had to turn on the "always day" and "always light" in the settings fairly quickly because the darkness was too hard for me to navigate as a beginner.
+        My first task involved finding a rake and heading towards the backed-up storm drain where leaves were clogging it.
+        Even though the gameplay and controls felt similar to games I have experienced (WASD to move, spacebar to jump, click to use your primary tool, etc) I had difficulty remembering how to access the map and change tools.
+        During the first level, there was an arrow on the screen pointing me towards the various drains and objects I was to engage with so it wasn't too hard to navigate.
+      </p>
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+        There were constant tips popping up on screen: "scrape the storm drains, and keep scraping until you see bubbles or leaves float up. Listen for gurgling." Which was quite basic at first but very useful in understanding how I was to engage with the game environment.
+        The game's overall instruction towards what to do and how to do it: "Find the last drain." "Go to the backyard." was quite helpful at first in understanding how the game worked, but I found that I grew a bit reliant on it and felt lost in the second level when those tips no longer appeared.
+      </p>
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+        One thing I noticed early on was that after clearing a storm drain, the leaves would come back and clog it again over time.
+        Although it annoyed me a bit, I thought this was interesting as it resembled how drains can get re-clogged in real life.
+      </p>
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+        I decided to venture into the basement where I found the water main was leaking and flooding the area.
+        I was instructed to turn off the power at the breaker panel first, while standing in the flooded basement, which I thought was a bit questionable from a safety standpoint.
+        After that I was directed to pick up a pipe wrench and tighten the leaking water main pipes. The game had a visual indicator of a crescent wrench moving in the direction of which to turn the pipe, "righty tighty lefty loosey," which was a nice touch.
+      </p>
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+        What the player was able to carry at one time was worth noting as the game only allowed for the player to hold one primary tool at a time.
+        This meant that in order to pick up a shovel, I had to drop the pipe wrench. This gameplay logic created a back-and-forth that felt realistic in a tedious sort of way.
+      </p>
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+        In the backyard, I was directed to dig a path for the water so that it could flow to my neighbour's backyard and away from my own home.
+        Throughout the first level, tools would magically appear in convenient areas when needed, as if I had a secret labourer doing the hard work for me.
+        A generator appeared in the backyard out of nowhere, a submersible pump and extension cord appeared in the basement when I needed them. This happened frequently in the first level, though when I reached the second level the tools were scattered around my pickup truck where I spawned, which felt more like how things actually are on a jobsite.
+        For cleaning up the flooded basement, I had to place the submersible pump in the deepest part of the water and run the drain hose up to the backyard. I then had to grab the generator, move it to the entrance of the basement, connect the power cable to the generator, and turn it on. That sequence felt satisfying once it worked. It is worth noting that I did accidentally turn the generator on and connect a live cable to the pump while it was still underwater, which in real life wouldn't have been very fun.
+      </p>
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+        When I was done with the basement and backyard flooding, I was instructed to find the big squeegee and push the remaining water towards the storm drains on the street.
+        When the tutorial ended and I moved onto the second level, "Midtown Market," I felt a bit lost when I was no longer being spoon-fed what to do and was on my own.
+      </p>
+    </div>
+  </details>
+
+  <details class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800/50 dark:hover:bg-gray-800 open:bg-white dark:open:bg-gray-900 transition-colors">
+    <summary class="font-bold cursor-pointer flex items-center gap-1 select-none text-gray-900 dark:text-gray-100">
+      <span class="text-lg">Affective Notes</span>
+    </summary>
+    <div class="mt-4 space-y-4">
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+        I probably spent a good two hours trying to figure out how to rake leaves out of a storm drain. Some of the frustration was primarily due to not being able to see objects as clearly as I needed to due to the lower graphics rendering capabilities of my laptop.
+        Discovering that the water level kept gradually rising if I did not fully complete a task added to that challenge, and there were stretches where I genuinely did not know if I was making progress or just moving water around in circles.
+      </p>
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+        Some satisfying moments came when a task was complete: tightening a pipe, watching the water flow to my neighbour's backyard, and seeing the level complete screen once I managed to eventually "git'r done." By the end of the first level I felt fairly worn out, and moving into the second level without any guidance made that feeling worse before it got better.
+      </p>
+    </div>
+  </details>
+
+  <details class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800/50 dark:hover:bg-gray-800 open:bg-white dark:open:bg-gray-900 transition-colors">
+    <summary class="font-bold cursor-pointer flex items-center gap-1 select-none text-gray-900 dark:text-gray-100">
+      <span class="text-lg">Analytic Notes</span>
+    </summary>
+    <div class="mt-4 space-y-4">
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+        It seems that the core problem in each of the levels is always the same: there is water where it should not be, and it is the player's job to move it somewhere else.
+        When I finally made it to the second level, I felt that even though I had gone through the process of learning how to use the tools in the first level, I was not really sure where to start when left on my own.
+        This made me think that the objective was not really to problem solve, but to follow a patterned way of using tools to mitigate groundwater. In considering this, it seems that the prescribed sequencing of gameplay removes a layer of player agency that a more realistic simulation might have had.
+      </p>
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+        In each of the tasks, the water level acts as a kind of clock through how it regenerated over time.
+        Having an area reflood if the player is not fast enough creates a sense of urgency and makes it so that the player must be efficient in their movements and decisions.
+      </p>
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+        While I found that the heavy scaffolding in the first level was effective for the initial onboarding of the game, it left me feeling underprepared for the second level when the instruction I had been relying on disappeared and I had to figure out the order of operations on my own.
+      </p>
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+        The protagonist of the game, being a middle-aged white working-class man, combined with the subtle display of an American flag on his house, the suburban setting, and the disaster scenario, gives the game a fairly specific "lone hero" archetype vibe.
+      </p>
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+        In addition to this, I found the framing of what was or was not considered dangerous to be worth noting. The character operates electrical equipment while standing in standing water with no PPE and no acknowledgment of real hazards. For a game otherwise trying to simulate trades work in hostile conditions, the absence of any safety framing is a telling omission.
+      </p>
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+        Another point worth bringing up is the task of redirecting water onto your neighbour's property.
+        While it is presented as just another objective, the fact that the game casually glosses over the civic reality of proper drainage solutions is telling of what kind of game this is and the silly workarounds that will be required in order to accomplish various goals.
+      </p>
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+        Overall, I think the regeneration of debris overtop of the clogged drains was one of my favourite design choices of the game as it showcases the true reality of drainage problems and flowing water: drainage work and drains do not always stay fixed.
+      </p>
+    </div>
+  </details>
+
+  <details class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800/50 dark:hover:bg-gray-800 open:bg-white dark:open:bg-gray-900 transition-colors">
+    <summary class="font-bold cursor-pointer flex items-center gap-1 select-none text-gray-900 dark:text-gray-100">
+      <span class="text-lg">Summary</span>
+    </summary>
+    <div class="mt-4 space-y-4">
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+        Getting a handle on this game was less about learning the mechanics and more about learning to read the environment well enough to know what needed doing next. The most important skill of this game turned out to be sequencing and knowing what order to tackle the problems in.
+      </p>
+    </div>
+  </details>
+
+</div>
+
+---
+## Section 3: Watching the Game
+
+<div class="grid grid-cols-1 md:grid-cols-[1fr_1fr] gap-6 my-8 items-start">
+  <div>
+    <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+      Watching a more skilled player on Twitch reframed my understanding of the game's difficulty and revealed how much the experience of a game is shaped by factors entirely outside its mechanics.
+      What took me 2.5 hours to accomplish, the streamer completed in under 15 minutes.
+      They sprinted everywhere where I had only ever walked, and they worked on the big problems before focusing on the smaller ones.
+    </p>
+    <p class="text-gray-700 dark:text-gray-300 leading-relaxed mt-4">
+      A lot of what I experienced as the game's difficulty was compounded by the fact that I genuinely could not see the environment well enough to navigate it or know if I was clicking in the right area. This streamer had much higher graphic settings than I did, which made the water levels, drain locations, and flooded zones significantly more distinctive than what I experienced on my low-end setup.
+    </p>
+  </div>
+
+  <div class="sticky top-8">
+    <div style="max-width: 440px; margin: 0 auto;">
+      <div style="display: flex; align-items: center; justify-content: flex-end; padding-right: 0.25rem; position: relative; z-index: 10;">
+        <span
+          style="position: relative; display: inline-block; margin-left: 0.25rem;"
+          onmouseenter="this.querySelector('.nikez-preview').style.opacity='1'; this.querySelector('.nikez-preview').style.pointerEvents='auto';"
+          onmouseleave="this.querySelector('.nikez-preview').style.opacity='0'; this.querySelector('.nikez-preview').style.pointerEvents='none';"
+        >
+          <a href="https://www.twitch.tv/videos/2718187653" target="_blank" rel="noreferrer noopener" style="font-size: 0.7rem; color: #7c3aed; text-decoration: none; font-weight: 500; letter-spacing: 0.01em;">Screenshots taken from Nikez ↗</a>
+          <span style="position: absolute; bottom: calc(100% + 8px); right: 0; width: 220px; border-radius: 0.5rem; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.2); opacity: 0; pointer-events: none; transition: opacity 0.2s ease; z-index: 50;" class="nikez-preview">
+            <img src="/assets/images/blog/twitchstreamer.jpg" alt="Nikez on Twitch" style="width: 100%; display: block; object-fit: cover;" />
+          </span>
+        </span>
+      </div>
+
+      <div style="margin-top: -4.2rem;">
+        <EmblaCarousel
+          client:visible
+          images={[
+            { src: "/assets/images/blog/ddrainsim1.jpg", caption: "Unclogging their first drain." },
+            { src: "/assets/images/blog/ddrainsim2.jpg", caption: "Making the water flow towards the neighbour's backyard." },
+            { src: "/assets/images/blog/ddrainsim4.jpg", caption: "Squeegeeing water towards the pump." },
+            { src: "/assets/images/blog/ddrainsim5.jpg", caption: "Hooking up the pump to the generator." },
+            { src: "/assets/images/blog/ddrainsim6.jpg", caption: "Drain becoming re-clogged in the dark." },
+            { src: "/assets/images/blog/ddrainsim7.jpg", caption: "Ooops! Dumping vacuumed water back on the ground." },
+            { src: "/assets/images/blog/ddrainsim8.jpg", caption: "Magnet fishing complete." },
+          ]}
+        />
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="flex flex-col gap-1 mb-8">
+
+  <details class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800/50 dark:hover:bg-gray-800 open:bg-white dark:open:bg-gray-900 transition-colors">
+    <summary class="font-bold cursor-pointer flex items-center gap-1 select-none text-gray-900 dark:text-gray-100">
+      <span class="text-lg">Descriptive Notes</span>
+    </summary>
+    <div class="mt-4 space-y-4">
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+        I watched a Twitch VOD of someone else playing Drain Simulator. There was no real narration focused on the game itself, but there was a live chat transcript from when it was originally streamed, and the streamer did occasionally call out actions out loud: "pick up the bucket," "pick up the pump." Simple and action-oriented, not analytical.
+      </p>
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+        The night mode they played in, which I had turned off entirely because I could not navigate in the dark, actually looked great. There were reflections of rain, lightning, and street lamps amongst the flooded street in a way that really aligned with the disaster-styled storyline of the game. I feel that this context matters because a lot of my struggle in playing was probably less about the game itself and more about not being able to see what was happening clearly enough to make decisions.
+      </p>
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+        What took me about 2.5 hours in the tutorial, this player completed in under 15 minutes.
+        They sprinted everywhere where I had only ever walked.
+        They checked the tablet map with fluency, switched tools without hesitation, and combined tool usage in ways I had not figured out, like squeegeeing water toward the submersible pump rather than trying to push it all the way to the drain by hand.
+        In the second level, they were also able to find a drain I had never located, this one clogged by garbage rather than leaves.
+      </p>
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+        In Midtown Market, they worked through the sequence of unclogging the street drains first, then set up the generator outside the flooded cafe, placed the submersible pump inside, and pumped the water out to the now-unclogged drain.
+        In hindsight that seems like the obvious move, but when I was playing my mind went straight to the cafe without realizing I needed to unclog the street drains first.
+      </p>
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+        One mistake I watched the streamer make was while vacuuming the cafe they had been moving too fast and carelessly dumped the contents of the vacuum back onto the floor after vacuuming it up.
+        They expressed frustration by stating "Oh my god!" which I found to be humanizing after watching them move so fluidly throughout the level up to that point.
+      </p>
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+        After completing level two, they went magnet fishing in the canal, a point I had never reached when I played. They pulled up a scooter, a safe with an old camera inside, a lunch box, a shopping cart, audio equipment, an ashtray, and a screwdriver.
+        The live chat was entertaining throughout, with someone joking "man, this guy lifts" when they pulled up the safe.
+        The money earned from the level and the fishing was used to shop for new tools from a garage between levels.
+      </p>
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+        The narration and chat throughout were not really about the game. It was more about the streamer's community checking in, talking about Women's Day, asking how people were doing. The game was almost secondary to the social context of the stream itself.
+      </p>
+    </div>
+  </details>
+
+  <details class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800/50 dark:hover:bg-gray-800 open:bg-white dark:open:bg-gray-900 transition-colors">
+    <summary class="font-bold cursor-pointer flex items-center gap-1 select-none text-gray-900 dark:text-gray-100">
+      <span class="text-lg">Affective Notes</span>
+    </summary>
+    <div class="mt-4 space-y-4">
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+        Watching another person play the game was a mixture of different feelings for me. There was something humbling about watching someone finish the first two levels so fluently in such a short period of time compared to how I stumbled through the same tasks, though it felt clarifying more than anything knowing it could be done that easily.
+        It made it obvious that a lot of the difficulties I experienced were not about the game itself being hard, but rather about me not knowing how to play the game efficiently.
+      </p>
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+        Even when the streamer made little errors, there was a kind of rhythm to how they moved throughout the game, using the same tools and the same process over and over to clear the flooded areas. When they did show frustration it was only briefly before they moved on.
+        Watching the moments where their experience overlapped with mine made it clear that some frustrations are just built into the game itself, regardless of skill level, and that nothing is ever perfect. I was watching this person navigate and engage with this world in a genuinely different way from what I had done during my own playthrough, making me think about how differently the same game can be for different players depending on context and familiarity.
+      </p>
+    </div>
+  </details>
+
+  <details class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800/50 dark:hover:bg-gray-800 open:bg-white dark:open:bg-gray-900 transition-colors">
+    <summary class="font-bold cursor-pointer flex items-center gap-1 select-none text-gray-900 dark:text-gray-100">
+      <span class="text-lg">Analytic Notes</span>
+    </summary>
+    <div class="mt-4 space-y-4">
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+        One of the most obvious things that came from watching this session was how much the graphics shaped the entire experience of the game, not just aesthetically but functionally.
+        The water levels, flooded zones, and drain locations were all significantly more visible and easier to engage with at higher settings.
+        A lot of what I experienced as confusion or difficulty was compounded by the fact that I genuinely could not see the environment clearly enough to navigate it, which is worth noting as a real limitation of my own playthrough.
+      </p>
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+        Beyond that, the streamer's fluency came from what I would describe as their own working memory within the game.
+        They remembered what tools they had, where they were on the map, and what the correct sequence of operations needed to be.
+        I kept forgetting I had access to certain tools, where I had put something, or what I had or had not already done.
+        Their approach was also more playful and improvisational, where I was much more methodical and cautious, which seemed to slow everything down considerably.
+      </p>
+    </div>
+  </details>
+
+  <details class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800/50 dark:hover:bg-gray-800 open:bg-white dark:open:bg-gray-900 transition-colors">
+    <summary class="font-bold cursor-pointer flex items-center gap-1 select-none text-gray-900 dark:text-gray-100">
+      <span class="text-lg">Summary</span>
+    </summary>
+    <div class="mt-4 space-y-4">
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+        Watching a more skilled player made it clear that a lot of what I experienced as the game's difficulty was actually a combination of hardware limitations and unfamiliarity with modern game mechanics and the underlying logic.
+        It also revealed that this player's fluency came less from understanding the simulation deeply and more from knowing how to move through a game environment efficiently, which is its own kind of literacy entirely.
+      </p>
+    </div>
+  </details>
+
+</div>
+
+---
+## Section 4: Synthesis
+
+<p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+  <i>Drain Simulator</i> is a game about doing the dirty work, which was one reason it resonated with me right away. Clearing storm drains, pumping out basements, squeegeeing water toward a drain, none of that is glamorous in real life and the game does not pretend otherwise. What made it interesting to analyze was the gap between what the simulation showed and what it left out, and how much that gap revealed about how the game understands the labour it was trying to represent (Gee & Gee, 2017)<Cite n={1} title={"Gee & Gee (2017)"} />.
+</p>
+
+<p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-4 font-bold">
+  <b>Scaffolding: From Instructionist to Constructionist</b>
+</p>
+
+<p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+  The first level was undoubtedly instructionist in nature. Every objective was spelled out for the player, every tool had a visual indicator, and the on-screen arrows pointed the player toward the next task. That kind of extrinsic scaffolding lowered the barrier to entry considerably, but at the expense of compliance without real comprehension (Zainuddin et al., 2020)<Cite n={2} title="Zainuddin et al. (2020)" />. When the leaves came back and the water kept rising after I had already cleared the drains, I did not understand why at first, because I had been following instructions rather than building any sense of how the system actually worked.
+</p>
+
+<p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+  That pattern shifted when the game stopped explicitly directing me to do things and started requiring it of me. Figuring out the order of operations in draining the different flooded zones on my own produced a noticeably different feeling than when I was guided by the in-game tips, which matched what Burke and Kafai (2014) had described as the constructionist shift: learning through building rather than being told (Burke & Kafai, 2014)<Cite n={3} title={"Burke & Kafai (2014)"} />. That was where real engagement seemed to happen for me in the game (Gee, 2008)<Cite n={4} title="Gee (2008)" />.
+</p>
+
+<p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-4 font-bold">
+  <b>Prior Knowledge and the Analog Gap</b>
+</p>
+
+<p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+  Coming into this game with some residential plumbing experience made certain things click faster than they might have otherwise. While analogy mapping works best when a player can connect game mechanics to something they already understand (Martin et al., 2019)<Cite n={5} title={"Martin et al. (2019)"} />, that same prior knowledge also made the game's omissions more visible than they might have been to someone without that background.
+</p>
+
+<p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+  The generator never needed fuel. The character had no PPE despite encountering hazardous situations. The solution to a flooded backyard was to redirect water onto the neighbour's property. All of these things were not minor details in my mind, these were the differences between an authentic simulation of trades work and a gamified depiction of it. The game quietly frames trades labour as simpler and safer than it actually is, which is its own kind of statement about what that work actually looks like (Martin et al., 2019)<Cite n={5} title={"Martin et al. (2019)"} />.
+</p>
+
+<p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-4 font-bold">
+  <b>Distributed Systems and the Digital Divide</b>
+</p>
+
+<p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+  Watching a Twitch streamer complete the tutorial in under fifteen minutes made something clear that I had not fully registered during my own playthrough. Games are not just software, but texts embedded in distributed systems of hardware, social context, and accumulated game fluency that are engaged with on different reciprocal levels by the player (Gee & Gee, 2017)<Cite n={1} title={"Gee & Gee (2017)"} />. What I experienced as difficult was largely an access problem. The low-end graphics I had made the environment hard to read, which made decisions harder to make. What looked like a learning obstacle on my part was partly just an inability to see clearly enough to engage with the game the way it was meant to be engaged with (Gee & Gee, 2017)<Cite n={1} title={"Gee & Gee (2017)"} />.
+</p>
+
+<p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+  The Twitch chat also illustrated the affinity space dynamic, where people connected the game to real experiences and built meaning together around its scenarios (Gee & Gee, 2017)<Cite n={1} title={"Gee & Gee (2017)"} /> (Wulf et al., 2020)<Cite n={6} title={"Wulf et al. (2020)"} />. That social layer added a dimension to understanding the game that the solo playthrough did not have.
+</p>
+
+<p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-4 font-bold">
+  <b>Labour and the Work of Play</b>
+</p>
+
+<p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+  The game has a fairly consistent ideological position: infrastructure failure is a problem for a lone competent individual to fix. The middle-aged working-class protagonist with a plunger on his belt and an American flag outside his house presents a specific picture of who that individual is. The streamer I watched even called themselves "a true American hero, single-handedly saving the city." Nobody in the chat pushed back on that framing. It was just celebrated (Taylor, 2018)<Cite n={7} title="Taylor (2018)" />.
+</p>
+
+<p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+  The magnet fishing aspect of the game after completing the second level reinforced this outlook. Environmental remediation gets converted into a financial transaction: you fish for trash, you earn money, you spend it on tools. The civic dimension of the drainage work somewhat disappears here, which became an interesting design choice for a game that had otherwise simulated the real world public responsibility associated with unclogging municipal storm drains and helping others (Zainuddin et al., 2020)<Cite n={2} title="Zainuddin et al. (2020)" />.
+</p>
+
+<p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-8">
+  The most interesting thing about <i>Drain Simulator</i> was not what it taught directly but what it revealed through what it chose to omit. The missing safety gear, the limitless generator, the magically appearing tools, the redirecting of water onto a neighbour's property, all of these were the moments where the game's version of labour compared to reality began to come apart. That collision between prior embodied knowledge and game logic was where the most productive reflection happened, and where the game revealed the most about the work it was trying to simulate (Gee, 2008)<Cite n={4} title="Gee (2008)" /> (Gee & Gee, 2017)<Cite n={1} title={"Gee & Gee (2017)"} /> (Martin et al., 2019)<Cite n={5} title={"Martin et al. (2019)"} />.
+</p>
+---
+
+## References
+
+<div class="mt-8 border-t border-gray-200 dark:border-gray-700 pt-8">
+  <div class="flex flex-col gap-6">
+
+    <div id="ref-1" class="flex items-start gap-4 text-sm scroll-mt-24 group justify-between">
+      <div class="flex gap-3">
+        <a href="#cite-1" class="flex-none w-6 text-right font-mono text-xs text-blue-600 pt-1 hover:underline hover:font-bold" title="Jump back to citation">[1]</a>
+        <div class="leading-relaxed text-gray-700 dark:text-gray-300">
+          <b>Gee, E., &amp; Gee, J. P. (2017).</b> Games as distributed teaching and learning systems. <i>Teachers College Record</i>, 119(12).
+        </div>
+      </div>
+    </div>
+
+    <div id="ref-2" class="flex items-start gap-4 text-sm scroll-mt-24 group justify-between">
+      <div class="flex gap-3">
+        <a href="#cite-2" class="flex-none w-6 text-right font-mono text-xs text-blue-600 pt-1 hover:underline hover:font-bold" title="Jump back to citation">[2]</a>
+        <div class="leading-relaxed text-gray-700 dark:text-gray-300">
+          <b>Zainuddin, Z., et al. (2020).</b> The impact of gamification on learning and instruction: A systematic review of empirical evidence. <i>Educational Research Review</i>, 30.
+        </div>
+      </div>
+    </div>
+
+    <div id="ref-3" class="flex items-start gap-4 text-sm scroll-mt-24 group justify-between">
+      <div class="flex gap-3">
+        <a href="#cite-3" class="flex-none w-6 text-right font-mono text-xs text-blue-600 pt-1 hover:underline hover:font-bold" title="Jump back to citation">[3]</a>
+        <div class="leading-relaxed text-gray-700 dark:text-gray-300">
+          <b>Burke, Q., &amp; Kafai, Y. B. (2014).</b> Decade of game making for learning: From tools to communities. In <i>Handbook of Digital Games and Entertainment Technologies</i>. Springer.
+        </div>
+      </div>
+    </div>
+
+    <div id="ref-4" class="flex items-start gap-4 text-sm scroll-mt-24 group justify-between">
+      <div class="flex gap-3">
+        <a href="#cite-4" class="flex-none w-6 text-right font-mono text-xs text-blue-600 pt-1 hover:underline hover:font-bold" title="Jump back to citation">[4]</a>
+        <div class="leading-relaxed text-gray-700 dark:text-gray-300">
+          <b>Gee, J. P. (2008).</b> Cats and portals: Video games, learning, and play. <i>American Journal of Play</i>, 1(2).
+        </div>
+      </div>
+    </div>
+
+    <div id="ref-5" class="flex items-start gap-4 text-sm scroll-mt-24 group justify-between">
+      <div class="flex gap-3">
+        <a href="#cite-5" class="flex-none w-6 text-right font-mono text-xs text-blue-600 pt-1 hover:underline hover:font-bold" title="Jump back to citation">[5]</a>
+        <div class="leading-relaxed text-gray-700 dark:text-gray-300">
+          <b>Martin, W., Silander, M., &amp; Rutter, S. (2019).</b> Digital games as sources of analogy for learning science. <i>International Journal of Education in Mathematics, Science and Technology</i>, 7.
+        </div>
+      </div>
+    </div>
+
+    <div id="ref-6" class="flex items-start gap-4 text-sm scroll-mt-24 group justify-between">
+      <div class="flex gap-3">
+        <a href="#cite-6" class="flex-none w-6 text-right font-mono text-xs text-blue-600 pt-1 hover:underline hover:font-bold" title="Jump back to citation">[6]</a>
+        <div class="leading-relaxed text-gray-700 dark:text-gray-300">
+          <b>Wulf, T., Schneider, F. M., &amp; Beckert, S. (2020).</b> Watching players: An exploration of media enjoyment on Twitch. <i>Psychology of Popular Media</i>, 9.
+        </div>
+      </div>
+    </div>
+
+    <div id="ref-7" class="flex items-start gap-4 text-sm scroll-mt-24 group justify-between">
+      <div class="flex gap-3">
+        <a href="#cite-7" class="flex-none w-6 text-right font-mono text-xs text-blue-600 pt-1 hover:underline hover:font-bold" title="Jump back to citation">[7]</a>
+        <div class="leading-relaxed text-gray-700 dark:text-gray-300">
+          <b>Taylor, T. L. (2018).</b> <i>Watch me play: Twitch and the rise of game live streaming.</i> Princeton University Press.
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</Prose>

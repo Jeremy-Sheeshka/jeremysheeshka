@@ -7,5 +7,6 @@ export default new Map([
 ["src/content/post/2026-01-17-etec542-hoa1.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fpost%2F2026-01-17-etec542-hoa1.mdx&astroContentModuleFlag=true")],
 ["src/content/post/2026-02-05-etec542-HOA2.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fpost%2F2026-02-05-etec542-HOA2.mdx&astroContentModuleFlag=true")],
 ["src/content/post/2026-02-07-etec544-ch6fullerton.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fpost%2F2026-02-07-etec544-ch6fullerton.mdx&astroContentModuleFlag=true")],
-["src/content/post/2026-03-1-etec542-HOA3.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fpost%2F2026-03-1-etec542-HOA3.mdx&astroContentModuleFlag=true")]]);
+["src/content/post/2026-03-1-etec542-HOA3.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fpost%2F2026-03-1-etec542-HOA3.mdx&astroContentModuleFlag=true")],
+["src/content/post/2026-03-14-etec544-FieldAssignment.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fpost%2F2026-03-14-etec544-FieldAssignment.mdx&astroContentModuleFlag=true")]]);
 		
