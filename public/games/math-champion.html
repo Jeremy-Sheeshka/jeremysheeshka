@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🏆 Math Champion</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Arial Rounded MT Bold','Comic Sans MS',Arial,sans-serif;background:#1a1a2e;color:#fff;overflow:hidden;height:100dvh;width:100vw;user-select:none;-webkit-user-select:none}
+.screen{display:none;width:100%;height:100%;position:absolute;top:0;left:0;flex-direction:column;max-height:100dvh}
+.screen.active{display:flex}
+
+/* ── SETUP ── */
+#setupScreen{align-items:center;justify-content:flex-start;background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460);overflow-y:auto;padding:16px 20px 24px}
+.setup-title{font-size:clamp(32px,4vw,52px);color:#FFD700;text-shadow:0 0 30px rgba(255,215,0,.5);margin-bottom:16px;letter-spacing:1px}
+.setup-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;width:100%;max-width:1200px}
+.setup-card{background:rgba(255,255,255,.08);border-radius:14px;padding:16px;border:2px solid rgba(255,255,255,.15)}
+.setup-card h3{font-size:15px;color:#4ECDC4;margin-bottom:12px;text-transform:uppercase;letter-spacing:1px}
+.opt-row{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:9px;align-items:center}
+.opt-lbl{font-size:13px;color:rgba(255,255,255,.6);min-width:140px}
+.opt-btn{padding:7px 14px;border-radius:30px;border:2px solid rgba(255,255,255,.25);background:transparent;color:#fff;font-family:inherit;font-size:13px;cursor:pointer;transition:all .2s}
+.opt-btn:hover{background:rgba(255,255,255,.15)}
+.opt-btn.sel{background:#4ECDC4;border-color:#4ECDC4;color:#1a1a2e;font-weight:bold}
+.topic-btn{padding:9px 14px;border-radius:10px;border:2px solid rgba(255,255,255,.25);background:transparent;color:#fff;font-family:inherit;font-size:13px;cursor:pointer;transition:all .2s}
+.topic-btn:hover{background:rgba(255,255,255,.15)}
+.topic-btn.sel{background:#FF6B35;border-color:#FF6B35;font-weight:bold}
+.start-btn{margin-top:16px;padding:16px 56px;font-size:24px;font-family:inherit;font-weight:bold;background:linear-gradient(135deg,#FFD700,#FF6B35);color:#1a1a2e;border:none;border-radius:50px;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 8px 25px rgba(255,107,53,.4)}
+.start-btn:hover{transform:scale(1.05);box-shadow:0 12px 35px rgba(255,107,53,.6)}
+
+/* ── COUNTDOWN ── */
+#countdownScreen{align-items:center;justify-content:center;background:linear-gradient(135deg,#1a1a2e,#0f3460)}
+.cd-num{font-size:min(35vw,200px);font-weight:bold;color:#FFD700;text-shadow:0 0 60px rgba(255,215,0,.8);animation:cdPulse .8s ease-out}
+.cd-go{font-size:min(25vw,160px);font-weight:bold;color:#4ECDC4;text-shadow:0 0 60px rgba(78,205,196,.8);animation:goAnim .5s ease-out}
+@keyframes cdPulse{0%{transform:scale(1.6);opacity:0}100%{transform:scale(1);opacity:1}}
+@keyframes goAnim{0%{transform:scale(.4);opacity:0}60%{transform:scale(1.2)}100%{transform:scale(1);opacity:1}}
+
+/* ── GAME ── */
+#gameScreen{background:linear-gradient(180deg,#1a1a2e,#16213e)}
+.top-bar{display:flex;align-items:center;justify-content:space-between;padding:8px 16px;background:rgba(0,0,0,.3);border-bottom:2px solid rgba(255,255,255,.08);height:54px;flex-shrink:0}
+.pause-btn{background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.25);color:#fff;font-size:15px;padding:6px 14px;border-radius:8px;cursor:pointer;font-family:inherit}
+.q-counter{font-size:15px;color:rgba(255,255,255,.55)}
+.lb-corner{background:rgba(0,0,0,.5);border:1px solid rgba(255,215,0,.3);border-radius:10px;padding:6px 12px;font-size:12px;min-width:150px}
+.lb-title{color:#FFD700;font-size:11px;font-weight:bold;margin-bottom:3px}
+.lb-entries{color:rgba(255,255,255,.75);line-height:1.6}
+.question-area{display:flex;align-items:center;justify-content:center;padding:14px 20px;min-height:clamp(80px,12vh,120px);background:rgba(0,0,0,.18);flex-shrink:0}
+.q-text{font-size:clamp(42px,5.5vw,72px);font-weight:bold;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.5);text-align:center}
+.stats-bar{display:flex;align-items:center;justify-content:center;gap:24px;padding:8px 20px;background:rgba(0,0,0,.25);border-bottom:2px solid rgba(255,255,255,.06);flex-shrink:0}
+.champ-label{font-size:17px;color:#FFD700;font-weight:bold;min-width:160px}
+.streak-meter{display:flex;align-items:center;gap:8px}
+.streak-pips{display:flex;gap:4px}
+.pip{width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.25);transition:all .3s}
+.pip.on{background:#FFD700;border-color:#FFD700;box-shadow:0 0 8px rgba(255,215,0,.6)}
+.streak-txt{font-size:18px;font-weight:bold;color:#fff;min-width:50px}
+.timer-disp{font-size:26px;font-weight:bold;color:#fff;min-width:55px;text-align:center;transition:color .3s}
+.timer-disp.warn{color:#FF6B35;animation:tPulse .5s infinite}
+@keyframes tPulse{0%,100%{opacity:1}50%{opacity:.4}}
+.players-area{flex:1;display:flex;gap:8px;padding:8px;overflow:hidden;min-height:0}
+
+/* ── PLAYER ZONE ── */
+.pzone{flex:1;display:flex;flex-direction:column;border-radius:18px;border:3px solid rgba(255,255,255,.18);overflow:hidden;position:relative;transition:border-color .3s,box-shadow .3s;min-width:0}
+.pzone.champion{border-color:#FFD700;box-shadow:0 0 30px rgba(255,215,0,.35)}
+.pzone.challenger{border-color:#5B9EF7;box-shadow:0 0 16px rgba(91,158,247,.15)}
+.pzone.cf{animation:cFlash .55s ease-out}
+.pzone.wf{animation:wFlash .4s ease-out}
+@keyframes cFlash{0%{box-shadow:0 0 0 rgba(0,255,0,0)}50%{box-shadow:0 0 70px rgba(0,255,0,.9)}100%{box-shadow:0 0 24px rgba(0,255,0,.2)}}
+@keyframes wFlash{0%,100%{background:transparent}50%{background:rgba(255,0,0,.25)}}
+.pzone-hdr{display:flex;align-items:center;justify-content:center;padding:9px;background:rgba(0,0,0,.3);gap:10px;min-height:52px;flex-shrink:0}
+.role-badge{font-size:15px;font-weight:bold;padding:4px 14px;border-radius:20px;letter-spacing:.5px}
+.champ-badge{background:#FFD700;color:#1a1a2e}
+.chal-badge{background:#5B9EF7;color:#fff}
+.pname{font-size:17px;font-weight:bold;color:rgba(255,255,255,.85)}
+.ans-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:8px;flex:1;align-content:end}
+.ans-grid.oe{grid-template-columns:1fr 1fr;align-content:end}
+.ans-btn{min-height:clamp(90px,12vh,160px);border-radius:14px;border:3px solid rgba(255,255,255,.25);background:rgba(255,255,255,.09);color:#fff;font-family:inherit;font-size:clamp(22px,2.5vw,34px);font-weight:bold;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;text-align:center;padding:8px;-webkit-tap-highlight-color:transparent}
+.ans-btn:hover:not(:disabled){background:rgba(255,255,255,.22);transform:scale(1.03);border-color:#fff}
+.ans-btn:active:not(:disabled){transform:scale(.97)}
+.ans-btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.ans-btn.cr{background:rgba(0,200,80,.35);border-color:#00cc55}
+.ans-btn.wr{background:rgba(220,40,40,.3);border-color:#ff4444}
+.freeze-ov{display:none;position:absolute;inset:0;background:rgba(200,0,0,.12);border-radius:17px;z-index:10;align-items:center;justify-content:center;pointer-events:all}
+.freeze-ov.on{display:flex}
+.freeze-txt{font-size:clamp(24px,4vw,44px);font-weight:bold;color:#ff4444;text-shadow:0 0 20px rgba(255,68,68,.8);animation:fblink .5s infinite}
+@keyframes fblink{0%,100%{opacity:1}50%{opacity:.35}}
+.streak-pop{position:absolute;top:16px;left:50%;transform:translateX(-50%);font-size:clamp(18px,2.5vw,28px);font-weight:bold;color:#FFD700;pointer-events:none;animation:spop 1s ease-out forwards;z-index:50;white-space:nowrap;text-shadow:0 0 12px rgba(255,215,0,.8)}
+@keyframes spop{0%{transform:translateX(-50%) scale(.5);opacity:0}50%{transform:translateX(-50%) scale(1.3);opacity:1}100%{transform:translateX(-50%) translateY(-50px) scale(1);opacity:0}}
+.enc-msg{position:absolute;bottom:50px;left:50%;transform:translateX(-50%);font-size:clamp(16px,2vw,22px);font-weight:bold;color:#FFD700;background:rgba(0,0,0,.75);padding:7px 18px;border-radius:20px;animation:eFade 2.1s ease-out forwards;z-index:20;white-space:nowrap}
+@keyframes eFade{0%{opacity:0;transform:translateX(-50%) translateY(8px)}20%{opacity:1;transform:translateX(-50%) translateY(0)}70%{opacity:1}100%{opacity:0;transform:translateX(-50%) translateY(-12px)}}
+
+/* ── READY PHASE ── */
+.ready-zone{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:12px 16px 16px;height:100%}
+.ready-top{display:flex;flex-direction:column;align-items:center;gap:10px;padding-top:8px;flex:1;justify-content:center}
+.ready-bottom{width:100%;display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:auto}
+.stay-banner{font-size:clamp(36px,5vw,64px);font-weight:bold;color:#FFD700;text-shadow:0 0 24px rgba(255,215,0,.7);letter-spacing:2px;animation:bannerPop .4s ease-out}
+.switch-banner{font-size:clamp(36px,5vw,64px);font-weight:bold;color:#5B9EF7;text-shadow:0 0 24px rgba(91,158,247,.6);letter-spacing:2px;animation:bannerPop .4s ease-out}
+@keyframes bannerPop{0%{transform:scale(0.5);opacity:0}70%{transform:scale(1.12)}100%{transform:scale(1);opacity:1}}
+.stay-sub{font-size:clamp(13px,1.5vw,18px);color:rgba(255,255,255,.55);text-align:center}
+.ready-btn{width:90%;max-width:280px;padding:clamp(20px,3vh,36px) 20px;border-radius:20px;border:4px solid rgba(255,255,255,.2);background:rgba(255,255,255,.07);color:rgba(255,255,255,.6);font-family:inherit;font-size:clamp(22px,3vw,36px);font-weight:bold;cursor:pointer;transition:all .25s;letter-spacing:1px;-webkit-tap-highlight-color:transparent}
+.ready-btn:hover:not(.pressed){background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.4);transform:scale(1.03)}
+.ready-btn.pressed{background:linear-gradient(135deg,#00cc55,#00aa44);border-color:#00ff66;color:#fff;box-shadow:0 0 30px rgba(0,255,100,.5);transform:scale(1.05);cursor:default;animation:readyGlow 1.2s infinite alternate}
+@keyframes readyGlow{0%{box-shadow:0 0 20px rgba(0,255,100,.4)}100%{box-shadow:0 0 45px rgba(0,255,100,.8)}}
+.ready-check{font-size:clamp(28px,4vw,48px);opacity:0;transition:opacity .3s}
+.ready-check.show{opacity:1}
+.ready-header{font-size:clamp(22px,3vw,38px);font-weight:bold;color:#fff;text-align:center;animation:pulse 1.5s infinite alternate}
+@keyframes pulse{0%{opacity:.7}100%{opacity:1}}
+.ready-waiting{font-size:clamp(14px,1.8vw,22px);color:rgba(255,255,255,.5);text-align:center;margin-top:6px}
+
+/* ── MILESTONE ── */
+.milestone-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:100;align-items:center;justify-content:center;flex-direction:column}
+.milestone-ov.on{display:flex}
+.ms-txt{font-size:clamp(60px,10vw,120px);font-weight:bold;color:#FFD700;text-shadow:0 0 60px rgba(255,215,0,.8);animation:msAnim .5s ease-out;text-align:center}
+@keyframes msAnim{0%{transform:scale(0);opacity:0}70%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+
+/* ── PAUSE ── */
+#pauseScreen{align-items:center;justify-content:center;background:rgba(0,0,0,.88);z-index:200}
+.pause-title{font-size:clamp(32px,5vw,52px);font-weight:bold;color:#FFD700;margin-bottom:28px}
+.pause-menu{display:flex;flex-direction:column;gap:10px;min-width:280px}
+.pm-btn{padding:14px 26px;font-size:18px;font-family:inherit;border-radius:12px;border:2px solid rgba(255,255,255,.25);background:rgba(255,255,255,.09);color:#fff;cursor:pointer;transition:all .2s;text-align:left}
+.pm-btn:hover{background:rgba(255,255,255,.22);border-color:#fff}
+
+/* ── END ── */
+#endScreen{align-items:center;justify-content:center;background:linear-gradient(135deg,#1a1a2e,#0f3460)}
+.trophy-big{font-size:clamp(80px,14vw,140px);animation:trophySpin 1s ease-out;margin-bottom:16px;text-align:center}
+@keyframes trophySpin{0%{transform:scale(0) rotate(-180deg)}100%{transform:scale(1) rotate(0)}}
+.winner-txt{font-size:clamp(32px,5vw,58px);font-weight:bold;color:#FFD700;text-shadow:0 0 30px rgba(255,215,0,.6);margin-bottom:8px;text-align:center}
+.winner-sub{font-size:clamp(18px,2.5vw,28px);color:rgba(255,255,255,.65);margin-bottom:28px}
+.end-btns{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+.e-btn{padding:14px 36px;font-size:19px;font-family:inherit;font-weight:bold;border-radius:40px;border:none;cursor:pointer;transition:transform .2s}
+.e-btn:hover{transform:scale(1.05)}
+.e-btn.pri{background:linear-gradient(135deg,#FFD700,#FF6B35);color:#1a1a2e}
+.e-btn.sec{background:rgba(255,255,255,.12);color:#fff;border:2px solid rgba(255,255,255,.3)}
+
+/* ── SUMMARY ── */
+#summaryScreen{align-items:center;justify-content:flex-start;background:linear-gradient(135deg,#1a1a2e,#0f3460);padding:24px;overflow-y:auto}
+.sum-title{font-size:clamp(28px,4vw,44px);font-weight:bold;color:#FFD700;margin-bottom:20px}
+.sum-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;width:100%;max-width:960px;margin-bottom:20px}
+.sum-card{background:rgba(255,255,255,.09);border-radius:14px;padding:18px;border:2px solid rgba(255,255,255,.15)}
+.sum-card h3{color:#4ECDC4;font-size:15px;margin-bottom:10px;text-transform:uppercase;letter-spacing:1px}
+.sum-stat{font-size:clamp(24px,4vw,36px);font-weight:bold}
+.sum-sub{font-size:14px;color:rgba(255,255,255,.55);margin-top:3px}
+.t-row{display:flex;align-items:center;margin-bottom:8px;font-size:15px;gap:8px}
+.t-name{min-width:120px;color:rgba(255,255,255,.8)}
+.t-bar-wrap{flex:1;height:10px;background:rgba(255,255,255,.1);border-radius:5px;overflow:hidden}
+.t-bar{height:100%;background:#4ECDC4;border-radius:5px}
+.t-pct{color:#4ECDC4;font-weight:bold;min-width:38px;text-align:right}
+.t-frac{font-size:12px;color:rgba(255,255,255,.4);min-width:50px;text-align:right}
+
+/* ── CONFETTI ── */
+#confettiCanvas{position:fixed;inset:0;pointer-events:none;z-index:1000}
+</style>
+</head>
+<body>
+<canvas id="confettiCanvas"></canvas>
+
+<!-- ── SETUP ── -->
+<div id="setupScreen" class="screen active">
+  <div class="setup-title">🏆 MATH CHAMPION</div>
+  <div class="setup-grid">
+    <div class="setup-card">
+      <h3>👥 Players &amp; Difficulty</h3>
+      <div class="opt-row">
+        <span class="opt-lbl">Players:</span>
+        <button class="opt-btn sel" data-g="players" data-v="2">2 Players</button>
+        <button class="opt-btn" data-g="players" data-v="3">3 Players</button>
+      </div>
+      <div class="opt-row">
+        <span class="opt-lbl">Difficulty:</span>
+        <button class="opt-btn" data-g="diff" data-v="easy">Easy</button>
+        <button class="opt-btn sel" data-g="diff" data-v="medium">Medium</button>
+        <button class="opt-btn" data-g="diff" data-v="hard">Hard</button>
+        <button class="opt-btn" data-g="diff" data-v="adaptive">Adaptive</button>
+      </div>
+    </div>
+    <div class="setup-card">
+      <h3>⚙️ Game Settings</h3>
+      <div class="opt-row">
+        <span class="opt-lbl">Streak to Win:</span>
+        <button class="opt-btn" data-g="stk" data-v="3">3</button>
+        <button class="opt-btn sel" data-g="stk" data-v="5">5</button>
+        <button class="opt-btn" data-g="stk" data-v="7">7</button>
+        <button class="opt-btn" data-g="stk" data-v="10">10</button>
+      </div>
+      <div class="opt-row">
+        <span class="opt-lbl">Timer:</span>
+        <button class="opt-btn" data-g="tmr" data-v="10">10s</button>
+        <button class="opt-btn sel" data-g="tmr" data-v="15">15s</button>
+        <button class="opt-btn" data-g="tmr" data-v="20">20s</button>
+        <button class="opt-btn" data-g="tmr" data-v="0">None</button>
+      </div>
+      <div class="opt-row">
+        <span class="opt-lbl">Sound:</span>
+        <button class="opt-btn sel" data-g="snd" data-v="1">ON</button>
+        <button class="opt-btn" data-g="snd" data-v="0">OFF</button>
+      </div>
+    </div>
+    <div class="setup-card" style="grid-column:1/-1">
+      <h3>📚 Math Topics (select one or more)</h3>
+      <div class="opt-row" style="flex-wrap:wrap">
+        <button class="topic-btn sel" data-t="add">➕ Addition</button>
+        <button class="topic-btn sel" data-t="sub">➖ Subtraction</button>
+        <button class="topic-btn" data-t="rep">🔢 Repeated Addition</button>
+        <button class="topic-btn" data-t="mul">✖️ Multiplication (2×,5×,10×)</button>
+        <button class="topic-btn" data-t="oe">🔄 Odd or Even</button>
+        <button class="topic-btn" data-t="mix">🎲 Mixed</button>
+      </div>
+    </div>
+  </div>
+  <button class="start-btn" onclick="setupStart()">🚀 START GAME</button>
+</div>
+
+<!-- ── COUNTDOWN ── -->
+<div id="countdownScreen" class="screen">
+  <div id="cdEl" class="cd-num">3</div>
+</div>
+
+<!-- ── GAME ── -->
+<div id="gameScreen" class="screen">
+  <div class="top-bar">
+    <button class="pause-btn" onclick="pauseGame()">⏸ PAUSE</button>
+    <span class="q-counter" id="qCounter">Q 1</span>
+  </div>
+  <div class="question-area" id="qArea">
+    <div id="qText" class="q-text">—</div>
+  </div>
+  <div class="stats-bar">
+    <div class="champ-label" id="champLabel">🏆 Champion: —</div>
+    <div class="streak-meter">
+      <div class="streak-pips" id="streakPips"></div>
+      <div class="streak-txt" id="streakTxt">0/5</div>
+    </div>
+    <div class="timer-disp" id="timerEl">—</div>
+  </div>
+  <div class="players-area" id="playersArea"></div>
+</div>
+
+<!-- ── PAUSE ── -->
+<div id="pauseScreen" class="screen">
+  <div class="pause-title">⏸ PAUSED</div>
+  <div class="pause-menu">
+    <button class="pm-btn" onclick="resumeGame()">▶️ Resume</button>
+    <button class="pm-btn" onclick="skipQ()">⏭️ Skip Question</button>
+    <button class="pm-btn" id="muteBtn" onclick="toggleMute()">🔊 Mute Sound</button>
+    <button class="pm-btn" onclick="toSetup()">⚙️ Setup Screen</button>
+    <button class="pm-btn" onclick="resetGame()">🔄 Full Reset</button>
+  </div>
+</div>
+
+<!-- ── END ── -->
+<div id="endScreen" class="screen">
+  <div class="trophy-big">🏆</div>
+  <div class="winner-txt" id="winnerTxt">PLAYER 1 WINS!</div>
+  <div class="winner-sub" id="winnerSub">Champion with 5-streak!</div>
+  <div class="end-btns">
+    <button class="e-btn sec" onclick="showSummary()">📊 View Stats</button>
+    <button class="e-btn pri" onclick="playAgain()">🎮 Play Again</button>
+    <button class="e-btn sec" onclick="toSetup()">⚙️ New Setup</button>
+  </div>
+</div>
+
+<!-- ── SUMMARY ── -->
+<div id="summaryScreen" class="screen">
+  <div class="sum-title">📊 SESSION SUMMARY</div>
+  <div class="sum-grid" id="sumGrid"></div>
+  <div class="end-btns">
+    <button class="e-btn pri" onclick="playAgain()">🎮 Play Again</button>
+    <button class="e-btn sec" onclick="toSetup()">⚙️ New Setup</button>
+  </div>
+</div>
+
+<!-- ── MILESTONE OVERLAY ── -->
+<div class="milestone-ov" id="msOv">
+  <div class="ms-txt" id="msTxt">⭐ SUPERSTAR! ⭐</div>
+</div>
+
+<script>
+const S = { players:2, diff:'medium', topics:['add','sub'], streakToWin:5, qpr:9999, timer:15, sound:true };
+
+let G = {};
+const pNames = ['Player 1','Player 2','Player 3'];
+const usedQ = new Set();
+
+function freshG(){
+  G = {
+    champion:-1, streak:0, qCount:0, curQ:null,
+    roundOver:false, noWinner:false, frozen:[false,false,false],
+    freezeT:[null,null,null], timerInt:null, timerLeft:0,
+    paused:false, adaptDiff:S.diff==='adaptive'?'medium':S.diff,
+    cwins:0, closses:0, readyPhase:false, readyPressed:[],
+    sd:{
+      total:0, correct:0, attempts:0, topicStats:{},
+      times:[], qStart:0, champHist:[], longestStreak:0, longestPlayer:-1
+    },
+    lb:[]
+  };
+}
+
+document.querySelectorAll('.opt-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    const g=b.dataset.g;
+    document.querySelectorAll(`.opt-btn[data-g="${g}"]`).forEach(x=>x.classList.remove('sel'));
+    b.classList.add('sel');
+    const v=b.dataset.v;
+    if(g==='players') S.players=+v;
+    else if(g==='diff') S.diff=v;
+    else if(g==='stk') S.streakToWin=+v;
+    else if(g==='tmr') S.timer=+v;
+    else if(g==='snd') S.sound=v==='1';
+  });
+});
+document.querySelectorAll('.topic-btn').forEach(b=>{
+  b.addEventListener('click',()=>{ b.classList.toggle('sel'); refreshTopics(); });
+});
+function refreshTopics(){
+  S.topics=[];
+  document.querySelectorAll('.topic-btn.sel').forEach(b=>S.topics.push(b.dataset.t));
+  if(!S.topics.length){ document.querySelector('.topic-btn[data-t="add"]').classList.add('sel'); S.topics=['add']; }
+}
+
+function setupStart(){ refreshTopics(); freshG(); buildZones(); usedQ.clear(); showScreen('countdown'); runCD(); }
+
+function showScreen(n){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById(n+'Screen').classList.add('active'); }
+
+function runCD(){
+  const el=document.getElementById('cdEl');
+  let c=3; el.className='cd-num'; el.textContent='3'; snd('cd');
+  const iv=setInterval(()=>{
+    c--;
+    if(c===0){ clearInterval(iv); el.className='cd-go'; el.textContent='GO!'; snd('go'); setTimeout(()=>{ showScreen('game'); startQ(); },650); }
+    else { el.className=''; void el.offsetWidth; el.className='cd-num'; el.textContent=c; snd('cd'); }
+  },900);
+}
+
+function buildZones(){
+  const a=document.getElementById('playersArea');
+  a.innerHTML=''; a.className='players-area';
+  for(let i=0;i<S.players;i++){
+    a.innerHTML+=`
+    <div class="pzone challenger" id="z${i}">
+      <div class="pzone-hdr" id="hdr${i}">
+        <span class="role-badge chal-badge" id="badge${i}">CHALLENGER</span>
+        <span class="pname">${pNames[i]}</span>
+      </div>
+      <div class="ans-grid" id="ans${i}"></div>
+      <div class="freeze-ov" id="fr${i}"><div class="freeze-txt">TIME OUT</div></div>
+    </div>`;
+  }
+}
+
+function effDiff(){ return S.diff==='adaptive'?G.adaptDiff:S.diff; }
+function activeTopic(){
+  let ts=S.topics.filter(t=>t!=='mix');
+  if(S.topics.includes('mix')||!ts.length) ts=['add','sub','rep','mul','oe'];
+  return ts[~~(Math.random()*ts.length)];
+}
+function genQ(){ let q,tries=0; do{ q=genByTopic(activeTopic(),effDiff()); tries++; }while(usedQ.has(q.text)&&tries<25); usedQ.add(q.text); return q; }
+function rnd(a,b){ return ~~(Math.random()*(b-a+1))+a; }
+function shuf(a){ for(let i=a.length-1;i>0;i--){ const j=~~(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]; } return a; }
+function mkDist(cor,n,mul){
+  const s=new Set(); const off=[-2,-1,1,2,-3,3,-4,4];
+  for(const o of off){ const v=cor+o; if(v>=0&&v!==cor) s.add(v); if(s.size>=n) break; }
+  if(mul){[cor-mul,cor+mul].forEach(v=>{ if(v>=0&&v!==cor) s.add(v); });}
+  while(s.size<n){ const v=cor+rnd(-6,6); if(v>=0&&v!==cor) s.add(v); }
+  return [...s].slice(0,n);
+}
+function genByTopic(t,d){ if(t==='oe') return genOE(d); if(t==='mul') return genMul(d); if(t==='rep') return genRep(d); if(t==='sub') return genSub(d); return genAdd(d); }
+function genAdd(d){ let a,b; if(d==='easy'){a=rnd(0,9);b=rnd(0,9-a);}else if(d==='medium'){a=rnd(1,14);b=rnd(1,20-a);}else{a=rnd(5,38);b=rnd(5,50-a);} const c=a+b; return{text:`${a} + ${b} = ?`,ans:c,dist:mkDist(c,3),oe:false,topic:'add'}; }
+function genSub(d){ let a,b; if(d==='easy'){b=rnd(0,8);a=rnd(b,10);}else if(d==='medium'){b=rnd(1,9);a=rnd(b,20);}else{b=rnd(5,24);a=rnd(b,50);} const c=a-b; return{text:`${a} − ${b} = ?`,ans:c,dist:mkDist(c,3),oe:false,topic:'sub'}; }
+function genRep(d){ let v,t; if(d==='easy'){v=rnd(2,5);t=rnd(2,3);}else if(d==='medium'){v=rnd(2,7);t=rnd(2,4);}else{v=rnd(3,9);t=rnd(2,5);} const c=v*t; return{text:Array(t).fill(v).join(' + ')+'  = ?',ans:c,dist:mkDist(c,3),oe:false,topic:'rep'}; }
+function genMul(d){ const tbs=[2,5,10]; const a=tbs[~~(Math.random()*tbs.length)]; const b=rnd(1,d==='easy'?5:10); const c=a*b; return{text:`${a} × ${b} = ?`,ans:c,dist:mkDist(c,3,a),oe:false,topic:'mul'}; }
+function genOE(d){ const mx=d==='easy'?20:d==='medium'?50:100; const n=rnd(1,mx); const c=n%2===0?'EVEN':'ODD'; return{text:`Is ${n} odd or even?`,ans:c,dist:[c==='ODD'?'EVEN':'ODD'],oe:true,topic:'oe'}; }
+
+function startQ(){
+  G.qCount++; G.roundOver=false; G.noWinner=false; G.readyPhase=false;
+  G.frozen=[false,false,false];
+  for(let i=0;i<3;i++){
+    if(G.freezeT[i]){clearTimeout(G.freezeT[i]);G.freezeT[i]=null;}
+    const f=document.getElementById('fr'+i); if(f) f.classList.remove('on');
+  }
+  document.getElementById('qArea').innerHTML=`<div id="qText" class="q-text">—</div>`;
+  const q=genQ(); G.curQ=q; G.sd.qStart=Date.now(); G.sd.total++;
+  const lim=S.qpr>=9999?'∞':S.qpr;
+  document.getElementById('qCounter').textContent=`Q ${G.qCount} / ${lim}`;
+  document.getElementById('qText').textContent=q.text;
+  for(let i=0;i<S.players;i++){
+    const d=document.getElementById('ans'+i);
+    d.innerHTML='';
+    d.style.cssText='';
+    if(q.oe){
+      d.className='ans-grid oe';
+      ['Odd','Even'].forEach(opt=>{ const b=document.createElement('button'); b.className='ans-btn'; b.textContent=opt; b.style.fontSize='clamp(28px,3.5vw,44px)'; b.onclick=()=>handleAns(i,opt); d.appendChild(b); });
+    } else {
+      d.className='ans-grid';
+      shuf([q.ans,...q.dist.slice(0,3)]).forEach(opt=>{ const b=document.createElement('button'); b.className='ans-btn'; b.textContent=opt; b.onclick=()=>handleAns(i,opt); d.appendChild(b); });
+    }
+  }
+  updateChampDisplay(); updateStreak(); updateLB(); startTimer();
+}
+
+function handleAns(pi,val){
+  if(G.roundOver||G.frozen[pi]||G.paused||G.readyPhase) return;
+  G.sd.attempts++;
+  const tp=G.curQ.topic;
+  if(!G.sd.topicStats[tp]) G.sd.topicStats[tp]={c:0,t:0};
+  G.sd.topicStats[tp].t++;
+  const cor=G.curQ.ans;
+  const ok=typeof cor==='string'?val.toUpperCase()===cor.toUpperCase():+val===+cor;
+  if(ok){
+    G.roundOver=true; stopTimer();
+    const rt=(Date.now()-G.sd.qStart)/1000; G.sd.times.push(rt); G.sd.correct++; G.sd.topicStats[tp].c++;
+    disableAll(); revealAns(pi,val,true); flash(pi,'cf'); popStreak(pi,'+1 STREAK! 🌟'); snd('correct');
+    processWinner(pi);
+    if(Math.random()<.27) showEnc('correct',pi);
+    setTimeout(()=>checkMilestone(pi),1700);
+  } else {
+    revealAns(pi,val,false); freezeP(pi); flash(pi,'wf'); snd('wrong');
+    if(Math.random()<.27) showEnc('wrong',pi);
+  }
+}
+
+function revealAns(pi,val,ok){ const d=document.getElementById('ans'+pi); if(!d) return; d.querySelectorAll('.ans-btn').forEach(b=>{ if(b.textContent.trim()===String(val)) b.classList.add(ok?'cr':'wr'); }); }
+function disableAll(){ for(let i=0;i<S.players;i++){ const d=document.getElementById('ans'+i); if(d) d.querySelectorAll('.ans-btn').forEach(b=>b.disabled=true); } }
+function freezeP(pi){
+  G.frozen[pi]=true;
+  const d=document.getElementById('ans'+pi); if(d) d.querySelectorAll('.ans-btn').forEach(b=>b.disabled=true);
+  const f=document.getElementById('fr'+pi); if(f) f.classList.add('on');
+  G.freezeT[pi]=setTimeout(()=>{
+    if(!G.roundOver){ G.frozen[pi]=false; if(d) d.querySelectorAll('.ans-btn').forEach(b=>b.disabled=false); const f2=document.getElementById('fr'+pi); if(f2) f2.classList.remove('on'); }
+  },2500);
+}
+function flash(pi,cls){ const z=document.getElementById('z'+pi); if(!z) return; z.classList.add(cls); setTimeout(()=>z.classList.remove(cls),600); }
+
+function processWinner(w){
+  const prev=G.champion;
+  if(prev===-1){ G.champion=w; G.streak=1; G.sd.champHist.push({p:w,q:G.qCount}); }
+  else if(w===prev){ G.streak++; G.cwins++; G.closses=0; }
+  else { G.champion=w; G.streak=1; G.cwins=0; G.closses=0; G.sd.champHist.push({p:w,q:G.qCount}); }
+  if(G.streak>G.sd.longestStreak){ G.sd.longestStreak=G.streak; G.sd.longestPlayer=G.champion; }
+  lbEntry(G.champion,G.streak);
+  if(S.diff==='adaptive'){ if(G.cwins>=3){incDiff();G.cwins=0;} else if(G.closses>=3){decDiff();G.closses=0;} }
+  updateChampDisplay(); updateStreak();
+  if(G.streak>=S.streakToWin) setTimeout(()=>endGame(),500);
+}
+
+function updateChampDisplay(){
+  for(let i=0;i<S.players;i++){
+    const z=document.getElementById('z'+i), b=document.getElementById('badge'+i); if(!z||!b) continue;
+    if(i===G.champion){ z.className='pzone champion'; b.className='role-badge champ-badge'; b.textContent='🏆 CHAMPION'; }
+    else { z.className='pzone challenger'; b.className='role-badge chal-badge'; b.textContent='CHALLENGER'; }
+  }
+  const nm=G.champion>=0?pNames[G.champion]:'—';
+  document.getElementById('champLabel').textContent=`🏆 Champion: ${nm}`;
+}
+function updateStreak(){
+  const pips=document.getElementById('streakPips'); pips.innerHTML='';
+  for(let i=0;i<S.streakToWin;i++){ const d=document.createElement('div'); d.className='pip'+(i<G.streak?' on':''); pips.appendChild(d); }
+  document.getElementById('streakTxt').textContent=`${G.streak}/${S.streakToWin}`;
+}
+
+function startTimer(){
+  stopTimer(); const el=document.getElementById('timerEl');
+  if(S.timer===0){ el.textContent='—'; el.className='timer-disp'; return; }
+  G.timerLeft=S.timer; updateTD();
+  G.timerInt=setInterval(()=>{
+    if(G.paused||G.readyPhase) return;
+    G.timerLeft--; updateTD();
+    if(G.timerLeft<=4) snd('cd');
+    if(G.timerLeft<=0){
+      stopTimer();
+      if(!G.roundOver){
+        G.roundOver=true; G.noWinner=true; disableAll();
+        if(G.champion>=0){ G.streak=0; G.closses++; G.cwins=0; if(S.diff==='adaptive'&&G.closses>=3){decDiff();G.closses=0;} }
+        updateStreak();
+        document.getElementById('qText').textContent="⏱️ TIME'S UP!";
+        setTimeout(()=>showReadyPhase(),1400);
+      }
+    }
+  },1000);
+}
+function stopTimer(){ if(G.timerInt){clearInterval(G.timerInt);G.timerInt=null;} }
+function updateTD(){ const el=document.getElementById('timerEl'); el.textContent=G.timerLeft+'s'; el.className='timer-disp'+(G.timerLeft<=5?' warn':''); }
+
+function checkMilestone(winner){
+  const ms=[3,5,7,10];
+  if(ms.includes(G.streak)&&G.streak<S.streakToWin){
+    const msgs=['⭐ SUPERSTAR! ⭐','🔥 ON FIRE! 🔥','💥 AMAZING! 💥','🌟 INCREDIBLE! 🌟'];
+    document.getElementById('msTxt').textContent=msgs[~~(Math.random()*msgs.length)];
+    document.getElementById('msOv').classList.add('on');
+    confetti(true); snd('milestone');
+    setTimeout(()=>{ document.getElementById('msOv').classList.remove('on'); showReadyPhase(); },2000);
+  } else { showReadyPhase(); }
+}
+
+function showReadyPhase(){
+  if(G.streak>=S.streakToWin) return;
+  G.readyPhase=true;
+  G.readyPressed=new Array(S.players).fill(false);
+  const noWin=G.noWinner;
+  document.getElementById('qArea').innerHTML=`
+    <div style="text-align:center">
+      <div class="ready-header">${noWin?'⏱️ No winner — everyone try again!':'🔄 Switch Players &amp; Get Ready!'}</div>
+      <div class="ready-waiting" id="readyWaiting">Waiting for all players to press READY…</div>
+    </div>`;
+  for(let i=0;i<S.players;i++){
+    const b=document.getElementById('badge'+i);
+    if(b&&noWin) b.style.visibility='hidden';
+    else if(b) b.style.visibility='visible';
+  }
+  for(let i=0;i<S.players;i++){
+    const stay=noWin||(i===G.champion&&G.champion>=0);
+    const d=document.getElementById('ans'+i);
+    d.style.cssText='flex:1;display:flex;flex-direction:column;min-height:0';
+    const fr=document.getElementById('fr'+i); if(fr) fr.classList.remove('on');
+    d.className='';
+    d.innerHTML=`
+      <div class="ready-zone">
+        <div class="ready-top">
+          <div class="stay-banner">✅ STAY</div>
+          <div class="stay-sub">${noWin?'No one scored — try again!':stay?'You won! Stay at the board.':''}</div>
+          ${!stay&&!noWin?`<div class="switch-banner">🔄 SWITCH</div><div class="stay-sub">New player — step up!</div>`:''}
+        </div>
+        <div class="ready-bottom">
+          <div class="ready-check" id="rc${i}">✅ READY!</div>
+          <button class="ready-btn" id="rb${i}" onclick="pressReady(${i})">Tap When Ready</button>
+        </div>
+      </div>`;
+  }
+  document.getElementById('timerEl').textContent='—';
+  document.getElementById('timerEl').className='timer-disp';
+}
+
+function pressReady(pi){
+  if(G.readyPressed[pi]) return;
+  G.readyPressed[pi]=true;
+  const btn=document.getElementById('rb'+pi), chk=document.getElementById('rc'+pi);
+  if(btn){ btn.classList.add('pressed'); btn.textContent='✅ Ready!'; btn.disabled=true; }
+  if(chk) chk.classList.add('show');
+  snd('cd'); checkAllReady();
+}
+function checkAllReady(){
+  const readyCount=G.readyPressed.slice(0,S.players).filter(Boolean).length;
+  const el=document.getElementById('readyWaiting');
+  if(readyCount<S.players){ if(el) el.textContent=`${readyCount} / ${S.players} ready… waiting for the rest!`; return; }
+  if(el) el.textContent='Everyone\'s ready! Starting…';
+  snd('go');
+  setTimeout(()=>{ G.readyPhase=false; showScreen('countdown'); runCD(); },600);
+}
+
+const dLvls=['easy','medium','hard'];
+function incDiff(){ const i=dLvls.indexOf(G.adaptDiff); if(i<2) G.adaptDiff=dLvls[i+1]; }
+function decDiff(){ const i=dLvls.indexOf(G.adaptDiff); if(i>0) G.adaptDiff=dLvls[i-1]; }
+
+function lbEntry(p,s){ let e=G.lb.find(x=>x.p===p); if(e){if(s>e.s)e.s=s;}else G.lb.push({p,s}); G.lb.sort((a,b)=>b.s-a.s); G.lb=G.lb.slice(0,5); }
+function updateLB(){
+  const el=document.getElementById('lbEl'); if(!G.lb.length){el.innerHTML='—';return;}
+  const ms=['🥇','🥈','🥉'];
+  el.innerHTML=G.lb.slice(0,3).map((e,i)=>`${ms[i]||'•'} ${pNames[e.p]}: ${e.s}`).join('<br>');
+}
+
+function endGame(){
+  stopTimer(); confetti(true); snd('victory');
+  document.getElementById('winnerTxt').textContent=`🏆 ${pNames[G.champion].toUpperCase()} WINS!`;
+  document.getElementById('winnerSub').textContent=`Champion with a ${G.streak}-streak!`;
+  showScreen('end');
+}
+function showSummary(){
+  const sd=G.sd;
+  const acc=sd.attempts>0?Math.round(sd.correct/sd.attempts*100):0;
+  const avgT=sd.times.length?(sd.times.reduce((a,b)=>a+b,0)/sd.times.length).toFixed(1):'—';
+  const cc={}; sd.champHist.forEach(h=>cc[h.p]=(cc[h.p]||0)+1);
+  const chStr=Object.entries(cc).map(([p,c])=>`${pNames[+p]} (${c}×)`).join(' · ')||'—';
+  const tNames={add:'Addition',sub:'Subtraction',rep:'Repeated Add.',mul:'Multiplication',oe:'Odd/Even'};
+  let tHTML='';
+  Object.entries(sd.topicStats).forEach(([t,st])=>{
+    const pct=st.t>0?~~(st.c/st.t*100):0;
+    tHTML+=`<div class="t-row"><span class="t-name">${tNames[t]||t}</span><div class="t-bar-wrap"><div class="t-bar" style="width:${pct}%"></div></div><span class="t-pct">${pct}%</span><span class="t-frac">${st.c}/${st.t}</span></div>`;
+  });
+  document.getElementById('sumGrid').innerHTML=`
+    <div class="sum-card"><h3>📊 Overall Accuracy</h3><div class="sum-stat">${acc}%</div><div class="sum-sub">${sd.correct} correct / ${sd.attempts} attempts</div><div style="margin-top:10px;font-size:15px;color:rgba(255,255,255,.6)">Total Questions: ${sd.total}</div></div>
+    <div class="sum-card"><h3>⏱️ Performance</h3><div class="sum-stat">${avgT}s</div><div class="sum-sub">Average response time</div><div style="margin-top:10px;font-size:15px;color:rgba(255,255,255,.6)">🏆 Longest streak: ${sd.longestStreak}${sd.longestPlayer>=0?' ('+pNames[sd.longestPlayer]+')':''}</div></div>
+    <div class="sum-card" style="grid-column:1/-1"><h3>📚 Topic Breakdown</h3>${tHTML||'<div style="color:rgba(255,255,255,.45)">No data</div>'}</div>
+    <div class="sum-card" style="grid-column:1/-1"><h3>👑 Champion History</h3><div style="font-size:17px;color:rgba(255,255,255,.8)">${chStr}</div></div>`;
+  showScreen('summary');
+}
+function playAgain(){ freshG(); usedQ.clear(); buildZones(); showScreen('countdown'); runCD(); }
+function toSetup(){ stopTimer(); showScreen('setup'); }
+function resetGame(){ stopTimer(); showScreen('setup'); }
+
+function pauseGame(){ G.paused=true; showScreen('pause'); }
+function resumeGame(){ G.paused=false; showScreen('game'); }
+function skipQ(){ G.paused=false; G.roundOver=true; stopTimer(); disableAll(); showScreen('game'); setTimeout(()=>showReadyPhase(),400); }
+function toggleMute(){ S.sound=!S.sound; document.getElementById('muteBtn').textContent=S.sound?'🔊 Mute Sound':'🔇 Unmute Sound'; }
+
+function popStreak(pi,txt){ const z=document.getElementById('z'+pi); if(!z) return; const el=document.createElement('div'); el.className='streak-pop'; el.textContent=txt; z.appendChild(el); setTimeout(()=>el.remove(),1100); }
+function showEnc(type,pi){ const z=document.getElementById('z'+pi); if(!z) return; const m={correct:['Great job!','Amazing!','Fantastic!','Brilliant!'],wrong:['Keep trying!','So close!','You\'ve got this!','Almost!']}; const list=m[type]; const el=document.createElement('div'); el.className='enc-msg'; el.textContent=list[~~(Math.random()*list.length)]; z.appendChild(el); setTimeout(()=>el.remove(),2200); }
+
+const cv=document.getElementById('confettiCanvas'), cx=cv.getContext('2d');
+let parts=[],cfAF=null;
+function resCV(){ cv.width=innerWidth; cv.height=innerHeight; } resCV(); addEventListener('resize',resCV);
+function confetti(big=false){
+  const n=big?220:90; const cols=['#FFD700','#FF6B35','#4ECDC4','#FF69B4','#9B59B6','#2ECC71','#E74C3C','#3498DB','#F39C12'];
+  for(let i=0;i<n;i++) parts.push({x:Math.random()*cv.width,y:-10,vx:(Math.random()-.5)*7,vy:Math.random()*5+2,col:cols[~~(Math.random()*cols.length)],w:Math.random()*12+6,h:Math.random()*6+4,r:Math.random()*360,rv:(Math.random()-.5)*9,life:1});
+  if(!cfAF) animCF();
+}
+function animCF(){
+  cx.clearRect(0,0,cv.width,cv.height);
+  parts=parts.filter(p=>p.life>0&&p.y<cv.height+20);
+  parts.forEach(p=>{ p.x+=p.vx;p.y+=p.vy;p.vy+=0.12;p.r+=p.rv; if(p.y>cv.height*.65) p.life-=0.025; cx.save();cx.translate(p.x,p.y);cx.rotate(p.r*Math.PI/180);cx.globalAlpha=p.life;cx.fillStyle=p.col;cx.fillRect(-p.w/2,-p.h/2,p.w,p.h);cx.restore(); });
+  if(parts.length){ cfAF=requestAnimationFrame(animCF); } else { cfAF=null; cx.clearRect(0,0,cv.width,cv.height); }
+}
+
+let AC=null;
+function getAC(){ if(!AC) AC=new(window.AudioContext||window.webkitAudioContext)(); return AC; }
+function snd(t){
+  if(!S.sound) return;
+  try{
+    const ac=getAC();
+    if(t==='cd')        beep(ac,880,.1,'sine',.28);
+    if(t==='go')        chord(ac,[523,659,784],.28);
+    if(t==='correct')   arp(ac,[523,659,784,1047],.07,.35);
+    if(t==='wrong')     beep(ac,180,.4,'sawtooth',.25);
+    if(t==='milestone') arp(ac,[523,659,784,1047,1319],.09,.5);
+    if(t==='victory')   victory(ac);
+  }catch(e){}
+}
+function beep(ac,f,dur,type,vol){ const o=ac.createOscillator(),g=ac.createGain(); o.connect(g);g.connect(ac.destination); o.type=type;o.frequency.value=f; g.gain.setValueAtTime(vol,ac.currentTime); g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+dur); o.start();o.stop(ac.currentTime+dur); }
+function chord(ac,fs,dur){ fs.forEach(f=>beep(ac,f,dur,'sine',.13)); }
+function arp(ac,fs,gap,dur){ fs.forEach((f,i)=>setTimeout(()=>beep(ac,f,dur,'sine',.18),i*gap*1000)); }
+function victory(ac){ const m=[523,659,784,1047,784,1047,1319]; m.forEach((f,i)=>setTimeout(()=>beep(ac,f,.28,'sine',.22),i*140)); }
+</script>
+</body>
+</html>
