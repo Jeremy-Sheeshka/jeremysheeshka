@@ -519,9 +519,9 @@ function showReadyPhase(){
     d.innerHTML=`
       <div class="ready-zone">
         <div class="ready-top">
-          <div class="stay-banner">✅ STAY</div>
-          <div class="stay-sub">${noWin?'No one scored — try again!':stay?'You won! Stay at the board.':''}</div>
-          ${!stay&&!noWin?`<div class="switch-banner">🔄 SWITCH</div><div class="stay-sub">New player — step up!</div>`:''}
+          ${noWin?`<div class="stay-banner">✅ Stay</div><div class="stay-sub">No one scored — try again!</div>`
+            : stay?`<div class="stay-banner">✅ Stay</div><div class="stay-sub">You won! Stay at the board.</div>`
+            :`<div class="switch-banner">🔄 Switch</div><div class="stay-sub">New player — step up!</div>`}
         </div>
         <div class="ready-bottom">
           <div class="ready-check" id="rc${i}">✅ READY!</div>
