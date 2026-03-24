@@ -155,8 +155,9 @@ aside,
 #duckBase { display: block; width: 100%; height: auto; border-radius: 0.75rem; }
 #drawingCanvas { position: absolute; top: 0; left: 0; cursor: crosshair; border-radius: 0.75rem; background: transparent; }
 #duckGallery { display: grid; gap: 0.75rem; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
-.duck-card { background: white; border-radius: 0.5rem; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
+.duck-card { position: relative; background: white; border-radius: 0.5rem; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
 .duck-card img { width: 100%; display: block; }
+.delete-btn { position: absolute; top: 5px; right: 5px; background: #ef4444; color: white; border: none; font-size: 10px; padding: 2px 6px; border-radius: 4px; cursor: pointer; font-weight: bold; z-index: 10; }
 </style>
 
 <div id="duck-toolbar">
@@ -191,7 +192,7 @@ aside,
 
 <script type="module" is:inline>
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, deleteDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 
 const firebaseConfig = {
@@ -212,6 +213,40 @@ const galleryCol = collection(db, "duckGallery");
 const canvas = document.getElementById("drawingCanvas");
 const duckBase = document.getElementById("duckBase");
 const ctx = canvas.getContext("2d");
+
+// --- UPDATED MODERATOR LOGIC (Checks Firestore) ---
+let isMod = sessionStorage.getItem('isMod') === 'true';
+
+window.deleteDuck = async (id) => {
+  if (confirm("Delete this duck forever?")) {
+    await deleteDoc(doc(db, "duckGallery", id));
+  }
+};
+
+window.addEventListener('keydown', async (e) => {
+  // Hotkey: Ctrl + Shift + Alt + D
+  if (e.ctrlKey && e.shiftKey && e.altKey && e.key.toLowerCase() === 'd') {
+    e.preventDefault();
+    const userInput = prompt("Moderator Password:");
+    
+    // Fetch the correct password from your Firestore screenshot path
+    const modRef = doc(db, "moderatorConfig", "duckModeration");
+    const modSnap = await getDoc(modRef);
+    
+    if (modSnap.exists()) {
+      const correctPass = modSnap.data().password;
+      if (userInput === correctPass) {
+        sessionStorage.setItem('isMod', 'true');
+        location.reload();
+      } else {
+        alert("Incorrect password.");
+      }
+    } else {
+      console.error("Could not find moderatorConfig/duckModeration in Firestore.");
+    }
+  }
+});
+// --------------------------------------------------
 
 let drawing = false;
 let allStrokes = [];
@@ -271,7 +306,14 @@ onSnapshot(query(galleryCol, orderBy("ts", "desc")), (snap) => {
   snap.forEach(d => {
     const card = document.createElement("div");
     card.className = "duck-card";
-    card.innerHTML = `<img src="${d.data().img}">`;
+    
+    // Check global isMod state to show button
+    const deleteBtnHtml = isMod ? `<button class="delete-btn" onclick="deleteDuck('${d.id}')">Delete</button>` : "";
+    
+    card.innerHTML = `
+      <img src="${d.data().img}">
+      ${deleteBtnHtml}
+    `;
     gallery.appendChild(card);
   });
 });

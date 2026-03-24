@@ -2,10 +2,9 @@
 title: "Community Exclusion and the Ethics of Participation in Prince Rupert"
 description: "A reflection on community exclusion and power dynamics within the Prince Rupert arts community."
 publishDate: 2025-11-28
-tags: ["prince rupert"]
-draft: true
-author: "Jeremy Sheeshka"
+keywords: "Kristy Tillman, John Turner, Dawn Quast, Michael Gurney"
 showToc: false
+draft: true
 ---
 
 <style>
@@ -32,6 +31,20 @@ a[href^="#"] span {
 .content-body {
     line-height: 1.6;
 }
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Community Exclusion and the Ethics of Participation in Prince Rupert",
+  "about": [
+    { "@type": "Person", "name": "Kristy Tillman" },
+    { "@type": "Person", "name": "John Turner" },
+    { "@type": "Person", "name": "Dawn Quast" },
+    { "@type": "Person", "name": "Michael Gurney" }
+  ]
+}
+</script>
 </style>
 
 <div class="content-body">
@@ -49,6 +62,7 @@ An example of this came when the manager of the Lester Centre informed me that a
   <audio controls class="w-full">
     <source src="/assets/audio/lestercentermanager.mp3" type="audio/mpeg">
   </audio>
+  <p class="text-center font-bold mt-2">Michael Gurney – Former General Manager of the Lester Centre of the Arts</p>
 </div>
 <br>
 

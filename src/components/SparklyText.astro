@@ -1,0 +1,22 @@
+---
+// src/components/SparklyText.astro
+export interface Props {
+  numberOfSparkles?: number;
+  color?: string;
+  class?: string;
+}
+
+const { numberOfSparkles = 5, color = "#f9ca24", class: className } = Astro.props;
+---
+
+<sparkly-text
+  number-of-sparkles={numberOfSparkles}
+  class={className}
+  style={{ '--sparkly-text-color': color }}
+>
+  <slot />
+</sparkly-text>
+
+<script>
+  import "@stefanjudis/sparkly-text";
+</script>

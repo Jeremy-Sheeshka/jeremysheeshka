@@ -1,0 +1,153 @@
+---
+title: "ETEC 544: Intellectual Production #2"
+description: "An annotated bibliography game exploring gamification research and serious games for ADHD, built for ETEC 544 Intellectual Production #2."
+publishDate: "2026-03-18"
+tags: ["etec544"]
+---
+
+import SparklyText from '../../components/SparklyText.astro';
+import Callout from "../../components/blocks/Callout.astro";
+
+
+<details class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 mb-8 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800/50 dark:hover:bg-gray-800 open:bg-white dark:open:bg-gray-900 transition-colors">
+  <summary class="font-bold cursor-pointer flex items-center gap-2 select-none text-gray-900 dark:text-gray-100">
+    <span class="text-lg">Assignment:</span>
+  </summary>
+  <div class="mt-4 space-y-4">
+    <p class="text-gray-700 dark:text-gray-300 leading-relaxed">Choose 2 readings and create 2 annotations of no more than 300 words each. Annotations are meant to be summaries of key findings + research methods/approach + your critical evaluation. This activity is meant to fine-tune your summarizing capabilities.  </p>
+  </div>
+</details>
+
+<section class="game-intro-card bg-gray-50 dark:bg-gray-800/50">
+  <div class="card-content">
+    <p>
+      Intellectual Production #2 is showcased as a mini RPG-style game where you speak with researchers to reveal a critical evaluation of their work. 
+    </p>
+    
+    <div class="iframe-container">
+      <iframe
+        src="/games/etec544-ip2.html"
+        title="ETEC 544 IP#2 Game"
+        allowfullscreen
+      ></iframe>
+    </div>
+  </div>
+</section>
+
+
+
+<Callout title="Disclaimer" variant="warning">
+Claude (Anthropic, 2025) AI was used to assist in the generation, understanding and iterative design process of working with the Phaser and WebAudio code for this intellectual production. Having not worked with Phaser code before, I directed the AI towards the concept of each level, provided my own annotations towards how the dialogue was to take place, and made editorial decisions about the structure, presentation and flow of the information. 
+All final text, along with the critical evaluation of the readings throughout the dialogue, is in my own words.
+</Callout>
+
+
+## <span class="section-accent"></span> References
+
+<div class="reference-grid">
+  <div class="ref-card bg-gray-50 dark:bg-gray-800/50">
+    <span class="ref-tag">Level 2</span>
+    <p>Alabdulakareem, E., & Jamjoom, M. (2020). Computer-assisted learning for improving ADHD individuals' executive functions through gamified interventions: A review. <em>Entertainment Computing</em>, 33, 100341.</p>
+    <a href="https://doi.org/10.1016/j.entcom.2020.100341" class="ref-link">View Source →</a>
+  </div>
+
+  <div class="ref-card bg-gray-50 dark:bg-gray-800/50">
+    <span class="ref-tag">Level 1</span>
+    <p>Zainuddin, Z., Chu, S. K. W., Shujahat, M., & Perera, C. J. (2020). The impact of gamification on learning and instruction: A systematic review of empirical evidence. <em>Educational Research Review</em>, 30, 100326.</p>
+    <a href="https://doi.org/10.1016/j.edurev.2020.100326" class="ref-link">View Source →</a>
+  </div>
+</div>
+
+<style>
+  {`
+    /* Container Styles */
+    .game-intro-card {
+      border-left: 8px solid #002145;
+      border-radius: 12px;
+      padding: 2rem;
+      margin: 2rem 0;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    }
+
+    .card-content p {
+      font-size: 1.15rem;
+      line-height: 1.7;
+      color: inherit;
+    }
+
+    .card-footer {
+      margin-top: 1.5rem;
+      font-size: 0.9rem;
+      border-top: 1px solid #ddd;
+      padding-top: 1rem;
+      color: #666;
+    }
+
+    /* iframe Embed */
+    .iframe-container {
+      margin-top: 2rem;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 2px solid #f9ca24;
+      box-shadow: 4px 4px 0px #f9ca24;
+    }
+
+    .iframe-container iframe {
+      display: block;
+      width: 100%;
+      height: min(700px, 80vh);
+      border: none;
+    }
+
+    /* Reference Cards */
+    .reference-grid {
+      display: grid;
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .ref-card {
+      border: 1px solid #e1e4e8;
+      border-radius: 10px;
+      padding: 1.5rem;
+      position: relative;
+      transition: border-color 0.3s ease;
+    }
+
+    .ref-card:hover {
+      border-color: #0055A4;
+    }
+
+    .ref-tag {
+      position: absolute;
+      top: -10px;
+      right: 20px;
+      background: #0055A4;
+      color: white;
+      padding: 2px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: bold;
+    }
+
+    .ref-link {
+      color: #0055A4;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .ref-link:hover {
+      text-decoration: underline;
+    }
+
+    .section-accent {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      background: #f9ca24;
+      border-radius: 50%;
+      margin-right: 8px;
+    }
+  `}
+</style>

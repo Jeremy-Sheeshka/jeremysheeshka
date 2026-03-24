@@ -1,0 +1,2301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>ETEC 544: Digital Games & Learning</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
+<style>
+ * { margin: 0; padding: 0; box-sizing: border-box; }
+ body {
+ background: #0a0a14;
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ min-height: 100vh;
+ font-family: monospace;
+ overflow: hidden;
+ }
+ #game-container canvas { display: block; image-rendering: pixelated; }
+</style>
+</head>
+<body>
+<div id="game-container"></div>
+<script>
+
+// ═══════════════════════════════════════════════════════════════
+// CHIPTUNE AUDIO MANAGER (Web Audio API)
+// ═══════════════════════════════════════════════════════════════
+class ChiptuneAudio {
+    constructor() {
+        this.ctx = null;
+        this.masterGain = null;
+        this.musicTimeout = null;
+        this.isMusicPlaying = false;
+        this.isEnabled = false;
+
+        // ─────────────────────────────────────────
+        // STEP SEQUENCER FORMAT
+        // { f: frequency, d: duration multiplier, r: rest }
+        // d: 1=8th, 2=quarter, 3=dotted quarter, 4=half
+        // ─────────────────────────────────────────
+
+        // Level 1 - A section (C major, light and bouncy)
+        // Melody has syncopated entries, held notes, and deliberate rests
+        this.melodyA = [
+            { f: 523.25, d: 2 },              // C5 quarter
+            { f: 0,      d: 1, r: true },     // rest 8th
+            { f: 392.00, d: 1 },              // G4 8th
+            { f: 440.00, d: 2 },              // A4 quarter
+            { f: 493.88, d: 1 },              // B4 8th
+            { f: 0,      d: 1, r: true },     // rest
+            { f: 523.25, d: 4 },              // C5 held half
+            { f: 0,      d: 2, r: true },     // rest quarter
+            { f: 392.00, d: 1 },              // G4 8th
+            { f: 329.63, d: 1 },              // E4 8th
+            { f: 392.00, d: 2 },              // G4 quarter
+            { f: 0,      d: 1, r: true },     // rest
+            { f: 440.00, d: 1 },              // A4 8th
+            { f: 392.00, d: 3 },              // G4 dotted
+            { f: 0,      d: 1, r: true },     // rest
+            { f: 329.63, d: 2 },              // E4 quarter
+            { f: 293.66, d: 1 },              // D4 8th
+            { f: 261.63, d: 4 },              // C4 held half
+            { f: 0,      d: 2, r: true }      // rest
+        ];
+
+        // Level 1 - B section (C major, answer phrase — starts on E)
+        this.melodyB = [
+            { f: 329.63, d: 2 },              // E4 quarter
+            { f: 392.00, d: 1 },              // G4 8th
+            { f: 440.00, d: 1 },              // A4 8th
+            { f: 0,      d: 2, r: true },     // rest quarter
+            { f: 493.88, d: 2 },              // B4 quarter
+            { f: 440.00, d: 1 },              // A4 8th
+            { f: 392.00, d: 3 },              // G4 dotted
+            { f: 0,      d: 1, r: true },     // rest
+            { f: 349.23, d: 2 },              // F4 quarter
+            { f: 329.63, d: 1 },              // E4 8th
+            { f: 0,      d: 1, r: true },     // rest
+            { f: 293.66, d: 3 },              // D4 dotted
+            { f: 0,      d: 1, r: true },     // rest
+            { f: 261.63, d: 1 },              // C4 8th
+            { f: 329.63, d: 1 },              // E4 8th
+            { f: 392.00, d: 2 },              // G4 quarter
+            { f: 440.00, d: 1 },              // A4 8th
+            { f: 523.25, d: 4 },              // C5 held half
+            { f: 0,      d: 2, r: true }      // rest
+        ];
+
+        // Level 2 - A section (G major — brighter key, more movement)
+        this.level2MelodyA = [
+            { f: 783.99, d: 2 },              // G5 quarter
+            { f: 0,      d: 1, r: true },     // rest
+            { f: 659.25, d: 1 },              // E5 8th
+            { f: 698.46, d: 2 },              // F#5 quarter
+            { f: 0,      d: 2, r: true },     // rest quarter
+            { f: 587.33, d: 1 },              // D5 8th
+            { f: 659.25, d: 1 },              // E5 8th
+            { f: 783.99, d: 3 },              // G5 dotted
+            { f: 0,      d: 1, r: true },     // rest
+            { f: 880.00, d: 2 },              // A5 quarter
+            { f: 783.99, d: 1 },              // G5 8th
+            { f: 698.46, d: 1 },              // F#5 8th
+            { f: 0,      d: 1, r: true },     // rest
+            { f: 659.25, d: 3 },              // E5 dotted
+            { f: 587.33, d: 1 },              // D5 8th
+            { f: 0,      d: 2, r: true },     // rest quarter
+            { f: 493.88, d: 1 },              // B4 8th
+            { f: 587.33, d: 1 },              // D5 8th
+            { f: 659.25, d: 4 },              // E5 held half
+            { f: 0,      d: 2, r: true }      // rest
+        ];
+
+        // Level 2 - B section (G major, climbing with wider leaps)
+        this.level2MelodyB = [
+            { f: 493.88, d: 1 },              // B4 8th
+            { f: 587.33, d: 1 },              // D5 8th
+            { f: 659.25, d: 2 },              // E5 quarter
+            { f: 0,      d: 2, r: true },     // rest quarter
+            { f: 783.99, d: 2 },              // G5 quarter
+            { f: 698.46, d: 1 },              // F#5 8th
+            { f: 0,      d: 1, r: true },     // rest
+            { f: 659.25, d: 3 },              // E5 dotted
+            { f: 0,      d: 1, r: true },     // rest
+            { f: 587.33, d: 2 },              // D5 quarter
+            { f: 523.25, d: 1 },              // C5 8th
+            { f: 493.88, d: 1 },              // B4 8th
+            { f: 0,      d: 2, r: true },     // rest quarter
+            { f: 440.00, d: 2 },              // A4 quarter
+            { f: 493.88, d: 1 },              // B4 8th
+            { f: 587.33, d: 1 },              // D5 8th
+            { f: 659.25, d: 2 },              // E5 quarter
+            { f: 783.99, d: 4 },              // G5 held half
+            { f: 0,      d: 2, r: true }      // rest
+        ];
+
+        // ─────────────────────────────────────────
+        // BASS LINES — 16-step 8th-note grid, 0 = rest
+        // ─────────────────────────────────────────
+
+        // Level 1 C major bass (roots + fifths)
+        this.bassA = [
+            130.81, 0,      0,      130.81,
+            164.81, 0,      164.81, 0,
+            146.83, 0,      0,      146.83,
+            196.00, 0,      130.81, 0
+        ];
+        this.bassB = [
+            164.81, 0,      164.81, 0,
+            174.61, 0,      0,      174.61,
+            146.83, 0,      146.83, 0,
+            261.63, 0,      196.00, 0
+        ];
+
+        // Level 2 G major bass
+        this.bass2A = [
+            196.00, 0,      0,      196.00,
+            246.94, 0,      246.94, 0,
+            220.00, 0,      0,      220.00,
+            293.66, 0,      196.00, 0
+        ];
+        this.bass2B = [
+            246.94, 0,      246.94, 0,
+            196.00, 0,      0,      196.00,
+            174.61, 0,      174.61, 0,
+            220.00, 0,      293.66, 0
+        ];
+
+        // ─────────────────────────────────────────
+        // LEVEL COMPLETE JINGLES
+        // ─────────────────────────────────────────
+
+        // Jingle 1 — C major ascending fanfare
+        this.jingle1 = [
+            { f: 392.00,  d: 1 },
+            { f: 523.25,  d: 1 },
+            { f: 659.25,  d: 1 },
+            { f: 783.99,  d: 2 },
+            { f: 0,       d: 1, r: true },
+            { f: 659.25,  d: 1 },
+            { f: 783.99,  d: 1 },
+            { f: 1046.50, d: 4 }
+        ];
+
+        // Jingle 2 — G major brighter fanfare
+        this.jingle2 = [
+            { f: 493.88,  d: 1 },
+            { f: 587.33,  d: 1 },
+            { f: 783.99,  d: 1 },
+            { f: 880.00,  d: 2 },
+            { f: 0,       d: 1, r: true },
+            { f: 783.99,  d: 1 },
+            { f: 880.00,  d: 1 },
+            { f: 1174.66, d: 4 }
+        ];
+
+        // ─────────────────────────────────────────
+        // STATE
+        // ─────────────────────────────────────────
+        this.currentSection = 'A';
+        this.loopStep = 0;
+        this.currentLevel = 1;
+        this.stepIndex = 0;
+        this.bassIndex = 0;
+        this.activeMelody = this.melodyA;
+        this.activeBass   = this.bassA;
+
+        this.bpm = 126;
+        this._tickMs = this._calcTick();
+    }
+
+    _calcTick() {
+        return (60 / this.bpm) * 0.5 * 1000;
+    }
+
+    init() {
+        if (this.ctx) return;
+        try {
+            this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+            this.masterGain = this.ctx.createGain();
+            this.masterGain.gain.value = 0.22;
+            this.masterGain.connect(this.ctx.destination);
+            this.isEnabled = true;
+        } catch(e) {
+            console.warn("Web Audio not supported");
+            this.isEnabled = false;
+        }
+    }
+
+    startMusic() {
+        if (!this.isEnabled || !this.ctx) return;
+        if (this.isMusicPlaying) return;
+        if (this.ctx.state === 'suspended') {
+            this.ctx.resume()
+                .then(() => this._startLoop())
+                .catch(e => console.warn("audio resume failed", e));
+        } else {
+            this._startLoop();
+        }
+    }
+
+    _startLoop() {
+        this.isMusicPlaying = true;
+        this.stepIndex = 0;
+        this.bassIndex = 0;
+        this._scheduleNext();
+    }
+
+    _scheduleNext() {
+        if (!this.isMusicPlaying) return;
+        const step = this.activeMelody[this.stepIndex % this.activeMelody.length];
+        const durMs = step.d * this._tickMs;
+
+        this._playStep(step, durMs);
+
+        this.stepIndex++;
+        this.bassIndex++;
+
+        // Section advance every 16 bass ticks
+        if (this.bassIndex % 16 === 0) {
+            this._advanceSongStructure();
+        }
+
+        this.musicTimeout = setTimeout(() => this._scheduleNext(), durMs);
+    }
+
+    _playStep(step, durMs) {
+        if (!this.ctx) return;
+
+        const bassIdx = this.bassIndex % this.activeBass.length;
+        const bassFreq = this.activeBass[bassIdx];
+
+        // Main melody — quiet, sits in background
+        if (!step.r && step.f > 0) {
+            this._playOsc(step.f, 'square',   0.09, durMs * 0.78);
+            this._playOsc(step.f, 'sawtooth', 0.04, durMs * 0.72, 7);
+        }
+
+        // Bass — triangle, warmer and more present
+        if (bassFreq > 0) {
+            this._playOsc(bassFreq, 'triangle', 0.20, this._tickMs * 0.80, 0, 0.004);
+        }
+
+        // Hi-hat only — no kick
+        const beat = this.bassIndex % 4;
+        if (beat === 1 || beat === 3) this._playNoise(30, 0.035);
+    }
+
+    _playOsc(freq, type, gainVal, durMs, detune = 0, attack = 0.005) {
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const g   = this.ctx.createGain();
+        osc.type = type;
+        osc.frequency.value = freq;
+        if (detune) osc.detune.value = detune;
+        g.gain.setValueAtTime(0, now);
+        g.gain.linearRampToValueAtTime(gainVal, now + attack);
+        g.gain.exponentialRampToValueAtTime(0.0001, now + Math.max(durMs * 0.001, 0.01));
+        osc.connect(g);
+        g.connect(this.masterGain);
+        osc.start(now);
+        osc.stop(now + Math.max(durMs * 0.001, 0.01) + 0.02);
+    }
+
+    _playNoise(durMs, gainVal = 0.035) {
+        if (!this.ctx) return;
+        const buf    = this.ctx.createBuffer(1, Math.ceil(this.ctx.sampleRate * 0.04), this.ctx.sampleRate);
+        const data   = buf.getChannelData(0);
+        for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+        const src    = this.ctx.createBufferSource();
+        const filter = this.ctx.createBiquadFilter();
+        filter.type  = 'highpass';
+        filter.frequency.value = 5000;
+        const g = this.ctx.createGain();
+        src.buffer = buf;
+        const now = this.ctx.currentTime;
+        g.gain.setValueAtTime(gainVal, now);
+        g.gain.exponentialRampToValueAtTime(0.0001, now + durMs * 0.001);
+        src.connect(filter); filter.connect(g); g.connect(this.masterGain);
+        src.start(now); src.stop(now + durMs * 0.001 + 0.01);
+    }
+
+    _advanceSongStructure() {
+        this.loopStep++;
+        const pattern = ['A', 'A', 'B', 'A'];
+        this.currentSection = pattern[this.loopStep % pattern.length];
+        this.stepIndex = 0;
+
+        if (this.currentLevel === 2) {
+            this.activeMelody = this.currentSection === 'A' ? this.level2MelodyA : this.level2MelodyB;
+            this.activeBass   = this.currentSection === 'A' ? this.bass2A        : this.bass2B;
+        } else {
+            this.activeMelody = this.currentSection === 'A' ? this.melodyA : this.melodyB;
+            this.activeBass   = this.currentSection === 'A' ? this.bassA   : this.bassB;
+        }
+    }
+
+    setLevel(level) {
+        this.currentLevel = level;
+        this.stepIndex    = 0;
+        this.bassIndex    = 0;
+        this.loopStep     = 0;
+        this.currentSection = 'A';
+
+        if (level === 2) {
+            this.activeMelody = this.level2MelodyA;
+            this.activeBass   = this.bass2A;
+        } else {
+            this.activeMelody = this.melodyA;
+            this.activeBass   = this.bassA;
+        }
+    }
+
+    // ─────────────────────────────────────────
+    // LEVEL COMPLETE JINGLE
+    // Stops background music, plays fanfare, then calls onFinished
+    // ─────────────────────────────────────────
+    playLevelComplete(level, onFinished) {
+        if (!this.isEnabled || !this.ctx) {
+            if (onFinished) onFinished();
+            return;
+        }
+
+        // Resume context if suspended (needed after user interaction gap)
+        if (this.ctx.state === 'suspended') {
+            this.ctx.resume();
+        }
+
+        // Stop background loop first
+        this.stopMusic();
+
+        const jingle = (level === 2) ? this.jingle2 : this.jingle1;
+        const tick   = this._calcTick();
+
+        // Capture ctx reference so closures stay valid
+        const ctx         = this.ctx;
+        const masterGain  = this.masterGain;
+
+        // Helper scoped to captured references
+        const playJingleOsc = (freq, type, gainVal, durMs, detune, attack) => {
+            if (!ctx) return;
+            detune = detune || 0;
+            attack = attack || 0.005;
+            const now = ctx.currentTime;
+            const osc = ctx.createOscillator();
+            const g   = ctx.createGain();
+            osc.type = type;
+            osc.frequency.value = freq;
+            if (detune) osc.detune.value = detune;
+            g.gain.setValueAtTime(0, now);
+            g.gain.linearRampToValueAtTime(gainVal, now + attack);
+            g.gain.exponentialRampToValueAtTime(0.0001, now + Math.max(durMs * 0.001, 0.01));
+            osc.connect(g);
+            g.connect(masterGain);
+            osc.start(now);
+            osc.stop(now + Math.max(durMs * 0.001, 0.01) + 0.05);
+        };
+
+        let delay = 0;
+        jingle.forEach((step) => {
+            const durMs = step.d * tick;
+            if (!step.r && step.f > 0) {
+                // Capture durMs in closure via IIFE
+                (function(d) {
+                    setTimeout(() => {
+                        playJingleOsc(d.f,        'square',   0.22, durMs * 0.88);
+                        playJingleOsc(d.f * 0.5,  'triangle', 0.16, durMs * 0.92, 0, 0.003);
+                        playJingleOsc(d.f * 1.5,  'sawtooth', 0.05, durMs * 0.70, 5);
+                    }, delay);
+                })(step);
+            }
+            delay += durMs;
+        });
+
+        if (onFinished) {
+            setTimeout(onFinished, delay + 150);
+        }
+    }
+
+    playDialogueBeep() {
+        if (!this.isEnabled || !this.ctx) return;
+        if (this.ctx.state === 'suspended') this.ctx.resume();
+        this._playOsc(880,  'square', 0.15, 80);
+        this._playOsc(1760, 'sine',   0.05, 60);
+    }
+
+    stopMusic() {
+        if (this.musicTimeout) {
+            clearTimeout(this.musicTimeout);
+            this.musicTimeout = null;
+        }
+        this.isMusicPlaying = false;
+    }
+}
+
+window.gameAudio = null;
+// ═══════════════════════════════════════════════════════════════
+// END AUDIO
+// ═══════════════════════════════════════════════════════════════
+
+
+// ═══════════════════════════════════════════════════════════════
+// ETEC 544: Digital Games & Learning — A Research Adventure
+// Phaser 3 — Two levels: Scarfe Foyer + The Library
+// ═══════════════════════════════════════════════════════════════
+
+const W = 800, H = 560;
+const TILE = 32;
+const SPEED = 170;
+
+// ── Texture Factory ───────────────────────────────────────────
+function ensureTextures(scene) {
+ if (!scene.textures.exists('player')) {
+ const g = scene.make.graphics({ add: false });
+ g.fillStyle(0x000000, 0.2); g.fillEllipse(16, 34, 20, 6);
+ g.fillStyle(0x1a237e); g.fillRect(9, 26, 6, 8); g.fillRect(17, 26, 6, 8);
+ g.fillStyle(0x212121); g.fillRect(8, 32, 7, 4); g.fillRect(17, 32, 7, 4);
+ g.fillStyle(0x1565c0); g.fillRect(7, 14, 18, 14);
+ g.fillStyle(0xffe0b2); g.fillRect(9, 3, 14, 12);
+ g.fillStyle(0x4e342e); g.fillRect(9, 3, 14, 4); g.fillRect(9, 3, 3, 8);
+ g.fillStyle(0x1a1a1a); g.fillRect(12, 8, 3, 3); g.fillRect(18, 8, 3, 3);
+ g.fillStyle(0xffffff); g.fillRect(13, 8, 1, 1); g.fillRect(19, 8, 1, 1);
+ g.fillStyle(0xbf7057); g.fillRect(13, 13, 6, 1);
+ g.generateTexture('player', 32, 36); g.destroy();
+ }
+
+ if (!scene.textures.exists('mccready')) {
+ const g = scene.make.graphics({ add: false });
+ g.fillStyle(0x000000, 0.15); g.fillEllipse(16, 38, 20, 6);
+ g.fillStyle(0x263238); g.fillRect(8, 26, 7, 10); g.fillRect(17, 26, 7, 10);
+ g.fillStyle(0x111111); g.fillRect(7, 33, 8, 4); g.fillRect(17, 33, 8, 4);
+ g.fillStyle(0x1c1c1c); g.fillRect(6, 13, 20, 14);
+ g.fillStyle(0xf2d6c9); g.fillRect(13, 13, 6, 3);
+ g.fillStyle(0x1c1c1c); g.fillRect(6, 13, 7, 8); g.fillRect(19, 13, 7, 8);
+ g.fillStyle(0xf2d6c9); g.fillRect(9, 3, 14, 12);
+ g.fillStyle(0xb89b7a); g.fillRect(9, 2, 14, 4); g.fillRect(9, 2, 3, 7); g.fillRect(20, 2, 3, 5);
+ g.fillStyle(0xd8c2a8); g.fillRect(11, 5, 10, 1);
+ g.fillStyle(0x2a2a2a); g.fillRect(12, 8, 2, 2); g.fillRect(18, 8, 2, 2);
+ g.fillStyle(0xd79a8a); g.fillRect(13, 12, 6, 1);
+ g.fillStyle(0xe8bfae); g.fillRect(15, 10, 1, 1);
+ g.generateTexture('mccready', 32, 40); g.destroy();
+ }
+
+ // ── Zainuddin: red top, warm gold skin, short dark hair, round glasses, beard ──
+ if (!scene.textures.exists('npc_zainuddin')) {
+ const g = scene.make.graphics({ add: false });
+ // Shadow
+ g.fillStyle(0x000000, 0.2); g.fillEllipse(16, 38, 20, 6);
+ // Legs — dark trousers
+ g.fillStyle(0x1a1a2e); g.fillRect(8, 27, 7, 10); g.fillRect(17, 27, 7, 10);
+ // Shoes
+ g.fillStyle(0x111111); g.fillRect(7, 34, 8, 4); g.fillRect(17, 34, 8, 4);
+ // Body — red jacket/sweater
+ g.fillStyle(0xc62828); g.fillRect(5, 13, 22, 15);
+ // White collar
+ g.fillStyle(0xffffff); g.fillRect(13, 13, 6, 5);
+ // Head
+ g.fillStyle(0xf9a825); g.fillRect(9, 3, 14, 13);
+ // Short dark hair (close crop)
+ g.fillStyle(0x1a0a00); g.fillRect(9, 3, 14, 4);
+ // Sideburns
+ g.fillRect(9, 4, 3, 6); g.fillRect(20, 4, 3, 6);
+ // Beard (short, chin)
+ g.fillStyle(0x2a1400); g.fillRect(11, 13, 10, 3);
+ // Eyes
+ g.fillStyle(0x1a1a1a); g.fillRect(11, 8, 3, 3); g.fillRect(18, 8, 3, 3);
+ g.fillStyle(0xffffff); g.fillRect(12, 8, 1, 1); g.fillRect(19, 8, 1, 1);
+ // Round glasses frames
+ g.lineStyle(1, 0x4a3000);
+ g.strokeRect(10, 7, 5, 5); g.strokeRect(17, 7, 5, 5);
+ // Glasses bridge
+ g.fillStyle(0x4a3000); g.fillRect(15, 9, 2, 1);
+ // Nose
+ g.fillStyle(0xc88020, 0.8); g.fillRect(15, 11, 2, 2);
+ g.generateTexture('npc_zainuddin', 32, 40); g.destroy();
+ }
+
+ // ── Chu: green hoodie, fair skin, messy dark hair, taller build ──
+ if (!scene.textures.exists('npc_chu')) {
+ const g = scene.make.graphics({ add: false });
+ g.fillStyle(0x000000, 0.2); g.fillEllipse(16, 38, 20, 6);
+ // Legs — jeans blue
+ g.fillStyle(0x1565c0); g.fillRect(8, 27, 7, 10); g.fillRect(17, 27, 7, 10);
+ g.fillStyle(0x0d3c6e); g.fillRect(7, 34, 8, 4); g.fillRect(17, 34, 8, 4);
+ // Body — green hoodie (wider/bulkier)
+ g.fillStyle(0x2e7d32); g.fillRect(4, 12, 24, 16);
+ // Hood drawstrings
+ g.fillStyle(0x1b5e20); g.fillRect(13, 14, 2, 8); g.fillRect(17, 14, 2, 8);
+ // Kangaroo pocket
+ g.fillStyle(0x1b5e20); g.fillRect(9, 21, 14, 6);
+ // Head (slightly taller)
+ g.fillStyle(0xffe0b2); g.fillRect(9, 1, 14, 13);
+ // Messy hair — spiky top
+ g.fillStyle(0x1a1008);
+ g.fillRect(9, 1, 14, 5);
+ g.fillRect(9, 0, 3, 4); g.fillRect(13, -1, 3, 4); g.fillRect(17, 0, 3, 3); g.fillRect(20, 1, 3, 3);
+ // Eyes
+ g.fillStyle(0x1a1a1a); g.fillRect(11, 7, 3, 3); g.fillRect(18, 7, 3, 3);
+ g.fillStyle(0xffffff); g.fillRect(12, 7, 1, 1); g.fillRect(19, 7, 1, 1);
+ // Nose
+ g.fillStyle(0xe8a87c, 0.7); g.fillRect(15, 10, 2, 2);
+ // Slight smirk
+ g.fillStyle(0xbf7057); g.fillRect(12, 12, 8, 1); g.fillRect(18, 11, 2, 1);
+ g.generateTexture('npc_chu', 32, 40); g.destroy();
+ }
+
+ // ── Shujahat: purple blazer, golden skin, slicked-back hair, moustache ──
+ if (!scene.textures.exists('npc_shujahat')) {
+ const g = scene.make.graphics({ add: false });
+ g.fillStyle(0x000000, 0.2); g.fillEllipse(16, 38, 20, 6);
+ // Legs — charcoal trousers
+ g.fillStyle(0x37474f); g.fillRect(8, 27, 7, 10); g.fillRect(17, 27, 7, 10);
+ g.fillStyle(0x263238); g.fillRect(7, 34, 8, 4); g.fillRect(17, 34, 8, 4);
+ // Body — purple blazer
+ g.fillStyle(0x6a1b9a); g.fillRect(5, 13, 22, 15);
+ // Lapels
+ g.fillStyle(0x4a0072); g.fillTriangle(10, 13, 16, 13, 10, 22);
+ g.fillTriangle(22, 13, 16, 13, 22, 22);
+ // White shirt under
+ g.fillStyle(0xfafafa); g.fillRect(14, 13, 4, 15);
+ // Tie
+ g.fillStyle(0xf9ca24); g.fillRect(15, 13, 2, 12);
+ // Head
+ g.fillStyle(0xffd54f); g.fillRect(9, 3, 14, 12);
+ // Slicked-back hair
+ g.fillStyle(0x1c0a00);
+ g.fillRect(9, 3, 14, 4); // top band
+ g.fillRect(9, 3, 2, 10); // left side
+ g.fillRect(21, 3, 2, 8); // right side
+ // Moustache
+ g.fillStyle(0x2a0e00); g.fillRect(12, 12, 4, 2); g.fillRect(16, 12, 4, 2);
+ // Eyes
+ g.fillStyle(0x1a1a1a); g.fillRect(11, 8, 3, 2); g.fillRect(18, 8, 3, 2);
+ g.fillStyle(0xffffff); g.fillRect(12, 8, 1, 1); g.fillRect(19, 8, 1, 1);
+ // Nose
+ g.fillStyle(0xc8a030, 0.7); g.fillRect(15, 10, 2, 2);
+ g.generateTexture('npc_shujahat', 32, 40); g.destroy();
+ }
+
+ // ── Perera: FEMALE — orange blouse, fair skin, long dark hair, earrings ──
+ if (!scene.textures.exists('npc_perera')) {
+ const g = scene.make.graphics({ add: false });
+ g.fillStyle(0x000000, 0.18); g.fillEllipse(16, 39, 22, 6);
+ // Legs — dark slim trousers
+ g.fillStyle(0x2c1810); g.fillRect(9, 27, 6, 10); g.fillRect(17, 27, 6, 10);
+ g.fillStyle(0x1a0e08); g.fillRect(8, 34, 7, 5); g.fillRect(17, 34, 7, 5);
+ // Body — orange blouse, slightly A-line suggesting feminine silhouette
+ g.fillStyle(0xe65100); g.fillRect(5, 14, 22, 14);
+ // Flared sides (A-line hint)
+ g.fillRect(3, 22, 3, 6); g.fillRect(26, 22, 3, 6);
+ // Neckline V-shape
+ g.fillStyle(0xffe0b2); g.fillTriangle(13, 14, 19, 14, 16, 19);
+ // Small white collar detail
+ g.fillStyle(0xffffff, 0.5); g.fillRect(13, 14, 6, 2);
+ // Head (slightly rounder)
+ g.fillStyle(0xffe0b2); g.fillRect(9, 4, 14, 12);
+ // Long dark hair — flows past shoulders
+ g.fillStyle(0x1a0808);
+ g.fillRect(9, 4, 14, 5); // top
+ g.fillRect(7, 4, 4, 20); // left long flow
+ g.fillRect(21, 4, 4, 18); // right long flow
+ g.fillRect(9, 4, 2, 16); // left inner strand
+ // Hair highlight
+ g.fillStyle(0x3d1010, 0.6); g.fillRect(12, 4, 3, 14);
+ // Earrings (small gold dots)
+ g.fillStyle(0xf9ca24); g.fillCircle(8, 11, 2); g.fillCircle(24, 11, 2);
+ // Eyes — slightly longer lashes effect (extra pixel above)
+ g.fillStyle(0x1a0808); g.fillRect(11, 7, 4, 1); g.fillRect(17, 7, 4, 1); // lash line
+ g.fillStyle(0x1a1a1a); g.fillRect(11, 8, 4, 3); g.fillRect(17, 8, 4, 3);
+ g.fillStyle(0xffffff); g.fillRect(13, 8, 1, 1); g.fillRect(19, 8, 1, 1);
+ // Rosy lips
+ g.fillStyle(0xd44060); g.fillRect(12, 13, 8, 2);
+ g.fillStyle(0xe8607a, 0.6); g.fillRect(13, 13, 6, 1);
+ // Nose
+ g.fillStyle(0xd4896a, 0.7); g.fillRect(15, 11, 2, 2);
+ g.generateTexture('npc_perera', 32, 40); g.destroy();
+ }
+
+ // ── Alabdulakareem: deep blue suit, fair skin, neat short hair, lanyard ──
+ if (!scene.textures.exists('npc_alabd')) {
+ const g = scene.make.graphics({ add: false });
+ g.fillStyle(0x000000, 0.2); g.fillEllipse(16, 38, 20, 6);
+ g.fillStyle(0x1a237e); g.fillRect(8, 27, 7, 10); g.fillRect(17, 27, 7, 10);
+ g.fillStyle(0x111122); g.fillRect(7, 34, 8, 4); g.fillRect(17, 34, 8, 4);
+ // Suit jacket — navy
+ g.fillStyle(0x0d47a1); g.fillRect(5, 12, 22, 16);
+ // Lapels
+ g.fillStyle(0x0a2fa6); g.fillTriangle(11, 12, 16, 12, 11, 20);
+ g.fillTriangle(21, 12, 16, 12, 21, 20);
+ // White shirt
+ g.fillStyle(0xfafafa); g.fillRect(14, 12, 4, 16);
+ // Lanyard (UBC blue/yellow)
+ g.fillStyle(0xf9ca24); g.fillRect(14, 12, 1, 14); g.fillRect(17, 12, 1, 14);
+ // Lanyard card
+ g.fillStyle(0xffffff); g.fillRect(13, 22, 6, 4);
+ g.fillStyle(0x0d47a1, 0.6); g.fillRect(14, 23, 4, 1);
+ // Head
+ g.fillStyle(0xffe0b2); g.fillRect(9, 3, 14, 12);
+ // Neat short hair (swept left)
+ g.fillStyle(0x1a1218);
+ g.fillRect(9, 3, 14, 4);
+ g.fillRect(9, 3, 3, 9);
+ g.fillStyle(0x2c2028); g.fillRect(10, 3, 8, 2); // part
+ // Eyes
+ g.fillStyle(0x1a1a1a); g.fillRect(11, 8, 3, 3); g.fillRect(18, 8, 3, 3);
+ g.fillStyle(0xffffff); g.fillRect(12, 8, 1, 1); g.fillRect(19, 8, 1, 1);
+ // Nose
+ g.fillStyle(0xd4956f, 0.7); g.fillRect(15, 11, 2, 2);
+ // Neutral mouth
+ g.fillStyle(0xbf7057); g.fillRect(13, 13, 6, 1);
+ g.generateTexture('npc_alabd', 32, 40); g.destroy();
+ }
+
+ // ── Jamjoom: teal cardigan, warm skin, wavy hair, round face, goatee ──
+ if (!scene.textures.exists('npc_jamjoom')) {
+ const g = scene.make.graphics({ add: false });
+ g.fillStyle(0x000000, 0.2); g.fillEllipse(16, 38, 20, 6);
+ g.fillStyle(0x37474f); g.fillRect(8, 27, 7, 10); g.fillRect(17, 27, 7, 10);
+ g.fillStyle(0x263238); g.fillRect(7, 34, 8, 4); g.fillRect(17, 34, 8, 4);
+ // Cardigan — teal
+ g.fillStyle(0x00695c); g.fillRect(5, 13, 22, 15);
+ // Cardigan opening
+ g.fillStyle(0x004d40); g.fillRect(14, 13, 4, 15);
+ // Light undershirt
+ g.fillStyle(0xfff9f0); g.fillRect(15, 13, 2, 15);
+ // Head — rounder/wider
+ g.fillStyle(0xffd180); g.fillRect(8, 3, 16, 13);
+ // Wavy hair (warm brown)
+ g.fillStyle(0x3d2008);
+ g.fillRect(8, 3, 16, 5); // top
+ g.fillRect(8, 3, 3, 12); // left side
+ g.fillRect(21, 3, 3, 10); // right side
+ // Wave bumps on top
+ g.fillStyle(0x5a3010);
+ g.fillRect(10, 1, 3, 3); g.fillRect(14, 0, 4, 3); g.fillRect(19, 2, 3, 3);
+ // Goatee
+ g.fillStyle(0x2a1000); g.fillRect(13, 14, 6, 2);
+ g.fillRect(14, 16, 4, 1);
+ // Eyes
+ g.fillStyle(0x1a1a1a); g.fillRect(11, 8, 4, 3); g.fillRect(17, 8, 4, 3);
+ g.fillStyle(0xffffff); g.fillRect(13, 8, 1, 1); g.fillRect(19, 8, 1, 1);
+ // Nose
+ g.fillStyle(0xc8901a, 0.7); g.fillRect(15, 11, 2, 3);
+ // Friendly smile
+ g.fillStyle(0xbf7057); g.fillRect(12, 13, 8, 2);
+ g.fillStyle(0xffffff); g.fillRect(13, 13, 6, 1);
+ g.generateTexture('npc_jamjoom', 32, 40); g.destroy();
+ }
+
+ // ── Jamjoom, Mona — FEMALE: teal blouse, warm skin, shoulder-length dark hair, earrings ──
+ if (!scene.textures.exists('npc_jamjoom_f')) {
+ const g = scene.make.graphics({ add: false });
+ g.fillStyle(0x000000, 0.18); g.fillEllipse(16, 39, 22, 6);
+ // Legs — dark slim trousers
+ g.fillStyle(0x263238); g.fillRect(9, 27, 6, 10); g.fillRect(17, 27, 6, 10);
+ g.fillStyle(0x1a2428); g.fillRect(8, 34, 7, 5); g.fillRect(17, 34, 7, 5);
+ // Body — teal blouse, A-line silhouette
+ g.fillStyle(0x00695c); g.fillRect(5, 14, 22, 14);
+ g.fillRect(3, 22, 3, 6); g.fillRect(26, 22, 3, 6); // flared sides
+ // Neckline
+ g.fillStyle(0xffd180); g.fillTriangle(13, 14, 19, 14, 16, 19);
+ // Head
+ g.fillStyle(0xffd180); g.fillRect(9, 4, 14, 12);
+ // Shoulder-length dark hair
+ g.fillStyle(0x1a0808);
+ g.fillRect(9, 4, 14, 5); // top
+ g.fillRect(7, 4, 4, 18); // left flow
+ g.fillRect(21, 4, 4, 16); // right flow
+ g.fillRect(9, 4, 2, 14); // left inner
+ // Earrings
+ g.fillStyle(0x004d40); g.fillCircle(8, 11, 2); g.fillCircle(24, 11, 2);
+ // Lashes
+ g.fillStyle(0x1a0808); g.fillRect(11, 7, 4, 1); g.fillRect(17, 7, 4, 1);
+ // Eyes
+ g.fillStyle(0x1a1a1a); g.fillRect(11, 8, 4, 3); g.fillRect(17, 8, 4, 3);
+ g.fillStyle(0xffffff); g.fillRect(13, 8, 1, 1); g.fillRect(19, 8, 1, 1);
+ // Rosy lips
+ g.fillStyle(0xc0604a); g.fillRect(12, 13, 8, 2);
+ g.fillStyle(0xd8806a, 0.5); g.fillRect(13, 13, 6, 1);
+ // Nose
+ g.fillStyle(0xc8901a, 0.7); g.fillRect(15, 11, 2, 2);
+ g.generateTexture('npc_jamjoom_f', 32, 40); g.destroy();
+ }
+
+ if (!scene.textures.exists('exclaim')) {
+ const g = scene.make.graphics({ add: false });
+ // Dark circular badge background
+ g.fillStyle(0x001a38, 0.92); g.fillCircle(12, 12, 12);
+ // White ring border
+ g.lineStyle(2.5, 0xffffff, 0.9); g.strokeCircle(12, 12, 11);
+ // Bright red exclamation mark
+ g.fillStyle(0xff3b3b); g.fillRect(10, 3, 4, 11); // stem
+ g.fillRect(10, 17, 4, 4); // dot
+ g.generateTexture('exclaim', 24, 24); g.destroy();
+ }
+}
+
+// ── Headshot Portrait Factory ─────────────────────────────────
+function ensureHeadshots(scene) {
+ const S = 60;
+
+ // Shared helper — draws a simple clean face on a coloured bg
+ // hairCol2 = optional second hair colour for a single highlight stripe
+ function drawFace(g, bgCol, skinCol, hairCol, shirtCol, opts = {}) {
+ const {
+ hairStyle = 'flat', // 'flat' | 'spiky' | 'long' | 'slick' | 'wave'
+ hairCol2 = null,
+ glasses = false,
+ moustache = false,
+ goatee = false,
+ beard = false,
+ earrings = false,
+ lashes = false,
+ lips = false, // pink lips for Perera
+ tie = false,
+ lanyard = false,
+ smirk = false,
+ } = opts;
+
+ // BG
+ g.fillStyle(bgCol); g.fillRoundedRect(0, 0, S, S, 8);
+
+ // Shirt / shoulders
+ g.fillStyle(shirtCol); g.fillRect(4, 44, 52, 18);
+
+ // Neck
+ g.fillStyle(skinCol); g.fillRect(22, 40, 16, 8);
+
+ // Head — clean rectangle, centred
+ g.fillStyle(skinCol); g.fillRect(13, 14, 34, 28);
+
+ // ── Hair ──
+ g.fillStyle(hairCol);
+ if (hairStyle === 'flat') {
+ // Simple flat cap on top, small side bits
+ g.fillRect(13, 14, 34, 7);
+ g.fillRect(13, 14, 4, 16);
+ g.fillRect(43, 14, 4, 12);
+ } else if (hairStyle === 'spiky') {
+ g.fillRect(13, 14, 34, 7);
+ g.fillRect(13, 14, 4, 18);
+ g.fillRect(43, 14, 4, 14);
+ // 3 spikes
+ g.fillRect(15, 8, 6, 8);
+ g.fillRect(24, 6, 8, 9);
+ g.fillRect(36, 9, 6, 7);
+ } else if (hairStyle === 'long') {
+ // Long hair: flows down sides past shoulders
+ g.fillRect(13, 14, 34, 7);
+ g.fillRect(5, 14, 10, 34); // left flow
+ g.fillRect(45, 14, 10, 30); // right flow
+ if (hairCol2) {
+ g.fillStyle(hairCol2);
+ g.fillRect(7, 18, 3, 28); // highlight strand
+ }
+ } else if (hairStyle === 'slick') {
+ // Slicked back — flat top, tight sides
+ g.fillRect(13, 14, 34, 6);
+ g.fillRect(13, 14, 3, 22);
+ g.fillRect(44, 14, 3, 18);
+ } else if (hairStyle === 'wave') {
+ // Wavy — base + 3 bumps on top
+ g.fillRect(10, 14, 40, 8);
+ g.fillRect(10, 14, 5, 22);
+ g.fillRect(45, 14, 5, 18);
+ g.fillRect(14, 8, 8, 8);
+ g.fillRect(26, 6, 8, 9);
+ g.fillRect(38, 8, 7, 8);
+ }
+
+ // Sandy hairline stripe for McCready style (optional, via hairCol2 on flat)
+ if (hairStyle === 'flat' && hairCol2) {
+ g.fillStyle(hairCol2); g.fillRect(16, 18, 20, 2);
+ }
+
+ // ── Extras over hair ──
+ if (earrings) {
+ g.fillStyle(0xf9ca24);
+ g.fillCircle(11, 30, 3); g.fillCircle(49, 30, 3);
+ }
+
+ // ── Eyes ──
+ g.fillStyle(0x1a1a1a);
+ if (lashes) {
+ // Lash bar first
+ g.fillRect(16, 28, 10, 2); g.fillRect(34, 28, 10, 2);
+ }
+ // Eye whites
+ g.fillStyle(0xffffff); g.fillRect(16, 30, 10, 6); g.fillRect(34, 30, 10, 6);
+ // Pupils
+ g.fillStyle(0x1a1a1a); g.fillRect(18, 31, 5, 4); g.fillRect(36, 31, 5, 4);
+ // Shine dot
+ g.fillStyle(0xffffff); g.fillRect(19, 31, 2, 1); g.fillRect(37, 31, 2, 1);
+
+ // ── Glasses (Zainuddin) ──
+ if (glasses) {
+ g.lineStyle(2, 0x3a2800);
+ g.strokeRect(14, 28, 13, 10);
+ g.strokeRect(33, 28, 13, 10);
+ g.fillStyle(0x3a2800); g.fillRect(27, 32, 6, 2); // bridge
+ g.fillRect(10, 31, 4, 2); g.fillRect(46, 31, 4, 2); // arms
+ }
+
+ // ── Nose — single small dot ──
+ g.fillStyle(skinCol === 0xf9a825 || skinCol === 0xffd54f || skinCol === 0xffd180
+ ? 0xb87820 : 0xc07050);
+ g.fillRect(27, 36, 6, 3);
+
+ // ── Mouth ──
+ if (lips) {
+ g.fillStyle(0xd44060); g.fillRect(19, 40, 22, 4);
+ g.fillStyle(0xffc0cb, 0.4); g.fillRect(20, 40, 20, 2);
+ } else if (smirk) {
+ g.fillStyle(0xbf7057); g.fillRect(19, 40, 18, 2); g.fillRect(34, 39, 4, 2);
+ } else {
+ g.fillStyle(0xbf7057); g.fillRect(19, 40, 22, 2);
+ }
+
+ // ── Moustache (Shujahat) ──
+ if (moustache) {
+ g.fillStyle(0x2a0e00);
+ g.fillRect(18, 38, 10, 3); g.fillRect(32, 38, 10, 3);
+ }
+
+ // ── Goatee (Jamjoom) ──
+ if (goatee) {
+ g.fillStyle(0x2a1000);
+ g.fillRect(21, 42, 18, 4);
+ g.fillRect(24, 46, 12, 3);
+ }
+
+ // ── Short beard (Zainuddin) ──
+ if (beard) {
+ g.fillStyle(0x2a1400);
+ g.fillRect(16, 40, 28, 4);
+ g.fillRect(19, 44, 22, 2);
+ }
+
+ // ── Tie (Shujahat) ──
+ if (tie) {
+ g.fillStyle(0xf9ca24);
+ g.fillRect(27, 44, 6, 16);
+ }
+
+ // ── Lanyard (Alabdulakareem) ──
+ if (lanyard) {
+ g.fillStyle(0xf9ca24);
+ g.fillRect(26, 44, 2, 14); g.fillRect(32, 44, 2, 14);
+ g.fillStyle(0xffffff); g.fillRect(25, 54, 10, 7);
+ g.fillStyle(0x0d47a1); g.fillRect(26, 55, 8, 2);
+ }
+
+ // Frame
+ g.lineStyle(2, 0xffffff, 0.15); g.strokeRoundedRect(1, 1, S-2, S-2, 7);
+ }
+
+ // ── Sheeshkabob ─────────────────────────────
+ if (!scene.textures.exists('head_player')) {
+ const g = scene.make.graphics({ add: false });
+ drawFace(g, 0x1565c0, 0xffe0b2, 0x4e342e, 0x1565c0, { hairStyle: 'flat' });
+ g.generateTexture('head_player', S, S); g.destroy();
+ }
+
+ // ── Dr. McCready ─────────────────────────────
+ // Sandy hair: flat top cap, NO big side locks — just a thin trim
+ if (!scene.textures.exists('head_mccready')) {
+ const g = scene.make.graphics({ add: false });
+ // BG + shirt
+ g.fillStyle(0x263238); g.fillRoundedRect(0, 0, S, S, 8);
+ g.fillStyle(0x1c1c1c); g.fillRect(4, 44, 52, 18);
+ // V-neck skin peek
+ g.fillStyle(0xf2d6c9); g.fillTriangle(22, 44, 38, 44, 30, 52);
+ // Neck
+ g.fillStyle(0xf2d6c9); g.fillRect(22, 40, 16, 8);
+ // Head
+ g.fillStyle(0xf2d6c9); g.fillRect(13, 14, 34, 28);
+ // Hair — sandy flat cap only, NO side chunks
+ g.fillStyle(0xb89b7a); g.fillRect(13, 14, 34, 7);
+ // Eyes
+ g.fillStyle(0xffffff); g.fillRect(16, 30, 10, 6); g.fillRect(34, 30, 10, 6);
+ g.fillStyle(0x2a2a2a); g.fillRect(18, 31, 5, 4); g.fillRect(36, 31, 5, 4);
+ g.fillStyle(0xffffff); g.fillRect(19, 31, 2, 1); g.fillRect(37, 31, 2, 1);
+ // Nose
+ g.fillStyle(0xe0b9a8); g.fillRect(27, 36, 6, 3);
+ // Subtle smile
+ g.fillStyle(0xd79a8a); g.fillRect(19, 40, 22, 2);
+ g.lineStyle(2, 0xffffff, 0.15); g.strokeRoundedRect(1, 1, S-2, S-2, 7);
+ g.generateTexture('head_mccready', S, S); g.destroy();
+ }
+
+ // ── Zainuddin ─────────────────────── glasses + beard
+ if (!scene.textures.exists('head_zainuddin')) {
+ const g = scene.make.graphics({ add: false });
+ drawFace(g, 0xb71c1c, 0xf9a825, 0x1a0a00, 0xc62828,
+ { hairStyle: 'flat', glasses: true, beard: true });
+ g.generateTexture('head_zainuddin', S, S); g.destroy();
+ }
+
+ // ── Chu ───────────────────────── spiky hair + smirk
+ if (!scene.textures.exists('head_chu')) {
+ const g = scene.make.graphics({ add: false });
+ drawFace(g, 0x1b5e20, 0xffe0b2, 0x1a1008, 0x2e7d32,
+ { hairStyle: 'spiky', smirk: true });
+ g.generateTexture('head_chu', S, S); g.destroy();
+ }
+
+ // ── Shujahat ──────────────────────── slick hair + moustache + tie
+ if (!scene.textures.exists('head_shujahat')) {
+ const g = scene.make.graphics({ add: false });
+ drawFace(g, 0x4a148c, 0xffd54f, 0x1c0a00, 0x6a1b9a,
+ { hairStyle: 'slick', moustache: true, tie: true });
+ g.generateTexture('head_shujahat', S, S); g.destroy();
+ }
+
+ // ── Perera (female) ───────────── long hair + earrings + pink lips + lashes
+ if (!scene.textures.exists('head_perera')) {
+ const g = scene.make.graphics({ add: false });
+ drawFace(g, 0xbf360c, 0xffe0b2, 0x1a0808, 0xe65100,
+ { hairStyle: 'long', hairCol2: 0x3d1010, earrings: true, lashes: true, lips: true });
+ g.generateTexture('head_perera', S, S); g.destroy();
+ }
+
+ // ── Alabdulakareem ────────────── flat hair + lanyard
+ if (!scene.textures.exists('head_alabd')) {
+ const g = scene.make.graphics({ add: false });
+ drawFace(g, 0x0a2fa6, 0xffe0b2, 0x1a1218, 0x0d47a1,
+ { hairStyle: 'flat', lanyard: true });
+ g.generateTexture('head_alabd', S, S); g.destroy();
+ }
+
+ // ── Jamjoom ───────────────────── wavy hair + goatee
+ if (!scene.textures.exists('head_jamjoom')) {
+ const g = scene.make.graphics({ add: false });
+ drawFace(g, 0x004d40, 0xffd180, 0x3d2008, 0x00695c,
+ { hairStyle: 'wave', goatee: true });
+ g.generateTexture('head_jamjoom', S, S); g.destroy();
+ }
+
+ // ── Jamjoom, Mona (female) ─── long dark hair + earrings + lips + lashes
+ if (!scene.textures.exists('head_jamjoom_f')) {
+ const g = scene.make.graphics({ add: false });
+ drawFace(g, 0x004d40, 0xffd180, 0x1a0808, 0x00695c,
+ { hairStyle: 'long', hairCol2: 0x2a1010, earrings: true, lashes: true, lips: true });
+ g.generateTexture('head_jamjoom_f', S, S); g.destroy();
+ }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// TITLE SCENE
+// ═══════════════════════════════════════════════════════════════
+class TitleScene extends Phaser.Scene {
+ constructor() { super('TitleScene'); }
+
+ create() {
+ ensureTextures(this);
+ ensureHeadshots(this);
+ 
+ // Initialize audio manager and start music on user action (added)
+ if (!window.gameAudio) {
+     window.gameAudio = new ChiptuneAudio();
+     window.gameAudio.init();
+ }
+ 
+ const bg = this.add.graphics();
+ bg.fillGradientStyle(0x0a0a14, 0x0a0a14, 0x1a0a2e, 0x1a0a2e, 1);
+ bg.fillRect(0, 0, W, H);
+ for (let i = 0; i < 100; i++) {
+ const x = Phaser.Math.Between(0, W);
+ const y = Phaser.Math.Between(0, H * 0.55);
+ const r = Math.random() < 0.2 ? 2 : 1;
+ const a = Phaser.Math.FloatBetween(0.4, 1);
+ this.add.circle(x, y, r, 0xffffff, a);
+ }
+ const gr = this.add.graphics();
+ gr.fillStyle(0x1a2e1a); gr.fillRect(0, H * 0.75, W, H * 0.25);
+ gr.fillStyle(0x2e4a2e); gr.fillRect(0, H * 0.75, W, 8);
+ this._drawSilhouettes();
+
+ this.add.text(W / 2, 45, 'ETEC 544', {
+ fontSize: '54px', fontFamily: '"Courier New", monospace',
+ color: '#f9ca24', stroke: '#b8860b', strokeThickness: 8,
+ shadow: { x: 4, y: 4, color: '#000', blur: 0, fill: true }
+ }).setOrigin(0.5);
+ this.add.text(W / 2, 108, 'Intellectual Production #2', {
+ fontSize: '20px', fontFamily: '"Courier New", monospace',
+ color: '#dfe6e9', stroke: '#000', strokeThickness: 3
+ }).setOrigin(0.5);
+ this.add.text(W / 2, 138, '— An Annotated Review of Research —', {
+ fontSize: '13px', fontFamily: '"Courier New", monospace', color: '#74b9ff'
+ }).setOrigin(0.5);
+
+ const py = 377;
+ this.add.image(W / 2 - 80, py, 'player').setScale(3).setDepth(5);
+ this.add.image(W / 2 + 80, py, 'mccready').setScale(3).setDepth(5);
+ this.add.text(W / 2 - 80, py + 70, 'Sheeshkabob\n', {
+ fontSize: '11px', fontFamily: '"Courier New", monospace',
+ color: '#4fc3f7', align: 'center', stroke: '#000', strokeThickness: 2
+ }).setOrigin(0.5);
+ this.add.text(W / 2 + 80, py + 70, 'Dr. McCready\n', {
+ fontSize: '11px', fontFamily: '"Courier New", monospace',
+ color: '#ffd700', align: 'center', stroke: '#000', strokeThickness: 2
+ }).setOrigin(0.5);
+
+ const startTxt = this.add.text(W / 2, 495, '▶ PRESS THE SPACEBAR TO BEGIN ◀', {
+ fontSize: '20px', fontFamily: '"Courier New", monospace',
+ color: '#f9ca24', stroke: '#b8860b', strokeThickness: 4
+ }).setOrigin(0.5);
+ this.tweens.add({ targets: startTxt, alpha: 0.1, duration: 600, yoyo: true, repeat: -1 });
+ this.add.text(W / 2, 530, 'Annotations by Jeremy Sheeshka', {
+ fontSize: '10px', fontFamily: '"Courier New", monospace', color: '#555577'
+ }).setOrigin(0.5);
+
+ // Modified: start audio and then fade to game (added audio)
+ const startGame = () => {
+     if (window.gameAudio) window.gameAudio.startMusic();
+     this.cameras.main.fade(400, 0, 0, 0, false, (c, p) => { if (p === 1) this.scene.start('ArcadeScene'); });
+ };
+ this.input.keyboard.once('keydown-ENTER', startGame);
+ this.input.keyboard.once('keydown-SPACE', startGame);
+ this.cameras.main.fadeIn(600);
+ }
+
+ _drawSilhouettes() {
+ const g = this.add.graphics();
+ g.fillStyle(0x0d0a08);
+ g.fillRect(W - 180, H * 0.45, 160, H * 0.3);
+ for (let i = 0; i < 5; i++) {
+ g.fillStyle(0x1a1508);
+ g.fillRect(W - 175 + i * 30, H * 0.45, 12, H * 0.3);
+ }
+ g.fillStyle(0x100e08);
+ g.fillTriangle(W - 185, H * 0.45, W - 20, H * 0.45, W - 103, H * 0.35);
+ this.add.text(W - 103, H * 0.41, 'UBC', {
+ fontSize: '14px', fontFamily: 'monospace', color: '#f9ca24', fontStyle: 'bold'
+ }).setOrigin(0.5);
+ g.fillStyle(0xf9ca24, 0.3);
+ for (let r = 0; r < 2; r++)
+ for (let c = 0; c < 4; c++)
+ g.fillRect(W - 168 + c * 36, H * 0.49 + r * 30, 20, 18);
+ }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// BASE LEVEL
+// ═══════════════════════════════════════════════════════════════
+class BaseLevel extends Phaser.Scene {
+
+ _initLevel(npcs) {
+ this._npcs = npcs;
+ this._collected = new Set();
+ this._dialogActive = false;
+ this._dlgData = null;
+ this._dlgPage = 0;
+ this._completeTriggered = false;
+ this._exclaims = {};
+ }
+
+ _spawnPlayer(x, y) {
+ this.player = this.physics.add.sprite(x, y, 'player');
+ this.player.setCollideWorldBounds(true);
+ this.player.setDepth(20);
+ this.cursors = this.input.keyboard.createCursorKeys();
+ this._wasd = this.input.keyboard.addKeys({ up: 'W', down: 'S', left: 'A', right: 'D' });
+ }
+
+ _spawnNPCs() {
+ this._npcs.forEach(npc => {
+ npc.sprite = this.physics.add.staticSprite(npc.x, npc.y, npc.tex).setScale(1.5).setDepth(15);
+ this.add.text(npc.x, npc.y + 36, npc.label, {
+ fontSize: '9px', fontFamily: '"Courier New", monospace',
+ color: '#f9ca24', stroke: '#000', strokeThickness: 3
+ }).setOrigin(0.5).setDepth(16);
+ });
+ }
+
+ _buildDialogBox() {
+ const bh = 172;
+ const PS = 84;
+ const PW = PS + 16;
+ const TX = PW + 10;
+
+ this._dlgGroup = this.add.container(0, H - bh).setDepth(80).setVisible(false);
+
+ const bg = this.add.graphics();
+ bg.fillStyle(0x03030c, 0.99); bg.fillRect(0, 0, W, bh);
+ bg.lineStyle(3, 0x74b9ff); bg.strokeRect(1, 1, W - 2, bh - 2);
+ bg.lineStyle(1, 0x1a1a4a); bg.strokeRect(5, 5, W - 10, bh - 10);
+
+ bg.lineStyle(1, 0x2a4a7a, 0.8);
+ bg.lineBetween(PW + 2, 8, PW + 2, bh - 8);
+
+ const px = 8, py = (bh - PS) / 2;
+ bg.fillStyle(0x0d1526, 0.9);
+ bg.fillRoundedRect(px - 2, py - 2, PS + 4, PS + 4, 6);
+
+ this._dlgPortrait = this.add.image(px + PS / 2, bh / 2, 'head_mccready');
+ this._dlgPortrait.setDisplaySize(PS, PS);
+
+ // Name — Courier kept for character identity
+ this._dlgName = this.add.text(TX, 10, '', {
+   fontSize: '14px', fontFamily: '"Courier New", monospace',
+   color: '#f9ca24', fontStyle: 'bold', stroke: '#000', strokeThickness: 2
+ });
+
+ this._dlgNameLine = this.add.graphics();
+ this._dlgNameLine.lineStyle(1, 0x2a4a7a, 0.7);
+ this._dlgNameLine.lineBetween(TX, 30, W - 10, 30);
+
+ // Body — Nunito: clean, anti-aliased, readable
+ this._dlgBody = this.add.text(TX, 37, '', {
+   fontSize: '14px', fontFamily: 'Nunito, Arial, sans-serif',
+   color: '#ffffff', wordWrap: { width: W - TX - 18 }, lineSpacing: 5
+ });
+
+ this._dlgHint = this.add.text(W - 12, bh - 9, 'SPACEBAR to continue', {
+   fontSize: '11px', fontFamily: 'Nunito, Arial, sans-serif', color: '#5a8abf'
+ }).setOrigin(1, 1);
+
+ this._dlgGroup.add([bg, this._dlgPortrait, this._dlgNameLine, this._dlgName, this._dlgBody, this._dlgHint]);
+ this.input.keyboard.on('keydown-SPACE', () => { if (this._dialogActive) this._advanceDlg(); });
+ this.input.keyboard.on('keydown-ENTER', () => { if (this._dialogActive) this._advanceDlg(); });
+ }
+
+ _openDialog(npc) {
+   // ADDED: prevent any dialog from opening once level completion is triggered
+   if (this._completeTriggered) return;
+   if (this._dialogActive) return;
+   // ADDED: play dialogue beep sound when starting conversation
+   if (window.gameAudio) window.gameAudio.playDialogueBeep();
+   this._dlgData = npc;
+   this._dlgPage = 0;
+   this._dialogActive = true;
+   this._dlgGroup.setVisible(true);
+   this._renderDlgPage();
+ }
+
+ _getPortraitKey(npc, pageText) {
+ // Detect back-and-forth speaker from text prefix
+ if (pageText.startsWith('Sheeshkabob:')) return 'head_player';
+ if (pageText.startsWith('Dr. McCready:')) return 'head_mccready';
+ // Map NPC id → headshot key
+ const map = {
+ 'mc_intro': 'head_mccready',
+ 'mc_lib': 'head_mccready',
+ 'zainuddin': 'head_zainuddin',
+ 'chu': 'head_chu',
+ 'shujahat': 'head_shujahat',
+ 'perera': 'head_perera',
+ 'alabd_methods': 'head_alabd',
+ 'alabd_critique': 'head_alabd',
+ 'jamjoom_findings':'head_jamjoom',
+ 'jamjoom_design': 'head_jamjoom',
+ 'alabd': 'head_alabd',
+ 'jamjoom_f': 'head_jamjoom_f',
+ };
+ return map[npc.id] || 'head_mccready';
+ }
+
+ _renderDlgPage() {
+ const d = this._dlgData;
+ const pageText = d.pages[this._dlgPage];
+
+ // Detect speaker for back-and-forth dialogue
+ let displayName = d.name;
+ if (pageText.startsWith('Sheeshkabob:')) displayName = ' Sheeshkabob';
+ else if (pageText.startsWith('Dr. McCready:')) displayName = ' Dr. McCready';
+
+ this._dlgName.setText(displayName);
+ this._dlgBody.setText(pageText);
+
+ // Swap portrait to match current speaker
+ const portraitKey = this._getPortraitKey(d, pageText);
+ if (this._dlgPortrait.texture.key !== portraitKey) {
+ this._dlgPortrait.setTexture(portraitKey);
+ }
+
+ const last = this._dlgPage >= d.pages.length - 1;
+ this._dlgHint.setText(last ? '[ SPACE / ENTER ] close ' : '[ SPACE / ENTER ] next ▶');
+ }
+
+ _advanceDlg() {
+ const d = this._dlgData;
+ if (this._dlgPage < d.pages.length - 1) {
+ this._dlgPage++;
+ this._renderDlgPage();
+ } else {
+ this._dialogActive = false;
+ this._dlgGroup.setVisible(false);
+ if (d.required !== false && !this._collected.has(d.id)) {
+ this._collected.add(d.id);
+ d.sprite.setTint(0x888888);
+ this._sparkle(d.sprite.x, d.sprite.y);
+ this._updateHUD();
+ this._checkComplete();
+ }
+ if (this._onDialogClosed) this._onDialogClosed(d);
+ }
+ }
+
+ _sparkle(x, y) {
+ const symbols = ['', '', '', '', ''];
+ for (let i = 0; i < 5; i++) {
+ const sx = x + Phaser.Math.Between(-30, 30);
+ const t = this.add.text(sx, y - 10, symbols[i % symbols.length], {
+ fontSize: '16px', color: '#f9ca24'
+ }).setDepth(90);
+ this.tweens.add({
+ targets: t, y: t.y - 50, alpha: 0, duration: 900,
+ delay: i * 80, onComplete: () => t.destroy()
+ });
+ }
+ }
+
+ _buildHUD(levelLabel) {
+ this._hudBg = this.add.graphics().setDepth(79);
+ this._hudText = this.add.text(10, 8, '', {
+ fontSize: '12px', fontFamily: '"Courier New", monospace',
+ color: '#f9ca24', stroke: '#000', strokeThickness: 2
+ }).setDepth(80);
+ this.add.text(W - 10, 8, levelLabel, {
+ fontSize: '10px', fontFamily: '"Courier New", monospace',
+ color: '#74b9ff', stroke: '#000', strokeThickness: 2
+ }).setOrigin(1, 0).setDepth(80);
+ this._updateHUD();
+ }
+
+ _updateHUD() {
+ const req = this._npcs.filter(n => n.required !== false);
+ const done = req.filter(n => this._collected.has(n.id)).length;
+ this._hudText.setText(` Insights: ${done} / ${req.length}`);
+ }
+
+ _checkComplete() {
+ if (this._completeTriggered) return;
+ const req = this._npcs.filter(n => n.required !== false);
+ if (req.every(n => this._collected.has(n.id))) {
+ this._completeTriggered = true;
+ this.time.delayedCall(600, () => this._onComplete());
+ }
+ }
+
+ _onComplete() { /* override */ }
+
+ _setupOverlap() {
+ this._npcs.forEach(npc => {
+ this.physics.add.overlap(this.player, npc.sprite, () => {
+   // ADDED: also prevent overlap dialog if level completion is already triggered
+   if (!this._dialogActive && !this._collected.has(npc.id) && this._shouldAllowDialog?.(npc) !== false && !this._completeTriggered) {
+     this._openDialog(npc);
+   }
+ });
+ });
+ }
+
+ update() {
+ if (this._dialogActive) { this.player.setVelocity(0, 0); return; }
+ const c = this.cursors, w = this._wasd;
+ let vx = 0, vy = 0;
+ if (c.left.isDown || w.left.isDown) vx = -SPEED;
+ else if (c.right.isDown || w.right.isDown) vx = SPEED;
+ if (c.up.isDown || w.up.isDown) vy = -SPEED;
+ else if (c.down.isDown || w.down.isDown) vy = SPEED;
+ this.player.setVelocity(vx, vy);
+ if (vx < 0) this.player.setFlipX(true);
+ else if (vx > 0) this.player.setFlipX(false);
+ }
+
+ _showLevelComplete(title, summary, nextScene, promptOverride) {
+  const pw = 540, ph = 320;
+  const px = W / 2 - pw / 2, py = H / 2 - ph / 2;
+
+  // Dim overlay
+  const ov = this.add.rectangle(W / 2, H / 2, W, H, 0x000000, 0).setDepth(200);
+  this.tweens.add({ targets: ov, fillAlpha: 0.85, duration: 400 });
+
+  // Panel
+  const panel = this.add.graphics().setDepth(201);
+  panel.fillStyle(0x06060f, 0.98);
+  panel.fillRoundedRect(px, py, pw, ph, 14);
+  panel.lineStyle(3, 0xf9ca24);
+  panel.strokeRoundedRect(px, py, pw, ph, 14);
+  panel.lineStyle(1, 0x2a2a5a);
+  panel.strokeRoundedRect(px + 5, py + 5, pw - 10, ph - 10, 11);
+
+  // "— LEVEL COMPLETE —" small label at top
+  this.add.text(W / 2, py + 26, '— LEVEL COMPLETE —', {
+    fontSize: '10px', fontFamily: '"Courier New", monospace',
+    color: '#74b9ff', letterSpacing: 3
+  }).setOrigin(0.5).setDepth(202);
+
+  // Title — smaller so it stays in its lane
+  this.add.text(W / 2, py + 60, title, {
+    fontSize: '22px', fontFamily: '"Courier New", monospace',
+    color: '#f9ca24', stroke: '#000', strokeThickness: 4
+  }).setOrigin(0.5).setDepth(202);
+
+  // Divider under title
+  const dl = this.add.graphics().setDepth(202);
+  dl.lineStyle(1, 0x2a4a7a, 0.8);
+  dl.lineBetween(px + 30, py + 88, px + pw - 30, py + 88);
+
+  // Summary text — sits in the middle zone with full room
+  this.add.text(W / 2, py + 88 + 8, summary, {
+    fontSize: '14px', fontFamily: 'Nunito, Arial, sans-serif',
+    color: '#ffffff', align: 'center',
+    lineSpacing: 6, wordWrap: { width: pw - 60 }
+  }).setOrigin(0.5, 0).setDepth(202);
+
+  // Divider above prompt
+  const dl2 = this.add.graphics().setDepth(202);
+  dl2.lineStyle(1, 0x2a4a7a, 0.8);
+  dl2.lineBetween(px + 30, py + ph - 48, px + pw - 30, py + ph - 48);
+
+  // Blinking prompt pinned to bottom
+  const promptText = promptOverride || '  PRESS SPACEBAR TO CONTINUE TO LEVEL 2  ';
+  const prompt = this.add.text(W / 2, py + ph - 26, promptText, {
+    fontSize: '13px', fontFamily: 'Nunito, Arial, sans-serif',
+    color: '#f9ca24', fontStyle: 'bold'
+  }).setOrigin(0.5).setDepth(202);
+  this.tweens.add({ targets: prompt, alpha: 0.15, duration: 560, yoyo: true, repeat: -1 });
+
+  this.input.keyboard.once('keydown-ENTER', () => {
+    this.cameras.main.fade(500, 0, 0, 0, false, (c, p) => { if (p === 1) this.scene.start(nextScene); });
+  });
+  this.input.keyboard.once('keydown-SPACE', () => {
+    this.cameras.main.fade(500, 0, 0, 0, false, (c, p) => { if (p === 1) this.scene.start(nextScene); });
+  });
+ }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// LEVEL 1: UBC SCARFE FOYER — SEQUENTIAL LEARNING PATH
+// Order: McCready intro → Zainuddin → Chu → Shujahat → Perera → McCready final
+// ═══════════════════════════════════════════════════════════════
+class ArcadeScene extends BaseLevel {
+ constructor() { super('ArcadeScene'); }
+
+ create() {
+ ensureTextures(this);
+ ensureHeadshots(this);
+ // Set audio to Level 1 music (active melody A/B pattern)
+ if (window.gameAudio) window.gameAudio.setLevel(1);
+ this._walkDir = 1;
+
+ const npcs = [
+ // Dr. McCready — at reception desk
+ {
+ id: 'mc_intro', required: false,
+ name: ' Dr. McCready',
+ label: 'Dr.McCready',
+ tex: 'mccready', x: 400, y: 144,
+ pages: []
+ },
+ // Zainuddin — at computer station (left side)
+ {
+ id: 'zainuddin', required: true,
+ name: ' Zainuddin — Summary',
+ label: 'Dr. Zainuddin',
+ tex: 'npc_zainuddin', x: 148, y: 265,
+ pages: [
+ "Our research synthesizes studies of gamification in education published in the Web of Science database from 2016–2019. \n\n\ We identified three core positive outcomes: enhanced motivation and engagement, improved academic achievement, and stronger social connection.",
+"Self-Determination Theory (SDT) was the underlying framework for most studies, linking game elements to learners’ needs for competence, autonomy, and relatedness. \n\n\ However, contradictory findings emerged: poorly designed gamification can be ineffective, with students chasing rewards rather than meaningfully engaging with content."
+ ]
+ },
+ // Chu — beside bookshelf (right side)
+ {
+ id: 'chu', required: true,
+ name: ' Chu — Research Methods',
+ label: 'Dr. Chu',
+ tex: 'npc_chu', x: 643, y: 210,
+ pages: [
+ "We used rigorous thematic and content analysis across all 46 studies, evaluating methodological approaches, theoretical frameworks, game mechanics, participant demographics, and learning outcomes across diverse cultural contexts.",
+"Our research was a qualitative‑dominant mixed methods review, interpretive and thematic, incorporating descriptive statistics to identify trends across the literature.",
+"Methodological strengths include multi‑researcher validation and clear inclusion criteria.\n\n\ A key limitation: we restricted final inclusion to articles indexed in only one database, which may have excluded relevant studies published elsewhere."
+ ]
+ },
+ // Shujahat — walking back and forth (centre foyer)
+ {
+ id: 'shujahat', required: true,
+ name: ' Shujahat — Key Findings',
+ label: 'Dr. Shujahat',
+ tex: 'npc_shujahat', x: 300, y: 370,
+ isWalker: true, walkLeft: 200, walkRight: 530,
+ pages: [
+ "While points, badges, and leaderboards (PBLs) were the most common game mechanics, leaderboards were rated the most engaging.",
+"That said, findings aren’t all positive. Some studies found gamification ineffective or counterproductive due to technical issues, poor instructional design, or external rewards undermining engagement.",
+"When poorly designed, extrinsic incentives can undermine intrinsic motivation, shifting focus from learning to reward‑chasing.\n\n\ Game mechanics must align with genuine learning objectives, not just surface‑level engagement."
+ ]
+ },
+ // Perera — near bulletin board (right side lower)
+ {
+ id: 'perera', required: true,
+ name: ' Perera — Critical Evaluation',
+ label: 'Dr. Perera',
+ tex: 'npc_perera', x: 628, y: 438,
+ pages: [
+ "While our review included multi‑researcher validation and clear inclusion criteria, it flags theoretical gaps like an overreliance on Self‑Determination Theory and the lack of gamification design frameworks.",
+"Other limitations: most studies were short‑term and lacked effect size analysis.\n\n\ One strength was its emphasis on low‑tech gamification, making findings applicable beyond high‑tech contexts."
+ ]
+ }
+ ];
+
+ this._initLevel(npcs);
+ this._buildScarfeFoyer();
+ this._spawnNPCs(); // overridden below to handle walker
+ this._spawnPlayer(400, 470);
+ this._buildDialogBox();
+ this._setupOverlap();
+
+ // ── Sequential logic ──────────────────────────────────────
+ this._step = 0;
+ this._activeNpcId = 'mc_intro';
+ this._mcNpc = npcs.find(n => n.id === 'mc_intro');
+
+ this._mcFinalPages = [
+ "Dr. McCready: Good work, Sheeshkabob! On to Level 2!"
+ ];
+
+ this._currentExclaim = null;
+ this._updateExclamation();
+ this._buildHUD('LEVEL 1: SCARFE FOYER');
+ this.cameras.main.fadeIn(600);
+ }
+
+ // ── Override _spawnNPCs to support the walking NPC ──────────
+ _spawnNPCs() {
+ this._npcs.forEach(npc => {
+ if (npc.isWalker) {
+ // Dynamic sprite so it can actually move
+ npc.sprite = this.physics.add.sprite(npc.x, npc.y, npc.tex)
+ .setScale(1.5).setDepth(15);
+ npc.sprite.setImmovable(true);
+ // Dark pill background behind label for readability
+ npc._nameBg = this.add.rectangle(npc.x, npc.y + 36, 0, 14, 0x001a38, 0.82).setDepth(15).setOrigin(0.5);
+ npc._nameLabel = this.add.text(npc.x, npc.y + 36, npc.label, {
+ fontSize: '10px', fontFamily: '"Courier New", monospace',
+ color: '#f9ca24', stroke: '#001a38', strokeThickness: 4,
+ fontStyle: 'bold'
+ }).setOrigin(0.5).setDepth(16);
+ // Size the bg pill to match text
+ npc._nameLabel.once('ready', () => {});
+ this.time.delayedCall(50, () => {
+ if (npc._nameBg) npc._nameBg.setSize(npc._nameLabel.width + 10, 16);
+ });
+ } else {
+ npc.sprite = this.physics.add.staticSprite(npc.x, npc.y, npc.tex)
+ .setScale(1.5).setDepth(15);
+ // Dark pill background
+ const lbl = this.add.text(npc.x, npc.y + 36, npc.label, {
+ fontSize: '10px', fontFamily: '"Courier New", monospace',
+ color: '#f9ca24', stroke: '#001a38', strokeThickness: 4,
+ fontStyle: 'bold'
+ }).setOrigin(0.5).setDepth(16);
+ this.time.delayedCall(50, () => {
+ this.add.rectangle(npc.x, npc.y + 36, lbl.width + 10, 16, 0x001a38, 0.82)
+ .setDepth(15).setOrigin(0.5);
+ lbl.setDepth(17); // ensure text sits above pill
+ });
+ }
+ });
+ }
+
+ // ── Sequential dialog gating ──────────────────────────────
+ _shouldAllowDialog(npc) {
+ return npc.id === this._activeNpcId;
+ }
+
+ _openDialog(npc) {
+ if (npc.id === 'mc_intro') {
+ if (this._step === 0) {
+ npc.pages = [
+ "Welcome, Sheeshkabob! Today we're examining Zainuddin et al. (2020) a systematic review of gamification in education.\n\nTalk to the four researchers to collect their insights. Off you go! "
+ ];
+ } else if (this._step === 5) {
+ npc.pages = this._mcFinalPages;
+ }
+ }
+ super._openDialog(npc);
+ }
+
+ _onDialogClosed(npc) {
+ if (npc.id === 'mc_intro') {
+ if (this._step === 0) {
+ this._step = 1;
+ this._activeNpcId = 'zainuddin';
+ } else if (this._step === 5) {
+   // Immediately mark as completed to prevent any further dialogs
+   this._completeTriggered = true;
+   this._onComplete();
+   return;
+ }
+ } else {
+ if (this._step === 1 && npc.id === 'zainuddin') { this._step = 2; this._activeNpcId = 'chu'; }
+ else if (this._step === 2 && npc.id === 'chu') { this._step = 3; this._activeNpcId = 'shujahat'; }
+ else if (this._step === 3 && npc.id === 'shujahat') { this._step = 4; this._activeNpcId = 'perera'; }
+ else if (this._step === 4 && npc.id === 'perera') { this._step = 5; this._activeNpcId = 'mc_intro'; }
+ }
+ this._updateExclamation();
+ }
+
+ // ── Exclamation — no tween for walker (we bob manually) ───
+ _updateExclamation() {
+ if (this._currentExclaim) {
+ this.tweens.killTweensOf(this._currentExclaim);
+ this._currentExclaim.destroy();
+ this._currentExclaim = null;
+ }
+ const npc = this._npcs.find(n => n.id === this._activeNpcId);
+ if (npc && npc.sprite) {
+ this._currentExclaim = this.add.image(npc.sprite.x, npc.sprite.y - 50, 'exclaim')
+ .setScale(2.2).setDepth(25);
+ if (!npc.isWalker) {
+ // Bob up and down + pulse scale for static NPCs
+ this.tweens.add({
+ targets: this._currentExclaim,
+ y: this._currentExclaim.y - 7,
+ scaleX: 2.5, scaleY: 2.5,
+ duration: 420, yoyo: true, repeat: -1, ease: 'Sine.easeInOut'
+ });
+ }
+ }
+ }
+
+ // ── No auto-complete: only McCready's final dialogue triggers it
+ _checkComplete() { /* intentionally empty */ }
+
+ // ── Update: move walker + track label + bob exclaim ────────
+ update() {
+ super.update();
+ const walker = this._npcs && this._npcs.find(n => n.isWalker);
+ if (!walker || !walker.sprite) return;
+
+ if (this._dialogActive || this._collected.has(walker.id)) {
+ walker.sprite.setVelocityX(0);
+ } else {
+ const speed = 26;
+ if (walker.sprite.x >= walker.walkRight) this._walkDir = -1;
+ if (walker.sprite.x <= walker.walkLeft) this._walkDir = 1;
+ walker.sprite.setVelocityX(speed * this._walkDir);
+ walker.sprite.setFlipX(this._walkDir < 0);
+ }
+
+ // Keep name label + bg above walker
+ if (walker._nameLabel) {
+ walker._nameLabel.setPosition(walker.sprite.x, walker.sprite.y + 36);
+ if (walker._nameBg) walker._nameBg.setPosition(walker.sprite.x, walker.sprite.y + 36);
+ }
+
+ // Manual sin-bob for exclaim when walker is the active NPC
+ if (walker.id === this._activeNpcId && this._currentExclaim) {
+ const bob = Math.sin(this.time.now / 280) * 5;
+ const pulse = 2.2 + Math.sin(this.time.now / 420) * 0.15;
+ this._currentExclaim.setPosition(walker.sprite.x, walker.sprite.y - 50 + bob);
+ this._currentExclaim.setScale(pulse);
+ }
+ }
+
+ // ══════════════════════════════════════════════════════════════
+ // UBC SCARFE FOYER MAP
+ // ══════════════════════════════════════════════════════════════
+ _buildScarfeFoyer() {
+ const g = this.add.graphics();
+
+ // ── Stone tile floor ──────────────────────────────────────
+ for (let row = 0; row <= Math.ceil(H / 64); row++) {
+ for (let col = 0; col <= Math.ceil(W / 64); col++) {
+ const alt = (row + col) % 2 === 0;
+ g.fillStyle(alt ? 0xd2ccc3 : 0xc8c2b8);
+ g.fillRect(col * 64, row * 64, 64, 64);
+ }
+ }
+ // Grout lines
+ g.lineStyle(1, 0xb4aea6, 0.55);
+ for (let x = 0; x <= W; x += 64) g.lineBetween(x, 0, x, H);
+ for (let y = 0; y <= H; y += 64) g.lineBetween(0, y, W, y);
+
+ // ── Back wall (visible strip at top) ─────────────────────
+ g.fillStyle(0xe8e3da);
+ g.fillRect(0, 0, W, 110);
+ // Chair rail / dado band
+ g.fillStyle(0xd5cdc0);
+ g.fillRect(0, 98, W, 14);
+ g.fillStyle(0xbfb8ae);
+ g.fillRect(0, 107, W, 4);
+
+ // ── Side walls ────────────────────────────────────────────
+ g.fillStyle(0xddd7ce);
+ g.fillRect(0, 0, 57, H);
+ g.fillRect(W - 57, 0, 57, H);
+ // Trim strip
+ g.fillStyle(0xbbb4aa);
+ g.fillRect(52, 0, 6, H);
+ g.fillRect(W - 58, 0, 6, H);
+
+ // ── UBC Scarfe banner ─────────────────────────────────────
+ g.fillStyle(0x002145);
+ g.fillRect(232, 7, 336, 60);
+ g.lineStyle(3, 0xf9ca24);
+ g.strokeRect(236, 10, 328, 54);
+ g.lineStyle(1, 0xf9ca24, 0.35);
+ g.strokeRect(240, 14, 320, 46);
+
+ // ── Left secondary banner (notice) ───────────────────────
+ g.fillStyle(0x002145, 0.7);
+ g.fillRect(57, 7, 140, 38);
+ g.lineStyle(1.5, 0x74b9ff, 0.5);
+ g.strokeRect(60, 10, 134, 32);
+
+ // ── Columns flanking the reception desk ──────────────────
+ const drawColumn = (cx) => {
+ g.fillStyle(0x9a8e80, 0.18); g.fillRect(cx + 6, 108, 28, H - 108);
+ g.fillStyle(0xf0ebe0); g.fillRect(cx, 108, 22, H - 108);
+ g.fillStyle(0xfaf8f2); g.fillRect(cx + 3, 108, 5, H - 108);
+ g.fillStyle(0xddd5c5); g.fillRect(cx - 6, 100, 34, 12); // capital
+ g.fillStyle(0xddd5c5); g.fillRect(cx - 6, H - 20, 34, 10); // base
+ };
+ drawColumn(248); // left column (x: 248–270)
+ drawColumn(536); // right column (x: 536–558)
+
+ // ── Reception desk (Dr. McCready — upper centre) ──────────
+ // Desk body (dark wood)
+ g.fillStyle(0x3e2723);
+ g.fillRect(272, 157, 256, 52);
+ // Desk top surface (lighter wood grain)
+ g.fillStyle(0x5d4037);
+ g.fillRect(272, 150, 256, 11);
+ // Wood grain lines on top
+ g.fillStyle(0x6d4c41, 0.4);
+ for (let i = 0; i < 8; i++) g.fillRect(275 + i * 30, 150, 2, 11);
+ // Desk front face
+ g.fillStyle(0x4e342e);
+ g.fillRect(276, 164, 248, 38);
+ // Panel grooves on front face
+ g.lineStyle(1, 0x3e2723, 0.6);
+ g.strokeRect(284, 170, 110, 25);
+ g.strokeRect(406, 170, 110, 25);
+ // Desk legs
+ g.fillStyle(0x3e2723);
+ g.fillRect(277, 198, 12, 12); g.fillRect(510, 198, 12, 12);
+ // Nameplate (gold)
+ g.fillStyle(0xf9ca24);
+ g.fillRect(358, 156, 84, 14);
+ g.lineStyle(1, 0xb8960c);
+ g.strokeRect(358, 156, 84, 14);
+ // Papers on desk
+ g.fillStyle(0xffffff); g.fillRect(287, 151, 34, 22);
+ g.fillStyle(0xf5f5f5); g.fillRect(291, 151, 28, 20);
+ g.fillStyle(0x1565c0, 0.3); g.fillRect(293, 154, 22, 2);
+ g.fillStyle(0x1565c0, 0.3); g.fillRect(293, 159, 18, 2);
+ g.fillStyle(0x1565c0, 0.3); g.fillRect(293, 164, 14, 2);
+ // Monitor on desk (right side)
+ g.fillStyle(0x1a1a1a); g.fillRect(452, 136, 56, 42);
+ g.fillStyle(0x263238); g.fillRect(455, 139, 50, 36);
+ g.fillStyle(0x29b6f6, 0.7); g.fillRect(457, 141, 46, 32);
+ g.fillStyle(0xffffff, 0.5); g.fillRect(459, 143, 32, 3);
+ g.fillStyle(0xffffff, 0.25); g.fillRect(459, 149, 38, 2);
+ g.fillStyle(0xffffff, 0.25); g.fillRect(459, 154, 34, 2);
+ g.fillStyle(0xffffff, 0.25); g.fillRect(459, 159, 28, 2);
+ g.fillStyle(0x424242); g.fillRect(474, 176, 10, 6); // stand
+
+ // ── Computer station — left side (Zainuddin) ──────────────
+ // Desk
+ g.fillStyle(0x4a3728); g.fillRect(62, 248, 140, 34);
+ g.fillStyle(0x5a4535); g.fillRect(62, 243, 140, 8);
+ // Wood grain
+ g.fillStyle(0x6d4c41, 0.25);
+ for (let i = 0; i < 4; i++) g.fillRect(65 + i * 32, 243, 2, 8);
+ // Legs
+ g.fillStyle(0x3e2520); g.fillRect(68, 280, 8, 16); g.fillRect(184, 280, 8, 16);
+ // Monitor
+ g.fillStyle(0x1a1a1a); g.fillRect(105, 193, 62, 52);
+ g.fillStyle(0x263238); g.fillRect(108, 196, 56, 46);
+ g.fillStyle(0x00acc1, 0.82); g.fillRect(110, 198, 52, 42);
+ // Screen content (academic document look)
+ g.fillStyle(0xffffff, 0.6); g.fillRect(112, 200, 40, 3); // title
+ g.fillStyle(0x90caf9, 0.5); g.fillRect(112, 207, 46, 2);
+ g.fillStyle(0x90caf9, 0.5); g.fillRect(112, 212, 42, 2);
+ g.fillStyle(0x90caf9, 0.5); g.fillRect(112, 217, 38, 2);
+ g.fillStyle(0x90caf9, 0.5); g.fillRect(112, 222, 44, 2);
+ g.fillStyle(0x4caf50, 0.75); g.fillRect(112, 229, 24, 9); // button
+ // Monitor stand
+ g.fillStyle(0x424242); g.fillRect(131, 243, 10, 7); g.fillRect(124, 248, 24, 4);
+ // Chair (behind desk, Zainuddin sits here)
+ g.fillStyle(0x1a237e); g.fillRect(94, 280, 56, 14); // seat
+ g.fillStyle(0x283593); g.fillRect(94, 257, 11, 38); // back
+ g.fillStyle(0x212121);
+ g.fillRect(96, 292, 6, 14); g.fillRect(140, 292, 6, 14); // legs
+
+ // ── Bookshelf — right side wall (Chu) ────────────────────
+ const bsx = 676;
+ // Unit frame
+ g.fillStyle(0x3e2000); g.fillRect(bsx, 90, 66, 228);
+ // Top & base boards
+ g.fillStyle(0x5a3000); g.fillRect(bsx - 2, 88, 70, 7);
+ g.fillStyle(0x5a3000); g.fillRect(bsx - 2, 312, 70, 8);
+ // Shelves + books
+ const shelfCols = [0x27ae60,0xe74c3c,0x3498db,0x8e44ad,0xf39c12,0x16a085,0xe67e22,0x2980b9,0xc0392b,0x1abc9c,0xe91e63,0x009688];
+ for (let s = 0; s < 4; s++) {
+ g.fillStyle(0x6d4c41); g.fillRect(bsx, 90 + s * 54, 66, 5);
+ for (let b = 0; b < 4; b++) {
+ const bw = 13, bh = 44;
+ g.fillStyle(shelfCols[(s * 4 + b) % shelfCols.length]);
+ g.fillRect(bsx + 4 + b * (bw + 1), 96 + s * 54, bw, bh);
+ g.fillStyle(0xffffff, 0.2);
+ g.fillRect(bsx + 4 + b * (bw + 1), 96 + s * 54, 3, bh);
+ // Book title stripe
+ g.fillStyle(0xffffff, 0.12);
+ g.fillRect(bsx + 6 + b * (bw + 1), 108 + s * 54, 9, 2);
+ }
+ }
+
+ // ── Bulletin board — right lower (Perera reads here) ─────
+ // Frame
+ g.fillStyle(0x6d4c2e); g.fillRect(613, 345, 108, 96);
+ // Cork surface
+ g.fillStyle(0xc4903a); g.fillRect(617, 349, 100, 88);
+ // Cork texture
+ g.fillStyle(0xb8852e, 0.4);
+ for (let r = 0; r < 3; r++)
+ for (let c = 0; c < 4; c++)
+ g.fillCircle(624 + c * 24, 358 + r * 28, 3);
+ // Papers
+ const boardPapers = [0xffffff, 0xfff9c4, 0xe8f5e9, 0xfce4ec];
+ [[0,0],[53,0],[0,48],[53,48]].forEach(([dx, dy], i) => {
+ g.fillStyle(boardPapers[i]);
+ g.fillRect(620 + dx, 353 + dy, 48, 38);
+ g.fillStyle(0x90a0a0, 0.45);
+ for (let l = 0; l < 3; l++) g.fillRect(623 + dx, 358 + dy + l * 9, 38, 2);
+ });
+ // Thumbtacks
+ g.fillStyle(0xe74c3c);
+ [[620,353],[667,353],[620,399],[667,399]].forEach(([tx,ty]) => g.fillCircle(tx, ty, 3));
+
+ // ── Bench/seating — left lower (waiting area) ─────────────
+ g.fillStyle(0x4e342e); g.fillRect(62, 378, 120, 20); // bench seat
+ g.fillStyle(0x5d4037); g.fillRect(62, 374, 120, 7); // seat top surface
+ // Wood grain on seat
+ g.fillStyle(0x6d4c41, 0.3);
+ for (let i = 0; i < 3; i++) g.fillRect(70 + i * 36, 374, 2, 7);
+ // Legs
+ g.fillStyle(0x3e2723);
+ g.fillRect(68, 396, 10, 18); g.fillRect(162, 396, 10, 18);
+ // Back support posts
+ g.fillStyle(0x4e342e);
+ g.fillRect(62, 356, 8, 24); g.fillRect(174, 356, 8, 24);
+ // Back rail
+ g.fillStyle(0x5d4037); g.fillRect(62, 352, 120, 7);
+
+ // ── Front entrance doors — bottom centre ──────────────────
+ // Outer surround / threshold
+ g.fillStyle(0x002145); g.fillRect(284, H - 80, 232, 80);
+ // Reveal header above doors
+ g.fillStyle(0x001530); g.fillRect(284, H - 84, 232, 8);
+ // Transom window (above doors, semi-transparent)
+ g.fillStyle(0x90cae0, 0.45); g.fillRect(289, H - 80, 222, 16);
+ g.lineStyle(1, 0x002145); g.lineBetween(400, H - 80, 400, H - 64);
+ // Left door glass panel
+ g.fillStyle(0xadd8e8, 0.82); g.fillRect(289, H - 64, 106, 64);
+ // Right door glass panel
+ g.fillStyle(0xadd8e8, 0.82); g.fillRect(405, H - 64, 106, 64);
+ // Horizontal door rails
+ g.fillStyle(0x001a38);
+ g.fillRect(289, H - 36, 106, 4); g.fillRect(405, H - 36, 106, 4);
+ // Centre mullion
+ g.fillStyle(0x002145); g.fillRect(396, H - 64, 12, 64);
+ // Door handles
+ g.fillStyle(0xd4a843);
+ g.fillRect(380, H - 50, 12, 4); g.fillRect(408, H - 50, 12, 4);
+ // Outer frame trim
+ g.fillStyle(0x001e3a);
+ g.fillRect(278, H - 85, 8, 85); g.fillRect(514, H - 85, 8, 85);
+ // Reflection glint on glass
+ g.fillStyle(0xffffff, 0.18); g.fillRect(292, H - 62, 8, 30);
+ g.fillStyle(0xffffff, 0.18); g.fillRect(408, H - 62, 8, 30);
+ // Floor mat
+ g.fillStyle(0x002145); g.fillRect(308, H - 14, 184, 14);
+ g.lineStyle(1.5, 0xf9ca24); g.strokeRect(311, H - 12, 178, 10);
+
+ // ── Potted plants flanking doors ──────────────────────────
+ [[258, H - 12], [542, H - 12]].forEach(([px, py]) => {
+ // Pot
+ g.fillStyle(0x795548); g.fillEllipse(px, py - 12, 28, 24);
+ g.fillStyle(0x6d4c41); g.fillRect(px - 14, py - 4, 28, 6);
+ // Plant foliage
+ g.fillStyle(0x2e7d32); g.fillEllipse(px, py - 34, 34, 30);
+ g.fillStyle(0x388e3c); g.fillEllipse(px - 10, py - 40, 22, 20);
+ g.fillEllipse(px + 10, py - 40, 22, 20);
+ g.fillStyle(0x1b5e20); g.fillEllipse(px, py - 46, 18, 16);
+ });
+
+ // ── Overhead lighting (three recessed fixtures) ───────────
+ [[190, 70], [400, 70], [610, 70]].forEach(([lx, ly]) => {
+ // Fixture housing
+ g.fillStyle(0xc8bfb0); g.fillRect(lx - 26, ly - 14, 52, 16);
+ g.fillStyle(0xfffde7, 0.92); g.fillRect(lx - 22, ly - 12, 44, 12);
+ // Light glow on floor (very subtle)
+ g.fillStyle(0xfffde7, 0.025); g.fillEllipse(lx, ly + 260, 280, 420);
+ g.fillStyle(0xfffde7, 0.04); g.fillEllipse(lx, ly + 130, 180, 260);
+ g.fillStyle(0xfffde7, 0.055); g.fillEllipse(lx, ly + 60, 110, 150);
+ });
+
+ // ── Small UBC flag / pennant top-left ─────────────────────
+ g.fillStyle(0x002145); g.fillRect(62, 15, 54, 36);
+ g.fillStyle(0xf9ca24); // UBC thunder bird simplified
+ g.fillRect(70, 22, 38, 5);
+ g.fillRect(80, 22, 4, 18);
+
+ // ── Text overlays ─────────────────────────────────────────
+ this.add.text(400, 33, 'UBC SCARFE EDUCATION', {
+ fontSize: '15px', fontFamily: '"Courier New", monospace',
+ color: '#f9ca24', fontStyle: 'bold'
+ }).setOrigin(0.5).setDepth(5);
+
+ this.add.text(400, 56, 'F A C U L T Y O F E D U C A T I O N', {
+ fontSize: '9px', fontFamily: '"Courier New", monospace', color: '#74b9ff'
+ }).setOrigin(0.5).setDepth(5);
+
+ this.add.text(130, 26, 'INFO', {
+ fontSize: '8px', fontFamily: '"Courier New", monospace',
+ color: '#74b9ff', fontStyle: 'bold'
+ }).setOrigin(0.5).setDepth(5);
+
+ this.add.text(400, 163, 'DR. McCREADY', {
+ fontSize: '7px', fontFamily: '"Courier New", monospace',
+ color: '#1a0a00', fontStyle: 'bold'
+ }).setOrigin(0.5).setDepth(6);
+
+ this.add.text(667, 340, 'NOTICES', {
+ fontSize: '8px', fontFamily: '"Courier New", monospace',
+ color: '#4e342e', fontStyle: 'bold'
+ }).setOrigin(0.5).setDepth(6);
+
+ this.add.text(400, H - 7, 'E D U C A T I O N', {
+ fontSize: '7px', fontFamily: '"Courier New", monospace', color: '#f9ca24'
+ }).setOrigin(0.5).setDepth(6);
+
+ // ── Watermark ─────────────────────────────────────────────
+ this.add.text(W / 2, H / 2, 'SCARFE\nFOYER', {
+ fontSize: '60px', fontFamily: '"Courier New", monospace',
+ color: '#a8a09a', align: 'center'
+ }).setOrigin(0.5).setAlpha(0.065).setDepth(1);
+ }
+
+ _onComplete() {
+ // Play Level 1 fanfare, then show the complete screen
+ if (window.gameAudio) {
+     window.gameAudio.playLevelComplete(1, () => {
+         this._showLevelComplete(
+             'FOYER CLEARED!',
+             "Reference:\n\n Zainuddin, Z., Chu, S. K. W., Shujahat, M., & Perera, C. J. (2020). The impact of gamification on learning and instruction: A systematic review of empirical evidence. Educational Research Review, 30, Article 100326.",
+             'LibraryScene'
+         );
+     });
+ } else {
+     this._showLevelComplete(
+         'FOYER CLEARED!',
+         "Reference:\n\n Zainuddin, Z., Chu, S. K. W., Shujahat, M., & Perera, C. J. (2020). The impact of gamification on learning and instruction: A systematic review of empirical evidence. Educational Research Review, 30, Article 100326.",
+         'LibraryScene'
+     );
+ }
+ }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// LEVEL 2: NEVILLE SCARFE EDUCATION LIBRARY — SEQUENTIAL PATH
+// Order: McCready intro → Alabdulakareem (summary + findings)
+// → Jamjoom Mona (methods + approach) → McCready final
+// ═══════════════════════════════════════════════════════════════
+class LibraryScene extends BaseLevel {
+ constructor() { super('LibraryScene'); }
+
+ create() {
+ ensureTextures(this);
+ ensureHeadshots(this);
+ // Set audio to Level 2 music (more confident melody)
+ if (window.gameAudio) window.gameAudio.setLevel(2);
+ // Re-start music for level 2 (in case it was stopped by a jingle)
+ if (window.gameAudio) window.gameAudio.startMusic();
+
+ const npcs = [
+ // Dr. McCready — at information desk, upper centre
+ {
+ id: 'mc_lib', required: false,
+ name: ' Dr. McCready',
+ label: 'Dr.McCready',
+ tex: 'mccready', x: 400, y: 138,
+ pages: [] // set dynamically
+ },
+ // Alabdulakareem, Eatedal — at computer workstation, left side
+ {
+ id: 'alabd', required: true,
+ name: ' Alabdulakareem — Summary & Key Findings',
+ label: 'Dr. Alabdulakareem',
+ tex: 'npc_alabd', x: 158, y: 268,
+ pages: [
+ "Our 2020 research examines the effectiveness of gamified interventions, with a particular focus on serious games (educational games designed for a primary purpose other than entertainment), in improving executive functions in individuals with ADHD.", 
+ "We sourced studies from Google, Google Scholar, and the Saudi Digital Library using search terms combining ADHD, serious games, gamification, executive function, and computer-assisted Learning. We identified and compared 15 serious games across demographics, training duration, targeted skills, methodology, platform, and reported outcomes.",
+ "Our key findings indicate that serious games are a promising non-pharmaceutical treatment for ADHD. Interventions showed positive effects on academic engagement, working memory, inhibition, and self-control, while reducing hyperactive and disruptive behaviours.\n\nNotably, even short-term interventions produced meaningful improvements, though the authors caution that unsupervised use carries a risk of game addiction."
+ ]
+ },
+ // Jamjoom, Mona — FEMALE — near bookshelves, right side
+ {
+ id: 'jamjoom_f', required: true,
+ name: ' Jamjoom — Methods & Critical Evaluation',
+ label: 'Dr. Jamjoom',
+ tex: 'npc_jamjoom_f', x: 638, y: 268,
+ pages: [
+ "A key recommendation of our review is that serious game design must be grounded in pedagogical theoretical concepts and therapist advice. We also warn that without proper control and supervision, serious games can have negative impacts which can undermine the intended treatment.",
+ "That said, the studies in our review had limitations worth noting such as small sample sizes and a reliance on short-term interventions.\n\n Further to this, the literature we reviewed lacked gender-based comparisons and did not fully address the suitability of specific games for different ADHD subtypes. Future research could explore the long-term efficacy of gamified interventions."
+ ]
+ }
+ ];
+
+ this._initLevel(npcs);
+ this._buildScarfeLibrary();
+ this._spawnLibNPCs();
+ this._spawnPlayer(400, 460);
+ this._buildDialogBox();
+ this._setupOverlap();
+
+ // ── Sequential logic (mirrors ArcadeScene) ────────────────
+ // Steps: 0=McCready intro, 1=Alabdulakareem, 2=Jamjoom, 3=McCready final
+ this._step = 0;
+ this._activeNpcId = 'mc_lib';
+ this._currentExclaim = null;
+
+ this._mcFinalPages = [
+ "Dr. McCready: What's the central claim of Alabdulakareem & Jamjoom's research?",
+ "Sheeshkabob: Serious games are a promising non-pharmaceutical treatment for ADHD which potentially could improve executive functions like working memory and self-control, even in short-term interventions.",
+ "Dr. McCready: What were the key methodological weaknesses?",
+ "Sheeshkabob: Most of the reviewed studies had small sample sizes, lacked gender-based comparisons and made no differentiation between ADHD subtypes.",
+ "Dr. McCready: Interesting. Well done, Sheeshkabob!"
+ ];
+
+ this._updateExclamationLib();
+ this._buildHUD('LEVEL 2: SCARFE LIBRARY');
+ this.cameras.main.fadeIn(600);
+ }
+
+ // ── NPC spawn with Level-1-style dark pill labels ─────────────
+ _spawnLibNPCs() {
+ this._npcs.forEach(npc => {
+ npc.sprite = this.physics.add.staticSprite(npc.x, npc.y, npc.tex)
+ .setScale(1.5).setDepth(15);
+ const lbl = this.add.text(npc.x, npc.y + 36, npc.label, {
+ fontSize: '10px', fontFamily: '"Courier New", monospace',
+ color: '#f9ca24', stroke: '#001a38', strokeThickness: 4, fontStyle: 'bold'
+ }).setOrigin(0.5).setDepth(17);
+ this.time.delayedCall(50, () => {
+ this.add.rectangle(npc.x, npc.y + 36, lbl.width + 10, 16, 0x001a38, 0.82)
+ .setDepth(16).setOrigin(0.5);
+ lbl.setDepth(17);
+ });
+ });
+ }
+
+ // ── Sequential gating ─────────────────────────────────────────
+ _shouldAllowDialog(npc) {
+ return npc.id === this._activeNpcId;
+ }
+
+ _openDialog(npc) {
+ if (npc.id === 'mc_lib') {
+ if (this._step === 0) {
+ npc.pages = [
+ "Welcome! We're examining Alabdulakareem & Jamjoom (2020) A clinical review of Serious Games for ADHD.\n\nTalk to both researchers to learn more then report back to me to debrief. "
+ ];
+ } else if (this._step === 3) {
+ npc.pages = this._mcFinalPages;
+ }
+ }
+ super._openDialog(npc);
+ }
+
+ _onDialogClosed(npc) {
+ if (npc.id === 'mc_lib') {
+ if (this._step === 0) {
+ this._step = 1; this._activeNpcId = 'alabd';
+ } else if (this._step === 3) {
+   // Immediately mark as completed to prevent any further dialogs
+   this._completeTriggered = true;
+   this._onComplete(); return;
+ }
+ } else if (this._step === 1 && npc.id === 'alabd') {
+ this._step = 2; this._activeNpcId = 'jamjoom_f';
+ } else if (this._step === 2 && npc.id === 'jamjoom_f') {
+ this._step = 3; this._activeNpcId = 'mc_lib';
+ }
+ this._updateExclamationLib();
+ }
+
+ _updateExclamationLib() {
+ if (this._currentExclaim) {
+ this.tweens.killTweensOf(this._currentExclaim);
+ this._currentExclaim.destroy();
+ this._currentExclaim = null;
+ }
+ const npc = this._npcs.find(n => n.id === this._activeNpcId);
+ if (npc && npc.sprite) {
+ this._currentExclaim = this.add.image(npc.sprite.x, npc.sprite.y - 50, 'exclaim')
+ .setScale(2.2).setDepth(25);
+ this.tweens.add({
+ targets: this._currentExclaim,
+ y: this._currentExclaim.y - 7,
+ scaleX: 2.5, scaleY: 2.5,
+ duration: 420, yoyo: true, repeat: -1, ease: 'Sine.easeInOut'
+ });
+ }
+ }
+
+ // Override _checkComplete — only McCready final triggers completion
+ _checkComplete() { /* intentionally empty */ }
+
+ // ── Neville Scarfe Education Library map ──────────────────────
+ _buildScarfeLibrary() {
+ const g = this.add.graphics();
+
+ // ── Carpet floor — grey-blue with subtle stripe texture ────
+ g.fillStyle(0x7e8c96); g.fillRect(0, 0, W, H);
+ // Carpet stripe pattern (diagonal-like lines like in the photo)
+ g.fillStyle(0x6e7c86, 0.6);
+ for (let y = 0; y < H; y += 14) g.fillRect(0, y, W, 5);
+ // Lighter fleck rows
+ g.fillStyle(0x8e9caa, 0.3);
+ for (let y = 7; y < H; y += 14) g.fillRect(0, y, W, 3);
+
+ // ── White upper wall band (ceiling zone) ──────────────────
+ g.fillStyle(0xf0f0ee); g.fillRect(0, 0, W, 88);
+
+ // ── Yellow ceiling accent strip (matches photo) ────────────
+ g.fillStyle(0xd4a800); g.fillRect(0, 62, W, 18);
+ g.fillStyle(0xe8bc00); g.fillRect(0, 63, W, 6);
+
+ // ── Back wall — white with glass partition hint ────────────
+ g.fillStyle(0xe8e8e4); g.fillRect(0, 0, W, 64);
+ // Glass partitions
+ g.fillStyle(0xd0e8f0, 0.5);
+ g.fillRect(200, 0, 80, 62);
+ g.fillRect(510, 0, 80, 62);
+ g.lineStyle(2, 0xb0c8d8, 0.7);
+ g.strokeRect(200, 0, 80, 62);
+ g.strokeRect(510, 0, 80, 62);
+ // Mullions
+ g.fillStyle(0xc8d8e4, 0.5); g.fillRect(236, 0, 4, 62); g.fillRect(546, 0, 4, 62);
+
+ // ── Blue/navy accent pillars (key visual from photo) ───────
+ const drawPillar = (px) => {
+ g.fillStyle(0x2c4a6e); g.fillRect(px, 0, 28, H);
+ g.fillStyle(0x3a5a80); g.fillRect(px + 2, 0, 6, H); // highlight edge
+ g.fillStyle(0x1e3852); g.fillRect(px + 22, 0, 6, H); // shadow edge
+ };
+ drawPillar(44);
+ drawPillar(W - 72);
+
+ // ── INFORMATION sign hanging from ceiling (matches photo) ──
+ g.fillStyle(0x8b7355); g.fillRect(318, 62, 164, 28); // wood sign
+ g.fillStyle(0x7a6240); g.fillRect(318, 62, 164, 4);
+ g.fillStyle(0x9a8060); g.fillRect(318, 64, 164, 6);
+ // Border
+ g.lineStyle(2, 0x5a4828); g.strokeRect(318, 62, 164, 28);
+ // Hanging strings
+ g.fillStyle(0x5a4828); g.fillRect(356, 56, 3, 8); g.fillRect(441, 56, 3, 8);
+ this.add.text(400, 76, '• INFORMATION •', {
+ fontSize: '11px', fontFamily: '"Courier New", monospace',
+ color: '#f9ca24', fontStyle: 'bold'
+ }).setOrigin(0.5).setDepth(5);
+
+ // ── Recessed ceiling lights ────────────────────────────────
+ [150, 310, 490, 650].forEach(lx => {
+ g.fillStyle(0xe0e0dc); g.fillEllipse(lx, 56, 36, 10);
+ g.fillStyle(0xfffde0, 0.9); g.fillEllipse(lx, 56, 28, 7);
+ // Glow on floor
+ g.fillStyle(0xfffde0, 0.03); g.fillEllipse(lx, H / 2, 260, 400);
+ });
+
+ // ── Information desk — light maple wood, dark grey top ─────
+ // Desk top surface (dark grey)
+ g.fillStyle(0x4a4a4e); g.fillRect(268, 148, 264, 10);
+ // Desk body (light maple — matches photo)
+ g.fillStyle(0xc8a456); g.fillRect(268, 158, 264, 46);
+ // Wood grain
+ g.fillStyle(0xb89040, 0.3);
+ for (let i = 0; i < 7; i++) g.fillRect(272 + i * 36, 158, 2, 46);
+ // Front panel darker
+ g.fillStyle(0xb8943c); g.fillRect(272, 164, 256, 38);
+ // Panel groove lines
+ g.lineStyle(1, 0xa07830, 0.5);
+ g.strokeRect(280, 168, 112, 28); g.strokeRect(408, 168, 112, 28);
+ // Desk legs
+ g.fillStyle(0x9a7c30); g.fillRect(274, 200, 10, 12); g.fillRect(514, 200, 10, 12);
+ // Monitor on desk
+ g.fillStyle(0x2a2a2a); g.fillRect(448, 132, 52, 38);
+ g.fillStyle(0x1a1a1a); g.fillRect(451, 135, 46, 32);
+ g.fillStyle(0x2196f3, 0.65); g.fillRect(453, 137, 42, 28);
+ g.fillStyle(0xffffff, 0.45); g.fillRect(455, 139, 28, 2);
+ g.fillStyle(0xffffff, 0.2); g.fillRect(455, 144, 34, 2); g.fillRect(455, 149, 30, 2);
+ g.fillStyle(0x424242); g.fillRect(469, 168, 8, 5); // stand
+ // Papers + pen on desk
+ g.fillStyle(0xffffff); g.fillRect(280, 149, 38, 24);
+ g.fillStyle(0xe0e8f0); g.fillRect(284, 152, 30, 18);
+ g.fillStyle(0x3a6ea8, 0.4); for (let l = 0; l < 3; l++) g.fillRect(286, 155 + l * 5, 22, 2);
+ g.fillStyle(0x2244aa); g.fillRect(324, 150, 2, 20); // pen
+
+ // ── Computer workstation cluster — left (Alabdulakareem) ───
+ // Desk row (light maple)
+ g.fillStyle(0xc8a456); g.fillRect(68, 250, 148, 32);
+ g.fillStyle(0x4a4a4e); g.fillRect(68, 244, 148, 8); // dark top
+ g.fillStyle(0xb89040, 0.25); for (let i = 0; i < 4; i++) g.fillRect(72 + i * 34, 244, 2, 8);
+ // Legs
+ g.fillStyle(0x9a7c30); g.fillRect(74, 280, 8, 16); g.fillRect(196, 280, 8, 16);
+ // Monitor
+ g.fillStyle(0x2a2a2a); g.fillRect(100, 196, 58, 48);
+ g.fillStyle(0x1e272e); g.fillRect(103, 199, 52, 42);
+ g.fillStyle(0x00bcd4, 0.75); g.fillRect(105, 201, 48, 38);
+ g.fillStyle(0xffffff, 0.55); g.fillRect(107, 203, 36, 3);
+ g.fillStyle(0xffffff, 0.2); for (let l = 1; l < 5; l++) g.fillRect(107, 203 + l * 7, 42, 2);
+ g.fillStyle(0x424242); g.fillRect(125, 242, 10, 6); g.fillRect(118, 246, 24, 4); // stand
+ // Chair (black office chair)
+ g.fillStyle(0x2a2a2a); g.fillRect(90, 278, 52, 14); // seat
+ g.fillStyle(0x1a1a1a); g.fillRect(90, 257, 10, 36); // back
+ g.fillStyle(0x333333); g.fillRect(92, 290, 6, 12); g.fillRect(128, 290, 6, 12); // legs
+ // Second desk to the right of first (computer row feel)
+ g.fillStyle(0xc8a456); g.fillRect(68, 328, 148, 26);
+ g.fillStyle(0x4a4a4e); g.fillRect(68, 322, 148, 8);
+
+ // ── Bookshelf unit — right side (Jamjoom) ─────────────────
+ const bsx = W - 72 - 68;
+ g.fillStyle(0xdddbd6); g.fillRect(bsx, 88, 64, 224); // white frame
+ g.fillStyle(0xccc8c0); g.fillRect(bsx + 2, 88, 60, 4); // top board
+ g.fillStyle(0xccc8c0); g.fillRect(bsx + 2, 306, 60, 6); // bottom board
+ const bookC = [0x27ae60,0xe74c3c,0x2980b9,0x8e44ad,0xf39c12,0x16a085,0xe67e22,0xc0392b,0x1abc9c,0x2c3e50,0xe91e63];
+ for (let s = 0; s < 4; s++) {
+ g.fillStyle(0xb8b4aa); g.fillRect(bsx + 2, 92 + s * 52, 60, 4); // shelf
+ for (let b = 0; b < 4; b++) {
+ const bw = 12, bh = 40;
+ g.fillStyle(bookC[(s * 4 + b) % bookC.length]);
+ g.fillRect(bsx + 4 + b * 14, 97 + s * 52, bw, bh);
+ g.fillStyle(0xffffff, 0.18); g.fillRect(bsx + 4 + b * 14, 97 + s * 52, 2, bh);
+ g.fillStyle(0xffffff, 0.1); g.fillRect(bsx + 6 + b * 14, 108 + s * 52, 7, 2);
+ }
+ }
+
+ // ── Study table cluster — centre (open floor area) ─────────
+ // Two small maple tables
+ g.fillStyle(0xc8a456); g.fillRoundedRect(240, 340, 140, 56, 4);
+ g.fillStyle(0x4a4a4e); g.fillRoundedRect(240, 334, 140, 10, 2);
+ g.fillStyle(0xb89040, 0.2); for (let i = 0; i < 3; i++) g.fillRect(245 + i * 44, 334, 2, 10);
+ g.fillStyle(0x9a7c30); g.fillRect(248, 394, 8, 16); g.fillRect(360, 394, 8, 16);
+
+ g.fillStyle(0xc8a456); g.fillRoundedRect(420, 340, 140, 56, 4);
+ g.fillStyle(0x4a4a4e); g.fillRoundedRect(420, 334, 140, 10, 2);
+ g.fillStyle(0xb89040, 0.2); for (let i = 0; i < 3; i++) g.fillRect(425 + i * 44, 334, 2, 10);
+ g.fillStyle(0x9a7c30); g.fillRect(428, 394, 8, 16); g.fillRect(542, 394, 8, 16);
+
+ // Chairs around tables (maple wood seat — matches photo)
+ [[256,410],[300,410],[360,410],[310,330],[260,330],
+ [436,410],[480,410],[540,410],[490,330],[440,330]].forEach(([cx,cy]) => {
+ g.fillStyle(0xc8a456); g.fillRect(cx - 14, cy, 28, 16);
+ g.fillStyle(0xb89040); g.fillRect(cx - 14, cy, 28, 4);
+ g.fillStyle(0x9a7c30); g.fillRect(cx - 12, cy + 14, 6, 10); g.fillRect(cx + 6, cy + 14, 6, 10);
+ });
+
+ // ── Entrance area — bottom centre ─────────────────────────
+ g.fillStyle(0x2c4a6e); g.fillRect(284, H - 72, 232, 72); // entrance surround
+ g.fillStyle(0x1e3852); g.fillRect(284, H - 76, 232, 8); // header
+ // Glass doors
+ g.fillStyle(0xadd8f0, 0.75); g.fillRect(289, H - 68, 104, 68);
+ g.fillStyle(0xadd8f0, 0.75); g.fillRect(407, H - 68, 104, 68);
+ g.fillStyle(0x2c4a6e); g.fillRect(393, H - 68, 18, 68); // centre mullion
+ // Door rails
+ g.fillStyle(0x1e3852); g.fillRect(289, H - 38, 104, 4); g.fillRect(407, H - 38, 104, 4);
+ // Handles
+ g.fillStyle(0xd4a800); g.fillRect(372, H - 52, 14, 4); g.fillRect(414, H - 52, 14, 4);
+ // Reflections on glass
+ g.fillStyle(0xffffff, 0.14); g.fillRect(292, H - 66, 8, 28); g.fillRect(410, H - 66, 8, 28);
+ // Floor mat
+ g.fillStyle(0x1e3852); g.fillRect(310, H - 14, 180, 14);
+ g.lineStyle(1.5, 0xd4a800); g.strokeRect(314, H - 12, 172, 10);
+
+ // ── Potted plants by entrance ─────────────────────────────
+ [[260, H - 8], [540, H - 8]].forEach(([px, py]) => {
+ g.fillStyle(0xc8a456); g.fillRect(px - 12, py - 22, 24, 22);
+ g.fillStyle(0xb89040); g.fillRect(px - 12, py - 22, 24, 5);
+ g.fillStyle(0x2e7d32); g.fillEllipse(px, py - 36, 32, 24);
+ g.fillStyle(0x388e3c); g.fillEllipse(px - 8, py - 42, 20, 16); g.fillEllipse(px + 8, py - 42, 20, 16);
+ g.fillStyle(0x1b5e20); g.fillEllipse(px, py - 48, 14, 12);
+ });
+
+ // ── Text overlays ─────────────────────────────────────────
+ this.add.text(W / 2, 30, 'NEVILLE SCARFE EDUCATION LIBRARY', {
+ fontSize: '13px', fontFamily: '"Courier New", monospace',
+ color: '#2c4a6e', fontStyle: 'bold'
+ }).setOrigin(0.5).setDepth(5);
+
+ this.add.text(W / 2, 50, 'U B C F A C U L T Y O F E D U C A T I O N', {
+ fontSize: '8px', fontFamily: '"Courier New", monospace', color: '#8a7040'
+ }).setOrigin(0.5).setDepth(5);
+
+ this.add.text(400, 158, 'DR. McCREADY', {
+ fontSize: '7px', fontFamily: '"Courier New", monospace',
+ color: '#2a1a00', fontStyle: 'bold'
+ }).setOrigin(0.5).setDepth(6);
+
+ // ── Watermark ─────────────────────────────────────────────
+ this.add.text(W / 2, H / 2, 'SCARFE\nLIBRARY', {
+ fontSize: '56px', fontFamily: '"Courier New", monospace',
+ color: '#6e7c86', align: 'center'
+ }).setOrigin(0.5).setAlpha(0.07).setDepth(1);
+ }
+
+ _onComplete() {
+ // Play Level 2 fanfare, then show the complete screen
+ if (window.gameAudio) {
+     window.gameAudio.playLevelComplete(2, () => {
+         this._showLevelComplete(
+             'IP#2 COMPLETE!',
+             "Reference:\n\n Alabdulakareem, E., & Jamjoom, M. (2020). Computer-assisted learning for improving ADHD individuals' executive functions through gamified interventions: A review. Entertainment Computing, 33, Article 100341. https://doi.org/10.1016/j.entcom.2020.100341",
+             'TitleScene',
+             '▶ PRESS SPACEBAR TO PLAY AGAIN ◀'
+         );
+     });
+ } else {
+     this._showLevelComplete(
+         'IP#2 COMPLETE!',
+         "Reference:\n\n Alabdulakareem, E., & Jamjoom, M. (2020). Computer-assisted learning for improving ADHD individuals' executive functions through gamified interventions: A review. Entertainment Computing, 33, Article 100341. https://doi.org/10.1016/j.entcom.2020.100341",
+         'TitleScene',
+         '▶ PRESS SPACEBAR TO PLAY AGAIN ◀'
+     );
+ }
+ }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// PHASER CONFIG
+// ═══════════════════════════════════════════════════════════════
+const config = {
+ type: Phaser.AUTO,
+ width: W,
+ height: H,
+ parent: 'game-container',
+ backgroundColor: '#0a0a14',
+ physics: {
+ default: 'arcade',
+ arcade: { gravity: { y: 0 }, debug: false }
+ },
+ scene: [TitleScene, ArcadeScene, LibraryScene],
+ scale: {
+ mode: Phaser.Scale.FIT,
+ autoCenter: Phaser.Scale.CENTER_BOTH
+ }
+};
+
+document.fonts.ready.then(() => {
+  const game = new Phaser.Game(config);
+});
+</script>
+</body>
+</html>
