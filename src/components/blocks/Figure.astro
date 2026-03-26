@@ -1,8 +1,5 @@
 ---
-// Added 'size' prop with a default of 'full'
 const { src, alt, caption, size = "full", class: className = "" } = Astro.props;
-
-// Map sizes to Tailwind classes
 const sizeClasses = {
   xs: "max-w-xs mx-auto",
   sm: "max-w-sm mx-auto",
@@ -10,17 +7,15 @@ const sizeClasses = {
   lg: "max-w-2xl mx-auto",
   full: "w-full"
 };
-
 const selectedSize = sizeClasses[size] || sizeClasses.full;
 ---
-
 <figure class={`my-8 ${selectedSize} ${className}`}>
   <div class="overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm">
     <img
       src={src}
       alt={alt}
       loading="lazy"
-      class="block w-full h-auto transition-hover duration-300 hover:scale-[1.02]"
+      class="block w-full h-auto"
     />
   </div>
   {caption && (

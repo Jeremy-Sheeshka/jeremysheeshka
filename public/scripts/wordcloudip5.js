@@ -1,4 +1,4 @@
-(function () {
+`(function () {
   // --------------------------------------------------------------
   // 1. FULL TEXT
   // --------------------------------------------------------------
@@ -23,7 +23,7 @@ A thematic analysis was conducted, with the researcher identifying, analysing, a
 
 Findings: Exclusion was a common theme, with participants experiencing explicit exclusion in the form of being rejected from esports roles as a direct result of their gender. One participant described being excluded from an opportunity in ‘casting’: “And they message me back and they’re like, ‘Do you identify as a woman?’. I’m like ‘Yeah, I do’, and they’re like, ‘Oh okay, so we really want a female caster in here, but we don’t have the space right now’.” Another recounted an equally explicit gender-based exclusion: “I trialed for a team a couple years back, and everything seemed to be going fine, but at the end they were like, ‘Yeah we don’t really want a girl to play on our team’.” The directness of these gender exclusions is stark; neither was offered feedback or criticism on their actual suitability for the role, with their rejection based openly on their identity as a woman. There was a sense that male players – who have become accustomed to the hypermasculine culture that exists within the industry – may view it as risky to introduce another gender into a space so dominated by men.
 
-Attempts by organisers and individuals to protect women from gender-based harassment and toxicity can result in further exclusion. One participant described how hostility from male counterparts in a mixed-gender team directly led to her own separation from the team: “One of the guys told me that I couldn’t do my job and then said the words. ‘Why have we let a woman set up the lobby, there’s clearly something wrong with her’. And I was like, okay, this is a bit odd, so they ended up splitting up the genders of the teams so that I didn’t have to deal with it rather than just getting rid of the one person causing the problem.” Instead of removing the male player, the female players were separated and put into their own team. The message is that the team’s problem was a woman entering a man’s space, rather than a male player’s misogyny.
+Attempts by organisers and individuals to protect women from gender-based harassment and toxicity can result in further exclusion. One participant described how hostility from male counterparts in a mixed-gender team directly led to her own separation from the team: “One of the guys told me that I couldn’t do my job and then said the words. ‘Why have we let a woman set up the lobby, there’s clearly something wrong with her’. And I was like, okay, this is a bit odd, so they ended up splitting up the genders of the teams so that I didnt have to deal with it rather than just getting rid of the one person causing the problem.” Instead of removing the male player, the female players were separated and put into their own team. The message is that the team’s problem was a woman entering a man’s space, rather than a male player’s misogyny.
 
 There are several costs of these forms of exclusion for women in esports, including financial. In particular, there was a sense that women may be limited to amateur roles as a result of their gender, with one participant noting: “The argument I see men have is that women aren’t good enough to be in the Tier 1 teams with men … Well, lots of these men had the opportunity to go to academy teams or have their games be salaried, so they don’t have to work a job, whereas a lot of women, there’s not much funding in the area so women have to go to work and have a job, which means they can’t dedicate their time needed to their game to get to the same level as men.” In-person esports events were associated with additional forms of exclusion for women attendees. One participant commented that she often has to pay for a single hotel room rather than reducing costs by sharing, as there are no other women attending. She also reported social costs to this exclusion, as being the only woman “can just get kind of awkward sometimes”, and her single hotel room left her feeling cut off socially: “it can be lonely sometimes”. The implication is that male-dominated culture surrounding esports can leave women watching from the sidelines, feeling isolated.
 
@@ -421,7 +421,7 @@ But, almost from the beginning, lots of people passed through Ubisoft Toronto wh
     were be been being have has had having do does did doing will would should
     can could ought i'm you're he's she's it's we're they're i've you've we've
     they've i'd you'd he'd she'd we'd they'd i'll you'll he'll she'll we'll they'll
-    isn't aren't wasn't weren't hasn't haven't hadn't doesn't don't didn't won't
+    isn't aren't wasn't weren't hasn't haven't hadn't doesn't don't didnt won't
     wouldn't shan't shouldn't can't cannot couldn't mustn't let's that's who's
     what's here's there's when's where's why's how's a an the and but if or because
     as until while of at by for with about against between into through during
@@ -573,4 +573,4 @@ renderCloud(topWords, "wordcloud-viz", 900, 400);    var resizeTimer;
   } else {
     init();
   }
-})();
+})();`

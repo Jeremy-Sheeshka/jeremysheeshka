@@ -3,16 +3,15 @@ title: "Hegemonic Play: Gatekeeping Game Culture"
 description: "Reflecting on the systemic barriers women and marginalized groups face in video game cultures."
 publishDate: "2026-03-20"
 tags: ["etec544"]
-draft: true
 ---
-
+ 
 import Prose from "../../components/blocks/Prose.astro";
 import Callout from "../../components/blocks/Callout.astro";
 import Cite from "../../components/widgets/Cite.astro";
-
+ 
 <Prose>
-
-
+ 
+ 
 <details class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 mb-8 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800/50 dark:hover:bg-gray-800 open:bg-white dark:open:bg-gray-900 transition-colors">
   <summary class="font-bold cursor-pointer flex items-center gap-2 select-none text-gray-900 dark:text-gray-100">
     <span class="text-lg">Assignment:</span>
@@ -23,112 +22,314 @@ import Cite from "../../components/widgets/Cite.astro";
     </p>
   </div>
 </details>
-
-
+ 
+ 
 ---
+ 
 <div id="wordcloud-viz" style="margin: 2rem 0; min-height: 400px; border-radius: 1.5rem;"></div>
 <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/d3-cloud@1.2.7/build/d3.layout.cloud.js"></script>
 <script src="/scripts/wordcloudip5.js"></script>
-<p style="font-size: 0.85rem; margin-bottom: 0.5rem;">A D3.js word cloud based on the frequency of words found within the readings listed in the reference section.</p>
-
+<p style="font-size: 0.70rem; margin-bottom: 0.5rem;"><em>A D3.js word cloud visualization based on the frequency of words found within the readings listed in the reference section.</em></p>
+ 
+<div style="border-left: 3px solid #6366f1; padding: 0.75rem 1rem; background: rgba(99,102,241,0.05); border-radius: 0 0.5rem 0.5rem 0; margin: 0.5rem 0 2rem; font-size: 0.82rem; line-height: 1.7;">
+  <strong>Reading the cloud:</strong> The prominence of <em>women</em>, <em>game</em>, <em>culture</em>, and <em>harassment</em> reflects the central tension across all readings. The relative weight of <em>identity</em> and <em>space</em> signals how these scholars frame gaming as contested social territory — not merely a hobby, but a site of power.
+</div>
+ 
 ---
-
+ 
 ## Rationale
-
-For this intellectual production, I examined the ways video game culture systematically excludes women and other marginalized groups through layered structures of harassment, gatekeeping, and cultural expectation. 
-
+ 
+For this intellectual production, I examined the ways video game culture systematically excludes women and other marginalized groups through layered structures of harassment, gatekeeping, and cultural expectation.
+ 
 ---
-
+ 
 ## What Is Hegemonic Game Culture?
-
+ 
 At its core, video game culture is built around (and continues to serve) a narrow demographic: cisgendered, white, male players. Technical mastery in gameplay has become a proxy for masculine identity, meaning that to be good at games is, culturally, to be male. This isn't incidental. It's structural.
-
+ 
 This hegemony plays out across three interconnected arenas:
-
-| Arena | Key Dynamic |
-|---|---|
-| Professional Esports | Exclusion, false accusations, and hyper-surveillance of women |
-| Streaming & Multiplayer | Toxicity, threats, and identity-based harassment |
-| K-12 Education | STEM gender gap; classroom culture shapes gaming culture |
-
+ 
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 1.25rem; margin: 1.5rem 0 2.5rem;">
+  <div style="border-radius: 1rem; padding: 1.5rem 1.25rem; background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(99,102,241,0.02)); border: 1px solid rgba(99,102,241,0.25);">
+    <span style="font-size: 2rem; display: block; margin-bottom: 0.75rem;">🏆</span>
+    <strong style="display: block; font-size: 0.9rem; color: #6366f1; margin-bottom: 0.5rem;">Professional Esports</strong>
+    <p style="font-size: 0.82rem; margin: 0; line-height: 1.65; opacity: 0.82;">Exclusion, false accusations, and hyper-surveillance of women in competitive play</p>
+  </div>
+  <div style="border-radius: 1rem; padding: 1.5rem 1.25rem; background: linear-gradient(135deg, rgba(236,72,153,0.08), rgba(236,72,153,0.02)); border: 1px solid rgba(236,72,153,0.25);">
+    <span style="font-size: 2rem; display: block; margin-bottom: 0.75rem;">📡</span>
+    <strong style="display: block; font-size: 0.9rem; color: #db2777; margin-bottom: 0.5rem;">Streaming & Multiplayer</strong>
+    <p style="font-size: 0.82rem; margin: 0; line-height: 1.65; opacity: 0.82;">Toxicity, threats, and identity-based harassment in online play</p>
+  </div>
+  <div style="border-radius: 1rem; padding: 1.5rem 1.25rem; background: linear-gradient(135deg, rgba(16,185,129,0.08), rgba(16,185,129,0.02)); border: 1px solid rgba(16,185,129,0.25);">
+    <span style="font-size: 2rem; display: block; margin-bottom: 0.75rem;">🏫</span>
+    <strong style="display: block; font-size: 0.9rem; color: #059669; margin-bottom: 0.5rem;">K-12 Education</strong>
+    <p style="font-size: 0.82rem; margin: 0; line-height: 1.65; opacity: 0.82;">STEM gender gap; classroom culture shapes and reproduces gaming culture</p>
+  </div>
+</div>
+ 
 ---
-
+ 
 ## The Boundaries: How They're Built and Kept
-
+ 
 ### In Competitive Play
-
-The case of Geguri — a highly skilled South Korean *Overwatch* professional — makes these dynamics impossible to ignore. When she outperformed her male peers, the community's response wasn't admiration: it was accusations of cheating. <Cite n={1} title="Choi, Slaker & Ahmad (2020)" /> Even after a live demonstration cleared her name, the attacks shifted to her appearance, her age, her reluctance to be called a "feminist icon." Skill wasn't enough. She also had to justify her right to exist in the space.
-
-This is the pattern. Women in esports don't simply compete — they are surveilled, questioned, and required to perform their legitimacy in ways men never are. <Cite n={2} title="Witkowski (2018)" />
-
+ 
+The case of Geguri — a highly skilled South Korean *Overwatch* professional — makes these dynamics impossible to ignore. When she outperformed her male peers, the community's response wasn't admiration: it was accusations of cheating. <Cite n={2} title="Choi, Slaker & Ahmad (2020)" /> Even after a live demonstration cleared her name, the attacks shifted to her appearance, her age, her reluctance to be called a "feminist icon." Skill wasn't enough. She also had to justify her right to exist in the space.
+ 
+This is the pattern. Women in esports don't simply compete — they are surveilled, questioned, and required to perform their legitimacy in ways men never are. <Cite n={6} title="Witkowski (2018)" /> A recent empirical study by Crothers, Scott-Brown, and Cunningham (2024) confirms that these experiences are not isolated: women in esports report pervasive harassment that ranges from verbal abuse to doxing and sexual threats, with many eventually leaving competitive spaces altogether. <Cite n={7} title="Crothers, Scott-Brown & Cunningham (2024)" />
+ 
+<div id="stat-reveal-viz" style="margin: 2rem 0;"></div>
+<script src="/scripts/statsip5.js"></script>
+<p style="font-size: 0.70rem; margin-top: -1rem; margin-bottom: 2rem;"><em>Interactive data visualization drawn from Crothers et al. (2024), Witkowski (2018), and Rogstad (2022). Harassment multipliers reflect likelihood relative to male counterparts at 1x baseline. Use the numbered tabs to navigate panels.</em></p>
+ 
+<div id="geguri-timeline" style="margin: 2rem 0 2.5rem;">
+  <p style="font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #6366f1; margin: 0 0 1.25rem;">↳ Geguri: A Timeline of Conditional Belonging</p>
+ 
+  <div style="display: flex; gap: 1.25rem; padding-bottom: 1.25rem;">
+    <div style="display: flex; flex-direction: column; align-items: center; flex-shrink: 0; width: 3.5rem;">
+      <span style="font-weight: 700; font-size: 0.7rem; color: #6366f1; white-space: nowrap;">2016</span>
+      <div style="width: 0.75rem; height: 0.75rem; background: #6366f1; border-radius: 50%; margin: 0.3rem 0; flex-shrink: 0; box-shadow: 0 0 0 3px rgba(99,102,241,0.2);"></div>
+      <div style="width: 2px; background: linear-gradient(to bottom, #6366f1, #818cf8); flex: 1; min-height: 1rem;"></div>
+    </div>
+    <div style="flex: 1; padding-top: 0.1rem; padding-bottom: 0.25rem;">
+      <p style="margin: 0; font-size: 0.875rem; line-height: 1.65;"><strong>Rise through the ranks.</strong> Geguri climbs the Korean competitive ladder, posting extraordinary win rates on tank heroes and drawing wide attention across the Overwatch community.</p>
+    </div>
+  </div>
+ 
+  <div style="display: flex; gap: 1.25rem; padding-bottom: 1.25rem;">
+    <div style="display: flex; flex-direction: column; align-items: center; flex-shrink: 0; width: 3.5rem;">
+      <span style="font-weight: 700; font-size: 0.7rem; color: #e11d48; white-space: nowrap;">2017</span>
+      <div style="width: 0.75rem; height: 0.75rem; background: #e11d48; border-radius: 50%; margin: 0.3rem 0; flex-shrink: 0; box-shadow: 0 0 0 3px rgba(225,29,72,0.2);"></div>
+      <div style="width: 2px; background: linear-gradient(to bottom, #e11d48, #fb7185); flex: 1; min-height: 1rem;"></div>
+    </div>
+    <div style="flex: 1; padding-top: 0.1rem; padding-bottom: 0.25rem;">
+      <p style="margin: 0; font-size: 0.875rem; line-height: 1.65;"><strong>The accusation.</strong> Two male professional players publicly claim she must be using an aimbot — the underlying logic being that a woman simply could not perform at that level. The community amplifies the accusation widely.</p>
+    </div>
+  </div>
+ 
+  <div style="display: flex; gap: 1.25rem; padding-bottom: 1.25rem;">
+    <div style="display: flex; flex-direction: column; align-items: center; flex-shrink: 0; width: 3.5rem;">
+      <span style="font-weight: 700; font-size: 0.7rem; color: #e11d48; white-space: nowrap;">2017</span>
+      <div style="width: 0.75rem; height: 0.75rem; background: #e11d48; border-radius: 50%; margin: 0.3rem 0; flex-shrink: 0; box-shadow: 0 0 0 3px rgba(225,29,72,0.2);"></div>
+      <div style="width: 2px; background: linear-gradient(to bottom, #fb7185, #a78bfa); flex: 1; min-height: 1rem;"></div>
+    </div>
+    <div style="flex: 1; padding-top: 0.1rem; padding-bottom: 0.25rem;">
+      <p style="margin: 0; font-size: 0.875rem; line-height: 1.65;"><strong>Forced to prove it.</strong> Geguri streams herself playing live to demonstrate she is not cheating. The accusers retract their claims. No equivalent burden is placed on the male players who performed at comparable levels.</p>
+    </div>
+  </div>
+ 
+  <div style="display: flex; gap: 1.25rem; padding-bottom: 1.25rem;">
+    <div style="display: flex; flex-direction: column; align-items: center; flex-shrink: 0; width: 3.5rem;">
+      <span style="font-weight: 700; font-size: 0.7rem; color: #a78bfa; white-space: nowrap;">2017–</span>
+      <div style="width: 0.75rem; height: 0.75rem; background: #a78bfa; border-radius: 50%; margin: 0.3rem 0; flex-shrink: 0; box-shadow: 0 0 0 3px rgba(167,139,250,0.2);"></div>
+      <div style="width: 2px; background: linear-gradient(to bottom, #a78bfa, #6366f1); flex: 1; min-height: 1rem;"></div>
+    </div>
+    <div style="flex: 1; padding-top: 0.1rem; padding-bottom: 0.25rem;">
+      <p style="margin: 0; font-size: 0.875rem; line-height: 1.65;"><strong>The goalposts move.</strong> Cleared of cheating, the harassment continues — shifting to her appearance, her age, and her refusal to adopt the "feminist icon" label others wanted to assign her. Skill was never the real threshold.</p>
+    </div>
+  </div>
+ 
+  <div style="display: flex; gap: 1.25rem; padding-bottom: 1.25rem;">
+    <div style="display: flex; flex-direction: column; align-items: center; flex-shrink: 0; width: 3.5rem;">
+      <span style="font-weight: 700; font-size: 0.7rem; color: #6366f1; white-space: nowrap;">2018</span>
+      <div style="width: 0.75rem; height: 0.75rem; background: #6366f1; border-radius: 50%; margin: 0.3rem 0; flex-shrink: 0; box-shadow: 0 0 0 3px rgba(99,102,241,0.2);"></div>
+      <div style="width: 2px; background: rgba(99,102,241,0.2); flex: 1; min-height: 1rem;"></div>
+    </div>
+    <div style="flex: 1; padding-top: 0.1rem; padding-bottom: 0.25rem;">
+      <p style="margin: 0; font-size: 0.875rem; line-height: 1.65;"><strong>Overwatch League.</strong> Geguri joins the Shanghai Dragons, becoming one of the first women in the Overwatch League — entering a professional structure built without her in mind, where her presence is still framed as exceptional rather than expected.</p>
+    </div>
+  </div>
+ 
+  <div style="display: flex; gap: 1.25rem;">
+    <div style="display: flex; flex-direction: column; align-items: center; flex-shrink: 0; width: 3.5rem;">
+      <span style="font-weight: 700; font-size: 0.7rem; color: #94a3b8; white-space: nowrap;">→</span>
+      <div style="width: 0.75rem; height: 0.75rem; background: #94a3b8; border-radius: 50%; margin: 0.3rem 0; flex-shrink: 0;"></div>
+    </div>
+    <div style="flex: 1; padding-top: 0.1rem;">
+      <p style="margin: 0; font-size: 0.875rem; line-height: 1.65; font-style: italic; opacity: 0.75;"><strong>The lesson:</strong> Skill is not sufficient. Women in esports must also continuously perform their right to be there. The burden of proof is gendered — and it never fully lifts.</p>
+    </div>
+  </div>
+ 
+</div>
+ 
 ### In the Industry Itself
-
-The problems don't stop at the player level. The workplace culture at studios like Ubisoft Toronto has been described as a protected ecosystem of harm — where powerful men faced no accountability, HR structures were compromised by personal relationships, and women who spoke up risked their careers. <Cite n={3} title="Kotaku (2020)" /> The message sent to women considering a career in games is clear: you are not safe here.
-
+ 
+The problems don't stop at the player level. The workplace culture at studios like Ubisoft Toronto has been described as a protected ecosystem of harm — where powerful men faced no accountability, HR structures were compromised by personal relationships, and women who spoke up risked their careers. <Cite n={5} title="Schreier (2020)" /> The message sent to women considering a career in games is clear: you are not safe here.
+ 
 ### Through Tropes and Representation
-
+ 
 Within games themselves, women are frequently flattened into stereotypes: the healer, the love interest, the reward. The "girl gamer" label strips women of individual identity and assigns them a corner of the culture they're permitted to occupy — as long as they remain palatable to male audiences. Refusing that corner invites hostility.
-
+ 
 ---
-
+ 
 ## Data Reliability & Positionality
-
+ 
 It's worth acknowledging that much of the data on harassment in gaming is self-reported or anecdotal, which means it likely *undercounts* the real scope of the problem. Marginalized players who have already been pushed out of the space aren't surveyed. Historical mistrust of institutions — whether that's a game studio's HR department or a tournament organizer — may discourage reporting entirely.
-
-I also bring my own positionality to this topic: I am a man writing about the experiences of women and LGBTQ+ people in gaming. I've tried to center the voices from the research, but this is a perspective I hold with care.
-
+ 
+I also bring my own positionality to this topic: I am a man writing about the experiences of women and LGBTQ+ people in gaming. I've tried to center the voices from the research, but this is a perspective I hold with care. What I can offer is an examination of the structures that enable harm — and a commitment to using my own access to gaming and educational spaces to disrupt those structures. I cannot speak to the lived experience of being harassed in a voice chat, but I can refuse to be silent when I witness it.
+ 
 ---
-
+ 
 ## Findings
-
+ 
 One of the clearest takeaways from this research is that the barriers aren't loud and singular — they're quiet and cumulative. A woman doesn't leave gaming because of one comment. She leaves because of thousands of comments, structural invisibility, and the constant expenditure of energy proving she belongs.
-
-All-female esports leagues represent one proposed solution, offering safer developmental spaces and removing the burden of representing all women in a single performance. <Cite n={2} title="Witkowski (2018)" /> But segregated leagues also risk leaving the men's side of the culture entirely intact — and unexamined.
-
+ 
+All-female esports leagues represent one proposed solution, offering safer developmental spaces and removing the burden of representing all women in a single performance. <Cite n={6} title="Witkowski (2018)" /> But segregated leagues also risk leaving the men's side of the culture entirely intact — and unexamined.
+ 
 The more uncomfortable truth is that changing game culture requires changing the men in it.
-
+ 
+<div id="attrition-viz" style="margin: 2.5rem 0;">
+  <p style="font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #6366f1; margin: 0 0 0.4rem;">↳ The Cumulative Exit: Where Women Leave Gaming</p>
+  <p style="font-size: 0.82rem; opacity: 0.7; margin: 0 0 1.5rem; font-style: italic; line-height: 1.6;">Each stage adds new barriers. The cost of staying rises; the pipeline narrows. Bar heights are proportional and illustrative. Sources: Crothers et al. (2024); Rogstad (2022).</p>
+ 
+  <div style="display: flex; align-items: flex-end; gap: 0.625rem; height: 150px; margin-bottom: 0.5rem;">
+    <div style="flex: 1; height: 100%; background: linear-gradient(to top, #f43f5e, #fb7185); border-radius: 0.5rem 0.5rem 0 0; opacity: 0.9;"></div>
+    <div style="flex: 1; height: 83%; background: linear-gradient(to top, #e879a0, #f0abcc); border-radius: 0.5rem 0.5rem 0 0; opacity: 0.85;"></div>
+    <div style="flex: 1; height: 60%; background: linear-gradient(to top, #a78bfa, #c4b5fd); border-radius: 0.5rem 0.5rem 0 0; opacity: 0.85;"></div>
+    <div style="flex: 1; height: 37%; background: linear-gradient(to top, #818cf8, #a5b4fc); border-radius: 0.5rem 0.5rem 0 0; opacity: 0.8;"></div>
+    <div style="flex: 1; height: 17%; background: linear-gradient(to top, #94a3b8, #cbd5e1); border-radius: 0.5rem 0.5rem 0 0; opacity: 0.7;"></div>
+  </div>
+ 
+  <div style="display: flex; gap: 0.625rem; margin-top: 0.35rem;">
+    <div style="flex: 1; font-size: 0.7rem; text-align: center; line-height: 1.35; opacity: 0.85;"><strong>Casual</strong><br />Players</div>
+    <div style="flex: 1; font-size: 0.7rem; text-align: center; line-height: 1.35; opacity: 0.85;"><strong>Online</strong><br />Multiplayer</div>
+    <div style="flex: 1; font-size: 0.7rem; text-align: center; line-height: 1.35; opacity: 0.85;"><strong>Regular</strong><br />Competitive</div>
+    <div style="flex: 1; font-size: 0.7rem; text-align: center; line-height: 1.35; opacity: 0.85;"><strong>Streaming /</strong><br />Content</div>
+    <div style="flex: 1; font-size: 0.7rem; text-align: center; line-height: 1.35; opacity: 0.85;"><strong>Esports</strong><br />Pro</div>
+  </div>
+ 
+  <div style="display: flex; gap: 0.625rem; margin-top: 0.75rem; border-top: 1px solid rgba(99,102,241,0.1); padding-top: 0.75rem;">
+    <div style="flex: 1; font-size: 0.65rem; text-align: center; line-height: 1.4; opacity: 0.6; font-style: italic;">Broad access; casual slurs and exclusion begin</div>
+    <div style="flex: 1; font-size: 0.65rem; text-align: center; line-height: 1.4; opacity: 0.6; font-style: italic;">Voice chat toxicity; gender-based targeting escalates</div>
+    <div style="flex: 1; font-size: 0.65rem; text-align: center; line-height: 1.4; opacity: 0.6; font-style: italic;">Identity scrutiny; legitimacy must be constantly proven</div>
+    <div style="flex: 1; font-size: 0.65rem; text-align: center; line-height: 1.4; opacity: 0.6; font-style: italic;">Doxing, sexual threats, and appearance policing</div>
+    <div style="flex: 1; font-size: 0.65rem; text-align: center; line-height: 1.4; opacity: 0.6; font-style: italic;">Near-total exclusion; Geguri's story made typical</div>
+  </div>
+</div>
+ 
 ---
-
+ 
+## How Boundaries Change (or Don't)
+ 
+Efforts to shift hegemonic game culture operate at multiple levels:
+ 
+- **Grassroots resistance:** Organizations like *Women in Games*, *AnyKey*, and community-led initiatives provide mentorship, safe spaces, and advocacy. These groups challenge the idea that gaming is inherently male and create pathways for marginalized players to enter and stay.
+- **Institutional reforms:** Some game companies now employ dedicated moderation teams, deploy AI tools to detect harassment, and publish transparency reports. Esports leagues have introduced anti-harassment policies and, in a few cases, diversity quotas. <Cite n={8} title="Rogstad (2022)" />
+- **Persistent barriers:** Despite these efforts, Rogstad's (2022) literature review reveals that the underlying structures of esports remain overwhelmingly male-dominated. Media coverage still frames women players as novelties, and the burden of proving legitimacy continues to fall on individuals rather than systems.
+ 
+Thus, while boundaries *can* shift, they often do so slowly and incompletely. The default culture is resilient because it is embedded not only in policies but in everyday interactions, media narratives, and the design of games themselves.
+ 
+---
+ 
 ## The Layers of Exclusion
-
+ 
 The circle packing chart below visualizes the topics we've discussed — from "Hegemonic Masculinity" to the detailed case studies. Click on any circle to zoom in and explore the structure of gatekeeping, harassment, and resistance. Click the background to zoom back out.
-
+ 
 <div id="circlepack-chart" style="margin: 2rem 0; display: flex; justify-content: center;"></div>
-<div id="circlepack-chart" style="margin: 2rem 0; display: flex; justify-content: center;"></div>
-
+ 
 <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 <script src="/scripts/circlepackip5.js"></script>
-
+<p style="font-size: 0.70rem;">This interactive chart is keyboard navigable: use Tab to focus on a circle, then Enter to zoom in, and Escape to zoom out. A text-based outline of the hierarchy is available in the page source.</p>
+ 
 ---
-
+ 
 ## Implications for Teaching Practice
-
+ 
 This is where my role as a K-12 educator becomes concrete. The classroom is where the next generation of players, developers, and community members is being shaped.
-
+ 
 <Callout title="Burning Question" variant="note">
   How do I actively model inclusive gaming culture in my classroom — not just by adding representation, but by disrupting the underlying assumption that STEM and gaming spaces belong to some students more than others?
 </Callout>
-
+ 
 Girls were twice as likely to draw a boy when asked to draw a scientist or mathematician. Boys drew boys almost universally. <Cite n={4} title="Edutopia (2019)" /> If gaming spaces replicate this, and they do, then the K-12 classroom is both a site of the problem and one of the most powerful places to address it.
-
+ 
+One strategy I've begun using is a **cooperative game session** where students are randomly assigned roles that defy gender stereotypes — for example, in *Overcooked*, everyone rotates between "support" and "lead" positions, and we debrief afterward on who assumed authority and why. Another practice is **explicit language intervention**: when a student uses a phrase like "you play like a girl," we pause to analyze what that phrase actually means and whose work it does.
+ 
 Teachers who model inclusivity will see students who practice it — in classrooms, in lobbies, and eventually, in studios.
-
+ 
+<div id="educator-audit" style="margin: 2rem 0; border: 1px solid rgba(99,102,241,0.2); border-radius: 1rem; padding: 1.5rem; background: rgba(99,102,241,0.03);">
+  <p style="font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #6366f1; margin: 0 0 0.3rem;">🎯 Educator Self-Audit</p>
+  <p style="font-size: 0.82rem; opacity: 0.7; margin: 0 0 1.25rem; line-height: 1.55;">Check the practices you already use. What gaps remain?</p>
+  <div id="audit-items"></div>
+  <div style="margin-top: 1.25rem;">
+    <div style="height: 6px; background: rgba(99,102,241,0.12); border-radius: 99px; overflow: hidden;">
+      <div id="audit-bar" style="height: 100%; background: #6366f1; border-radius: 99px; width: 0%; transition: width 0.35s ease;"></div>
+    </div>
+    <p id="audit-msg" style="font-size: 0.75rem; margin: 0.5rem 0 0; opacity: 0.6; font-style: italic;">0 of 5 practices checked</p>
+  </div>
+</div>
+ 
+<script src="/scripts/auditip5.js"></script>
+ 
+**A call to action for educators:**  
+1. Audit the games you use in class. Who is centered? Who is absent?  
+2. Interrupt "casual" gatekeeping language immediately and publicly.  
+3. Invite guest speakers (even virtually) from diverse gaming backgrounds.  
+4. Share resources like the *Feminist Frequency* series or the *AnyKey* educator guides with your students.
+ 
 ---
-
+ 
+## Key Takeaways
+ 
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin: 1.5rem 0 2.5rem;">
+ 
+  <div style="border-radius: 1rem; padding: 1.25rem; border: 1px solid rgba(99,102,241,0.2); background: linear-gradient(135deg, rgba(99,102,241,0.06), rgba(99,102,241,0.01));">
+    <span style="font-size: 1.5rem; display: block; margin-bottom: 0.5rem;">🔁</span>
+    <strong style="font-size: 0.9rem; display: block; margin-bottom: 0.35rem; color: #6366f1;">Daily Micro-interactions</strong>
+    <p style="font-size: 0.8rem; margin: 0; line-height: 1.65; opacity: 0.82;">Hegemony is maintained through routine remarks and small exclusions — not only overt acts of sexism.</p>
+  </div>
+ 
+  <div style="border-radius: 1rem; padding: 1.25rem; border: 1px solid rgba(236,72,153,0.2); background: linear-gradient(135deg, rgba(236,72,153,0.06), rgba(236,72,153,0.01));">
+    <span style="font-size: 1.5rem; display: block; margin-bottom: 0.5rem;">📉</span>
+    <strong style="font-size: 0.9rem; display: block; margin-bottom: 0.35rem; color: #db2777;">Cumulative Barriers</strong>
+    <p style="font-size: 0.8rem; margin: 0; line-height: 1.65; opacity: 0.82;">Women leave gaming not because of a single event, but because of a constant drain of legitimacy work and compounding hostility.</p>
+  </div>
+ 
+  <div style="border-radius: 1rem; padding: 1.25rem; border: 1px solid rgba(245,158,11,0.2); background: linear-gradient(135deg, rgba(245,158,11,0.06), rgba(245,158,11,0.01));">
+    <span style="font-size: 1.5rem; display: block; margin-bottom: 0.5rem;">⚖️</span>
+    <strong style="font-size: 0.9rem; display: block; margin-bottom: 0.35rem; color: #d97706;">All-Female Leagues</strong>
+    <p style="font-size: 0.8rem; margin: 0; line-height: 1.65; opacity: 0.82;">Offer safer developmental spaces, but risk leaving the dominant culture intact and unexamined on the other side.</p>
+  </div>
+ 
+  <div style="border-radius: 1rem; padding: 1.25rem; border: 1px solid rgba(16,185,129,0.2); background: linear-gradient(135deg, rgba(16,185,129,0.06), rgba(16,185,129,0.01));">
+    <span style="font-size: 1.5rem; display: block; margin-bottom: 0.5rem;">🌱</span>
+    <strong style="font-size: 0.9rem; display: block; margin-bottom: 0.35rem; color: #059669;">Institutional & Grassroots Efforts</strong>
+    <p style="font-size: 0.8rem; margin: 0; line-height: 1.65; opacity: 0.82;">Both exist, but are often underfunded and slow to shift the deep structural assumptions baked into gaming culture.</p>
+  </div>
+ 
+  <div style="border-radius: 1rem; padding: 1.25rem; border: 1px solid rgba(14,165,233,0.2); background: linear-gradient(135deg, rgba(14,165,233,0.06), rgba(14,165,233,0.01));">
+    <span style="font-size: 1.5rem; display: block; margin-bottom: 0.5rem;">🏫</span>
+    <strong style="font-size: 0.9rem; display: block; margin-bottom: 0.35rem; color: #0284c7;">The Classroom as Intervention</strong>
+    <p style="font-size: 0.8rem; margin: 0; line-height: 1.65; opacity: 0.82;">Educators can model and enforce inclusive norms before students enter broader gaming spaces — it matters before it's too late.</p>
+  </div>
+ 
+</div>
+ 
+---
+ 
 ## Reflections
-
+ 
 Before engaging seriously with this research, I understood harassment in gaming as something *other* people did. What shifted for me was recognizing the structural nature of it — that the problem isn't a few bad actors, but a culture that consistently produces and protects them.
-
+ 
 The lack of opportunity for women to engage in this industry is not only a concern for gender equality in gaming — it is an economic and creative failure. The games being made are narrower, less imaginative, and less human than they could be.
-
+ 
 My responsibility isn't just to raise boys who treat people well online. It's to create classrooms where girls don't have to fight for the right to belong in digital spaces before they've even started.
-
+ 
 ---
+ 
+## Further Resources
+ 
+- [AnyKey](https://anykey.org) – Research and advocacy for inclusion in esports and gaming.  
+- [Feminist Frequency](https://feministfrequency.com) – Media analysis series on gender in games.  
+- [Take This](https://takethis.org) – Mental health and inclusivity resources for game communities.  
+- [Women in Games](https://www.womeningames.org) – Global organization supporting women and non-binary people in the games industry.
+ 
+---
+ 
 ## References
 <div class="mt-8 border-t border-gray-200 dark:border-gray-700 pt-8">
 <div class="flex flex-col gap-6">
-
+ 
 <div id="ref-1" class="flex items-start gap-4 text-sm scroll-mt-24 group justify-between">
 <div class="flex gap-3">
 <a href="#cite-1" class="flex-none w-6 text-right font-mono text-xs text-blue-600 pt-1 hover:underline hover:font-bold">[1]</a>
@@ -137,7 +338,7 @@ My responsibility isn't just to raise boys who treat people well online. It's to
 </div>
 </div>
 </div>
-
+ 
 <div id="ref-2" class="flex items-start gap-4 text-sm scroll-mt-24 group justify-between">
 <div class="flex gap-3">
 <a href="#cite-2" class="flex-none w-6 text-right font-mono text-xs text-blue-600 pt-1 hover:underline hover:font-bold">[2]</a>
@@ -146,7 +347,7 @@ My responsibility isn't just to raise boys who treat people well online. It's to
 </div>
 </div>
 </div>
-
+ 
 <div id="ref-3" class="flex items-start gap-4 text-sm scroll-mt-24 group justify-between">
 <div class="flex gap-3">
 <a href="#cite-3" class="flex-none w-6 text-right font-mono text-xs text-blue-600 pt-1 hover:underline hover:font-bold">[3]</a>
@@ -155,16 +356,7 @@ My responsibility isn't just to raise boys who treat people well online. It's to
 </div>
 </div>
 </div>
-
-<div id="ref-4" class="flex items-start gap-4 text-sm scroll-mt-24 group justify-between">
-<div class="flex gap-3">
-<a href="#cite-4" class="flex-none w-6 text-right font-mono text-xs text-blue-600 pt-1 hover:underline hover:font-bold">[4]</a>
-<div class="leading-relaxed text-gray-700 dark:text-gray-300">
-<b>Rogstad, E. T. (2022).</b> Gender in eSports research: A literature review. <i>European Journal for Sport and Society</i>, <i>19</i>(3), 195–213.
-</div>
-</div>
-</div>
-
+ 
 <div id="ref-5" class="flex items-start gap-4 text-sm scroll-mt-24 group justify-between">
 <div class="flex gap-3">
 <a href="#cite-5" class="flex-none w-6 text-right font-mono text-xs text-blue-600 pt-1 hover:underline hover:font-bold">[5]</a>
@@ -176,7 +368,7 @@ My responsibility isn't just to raise boys who treat people well online. It's to
 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" class="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" /></svg>
 </a>
 </div>
-
+ 
 <div id="ref-6" class="flex items-start gap-4 text-sm scroll-mt-24 group justify-between">
 <div class="flex gap-3">
 <a href="#cite-6" class="flex-none w-6 text-right font-mono text-xs text-blue-600 pt-1 hover:underline hover:font-bold">[6]</a>
@@ -185,8 +377,17 @@ My responsibility isn't just to raise boys who treat people well online. It's to
 </div>
 </div>
 </div>
-
+ 
+<div id="ref-7" class="flex items-start gap-4 text-sm scroll-mt-24 group justify-between">
+<div class="flex gap-3">
+<a href="#cite-7" class="flex-none w-6 text-right font-mono text-xs text-blue-600 pt-1 hover:underline hover:font-bold">[7]</a>
+<div class="leading-relaxed text-gray-700 dark:text-gray-300">
+<b>Rogstad, E. T. (2022).</b> Gender in eSports research: A literature review. <i>European Journal for Sport and Society</i>, <i>19</i>(3), 195–213.
 </div>
 </div>
-
+</div>
+ 
+</div>
+</div>
+ 
 </Prose>
