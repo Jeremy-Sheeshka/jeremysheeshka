@@ -522,7 +522,7 @@
       <h2>The Incident</h2>
       <div class="rp-4col">
         <div class="rp-card lg"><div class="rp-lbl">Background</div><h4>Two professionals</h4><p>Coordinating a shared community event. Previously collaborated through clear advance notice of a third party.</p></div>
-        <div class="rp-card lg"><div class="rp-lbl">The Trigger</div><h4>Poster distributed</h4><p>Jordan's group listed as a participant in the event to all district staff without his consultation.</p></div>
+        <div class="rp-card lg"><div class="rp-lbl">The Trigger</div><h4>Poster distributed</h4><p>Jordan's group listed as a participant in the event to all staff without his consultation.</p></div>
         <div class="rp-card lt"><div class="rp-lbl">Jordan's reply</div><h4>Concern raised</h4><p>Jordan raised concern about short notice and scheduling challenges.</p></div>
         <div class="rp-card lc"><div class="rp-lbl">Karen's response</div><h4>"You should have known"</h4><p>Karen takes this as a signal to remove Jordan's group from the event entirely and CC's his administration.</p></div>
       </div>
@@ -564,7 +564,7 @@
       <div class="rp-ctx gold">Neuliep — Socio-Relational Context</div>
       <h2>Power, Status, and Policing</h2>
       <div class="rp-3col">
-        <div class="rp-card gold"><div class="rp-lbl gold">Veteran vs. Newcomer</div><h4>Cultural capital</h4><p>Karen was guided through the event for over 20 years before the third party passed away. She had institutional (insider) knowledge which she held Jordan accountable for but was something he did not yet possess as he was still new to the community.</p></div>
+        <div class="rp-card gold"><div class="rp-lbl gold">Veteran vs. Newcomer</div><h4>Cultural capital</h4><p>Karen was guided through the event for over 20 years before through a third party that had recently left the district. She had institutional (insider) knowledge which she held Jordan accountable for but was something he did not yet possess as he was still new to the community.</p></div>
         <div class="rp-card coral"><div class="rp-lbl coral">Informal policing</div><h4>Labelled "unprofessional"</h4><p>Karen expressed that Jordan's style of communication about this was unprofessional. This brings to question whose norms of communication create the default.</p></div>
         <div class="rp-card teal"><div class="rp-lbl teal">Formal policing</div><h4>Senior colleague CC'd</h4><p>Their response: "My expectation was that I would see your group performing, as they have every year." Tradition enforced from institutional authority.</p></div>
       </div>
