@@ -1,6 +1,6 @@
 // Runs after D3 is loaded via CDN script tag in the page
 (function () {
-  const width = 700;
+  const width = 500;
   const height = width;
 
   const color = d3.scaleLinear()
