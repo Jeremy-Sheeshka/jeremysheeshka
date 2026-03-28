@@ -16,113 +16,111 @@
 
     // Tier 1 – Category bubbles
     'Hegemonic Masculinity':
-      'Game culture constructs men as the "default" gamer by merging geek identity with neoliberal masculinity and a pervasive myth of meritocracy.',
+      'Game culture constructs men as the "default" gamer.',
     'Harassment and Toxicity':
-      'A hyper-masculine, anonymous environment fosters severe harassment used deliberately as "gender-zoning" — pushing women out of competitive spaces.',
+      'Hyper-masculine, anonymized environments often create severe harassment that push women out of competitive spaces.',
     'Sexual Objectification':
-      'Women are routinely reduced to decorative or sexual props, from marketing "booth babes" to hyper-sexualized in-game character designs.',
+      'Women are routinely reduced to sexualized props and are hyper-sexualized through in-game character designs.',
     'Barriers and Inequality':
-      'Structural exclusion — not a lack of skill — keeps women underrepresented at every level of professional play.',
+      'Structural exclusions keep women underrepresented.',
     'Stereotypes and Expectations':
       'Female players face constant, compounding assumptions about their skill, role preferences, and appearance.',
     'Coping Strategies':
       'Facing relentless hostility, women develop defensive survival strategies that carry their own psychological costs.',
     'Pathways to Change':
-      'Lasting reform requires visible role models, safe practice spaces, and genuine institutional accountability.',
+      'Lasting change requires visible role models, safe practice spaces, and genuine institutional accountability.',
     'Case Studies':
-      'Real-world examples that illustrate the systemic barriers — and occasional breakthroughs — women experience in gaming.',
+      'Real-world examples that illustrate the systemic barriers women experience.',
 
     // Hegemonic Masculinity children
     'Geek vs. Athletic Masculinity':
-      'eSports fuses "geek" identity with competitive dominance, creating a new masculine archetype that still excludes women.',
+      '',
     'Technological Mastery as Male':
-      'Tech skill is culturally coded as masculine, framing women who game as anomalies rather than natural participants.',
+      '',
     'Male Dominance in eSports':
-      'Men are positioned as the default competitive player; women are treated as exceptions who must constantly re-prove their legitimacy.',
+      '',
     'Structural Sexism in Industry':
-      'The "myth of meritocracy" masks the real barriers — exclusion from scrims, pay gaps, and lack of promotion — that block women\'s advancement.',
+      '',
 
     // Harassment and Toxicity children
     'Online Abuse':
-      'Women face disproportionate sexual objectification, violent threats, and toxic banter from teammates and spectators alike.',
+      'Women face disproportionate sexual objectification, violent threats, and toxic banter from teammates and spectators.',
     'Rape and Death Threats':
-      'Female gamers routinely receive threats severe enough to cause withdrawal from gaming entirely — a direct, measurable outcome of toxic culture.',
+      '',
     'Sexist/Homophobic Language':
-      'Slurs are normalised as "banter," creating a hostile baseline that triggers stereotype threat and self-doubt in women.',
+      '',
     'GamerGate Incident':
-      'A coordinated 2014 harassment campaign that fabricated conspiracy theories against feminist scholars and developers to resist cultural change in gaming.',
-    'Workplace Assault (Ubisoft Case)':
-      'Allegations at Ubisoft Toronto exposed how permissive party culture and broken HR systems protect powerful abusers over survivors.',
+      '',
+    'Workplace Assault (Ubisoft case study)':
+      '',
 
     // Sexual Objectification children
     'Booth Babes':
-      'Using women as marketing props at gaming events commodifies the female body while simultaneously marginalising women as players.',
+      '',
     'Sexualized Game Characters':
-      'Female characters are frequently designed for the male gaze, reinforcing the cultural message that games are made by and for men.',
+      '',
     'Unwanted Sexual Attention':
-      'Women at live gaming events face persistent unwanted contact and commentary, making participation unsafe and exhausting.',
+      '',
 
     // Barriers and Inequality children
     'Underrepresentation in Professional Play':
-      'Women are systematically excluded from "scrims" and top-tier teams, blocking the practice pathway required to reach professional competition.',
+      '',
     'Gender Pay Gap':
-      'Female eSports players earn significantly less and have far fewer annual tournaments to compete in than their male counterparts.',
+      '',
     'Lack of Promotion for Women':
-      'Women are rarely elevated to visible roles like coaches or shoutcasters, removing the role models that signal professional viability to newcomers.',
+      '',
     'Gender-Zoning and Exclusion':
-      'Harassment functions as a deliberate tactic to push women out of shared practice spaces, restricting their development and access.',
+      '',
 
     // Stereotypes and Expectations children
     'The Gamer Girl Trope':
-      'Women are stereotyped as casual players performing femininity for attention, rather than as serious and skilled competitors.',
+      '',
     'Appearance-Based Judgment':
-      'Female streamers and pros face intense scrutiny of their looks rather than their gameplay, undermining their credibility and focus.',
-    'Restricted Character Roles (e.g. Mercy)':
-      'The "Mercy stereotype" assumes women lack the mechanical skill for damage or tank roles, pressuring them into lower-prestige support positions.',
+      '',
+    'Restricted Character Roles':
+      '',
     'Assumed Lower Skill Levels':
-      'Women\'s skill is persistently doubted; even exceptional performances are dismissed with backhanded compliments like "you played well for a girl."',
+      '',
 
     // Coping Strategies children
     'Gender Masking/Voice Altering':
-      'Women disguise their gender online to avoid harassment, though this protective strategy produces guilt over the inability to defend others who are targeted.',
+      '',
     'Avoidance of Voice Chat':
-      'Staying silent in voice channels reduces harassment but limits teamwork and restricts competitive development.',
+      '',
     'Withdrawal from Gaming':
-      'Persistent abuse causes many women to reduce their playtime or quit entirely — a direct and measurable cost of toxic culture.',
+      '',
     'Internalized Subordination':
-      'Constant harassment can cause women to internalise false beliefs about their own inferiority, compounding the original harm.',
+      '',
 
     // Pathways to Change children
     'Visible Female Role Models':
-      'Promoting female coaches, shoutcasters, and organizers signals to newcomers that a professional career is genuinely possible.',
-    'Single-Gender Leagues (Game Changers)':
-      'All-female tournaments like Valorant Game Changers create safe skill-building spaces, though critics warn they must lead toward — not replace — mixed-competition.',
+      '',
+    'Single-Gender Leagues':
+      '',
     'Supportive Communities':
-      'Female-driven micro-communities provide a protective ring of solidarity that safeguards mental health and builds resilience.',
+      '',
     'Institutional Accountability':
-      'Organisations must adopt proactive "networked caretaking" — punishing toxicity and protecting players rather than shielding abusers.',
-    'Encouraging Women in STEM':
+      '',
+    'Encouraging Women to enter STEM fields ':
       'Broadening access to technology and coding education is foundational to long-term equity across the game industry pipeline.',
 
     // Case Studies children
     'Geguri (Kim Se-yeon)':
-      'South Korean Overwatch pro falsely accused of using cheating software — her case is a defining example of how women\'s skill is surveilled and disbelieved.',
+      'South Korean Overwatch pro falsely accused of using cheating software. A defining example of how women\'s skill is surveilled and disbelieved.',
     'Cheating Accusations':
-      'Male players filed formal complaints against Geguri, refusing to accept that her accuracy was the product of legitimate skill.',
+      '',
     'Live-stream Verification':
-      'Geguri streamed live to prove her legitimacy, notably hiding her face — subverting the heteronormative gaze that targets female bodies online.',
+      '',
     'Post-feminist Stance':
-      'Geguri publicly rejected feminist labels as a survival strategy, prioritising acceptance in a meritocratic culture over challenging its inequities.',
+      '',
     'Ubisoft Toronto':
-      'Allegations of sustained workplace abuse exposed how "party culture" and institutional failures create impunity for senior abusers.',
-    'Abuse Allegations (Maxime Beland)':
-      'Senior creative director Maxime Béland resigned amid multiple allegations of physical and emotional abuse by colleagues.',
+      'A case study on sustained workplace abuse and institutional failures.',
+    'Abuse Allegations':
+      '',
     'HR and Management Failures':
-      'HR explicitly advised victims to confront their abusers directly — a policy that created a chilling effect and silenced survivors.',
+      '',
     'Toxic Party Culture':
-      'A permissive culture of heavy drinking and blurred boundaries normalised violations and shielded powerful figures from accountability.',
-    'DiGRA Fishbowl Controversy':
-      'GamerGate targeted a DiGRA academic event, harassing feminist scholars to suppress critical game studies and resist diversity in the field.',
+      '',
   };
 
   const data = {
@@ -173,7 +171,7 @@
         children: [
           { name: 'The Gamer Girl Trope', value: 1 },
           { name: 'Appearance-Based Judgment', value: 1 },
-          { name: 'Restricted Character Roles (e.g. Mercy)', value: 1 },
+          { name: 'Restricted Character Roles', value: 1 },
           { name: 'Assumed Lower Skill Levels', value: 1 },
         ],
       },
@@ -190,10 +188,10 @@
         name: 'Pathways to Change',
         children: [
           { name: 'Visible Female Role Models', value: 1 },
-          { name: 'Single-Gender Leagues (Game Changers)', value: 1 },
+          { name: 'Single-Gender Leagues', value: 1 },
           { name: 'Supportive Communities', value: 1 },
           { name: 'Institutional Accountability', value: 1 },
-          { name: 'Encouraging Women in STEM', value: 1 },
+          { name: 'Encouraging Women to enter STEM fields', value: 1 },
         ],
       },
       {
@@ -210,12 +208,11 @@
           {
             name: 'Ubisoft Toronto',
             children: [
-              { name: 'Abuse Allegations (Maxime Beland)', value: 1 },
+              { name: 'Abuse Allegations', value: 1 },
               { name: 'HR and Management Failures', value: 1 },
               { name: 'Toxic Party Culture', value: 1 },
             ],
           },
-          { name: 'DiGRA Fishbowl Controversy', value: 1 },
         ],
       },
     ],
