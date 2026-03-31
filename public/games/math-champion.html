@@ -21,6 +21,10 @@ body{font-family:'Arial Rounded MT Bold','Comic Sans MS',Arial,sans-serif;backgr
 .opt-btn{padding:7px 14px;border-radius:30px;border:2px solid rgba(255,255,255,.25);background:transparent;color:#fff;font-family:inherit;font-size:13px;cursor:pointer;transition:all .2s}
 .opt-btn:hover{background:rgba(255,255,255,.15)}
 .opt-btn.sel{background:#4ECDC4;border-color:#4ECDC4;color:#1a1a2e;font-weight:bold}
+
+/* ── NEW: shuffle/cooldown highlight colour so they stand out slightly ── */
+.opt-btn.sel-warn{background:#FF6B35;border-color:#FF6B35;color:#fff;font-weight:bold}
+
 .topic-btn{padding:9px 14px;border-radius:10px;border:2px solid rgba(255,255,255,.25);background:transparent;color:#fff;font-family:inherit;font-size:13px;cursor:pointer;transition:all .2s}
 .topic-btn:hover{background:rgba(255,255,255,.15)}
 .topic-btn.sel{background:#FF6B35;border-color:#FF6B35;font-weight:bold}
@@ -77,9 +81,16 @@ body{font-family:'Arial Rounded MT Bold','Comic Sans MS',Arial,sans-serif;backgr
 .ans-btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
 .ans-btn.cr{background:rgba(0,200,80,.35);border-color:#00cc55}
 .ans-btn.wr{background:rgba(220,40,40,.3);border-color:#ff4444}
-.freeze-ov{display:none;position:absolute;inset:0;background:rgba(200,0,0,.12);border-radius:17px;z-index:10;align-items:center;justify-content:center;pointer-events:all}
+
+/* ── NEW: shuffle bounce animation ── */
+@keyframes shuffleBounce{0%{transform:scale(1)}30%{transform:scale(.92) rotate(-2deg)}60%{transform:scale(1.05) rotate(1deg)}100%{transform:scale(1) rotate(0)}}
+.ans-btn.shuffled{animation:shuffleBounce .35s ease-out}
+
+.freeze-ov{display:none;position:absolute;inset:0;background:rgba(200,0,0,.12);border-radius:17px;z-index:10;align-items:center;justify-content:center;pointer-events:all;flex-direction:column;gap:8px}
 .freeze-ov.on{display:flex}
 .freeze-txt{font-size:clamp(24px,4vw,44px);font-weight:bold;color:#ff4444;text-shadow:0 0 20px rgba(255,68,68,.8);animation:fblink .5s infinite}
+/* ── NEW: cooldown countdown inside freeze overlay ── */
+.freeze-cd{font-size:clamp(18px,2.5vw,28px);color:rgba(255,100,100,.9);font-weight:bold}
 @keyframes fblink{0%,100%{opacity:1}50%{opacity:.35}}
 .streak-pop{position:absolute;top:16px;left:50%;transform:translateX(-50%);font-size:clamp(18px,2.5vw,28px);font-weight:bold;color:#FFD700;pointer-events:none;animation:spop 1s ease-out forwards;z-index:50;white-space:nowrap;text-shadow:0 0 12px rgba(255,215,0,.8)}
 @keyframes spop{0%{transform:translateX(-50%) scale(.5);opacity:0}50%{transform:translateX(-50%) scale(1.3);opacity:1}100%{transform:translateX(-50%) translateY(-50px) scale(1);opacity:0}}
@@ -186,6 +197,20 @@ body{font-family:'Arial Rounded MT Bold','Comic Sans MS',Arial,sans-serif;backgr
         <button class="opt-btn" data-g="tmr" data-v="20">20s</button>
         <button class="opt-btn" data-g="tmr" data-v="0">None</button>
       </div>
+      <!-- ── NEW: Wrong-answer cooldown setting ── -->
+      <div class="opt-row">
+        <span class="opt-lbl">Wrong Guess Cooldown:</span>
+        <button class="opt-btn" data-g="cd" data-v="2500">2.5s</button>
+        <button class="opt-btn sel" data-g="cd" data-v="5000">5s</button>
+        <button class="opt-btn" data-g="cd" data-v="8000">8s</button>
+        <button class="opt-btn" data-g="cd" data-v="10000">10s</button>
+      </div>
+      <!-- ── NEW: Answer shuffle setting ── -->
+      <div class="opt-row">
+        <span class="opt-lbl">Shuffle on Wrong:</span>
+        <button class="opt-btn sel" data-g="shuf" data-v="1">ON 🔀</button>
+        <button class="opt-btn" data-g="shuf" data-v="0">OFF</button>
+      </div>
       <div class="opt-row">
         <span class="opt-lbl">Sound:</span>
         <button class="opt-btn sel" data-g="snd" data-v="1">ON</button>
@@ -272,7 +297,18 @@ body{font-family:'Arial Rounded MT Bold','Comic Sans MS',Arial,sans-serif;backgr
 </div>
 
 <script>
-const S = { players:2, diff:'medium', topics:['add','sub'], streakToWin:5, qpr:9999, timer:15, sound:true };
+// ── Settings object — added cooldown (ms) and shuffle flag ──
+const S = {
+  players: 2,
+  diff: 'medium',
+  topics: ['add','sub'],
+  streakToWin: 5,
+  qpr: 9999,
+  timer: 15,
+  sound: true,
+  cooldown: 5000,   // NEW: wrong-answer freeze duration in ms (default 5s)
+  shuffle: true     // NEW: reshuffle answer buttons after a wrong guess
+};
 
 let G = {};
 const pNames = ['Player 1','Player 2','Player 3'];
@@ -282,7 +318,10 @@ function freshG(){
   G = {
     champion:-1, streak:0, qCount:0, curQ:null,
     roundOver:false, noWinner:false, frozen:[false,false,false],
-    freezeT:[null,null,null], timerInt:null, timerLeft:0,
+    freezeT:[null,null,null],
+    // NEW: per-player cooldown display intervals
+    freezeCD:[null,null,null],
+    timerInt:null, timerLeft:0,
     paused:false, adaptDiff:S.diff==='adaptive'?'medium':S.diff,
     cwins:0, closses:0, readyPhase:false, readyPressed:[],
     sd:{
@@ -293,19 +332,23 @@ function freshG(){
   };
 }
 
+// ── Option button wiring (handles the two new groups: cd and shuf) ──
 document.querySelectorAll('.opt-btn').forEach(b=>{
   b.addEventListener('click',()=>{
     const g=b.dataset.g;
     document.querySelectorAll(`.opt-btn[data-g="${g}"]`).forEach(x=>x.classList.remove('sel'));
     b.classList.add('sel');
     const v=b.dataset.v;
-    if(g==='players') S.players=+v;
-    else if(g==='diff') S.diff=v;
-    else if(g==='stk') S.streakToWin=+v;
-    else if(g==='tmr') S.timer=+v;
-    else if(g==='snd') S.sound=v==='1';
+    if(g==='players')      S.players=+v;
+    else if(g==='diff')    S.diff=v;
+    else if(g==='stk')     S.streakToWin=+v;
+    else if(g==='tmr')     S.timer=+v;
+    else if(g==='snd')     S.sound=v==='1';
+    else if(g==='cd')      S.cooldown=+v;       // NEW
+    else if(g==='shuf')    S.shuffle=v==='1';   // NEW
   });
 });
+
 document.querySelectorAll('.topic-btn').forEach(b=>{
   b.addEventListener('click',()=>{ b.classList.toggle('sel'); refreshTopics(); });
 });
@@ -340,7 +383,10 @@ function buildZones(){
         <span class="pname">${pNames[i]}</span>
       </div>
       <div class="ans-grid" id="ans${i}"></div>
-      <div class="freeze-ov" id="fr${i}"><div class="freeze-txt">TIME OUT</div></div>
+      <div class="freeze-ov" id="fr${i}">
+        <div class="freeze-txt">TIME OUT</div>
+        <div class="freeze-cd" id="frcd${i}"></div>
+      </div>
     </div>`;
   }
 }
@@ -373,7 +419,10 @@ function startQ(){
   G.frozen=[false,false,false];
   for(let i=0;i<3;i++){
     if(G.freezeT[i]){clearTimeout(G.freezeT[i]);G.freezeT[i]=null;}
+    // NEW: clear any cooldown display intervals
+    if(G.freezeCD[i]){clearInterval(G.freezeCD[i]);G.freezeCD[i]=null;}
     const f=document.getElementById('fr'+i); if(f) f.classList.remove('on');
+    const fc=document.getElementById('frcd'+i); if(fc) fc.textContent='';
   }
   document.getElementById('qArea').style.display='';
   document.querySelector('.stats-bar').style.display='';
@@ -415,21 +464,72 @@ function handleAns(pi,val){
     if(Math.random()<.27) showEnc('correct',pi);
     setTimeout(()=>checkMilestone(pi),1700);
   } else {
-    revealAns(pi,val,false); freezeP(pi); flash(pi,'wf'); snd('wrong');
+    revealAns(pi,val,false); flash(pi,'wf'); snd('wrong');
+    freezeP(pi);   // freeze now uses S.cooldown
+    // NEW: shuffle answer buttons after the red-flash has been visible briefly
+    if(S.shuffle && !G.curQ.oe){
+      setTimeout(()=>reshuffleAnswers(pi), 450);
+    }
     if(Math.random()<.27) showEnc('wrong',pi);
   }
 }
 
-function revealAns(pi,val,ok){ const d=document.getElementById('ans'+pi); if(!d) return; d.querySelectorAll('.ans-btn').forEach(b=>{ if(b.textContent.trim()===String(val)) b.classList.add(ok?'cr':'wr'); }); }
+function revealAns(pi,val,ok){
+  const d=document.getElementById('ans'+pi); if(!d) return;
+  d.querySelectorAll('.ans-btn').forEach(b=>{ if(b.textContent.trim()===String(val)) b.classList.add(ok?'cr':'wr'); });
+}
 function disableAll(){ for(let i=0;i<S.players;i++){ const d=document.getElementById('ans'+i); if(d) d.querySelectorAll('.ans-btn').forEach(b=>b.disabled=true); } }
+
+// ── UPDATED freezeP: uses S.cooldown and shows a live countdown ──
 function freezeP(pi){
   G.frozen[pi]=true;
-  const d=document.getElementById('ans'+pi); if(d) d.querySelectorAll('.ans-btn').forEach(b=>b.disabled=true);
+  const d=document.getElementById('ans'+pi);
+  if(d) d.querySelectorAll('.ans-btn').forEach(b=>b.disabled=true);
+
   const f=document.getElementById('fr'+pi); if(f) f.classList.add('on');
+
+  // NEW: live countdown display inside the freeze overlay
+  const cdEl=document.getElementById('frcd'+pi);
+  let remaining=Math.ceil(S.cooldown/1000);
+  if(cdEl) cdEl.textContent=`${remaining}s`;
+  if(G.freezeCD[pi]) clearInterval(G.freezeCD[pi]);
+  G.freezeCD[pi]=setInterval(()=>{
+    remaining--;
+    if(cdEl) cdEl.textContent=remaining>0?`${remaining}s`:'';
+    if(remaining<=0){ clearInterval(G.freezeCD[pi]); G.freezeCD[pi]=null; }
+  },1000);
+
+  if(G.freezeT[pi]) clearTimeout(G.freezeT[pi]);
   G.freezeT[pi]=setTimeout(()=>{
-    if(!G.roundOver){ G.frozen[pi]=false; if(d) d.querySelectorAll('.ans-btn').forEach(b=>b.disabled=false); const f2=document.getElementById('fr'+pi); if(f2) f2.classList.remove('on'); }
-  },2500);
+    if(!G.roundOver){
+      G.frozen[pi]=false;
+      if(d) d.querySelectorAll('.ans-btn').forEach(b=>b.disabled=false);
+      const f2=document.getElementById('fr'+pi); if(f2) f2.classList.remove('on');
+      if(cdEl) cdEl.textContent='';
+    }
+  }, S.cooldown);   // ← uses configurable cooldown
 }
+
+// ── NEW: reshuffleAnswers — randomises button order after a wrong guess ──
+function reshuffleAnswers(pi){
+  if(G.roundOver || !G.curQ || G.curQ.oe) return;
+  const d=document.getElementById('ans'+pi); if(!d) return;
+  const btns=[...d.querySelectorAll('.ans-btn')];
+  // Collect current numeric values from button labels
+  const vals=btns.map(b=>+b.textContent.trim());
+  shuf(vals);
+  btns.forEach((b,i)=>{
+    const v=vals[i];
+    b.textContent=v;
+    // Rewire click handler with the new value
+    b.onclick=()=>handleAns(pi,v);
+    // Reset any colour classes (wrong highlight), keep disabled state
+    b.className='ans-btn shuffled';
+    // Remove animation class after it plays so it can fire again next time
+    b.addEventListener('animationend',()=>b.classList.remove('shuffled'),{once:true});
+  });
+}
+
 function flash(pi,cls){ const z=document.getElementById('z'+pi); if(!z) return; z.classList.add(cls); setTimeout(()=>z.classList.remove(cls),600); }
 
 function processWinner(w){
@@ -515,6 +615,8 @@ function showReadyPhase(){
     const d=document.getElementById('ans'+i);
     d.style.cssText='flex:1;display:flex;flex-direction:column;min-height:0';
     const fr=document.getElementById('fr'+i); if(fr) fr.classList.remove('on');
+    // NEW: clear cooldown display when entering ready phase
+    const fc=document.getElementById('frcd'+i); if(fc) fc.textContent='';
     d.className='';
     d.innerHTML=`
       <div class="ready-zone">
@@ -556,7 +658,7 @@ function decDiff(){ const i=dLvls.indexOf(G.adaptDiff); if(i>0) G.adaptDiff=dLvl
 
 function lbEntry(p,s){ let e=G.lb.find(x=>x.p===p); if(e){if(s>e.s)e.s=s;}else G.lb.push({p,s}); G.lb.sort((a,b)=>b.s-a.s); G.lb=G.lb.slice(0,5); }
 function updateLB(){
-  const el=document.getElementById('lbEl'); if(!G.lb.length){el.innerHTML='—';return;}
+  const el=document.getElementById('lbEl'); if(!el||!G.lb.length) return;
   const ms=['🥇','🥈','🥉'];
   el.innerHTML=G.lb.slice(0,3).map((e,i)=>`${ms[i]||'•'} ${pNames[e.p]}: ${e.s}`).join('<br>');
 }
