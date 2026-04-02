@@ -2,9 +2,8 @@
 title: "Community Exclusion and the Ethics of Participation in Prince Rupert"
 description: "A reflection on community exclusion and power dynamics within the Prince Rupert arts community."
 publishDate: 2025-11-28
-keywords: "Kristy Tillman, John Turner, Dawn Quast, Michael Gurney"
 showToc: false
-draft: true
+unlisted: true
 ---
 
 <style>
