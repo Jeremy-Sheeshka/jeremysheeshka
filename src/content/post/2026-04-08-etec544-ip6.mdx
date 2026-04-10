@@ -1,15 +1,152 @@
 ---
-title: "Etec 544 - IP6 - Race, Sexuality & Video Games: A Representational Audit"
-description: "An interactive multimodal mashup of key concepts, challenges, and theories at the intersection of race, sexuality, and video game design — Intellectual Production #6."
-publishDate: 2026-04-08
+title: "ETEC 544: Intellectual Production #6"
+description: "SURVIVANCE: A representational audit and interactive RPG exploring race, sexuality, and video games."
+publishDate: "2026-04-08"
 tags: ["etec544"]
-draft: true
 ---
 
+import Callout from "../../components/blocks/Callout.astro";
 import IP6Interactive from '../../components/IP6Interactive.astro';
 
-# Survivance — A JRPG Against Erasure
+<details class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 mb-8 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800/50 dark:hover:bg-gray-800 open:bg-white dark:open:bg-gray-900 transition-colors">
+  <summary class="font-bold cursor-pointer flex items-center gap-2 select-none text-gray-900 dark:text-gray-100">
+    <span class="text-lg">Assignment: Intellectual Production #6</span>
+  </summary>
+  <div class="mt-4 space-y-4">
+    <p class="text-gray-700 dark:text-gray-300 leading-relaxed">Create an interactive multimodal mashup of key concepts, challenges, and theories at the intersection of race, sexuality, and video game design.</p>
+  </div>
+</details>
 
-<IP6Interactive />
+<section class="game-intro-card bg-gray-50 dark:bg-gray-800/50">
+  <div class="card-content">
+    <p>
+      <strong>SURVIVANCE</strong> is an "RPG against erasure" that challenges the toxic, colonial norms of the mainstream video game industry. Instead of relying on traditional combat or demanding that players prove their "mastery over the machine," players navigate oppressive digital environments by setting firm boundaries and building a network of Community Ties with marginalized allies. 
+    </p>
+<p>
+  While most games tell you to win by grinding for points or defeating enemies, SURVIVANCE completely flips that script. Instead of fighting toxic gatekeepers on their terms, you win by setting boundaries, building real community ties, and focusing on the joy of creating your own safe spaces. Inspired by the game <a href="https://hairnah.com" target="_blank" rel="noopener noreferrer">Hair Nah</a>.
+</p>
+    <div class="iframe-container overflow-hidden bg-[#0a0a14]">
+      <IP6Interactive />
+    </div>
+  </div>
+</section>
+{/* AI Disclaimer Dropdown */}
+<details class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 mb-8 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800/50 dark:hover:bg-gray-800 open:bg-white dark:open:bg-gray-900 transition-colors">
+  <summary class="font-bold cursor-pointer flex items-center gap-2 select-none text-gray-900 dark:text-gray-100">
+    <span class="text-lg">AI & Tooling Disclaimer</span>
+  </summary>
+  <div class="mt-4 space-y-4">
+    <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+      This game was an experiment to see how far I could push human-AI co-creation to realize my vision for this assignment. While the AI suggested various mechanics and characteristics, I maintained final directorial control over what was incorporated, why, and how. It required hours of iterative prompting, testing, and tinkering to successfully weave complex themes of race, gender, and sexuality into a cohesive top-down RPG. My intention in using these tools was to amplify my technical capacity and abilities while showcasing core concepts in an interactive and multimodal way.
+    </p>
+    
+    <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+      My production stack for this included:
+    </p>
+    <ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-2">
+      <li><strong>Gemini Pro:</strong> Used for dozens of iterative coding cycles, debugging, and logic generation to build the game-engine and to troubleshoot code.</li>
+      <li><strong>Suno & Audacity:</strong> Suno generated the base audio tracks, which I then manually edited and looped using Audacity.</li>
+      <li><strong>Sfxr.me:</strong> Was used to manually synthesize the retro "bleeps and bloops" for dialogue and UI interactions.</li>
+      <li><strong>Claude Sonnet 4.6:</strong> Utilized to establish the specific GBA aesthetic and to debug visual glitches</li>
+    </ul>
 
-Play the game above using **arrow keys / WASD** to move and **E** to talk.
+    <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+Integrating this game into my Astro blog resulted in roughly 2,000 lines of JavaScript and HTML. While I will not pretend to have mastered every single line of the underlying logic, collaborating with AI allowed me to extend my technical reach and build something far more ambitious than I could have achieved alone over the course of several days. 
+    </p>
+  </div>
+</details>
+
+## <span class="section-accent"></span> References
+
+<div class="reference-grid">
+  <div class="ref-card bg-gray-50 dark:bg-gray-800/50">
+    <p>Barnes, K. (n.d.). Agniq suaŋŋaktuq and Kisima inŋitchuŋa (Never Alone): 'Cause Gaia likes it cold. <em>First Person Scholar</em>.</p>
+  </div>
+
+  <div class="ref-card bg-gray-50 dark:bg-gray-800/50">
+    <p>Cohen-Peckham, E. (2020, June 21). Confronting racial bias in video games. <em>TechCrunch</em>.</p>
+  </div>
+
+  <div class="ref-card bg-gray-50 dark:bg-gray-800/50">
+    <p>Gray, K. L., & Leonard, D. J. (n.d.). Not a post-racism and post-misogyny promised land: Video games as instruments of (in)justice.</p>
+  </div>
+
+  <div class="ref-card bg-gray-50 dark:bg-gray-800/50">
+    <p>Ruberg, B. (2018). Straightwashing Undertale: Video games and the limits of LGBTQ representation. <em>Transformative Works and Cultures</em>, (28). <a href="https://doi.org/10.3983/twc.2018.1516" class="ref-link">https://doi.org/10.3983/twc.2018.1516</a></p>
+  </div>
+</div>
+
+<style>
+  {`
+    /* Container Styles */
+    .game-intro-card {
+      border-left: 8px solid #002145;
+      border-radius: 12px;
+      padding: 2rem;
+      margin: 2rem 0;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    }
+
+    .card-content p {
+      font-size: 1.15rem;
+      line-height: 1.7;
+      color: inherit;
+    }
+
+    .card-footer {
+      margin-top: 1.5rem;
+      font-size: 0.9rem;
+      border-top: 1px solid #ddd;
+      padding-top: 1rem;
+      color: #666;
+    }
+
+    /* iframe Embed (Repurposed for React Component) */
+    .iframe-container {
+      margin-top: 2rem;
+      border-radius: 8px;
+      border: 2px solid #f9ca24;
+      box-shadow: 4px 4px 0px #f9ca24;
+    }
+
+    /* Reference Cards */
+    .reference-grid {
+      display: grid;
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .ref-card {
+      border: 1px solid #e1e4e8;
+      border-radius: 10px;
+      padding: 1.5rem;
+      position: relative;
+      transition: border-color 0.3s ease;
+    }
+
+    .ref-card:hover {
+      border-color: #0055A4;
+    }
+
+    .ref-link {
+      color: #0055A4;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      word-break: break-all;
+    }
+
+    .ref-link:hover {
+      text-decoration: underline;
+    }
+
+    .section-accent {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      background: #f9ca24;
+      border-radius: 50%;
+      margin-right: 8px;
+    }
+  `}
+</style>

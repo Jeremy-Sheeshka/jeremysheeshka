@@ -3,32 +3,18 @@ import SurvivanceGame from "./SurvivanceGame.jsx";
 ---
 
 <div class="game-container">
-	<SurvivanceGame client:load />
-</div>
-
-<div class="controls-hint">
-	<p>
-		<strong>Controls:</strong> Arrow Keys or WASD to Move | <strong>Z</strong> or <strong
-			>ENTER</strong
-		> to Interact
-	</p>
+    <SurvivanceGame client:load />
 </div>
 
 <style>
-	.game-container {
-		width: 100%;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		background: #111;
-		padding: 2rem;
-		border-radius: 12px;
-		margin: 2rem 0;
-	}
-	.controls-hint {
-		text-align: center;
-		font-family: monospace;
-		color: #666;
-		margin-bottom: 2rem;
-	}
+    .game-container {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #111;
+        padding: 2rem;
+        border-radius: 12px;
+        margin: 2rem 0;
+    }
 </style>
