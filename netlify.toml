@@ -3,4 +3,9 @@
   publish = "dist"
 
 [build.environment]
-  NODE_VERSION = "20" # Ensures Netlify uses a modern version of Node for Astro``
+  NODE_VERSION = "20"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Content-Security-Policy = "script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;"
