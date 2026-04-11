@@ -14,5 +14,6 @@ export default new Map([
 ["src/content/post/2026-03-23-etec544-ip5.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fpost%2F2026-03-23-etec544-ip5.mdx&astroContentModuleFlag=true")],
 ["src/content/post/2026-03-25-etec542-critical-incident.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fpost%2F2026-03-25-etec542-critical-incident.mdx&astroContentModuleFlag=true")],
 ["src/content/post/2026-04-05-etec542-hoa4.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fpost%2F2026-04-05-etec542-hoa4.mdx&astroContentModuleFlag=true")],
-["src/content/post/2026-04-08-etec544-ip6.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fpost%2F2026-04-08-etec544-ip6.mdx&astroContentModuleFlag=true")]]);
+["src/content/post/2026-04-08-etec544-ip6.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fpost%2F2026-04-08-etec544-ip6.mdx&astroContentModuleFlag=true")],
+["src/content/post/2026-04-10-etec544-undercooked-review.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fpost%2F2026-04-10-etec544-undercooked-review.mdx&astroContentModuleFlag=true")]]);
 		
