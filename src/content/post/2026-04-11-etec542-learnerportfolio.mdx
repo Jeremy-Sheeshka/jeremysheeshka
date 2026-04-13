@@ -1,0 +1,81 @@
+---
+title: "Learning Portfolio: Participation in Discussion and Reflection"
+description: "A relational map of my learning in this course — four artifacts explored through connection, community, and communication."
+publishDate: "2026-04-12"
+tags: ["etec5xx"]
+---
+
+import Callout from "../../components/blocks/Callout.astro";
+import SparklyText from "../../components/SparklyText.astro";
+
+<details class="border border-gray-200 dark:border-gray-600 rounded-lg p-4 mb-8 bg-gray-50 hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 open:bg-white dark:open:bg-gray-700 transition-colors">
+  <summary class="font-bold cursor-pointer flex items-center gap-2 select-none text-gray-900 dark:text-gray-100">
+    <span class="text-lg">Assignment:</span>
+  </summary>
+  <div class="mt-4 space-y-4 text-gray-700 dark:text-gray-300 leading-relaxed">
+    <p>Prepare a Learning Portfolio which showcases your participation in various discussion and reflection activities in this course. Highlight key inputs that contributed to your learning outcomes throughout the course.</p>
+    <p>Select and present the following:</p>
+    
+    <ul class="list-disc ml-6 space-y-2 marker:text-gray-700 dark:marker:text-gray-300">
+      <li>One (1) discussion posting that you believe was most valuable for your own learning or for group learning</li>
+      <li>One (1) logbook reflection that you believe was most valuable for your own learning</li>
+      <li>One (1) feedback comment you left for a classmate that you feel was most valuable in inspiring further insight, thought, or discussion</li>
+      <li>One (1) contribution, comment or response made by a classmate that you feel was important for your own learning</li>
+    </ul>
+
+    <p>In addition, write 300–1000 words explaining why you chose these items and in what ways you feel they were valuable or meaningful. Finally, write a reflective text of 300–1000 words on your communication experiences in this virtual learning environment.</p>
+  </div>
+</details>
+## <span class="section-accent"></span> Learner Portfolio
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Playfair+Display:ital,wght@0,500;0,600;1,400&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="/styles/etec542-portfolio-map.css" />
+
+<div id="portfolio-map-root">
+  <div id="pm-wrap">
+    <svg id="pm-graph"></svg>
+    <div id="pm-hint">Click a node to read - Try dragging it for fun</div>
+  </div>
+
+  <div id="pm-backdrop" style="display: none;"></div>
+  <div id="pm-panel" aria-hidden="true" role="dialog" style="display: none;">
+    <header class="pm-panel-header" id="pm-ov-header">
+      <div class="pm-panel-nav">
+        <span class="pm-ov-tag" id="pm-ov-tag"></span>
+        <button class="pm-ov-back" id="pm-ov-back" aria-label="Close panel">
+          <span>Back to Map</span>
+        </button>
+      </div>
+      <h2 class="pm-ov-title" id="pm-ov-title"></h2>
+      <p class="pm-ov-sub" id="pm-ov-sub"></p>
+    </header>
+    <div class="pm-panel-body" id="pm-panel-body">
+      <div class="pm-ov-text" id="pm-ov-text"></div>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="/scripts/etec542-learner-portfolio.js"></script>
+
+## <span class="section-accent"></span> Reflection
+
+<section class="reflection-card bg-gray-50 dark:bg-gray-800/50">
+  <div class="card-content">
+
+{/* ─────────────────────────────────────────────────────────────────
+    SECTION 2 — REFLECTION ON COMMUNICATION (300–1000 words)
+    ───────────────────────────────────────────────────────────────── */}
+<p>When reflecting on how my personal and cultural preferences affected my comfort in this course, I feel that I have grown in my own internal battle and self-concept of what culture is and how it is practiced. While I have not considered myself to be much of a cultural person in the past, I have come full circle on that thought in my realization that even thinking about culture in that way is itself a cultural perspective, one that I have come to understand over time and have since been able to break down and redefine.</p>
+
+<p>There were several moments throughout this course where I identified with the material and concepts being shared in a way that gave me an alternate perspective of myself and others that I had not necessarily considered before. As someone who has always thought of himself as a more direct, introverted, and low-context communicator not necessarily driven by social normative behaviour, stepping into this collaborative online learning environment amongst colleagues and instructors with the varying modes of communication and reflection required of me was a genuinely positive stretch for my abilities and how I typically engage.</p>
+
+<p>One of the biggest challenges I experienced in this course was the anxiety that comes with writing and portraying oneself through the permanence and visibility that asynchronous text creates in a way that face-to-face communication simply does not. In many instances I found myself overthinking sentence structures, my choice of topics, and reconsidering whether what I had to share was actually worth the digital space it would take up. I felt like I had to get everything just right before it counted for anything, which became its own perfectionist barrier, especially given the intentional informality of the discussion posts and logbook. Even with the professor's informal presence there to lower the barriers to entry, this caught me off guard and gave me the opportunity to genuinely reconsider how I engage and what challenges diverse learners might face in similar online environments.</p>
+
+<p>In terms of what this experience has taught me, I think the biggest takeaway is realizing just how much online learning environments quietly assume about the ways people communicate. The expectation of assertiveness, linear argumentation, and written academic fluency is baked into the format of virtual learning in ways that may come naturally to some but present real barriers to others. I found it fascinating to experience this from the other side through the intentionally diverse instructional design and methods presented throughout the course.</p>
+
+<p>Overall I would evaluate my participation as a genuine journey of working through my own contradictions around culture and communication. There was a real irony in looking back at a course so thoughtfully designed to elicit imperfect thinking and flexible engagement, knowing that its very openness got me caught up in my own perfectionism. As things progressed I began to understand this more through the logbook entries and reading partner discussions, and something shifted in a way that made the course click for me despite my personal uncertainties early on. If I could go back knowing what I know now, I would have been less critical of myself in how and why I communicated the way I did. I suspect that would have allowed me to show up more consistently earlier on and <SparklyText class="pl-1 inline-block font-bold text-[var(--theme-cinnabar)]" numberOfSparkles={5} color="var(--theme-cinnabar)">trust that not having it all figured out was actually part of the whole process.</SparklyText></p>
+</div>
+</section>

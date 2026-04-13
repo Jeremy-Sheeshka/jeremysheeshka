@@ -1,0 +1,222 @@
+/* public/styles/etec542-portfolio-map.css */
+
+/* ── Theme Variables ── */
+/* Default (Light Mode) */
+#portfolio-map-root {
+  position: relative; /* ✅ Keeps it naturally flowing in your article */
+  z-index: 50; /* ✅ Ensures nodes dragged out of the box hover OVER your text */
+  --pm-hint-color: #000000;
+  --pm-hint: rgba(0,0,0,0.45);
+  --pm-backdrop: rgba(0,0,0,0.50);
+  --pm-panel-bg: #ffffff;
+  --pm-panel-border: rgba(0,0,0,0.08);
+  --pm-overlay-text: #1a1a18;
+  --pm-overlay-muted: #5f5e5a;
+  --pm-back-color: #3d3d3a;
+  --pm-back-hover: #000000;
+  --pm-scroll: rgba(0,0,0,0.25);
+  --pm-node-glow: rgba(193, 149, 42, 0.35);
+}
+
+/* System-level Dark Mode */
+@media (prefers-color-scheme: dark) {
+  #portfolio-map-root {
+    --pm-hint-color: rgba(255,255,255,0.85);
+    --pm-hint: rgba(255,255,255,0.45);
+    --pm-backdrop: rgba(0,0,0,0.65);
+    --pm-panel-bg: #374151;
+    --pm-panel-border: rgba(255,255,255,0.15);
+    --pm-overlay-text: rgba(255,255,255,0.92);
+    --pm-overlay-muted: rgba(255,255,255,0.40);
+    --pm-back-color: rgba(255,255,255,0.50);
+    --pm-back-hover: rgba(255,255,255,0.90);
+    --pm-scroll: rgba(255,255,255,0.25);
+    --pm-node-glow: rgba(201, 149, 42, 0.50);
+  }
+}
+
+/* Class-based Dark Mode (Tailwind / Astro Toggles) */
+html.dark #portfolio-map-root,
+.dark #portfolio-map-root,
+[data-theme="dark"] #portfolio-map-root {
+    --pm-hint-color: rgba(255,255,255,0.85);
+    --pm-hint: rgba(255,255,255,0.45);
+    --pm-backdrop: rgba(0,0,0,0.65);
+    --pm-panel-bg: #374151;
+    --pm-panel-border: rgba(255,255,255,0.15);
+    --pm-overlay-text: rgba(255,255,255,0.92);
+    --pm-overlay-muted: rgba(255,255,255,0.40);
+    --pm-back-color: rgba(255,255,255,0.50);
+    --pm-back-hover: rgba(255,255,255,0.90);
+    --pm-scroll: rgba(255,255,255,0.25);
+    --pm-node-glow: rgba(201, 149, 42, 0.50);
+}
+
+/* Force light mode variables if html has 'light' class, overriding OS dark mode */
+html.light #portfolio-map-root,
+.light #portfolio-map-root,
+[data-theme="light"] #portfolio-map-root {
+  --pm-hint-color: #000000;
+  --pm-hint: rgba(0,0,0,0.45);
+  --pm-backdrop: rgba(0,0,0,0.50);
+  --pm-panel-bg: #ffffff;
+  --pm-panel-border: rgba(0,0,0,0.08);
+  --pm-overlay-text: #1a1a18;
+  --pm-overlay-muted: #5f5e5a;
+  --pm-back-color: #3d3d3a;
+  --pm-back-hover: #000000;
+  --pm-scroll: rgba(0,0,0,0.25);
+  --pm-node-glow: rgba(193, 149, 42, 0.35);
+}
+
+/* ── Canvas & Hint ── */
+#pm-wrap {
+  position: relative;
+  width: 100%;
+  height: clamp(360px, 58vw, 560px);
+  background: transparent;
+  margin: 0.5rem 0 2rem;
+  touch-action: none;
+  outline: none;
+  animation: pm-fade-in 0.5s ease forwards;
+}
+@keyframes pm-fade-in { from { opacity: 0; } to { opacity: 1; } }
+
+#pm-graph {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  display: block; 
+  overflow: visible !important; /* ✅ CRITICAL: Removes the SVG boundaries so nodes can exist outside it */
+}
+
+#pm-hint {
+  position: absolute;
+  bottom: 14px; left: 14px;
+  color: var(--pm-hint-color);
+  font-style: italic; font-size: 11px;
+  pointer-events: none; z-index: 2;
+  white-space: nowrap;
+  transition: opacity 0.4s ease, color 0.3s ease;
+  font-family: 'Lora', Georgia, serif;
+  opacity: 1; 
+}
+
+/* ── Backdrop & Panel ── */
+#pm-backdrop {
+  position: fixed; inset: 0; z-index: 9000;
+  background: transparent; 
+  opacity: 0; visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.35s ease, visibility 0.35s ease;
+}
+#pm-backdrop.pm-visible {
+  background: var(--pm-backdrop); 
+  opacity: 1; visibility: visible; pointer-events: auto;
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); 
+}
+
+#pm-panel {
+  position: fixed; top: 50%; left: 50%;
+  transform: translate(-50%, -50%) scale(0.93);
+  z-index: 9100; width: min(700px, 90vw); max-height: min(580px, 82vh);
+  background: var(--pm-panel-bg); border: 1px solid var(--pm-panel-border);
+  border-radius: 20px;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.18), 0 8px 24px rgba(0,0,0,0.08);
+  display: flex; flex-direction: column; overflow: hidden;
+  opacity: 0; visibility: hidden; pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), visibility 0.3s ease;
+}
+#pm-panel.pm-panel-open { opacity: 1; visibility: visible; transform: translate(-50%, -50%) scale(1); pointer-events: auto; }
+
+.pm-panel-header { flex-shrink: 0; padding: 1.3rem 1.6rem 1rem; border-bottom: 1px solid var(--pm-panel-border); }
+.pm-panel-nav { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 0.6rem; }
+.pm-ov-tag { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.25rem 0.75rem; border-radius: 20px; color: #fff; }
+
+.pm-ov-back {
+  background: var(--pm-back-color); border: none; cursor: pointer;
+  font-family: 'Lora', Georgia, serif; font-size: 0.9rem; font-weight: 500; color: #fff;
+  display: flex; align-items: center; gap: 0.35rem; padding: 0.5rem 1rem; margin-left: auto;
+  transition: all 0.2s ease; min-height: 44px; border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+}
+.pm-ov-back:hover { background: var(--pm-back-hover); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+.pm-ov-back:focus-visible { outline: 2px solid #C9952A; outline-offset: 2px; }
+
+.pm-ov-title { font-family: 'Playfair Display', Georgia, serif; font-size: clamp(1.1rem, 2.6vw, 1.4rem); font-weight: 600; color: var(--pm-overlay-text); line-height: 1.25; margin-bottom: 0.25rem; }
+.pm-ov-sub { font-style: italic; font-size: 0.78rem; color: var(--pm-overlay-muted); margin: 0; }
+
+.pm-panel-body { flex: 1; overflow-y: auto; padding: 1.4rem 1.6rem 2rem; scrollbar-width: auto; scrollbar-color: var(--pm-scroll) transparent; }
+
+.pm-panel-body::-webkit-scrollbar { width: 14px; }
+.pm-panel-body::-webkit-scrollbar-track { background: transparent; }
+.pm-panel-body::-webkit-scrollbar-thumb {
+  background-color: var(--pm-scroll);
+  border-radius: 10px;
+  border: 4px solid var(--pm-panel-bg); 
+}
+.pm-panel-body::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(128, 128, 128, 0.6);
+}
+
+.pm-ov-text { font-size: clamp(0.88rem, 1.8vw, 0.96rem); line-height: 1.85; color: var(--pm-overlay-text); font-family: 'Lora', Georgia, serif; margin: 0; }
+.pm-ov-body-text { white-space: pre-wrap; max-width: 64ch; }
+.pm-ov-img { 
+  width: 100%; 
+  max-width: 100%; 
+  height: auto; 
+  border-radius: 6px; 
+  border: 1px solid var(--pm-panel-border); 
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08); 
+  margin-bottom: 1.5rem; 
+  display: block; 
+}
+
+/* ── Nodes ── */
+.pm-art-node, .pm-center-node { cursor: grab; pointer-events: auto; }
+.pm-art-node:focus, .pm-center-node:focus { outline: none; }
+
+/* Hover Glow (No transform to prevent glitch) */
+.pm-art-node:hover .pm-main-c, .pm-center-node:hover .pm-center-main {
+  filter: drop-shadow(0 0 10px var(--pm-node-glow));
+  transition: filter 0.3s ease;
+}
+
+/* Active Click Pulse */
+.pm-art-node.pm-active .pm-main-c, .pm-center-node.pm-active .pm-center-main {
+  animation: pm-click-pulse 0.35s ease-out;
+}
+@keyframes pm-click-pulse {
+  0% { r: var(--r-start); } 50% { r: var(--r-end); } 100% { r: var(--r-start); }
+}
+
+/* Center Pulse Rings */
+@keyframes pm-pulse-out {
+  0% { r: 2px; opacity: 0.45; } 60% { opacity: 0.12; } 100% { r: 90px; opacity: 0; }
+}
+.pm-pulse-ring { fill: none; stroke: #C9952A; stroke-width: 1.2; animation: pm-pulse-out 4.5s ease-out infinite; }
+.pm-pulse-ring:nth-child(2) { animation-delay: 1.5s; }
+.pm-pulse-ring:nth-child(3) { animation-delay: 3.0s; }
+
+.pm-focus-ring { display: none; }
+
+/* Elegant Node Text */
+.pm-art-node text, .pm-center-node text {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 500;
+  letter-spacing: 0.015em;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.25);
+  pointer-events: none;
+  fill: rgba(255,255,255,0.96);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pm-pulse-ring, .pm-art-node, .pm-center-node { animation: none !important; transition: none !important; }
+  .pm-art-node:hover, .pm-center-node:hover { transform: none !important; filter: none !important; }
+  #pm-wrap { animation: none; }
+}
+
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+
+/* ── Blog Post Styles ── */
+.section-accent { display: inline-block; width: 10px; height: 10px; background: #C9952A; border-radius: 50%; margin-right: 8px; vertical-align: middle; }
+.reflection-card { border-left: 5px solid #2D4A3E; border-radius: 12px; padding: 1.8rem 2rem; margin: 1.5rem 0 2.5rem; background: var(--pm-panel-bg); border: 1px solid var(--pm-panel-border); box-shadow: 0 2px 10px rgba(0,0,0,0.03); }
+.card-content p { font-size: 1.02rem; line-height: 1.72; color: inherit; margin: 0 0 0.8rem; }
