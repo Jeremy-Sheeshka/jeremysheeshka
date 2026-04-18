@@ -39,13 +39,13 @@ p, b, strong, i, em, li, .reference-footer b, .reference-footer i {
 
 <p>To me, the jazz musician who continually reassesses their own musical abilities in collaborative settings (such as live performances, clinician feedback, session work, jams, etc.) utilizes the concept of action research to improve their musical capacities. The cyclical process of focusing, implementing, analyzing, and reflecting, can be applied to one's self-efficacy in instructing themselves and practicing on their instrument to better understand musical achievements, deficiencies, and performance metrics in real-time contexts (Suter, 2012).</p>
 
-![What is this thing called love leadsheet - Cole Porter](../../assets/images/blog/whatisthisthingcalledlove.png)
+<img src="../../assets/images/blog/whatisthisthingcalledlove.png" alt="What is this thing called love leadsheet - Cole Porter" style="width: 300px; display: block; margin: 0 auto;">
 
 <p align="center"><em>What is this thing called love - Cole Porter.</em></p>
 
 <p>This might look like a guitarist identifying that they struggle to play jazz vocabulary over minor 7♭5 chords in standards with faster tempos. They recognize this issue and proceed with corrective measures by transcribing licks and practicing patterns over this type of chord while gradually increasing the tempo with a metronome. They get feedback on their performance from colleagues at the next jam session and proceed to re-evaluate their growth by reiterating the process.</p>
 
-<p>This cycle of pragmatic action and reflection fits Creswell’s research design framework, as it mirrors his knowledge claim through a mixed-method approach by analyzing both quantitative data (peer feedback) and qualitative data (using the metronome as a data metric) (Creswell, 2002).</p>
+<p>This cycle of pragmatic action and reflection fits Creswell’s research design framework, as it mirrors his knowledge claim through a mixed-method approach aby analyzing both quantitative data (peer feedback) and qualitative data (using the metronome as a data metric) (Creswell, 2002).</p>
 
 <div class="fake-h2">Research Resources</div>
 
@@ -53,7 +53,7 @@ p, b, strong, i, em, li, .reference-footer b, .reference-footer i {
 
 <p>The second resource is an article titled <strong>"Empowering the Music Educator Through Action Research."</strong> In this research, Laprise provides strategies and steps toward practical, evidence-based improvements, using concrete and clear examples for the music educator.</p>
 
-![The action research cycle diagram](../../assets/images/blog/actionresearchcycle.jpg)
+<img src="../../assets/images/blog/actionresearchcycle.jpg" alt="The action research cycle diagram" style="width: 300px; display: block; margin: 0 auto;">
 
 <p align="center"><em>Laprise, R. (2017).</em></p>
 
