@@ -23,19 +23,39 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout your repository
+      - name: Checkout
         uses: actions/checkout@v4
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
-      - name: Install, build, and upload your site
-        uses: withastro/action@v3
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: latest
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version: 22
-          package-manager: pnpm@latest
+
+      - name: Install dependencies
+        run: pnpm install --ignore-scripts
+
+      - name: Rebuild native modules
+        run: pnpm rebuild esbuild sharp
+
+      - name: Build site
+        run: pnpm run build
         env:
           WEBMENTION_API_KEY: ${{ secrets.WEBMENTION_API_KEY }}
           WEBMENTION_URL: ${{ secrets.WEBMENTION_URL }}
           WEBMENTION_PINGBACK: ${{ secrets.WEBMENTION_PINGBACK }}
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist/
 
   deploy:
     needs: build
