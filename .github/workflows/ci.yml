@@ -39,11 +39,17 @@ jobs:
         with:
           node-version: 22
 
-      - name: Install dependencies
-        run: pnpm install --ignore-scripts
+      - name: Configure pnpm build permissions
+        run: echo '{"onlyBuiltDependencies":["esbuild","sharp"]}' > pnpm.json
 
-      - name: Rebuild native modules
-        run: pnpm rebuild esbuild sharp
+      - name: Install dependencies
+        run: |
+          rm -f pnpm-lock.yaml
+          pnpm install
+        env:
+          WEBMENTION_API_KEY: ${{ secrets.WEBMENTION_API_KEY }}
+          WEBMENTION_URL: ${{ secrets.WEBMENTION_URL }}
+          WEBMENTION_PINGBACK: ${{ secrets.WEBMENTION_PINGBACK }}
 
       - name: Build site
         run: pnpm run build
