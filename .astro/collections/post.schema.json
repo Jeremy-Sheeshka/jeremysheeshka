@@ -1,93 +1,62 @@
 {
-  "$ref": "#/definitions/post",
-  "definitions": {
-    "post": {
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "maxLength": 160
+    },
+    "description": {
+      "type": "string"
+    },
+    "coverImage": {
       "type": "object",
       "properties": {
-        "title": {
-          "type": "string",
-          "maxLength": 160
-        },
-        "description": {
+        "alt": {
           "type": "string"
         },
-        "coverImage": {
-          "type": "object",
-          "properties": {
-            "alt": {
-              "type": "string"
-            },
-            "src": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "alt",
-            "src"
-          ],
-          "additionalProperties": false
-        },
-        "draft": {
-          "type": "boolean",
-          "default": false
-        },
-        "ogImage": {
-          "type": "string"
-        },
-        "tags": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "default": []
-        },
-        "publishDate": {
-          "anyOf": [
-            {
-              "type": "string",
-              "format": "date-time"
-            },
-            {
-              "type": "string",
-              "format": "date"
-            },
-            {
-              "type": "integer",
-              "format": "unix-time"
-            }
-          ]
-        },
-        "updatedDate": {
-          "anyOf": [
-            {
-              "type": "string",
-              "format": "date-time"
-            },
-            {
-              "type": "string",
-              "format": "date"
-            },
-            {
-              "type": "integer",
-              "format": "unix-time"
-            }
-          ]
-        },
-        "pinned": {
-          "type": "boolean",
-          "default": false
-        },
-        "$schema": {
+        "src": {
           "type": "string"
         }
       },
       "required": [
-        "title",
-        "description",
-        "publishDate"
-      ],
-      "additionalProperties": false
+        "alt",
+        "src"
+      ]
+    },
+    "draft": {
+      "default": false,
+      "type": "boolean"
+    },
+    "ogImage": {
+      "type": "string"
+    },
+    "tags": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "publishDate": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedDate": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "pinned": {
+      "default": false,
+      "type": "boolean"
+    },
+    "$schema": {
+      "type": "string"
     }
   },
-  "$schema": "http://json-schema.org/draft-07/schema#"
+  "required": [
+    "title",
+    "description",
+    "publishDate"
+  ]
 }

@@ -1,6 +1,6 @@
 
 import __ASTRO_IMAGE_IMPORT_Z2d9YHy from "../../assets/images/blog/butzetrail.jpg?astroContentImageFlag=&importer=src%2Fcontent%2Fpost%2F2025-05-23-critical-comparison.md";
-import __ASTRO_IMAGE_IMPORT_Z3Xwtf from "../../assets/images/blog/tools.jpg?astroContentImageFlag=&importer=src%2Fcontent%2Fpost%2F2025-05-26-IP-1-ETEC511.md";
 import __ASTRO_IMAGE_IMPORT_Z2cWR7C from "../../assets/images/blog/rainbow.jpg?astroContentImageFlag=&importer=src%2Fcontent%2Fpost%2F2025-05-29-comparative-analysis-of-research.md";
-export default new Map([["../../assets/images/blog/butzetrail.jpg?astroContentImageFlag=&importer=src%2Fcontent%2Fpost%2F2025-05-23-critical-comparison.md", __ASTRO_IMAGE_IMPORT_Z2d9YHy], ["../../assets/images/blog/tools.jpg?astroContentImageFlag=&importer=src%2Fcontent%2Fpost%2F2025-05-26-IP-1-ETEC511.md", __ASTRO_IMAGE_IMPORT_Z3Xwtf], ["../../assets/images/blog/rainbow.jpg?astroContentImageFlag=&importer=src%2Fcontent%2Fpost%2F2025-05-29-comparative-analysis-of-research.md", __ASTRO_IMAGE_IMPORT_Z2cWR7C]]);
+import __ASTRO_IMAGE_IMPORT_Z3Xwtf from "../../assets/images/blog/tools.jpg?astroContentImageFlag=&importer=src%2Fcontent%2Fpost%2F2025-05-26-IP-1-ETEC511.md";
+export default new Map([["../../assets/images/blog/butzetrail.jpg?astroContentImageFlag=&importer=src%2Fcontent%2Fpost%2F2025-05-23-critical-comparison.md", __ASTRO_IMAGE_IMPORT_Z2d9YHy], ["../../assets/images/blog/rainbow.jpg?astroContentImageFlag=&importer=src%2Fcontent%2Fpost%2F2025-05-29-comparative-analysis-of-research.md", __ASTRO_IMAGE_IMPORT_Z2cWR7C], ["../../assets/images/blog/tools.jpg?astroContentImageFlag=&importer=src%2Fcontent%2Fpost%2F2025-05-26-IP-1-ETEC511.md", __ASTRO_IMAGE_IMPORT_Z3Xwtf]]);
 		

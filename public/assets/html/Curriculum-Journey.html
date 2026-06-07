@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Curriculum Journey — A Cinemagraph</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400;1,600&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<style>
+/* ── RESET ── */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:100%;height:100%;overflow:hidden;background:#0d1114;}
+
+/* ── SCENE ── */
+.scene{position:relative;width:100vw;height:100vh;overflow:hidden;}
+
+/* ── ZOOM WRAPPER ── */
+#photo-zoom{
+  position:absolute;inset:0;
+  transform-origin:center 55%;
+  transform:scale(1.375); 
+  transition:transform 3.8s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change:transform;
+}
+
+/* ── BASE PHOTO ── */
+.base-photo{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  object-fit:cover;
+  object-position:center 55%;
+  display:block;
+  transition:object-position 3.8s cubic-bezier(0.22, 1, 0.36, 1),
+             filter 2.8s ease;
+}
+
+/* ── ZONE CONTAINERS ── */
+.zone-container{
+  position:absolute;
+  pointer-events:none;
+  overflow:hidden;
+}
+
+/* ── SVG OVERLAYS ── */
+.overlay-svg{
+  position:absolute;
+  left:0;top:0;
+  width:100%;height:100%;
+  pointer-events:none;
+  overflow:visible;
+  transition: opacity 1.5s ease;
+}
+
+/* ── DANDELION CANVAS ── */
+#dandelionCanvas{
+  position:absolute;
+  left:0;top:0;
+  width:100%;height:100%;
+  pointer-events:none;
+  transition: opacity 1.5s ease;
+}
+
+/* ── WAVE CANVAS ── */
+#waveCanvas{
+  position:absolute;
+  left:0;top:0;
+  width:100%;height:100%;
+  pointer-events:none;
+  transition: opacity 1.5s ease;
+}
+
+/* ── SHIMMER CANVAS ── */
+#shimmerCanvas{
+  position:absolute;
+  left:0;top:0;
+  width:100%;height:100%;
+  pointer-events:none;
+  transition: opacity 1.5s ease;
+}
+
+/* ── GRAIN ── */
+#grain{
+  position:absolute;inset:0;z-index:30;
+  pointer-events:none;opacity:0.04;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:128px;mix-blend-mode:overlay;
+  animation:grainShift 0.14s steps(1) infinite;
+  transition: opacity 1.5s ease;
+}
+@keyframes grainShift{
+  0%{background-position:0 0;}25%{background-position:-28px 14px;}
+  50%{background-position:14px -20px;}75%{background-position:-10px 22px;}
+}
+
+/* ── TINT OVERLAY ── */
+#tint{
+  position:absolute;inset:0;z-index:31;
+  pointer-events:none;opacity:0;
+  transition:opacity 2.8s ease,background 2.8s ease;
+}
+
+/* ── VIGNETTE ── */
+#vignette{
+  position:absolute;inset:0;z-index:32;pointer-events:none;
+  background:radial-gradient(ellipse 88% 88% at 50% 50%,transparent 32%,rgba(13,17,20,0.68) 100%);
+}
+
+/* ── MOUSE CATCHER ── */
+#mouse-catcher{
+  position:absolute;inset:0;
+  z-index:40;cursor:crosshair;
+}
+
+/* ── HOTSPOTS ── */
+.hotspot{
+  position:absolute;z-index:50;
+  cursor:pointer;
+  transform:translate(-50%,-50%);
+  width:96px;
+  height:96px;
+  border-radius:50%;
+  transition: opacity 1.5s ease;
+}
+.hs-rings{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:56px;height:56px;
+  pointer-events:none;
+}
+.hs-ring{
+  position:absolute;inset:0;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,0.28);
+  animation:ringOut 6s ease-out infinite;
+}
+.hs-ring:nth-child(2){animation-delay:2s;}
+.hs-ring:nth-child(3){animation-delay:4s;}
+@keyframes ringOut{
+  0%{transform:scale(0.2);opacity:0.85;}
+  100%{transform:scale(4.2);opacity:0;}
+}
+.hs-dot{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:11px;height:11px;border-radius:50%;
+  transition:transform 0.3s ease,box-shadow 0.35s ease;
+}
+.hotspot:hover .hs-dot,
+.hotspot.active .hs-dot{
+  transform:translate(-50%,-50%) scale(1.9);
+}
+
+/* ── HS colours ── */
+#hs-sky .hs-dot{background:#00aaff;box-shadow:0 0 16px 3px rgba(0,170,255,0.7);}
+#hs-sky .hs-ring{border-color:rgba(0,170,255,0.4);}
+
+#hs-mtn .hs-dot{background:#ff4444;box-shadow:0 0 14px 2px rgba(255,68,68,0.65);}
+#hs-mtn .hs-ring{border-color:rgba(255,68,68,0.4);}
+
+#hs-water .hs-dot{background:#4caf50;box-shadow:0 0 14px 2px rgba(76,175,80,0.7);}
+#hs-water .hs-ring{border-color:rgba(76,175,80,0.4);}
+
+#hs-ground .hs-dot{background:#ffd700;box-shadow:0 0 14px 2px rgba(255,215,0,0.65);}
+#hs-ground .hs-ring{border-color:rgba(255,215,0,0.4);}
+
+/* ── ZONE INDICATOR DOTS ── */
+#zone-bar{
+  position:fixed;right:22px;top:50%;transform:translateY(-50%);
+  display:flex;flex-direction:column;gap:12px;z-index:100;
+}
+.zone-pip{
+  width:8px;height:8px;border-radius:50%;
+  background:rgba(215,228,238,0.16);
+  border:1px solid rgba(215,228,238,0.18);
+  transition:all 0.4s ease;
+  cursor:pointer;
+}
+.zone-pip.lit{
+  transform:scale(1.6);
+  background:rgba(215,228,238,0.8);
+}
+.zone-pip:hover{
+  background:rgba(215,228,238,0.5);
+}
+
+/* ── ENCOUNTER PANEL ── */
+#enc-wrap{
+  position:fixed;inset:0;z-index:150;
+  display:flex;align-items:center;justify-content:flex-end;
+  padding:4vw;pointer-events:none;
+  opacity:0;transition:opacity 0.35s ease;
+}
+#enc-wrap.open{opacity:1;pointer-events:all;}
+#enc-bg{position:absolute;inset:0;cursor:pointer;}
+
+#enc-panel{
+  position:relative;z-index:2;
+  width:min(540px,88vw);
+  max-height:82vh;overflow-y:auto;
+  background:rgba(8,11,17,0.86);
+  backdrop-filter:blur(30px) saturate(1.1);
+  border:1px solid rgba(215,228,238,0.08);
+  padding:3.2rem 3.2rem 2.8rem;
+  transform:translateX(36px);
+  transition:transform 0.65s cubic-bezier(0.16,1,0.3,1);
+}
+#enc-wrap.open #enc-panel{transform:translateX(0);}
+
+.enc-line{opacity:0;transform:translateY(10px);}
+.enc-num{
+  font-family:"Space Mono",monospace;font-size:0.56rem;
+  letter-spacing:0.18em;color:#c8a84b;opacity:0.7;margin-bottom:0.28rem;
+}
+.enc-title{
+  font-family:"Cormorant Garamond",serif;
+  font-size:clamp(1.9rem,4vw,2.9rem);font-weight:300;
+  letter-spacing:-0.02em;line-height:1;margin-bottom:0.28rem;
+}
+.enc-mode{
+  font-family:"Space Mono",monospace;font-size:0.52rem;
+  letter-spacing:0.16em;text-transform:uppercase;
+  color:rgba(215,228,238,0.28);margin-bottom:0.28rem;
+}
+.enc-zone-desc{
+  font-family:"Cormorant Garamond",serif;font-size:0.86rem;
+  font-style:italic;color:rgba(215,228,238,0.38);
+  margin-bottom:1.5rem;padding-bottom:1.3rem;
+  border-bottom:1px solid rgba(215,228,238,0.06);
+}
+.enc-body{
+  font-family:"Cormorant Garamond",serif;
+  font-size:clamp(0.94rem,1.5vw,1.07rem);font-weight:300;
+  line-height:1.85;color:rgba(215,228,238,0.78);
+}
+.enc-body p+p{margin-top:1em;}
+.enc-body em{font-style:italic;color:rgba(215,228,238,0.95);}
+.enc-pull{
+  margin:1.3rem 0;padding-left:1.2rem;
+  border-left:2px solid #c8a84b;
+}
+.enc-pull p{font-style:italic;line-height:1.6;color:rgba(215,228,238,0.86);
+  font-size:clamp(0.94rem,1.5vw,1.06rem);}
+.enc-pull cite{
+  display:block;margin-top:0.4rem;
+  font-family:"Space Mono",monospace;font-size:0.5rem;
+  letter-spacing:0.14em;text-transform:uppercase;
+  font-style:normal;color:rgba(215,228,238,0.26);
+}
+
+#enc-close{
+  position:absolute;top:1.1rem;right:1.4rem;
+  font-family:"Space Mono",monospace;font-size:0.54rem;
+  letter-spacing:0.12em;text-transform:uppercase;
+  color:rgba(215,228,238,0.26);background:none;border:none;
+  cursor:pointer;transition:color 0.2s;padding:0.3em 0.5em;
+}
+#enc-close:hover{color:rgba(215,228,238,0.65);}
+
+/* ── CORNER META ── */
+#corner-label{
+  position:fixed;bottom:1.6rem;left:1.8rem;z-index:100;
+  font-family:"Space Mono",monospace;font-size:0.48rem;
+  letter-spacing:0.14em;text-transform:uppercase;
+  color:rgba(215,228,238,0.45);
+  text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+  line-height:2;pointer-events:none;
+  opacity:0;transition:opacity 0.8s;
+}
+#corner-label.show{opacity:1;}
+
+/* ── STMT BTN ── */
+#stmt-btn{
+  position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);
+  z-index:100;font-family:"Space Mono",monospace;font-size:0.54rem;
+  letter-spacing:0.2em;text-transform:uppercase;
+  border:1px solid rgba(215,228,238,0.16);padding:0.6em 1.5em;
+  background:rgba(8,11,17,0.5);color:rgba(215,228,238,0.45);
+  cursor:pointer;backdrop-filter:blur(10px);transition:all 0.3s;
+  opacity:0;
+}
+#stmt-btn.show{opacity:1;}
+#stmt-btn:hover{color:rgba(215,228,238,0.82);border-color:rgba(215,228,238,0.42);}
+
+/* ── ZOOMED STATE (HIDES ANIMATIONS & OTHER HOTSPOTS) ── */
+.scene-zoomed .hotspot:not(.active) {
+  opacity: 0;
+  pointer-events: none;
+}
+.scene-zoomed .overlay-svg,
+.scene-zoomed #dandelionCanvas,
+.scene-zoomed #grain {
+  opacity: 0 !important;
+}
+
+/* ═══════════════════════════════════════════════════════
+   RESPONSIVE BREAKPOINTS
+═══════════════════════════════════════════════════════ */
+
+@media(min-width:1440px){
+  .hs-rings{width:64px;height:64px;}
+  .hs-dot{width:13px;height:13px;}
+  #enc-panel{padding:3.8rem 3.8rem 3.2rem;}
+  .enc-title{font-size:clamp(2.2rem,3.5vw,3.2rem);}
+  .enc-body{font-size:clamp(1rem,1.3vw,1.15rem);}
+}
+
+@media(min-width:1024px) and (max-width:1440px){
+  .base-photo{object-fit:contain;object-position:center center;background:#0d1114;}
+  #photo-zoom{transform-origin:center center;}
+  #enc-panel{width:min(480px,90vw);padding:2.8rem 2.8rem 2.4rem;}
+  .enc-title{font-size:clamp(1.7rem,3.5vw,2.4rem);}
+  .enc-body{font-size:clamp(0.9rem,1.8vw,1.02rem);}
+  .hs-rings{width:50px;height:50px;}
+  .hs-dot{width:10px;height:10px;}
+}
+
+@media(max-width:1024px){
+  .base-photo{object-fit:contain;object-position:center center;background:#0d1114;}
+  #photo-zoom{transform-origin:center center;}
+  #enc-panel{width:min(480px,90vw);padding:2.8rem 2.8rem 2.4rem;}
+  .enc-title{font-size:clamp(1.7rem,3.5vw,2.4rem);}
+  .enc-body{font-size:clamp(0.9rem,1.8vw,1.02rem);}
+  .hs-rings{width:50px;height:50px;}
+  .hs-dot{width:10px;height:10px;}
+}
+
+@media(max-width:768px){
+  .base-photo{object-fit:contain;object-position:center center;background:#0d1114;}
+  #photo-zoom{transform-origin:center center;}
+  .hs-rings{width:60px;height:60px;}
+  .hs-dot{width:14px;height:14px;}
+  #enc-wrap{align-items:flex-end;padding:0;}
+  #enc-panel{
+    width:100%;max-height:85vh;
+    border-radius:20px 20px 0 0;
+    padding:2.4rem 1.8rem 2rem;
+    transform:translateY(100%);
+  }
+  #enc-wrap.open #enc-panel{transform:translateY(0);}
+  .enc-title{font-size:clamp(1.6rem,5vw,2rem);}
+  .enc-body{font-size:clamp(0.92rem,2.5vw,1rem);}
+  .enc-zone-desc{font-size:0.82rem;}
+  #zone-bar{right:12px;gap:8px;}
+  #corner-label{bottom:1.2rem;left:1.2rem;font-size:0.42rem;}
+  #stmt-btn{bottom:1.2rem;font-size:0.5rem;padding:0.5em 1.2em;}
+}
+
+@media(max-width:480px){
+  .hs-rings{width:68px;height:68px;}
+  .hs-dot{width:16px;height:16px;}
+  #enc-panel{padding:2rem 1.4rem 1.6rem;max-height:88vh;}
+  .enc-title{font-size:clamp(1.5rem,6vw,1.8rem);}
+  .enc-body{font-size:clamp(0.88rem,2.8vw,0.95rem);}
+  .enc-num{font-size:0.5rem;}
+  .enc-mode{font-size:0.48rem;}
+  .enc-zone-desc{font-size:0.78rem;margin-bottom:1.2rem;padding-bottom:1rem;}
+  #zone-bar{right:10px;gap:8px;}
+  #corner-label{bottom:auto;top:1rem;left:1rem;font-size:0.4rem;}
+  #stmt-btn{bottom:1rem;font-size:0.48rem;padding:0.45em 1em;}
+  #enc-close{top:0.8rem;right:1rem;font-size:0.5rem;}
+}
+
+@media(max-width:768px) and (orientation:landscape){
+  #enc-panel{max-height:90vh;padding:1.8rem 2rem 1.6rem;}
+  .enc-title{font-size:clamp(1.4rem,3vw,1.8rem);}
+  .enc-body{font-size:clamp(0.85rem,1.5vw,0.95rem);}
+  #corner-label{bottom:auto;top:0.8rem;left:1rem;}
+  #stmt-btn{bottom:0.8rem;}
+}
+
+@media(max-width:480px) and (min-height:800px){
+  #enc-panel{max-height:80vh;}
+  #stmt-btn{bottom:1.8rem;}
+}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:0.01ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:0.01ms !important;
+  }
+  .hs-ring{animation:none;}
+  #grain{animation:none;}
+}
+
+@media(hover:none) and (pointer:coarse){
+  #enc-close{padding:0.5em 0.8em;min-height:44px;min-width:44px;}
+  #stmt-btn{padding:0.7em 1.8em;min-height:44px;}
+}
+
+@media(-webkit-min-device-pixel-ratio:2),(min-resolution:192dpi){
+  .base-photo{image-rendering:-webkit-optimize-contrast;image-rendering:crisp-edges;}
+}
+</style>
+</head>
+<body>
+<div class="scene" id="scene">
+
+  <div id="photo-zoom">
+  <img class="base-photo" id="basePhoto"
+       src="/assets/images/blog/boat-no-bird.jpg" alt="Harbour inlet, Prince Rupert BC" />
+  </div>
+
+  <!-- SKY ZONE: cloud drift (progressive) -->
+  <div id="sky-zone" class="zone-container">
+    <svg id="skySvg" class="overlay-svg"
+         viewBox="0 0 1200 1000" preserveAspectRatio="xMidYMid slice"
+         xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="fBlurHeavy"><feGaussianBlur stdDeviation="18"/></filter>
+        <filter id="fCloudBlur"><feGaussianBlur stdDeviation="22"/></filter>
+        <radialGradient id="gLightBeam" cx="78%" cy="4%" r="58%">
+          <stop offset="0%"   stop-color="#fffde8" stop-opacity="0.15"/>
+          <stop offset="100%" stop-color="#c5d5e5" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <rect id="skyBeam" x="0" y="0" width="1200" height="400"
+            fill="url(#gLightBeam)" opacity="0"/>
+      <!-- existing wisps -->
+      <g id="wisp1" filter="url(#fBlurHeavy)" opacity="0">
+        <ellipse cx="210" cy="52"  rx="240" ry="26" fill="rgba(255,255,255,0.15)"/>
+        <ellipse cx="370" cy="42"  rx="130" ry="17" fill="rgba(255,255,255,0.10)"/>
+      </g>
+      <g id="wisp2" filter="url(#fBlurHeavy)" opacity="0">
+        <ellipse cx="660" cy="92"  rx="280" ry="23" fill="rgba(255,255,255,0.12)"/>
+        <ellipse cx="820" cy="82"  rx="160" ry="15" fill="rgba(255,255,255,0.08)"/>
+      </g>
+      <g id="wisp3" filter="url(#fBlurHeavy)" opacity="0">
+        <ellipse cx="1050" cy="58" rx="200" ry="21" fill="rgba(255,255,255,0.13)"/>
+        <ellipse cx="950"  cy="70" rx="120" ry="13" fill="rgba(255,255,255,0.08)"/>
+      </g>
+      <!-- NEW: soft cloud bodies — drift horizontally when skyActive -->
+      <g id="cloud-group" opacity="0" filter="url(#fCloudBlur)">
+        <!-- cloud A: wide low cumulus mass -->
+        <g id="cloudA">
+          <ellipse cx="180"  cy="80"  rx="180" ry="38" fill="rgba(240,248,255,0.11)"/>
+          <ellipse cx="260"  cy="62"  rx="110" ry="28" fill="rgba(245,250,255,0.09)"/>
+          <ellipse cx="80"   cy="88"  rx="90"  ry="22" fill="rgba(235,245,252,0.07)"/>
+        </g>
+        <!-- cloud B: higher, thinner -->
+        <g id="cloudB">
+          <ellipse cx="750"  cy="48"  rx="220" ry="30" fill="rgba(242,249,255,0.10)"/>
+          <ellipse cx="850"  cy="36"  rx="130" ry="22" fill="rgba(248,252,255,0.08)"/>
+          <ellipse cx="650"  cy="55"  rx="100" ry="18" fill="rgba(238,246,252,0.07)"/>
+        </g>
+        <!-- cloud C: trailing edge right side -->
+        <g id="cloudC">
+          <ellipse cx="1120" cy="68"  rx="150" ry="28" fill="rgba(241,248,255,0.09)"/>
+          <ellipse cx="1060" cy="58"  rx="80"  ry="18" fill="rgba(245,251,255,0.07)"/>
+        </g>
+      </g>
+    </svg>
+  </div>
+
+  <!-- MOUNTAIN ZONE: shimmer water overlay (analytical) -->
+  <div id="mtn-zone" class="zone-container">
+    <svg id="mountainSvg" class="overlay-svg"
+         viewBox="0 0 1200 1000" preserveAspectRatio="xMidYMid slice"
+         xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="fMist"><feGaussianBlur stdDeviation="18"/></filter>
+        <filter id="fShimBlur"><feGaussianBlur stdDeviation="2.5"/></filter>
+      </defs>
+      <ellipse id="mist1" cx="600" cy="500" rx="550" ry="15" fill="rgba(210,228,232,0.0)" filter="url(#fMist)"/>
+      <ellipse id="mist2" cx="400" cy="515" rx="420" ry="12" fill="rgba(205,225,228,0.0)" filter="url(#fMist)"/>
+      <ellipse id="mist3" cx="800" cy="495" rx="450" ry="18" fill="rgba(212,230,234,0.0)" filter="url(#fMist)"/>
+      <ellipse id="mist4" cx="600" cy="505" rx="580" ry="10" fill="rgba(208,226,230,0.0)" filter="url(#fMist)"/>
+    </svg>
+    <!-- Shimmer canvas for analytical water sparkle -->
+    <canvas id="shimmerCanvas"></canvas>
+  </div>
+
+  <!-- WATER ZONE: ripples + rolling waves (synthetical) -->
+  <div id="water-zone" class="zone-container">
+    <svg id="waterSvg" class="overlay-svg"
+         viewBox="0 0 1200 1000" preserveAspectRatio="xMidYMid slice"
+         xmlns="http://www.w3.org/2000/svg">
+      <circle class="ripple" cx="160"  cy="590" r="0" fill="none"
+              stroke="rgba(190,215,228,0.55)" stroke-width="1.2"/>
+      <circle class="ripple" cx="390"  cy="615" r="0" fill="none"
+              stroke="rgba(188,212,226,0.50)" stroke-width="1.0"/>
+      <circle class="ripple" cx="610"  cy="580" r="0" fill="none"
+              stroke="rgba(192,218,230,0.52)" stroke-width="1.2"/>
+      <circle class="ripple" cx="800"  cy="600" r="0" fill="none"
+              stroke="rgba(188,212,226,0.48)" stroke-width="1.0"/>
+      <circle class="ripple" cx="1020" cy="588" r="0" fill="none"
+              stroke="rgba(190,215,228,0.50)" stroke-width="1.0"/>
+      <circle class="ripple" cx="1150" cy="620" r="0" fill="none"
+              stroke="rgba(186,210,224,0.45)" stroke-width="0.9"/>
+      <circle class="ripple-wide" cx="580" cy="595" r="0" fill="none"
+              stroke="rgba(195,218,232,0.32)" stroke-width="0.8"/>
+      <circle class="ripple-wide" cx="900" cy="605" r="0" fill="none"
+              stroke="rgba(190,215,228,0.28)" stroke-width="0.8"/>
+    </svg>
+    <!-- Rolling wave canvas -->
+    <canvas id="waveCanvas"></canvas>
+  </div>
+
+  <div id="ground-zone" class="zone-container">
+    <canvas id="dandelionCanvas"></canvas>
+  </div>
+
+  <div id="grain"></div>
+  <div id="tint"></div>
+  <div id="vignette"></div>
+
+  <div id="mouse-catcher"></div>
+
+  <div class="hotspot" id="hs-sky"    onclick="openZone('sky')"    tabindex="0" role="button" aria-label="Progressive — the sky">
+    <div class="hs-rings"><div class="hs-ring"></div><div class="hs-ring"></div><div class="hs-ring"></div></div>
+    <div class="hs-dot"></div>
+  </div>
+  <div class="hotspot" id="hs-mtn"    onclick="openZone('mtn')"    tabindex="0" role="button" aria-label="Analytical — the mountains">
+    <div class="hs-rings"><div class="hs-ring"></div><div class="hs-ring"></div><div class="hs-ring"></div></div>
+    <div class="hs-dot"></div>
+  </div>
+  <div class="hotspot" id="hs-water"  onclick="openZone('water')"  tabindex="0" role="button" aria-label="Synthetical — the water">
+    <div class="hs-rings"><div class="hs-ring"></div><div class="hs-ring"></div><div class="hs-ring"></div></div>
+    <div class="hs-dot"></div>
+  </div>
+  <div class="hotspot" id="hs-ground" onclick="openZone('ground')" tabindex="0" role="button" aria-label="Regressive — the ground">
+    <div class="hs-rings"><div class="hs-ring"></div><div class="hs-ring"></div><div class="hs-ring"></div></div>
+    <div class="hs-dot"></div>
+  </div>
+
+  <div id="zone-bar">
+    <div class="zone-pip" id="pip-sky"    title="Progressive" onclick="openZone('sky')"></div>
+    <div class="zone-pip" id="pip-mtn"    title="Analytical"  onclick="openZone('mtn')"></div>
+    <div class="zone-pip" id="pip-water"  title="Synthetical" onclick="openZone('water')"></div>
+    <div class="zone-pip" id="pip-ground" title="Regressive"  onclick="openZone('ground')"></div>
+  </div>
+</div>
+
+<div id="enc-wrap">
+  <div id="enc-bg" onclick="closeZone()"></div>
+  <div id="enc-panel">
+    <button id="enc-close" onclick="closeZone()">close ×</button>
+    <p  class="enc-num  enc-line" id="enc-num"></p>
+    <h2 class="enc-title enc-line" id="enc-title"></h2>
+    <p  class="enc-mode enc-line" id="enc-mode"></p>
+    <p  class="enc-zone-desc enc-line" id="enc-zone-desc"></p>
+    <div class="enc-body" id="enc-body"></div>
+  </div>
+</div>
+
+<div id="corner-label">
+  Curriculum Journey - ETEC 531<br>
+  Photo: Prince Rupert Harbour June 2026
+</div>
+<button id="stmt-btn" onclick="openZone('statement')">Artist Statement</button>
+
+<script>
+/* ═══════════════════════════════════════════════════════
+   ZONE DATA 
+═══════════════════════════════════════════════════════ */
+const ZONE_DATA = {
+  sky: {
+    num: "II.", title: "Progressive", mode: "Imagining the future",
+desc: "The sky pulls our gaze upwards past the misty horizon.",
+col: "#00aaff", tint: "rgba(0, 170, 255, 0.25)", photoPos: "center 15%",
+pipId: "pip-sky", dotId: "pip-sky", dotCol: "#00aaff",
+audioFile: "/assets/audio/Progressive.mp3",
+hotspotPercent: { x: 58, y: 14 },
+body: `<p>Funny how water can reflect everything and nothing all at once. The sky, mountains, ground, it's all there right beside your own reflection, but at the same time it's in motion. That's how I see myself amongst all of this. I can see myself, but maybe not all of the details. Still, I remain present within all of it.</p>
+<p>Pinar uses the phrase <em>placed together</em> as a way of describing how one can achieve synthesis with the present by integrating all aspects of their experiences. Further to that, as Brayboy and Maughan remind us, you have to start at the beginning before you can go anywhere else. Peering into my reflection inside of the water becomes that moment of synthesis for me.</p>
+<p>The present I arrive at will always be different from the one I originally started from.</p>`
+  },
+  mtn: {
+    num: "III.", title: "Analytical", mode: "Holding past and future in tension",
+    desc: "The mountains and horizons of the amalgamating present.",
+    col: "#ff4444", tint: "rgba(255, 68, 68, 0.25)", photoPos: "center 42%",
+    pipId: "pip-mtn", dotId: "pip-mtn", dotCol: "#ff4444",
+    audioFile: "/assets/audio/Analytical.mp3",
+    hotspotPercent: { x: 22, y: 45 },
+    body: `<p>The mountains decidedly sit in the background, half covered in clouds. They are not quite the past, but also not quite the future either. They sit somewhere inside of the present moment's perspective, neither being truly here nor there.</p>
+<p>When I consider my history as a student comparatively to my time as a teacher, I feel tensions I have most likely always felt but may not have always had words for. Much of the experiences I value were things taught by context and circumstance, through people and place. There is a feeling of being caught between being true to myself and the undercurrents pulling me in directions not entirely my own.</p>
+<p>Janks had brought up the idea of <em>reading with and against a text</em>, which I believe to be depictive of the analytical orientation. In sitting with my past choices and pondering the future, I can begin to make sense of my own educational experiences. Recognizing this tension does not resolve it. The analytical simply asks you to remain inside of it long enough to understand what it is telling you.</p>`
+  },
+  water: {
+    num: "IV.", title: "Synthetical", mode: "Returning to the present, changed",
+    desc: "The reflective water — containing everything at once",
+    col: "#4caf50", tint: "rgba(76, 175, 80, 0.25)", photoPos: "center 70%",
+    pipId: "pip-water", dotId: "pip-water", dotCol: "#4caf50",
+    audioFile: "/assets/audio/Synthetical.mp3",
+    hotspotPercent: { x: 35, y: 65 },
+    body: `<p>Funny how water can reflect everything and nothing all at once. The sky, mountains, ground, it's all there right beside your own reflection, but at the same time it's in motion. That's how I see myself amongst all of this. I can see myself, but maybe not all of the details. However, I remain present within all of it.</p>
+<p>Pinar uses the phrase <em>placed together</em> as a way of describing how one can achieve synthesis with the present by integrating all aspects of their experiences. Furthermore, as Brayboy and Maughan remind us, you have to start at the beginning before you can go anywhere else. Peering into my reflection inside of the water is that grounding for me.</p>
+<p>The present we arrive at currently is different from the one we started from.</p>`
+  },
+  ground: {
+    num: "I.", title: "Regressive", mode: "Returning to the past",
+    desc: "Roots, dandelions, and the memories.",
+    col: "#ffd700", tint: "rgba(255, 215, 0, 0.25)", photoPos: "center 90%",
+    pipId: "pip-ground", dotId: "pip-ground", dotCol: "#ffd700",
+    audioFile: "/assets/audio/Regressive.mp3",
+    hotspotPercent: { x: 86, y: 87 },
+    body: `<p>The dandelions here were never planted by anyone. They were never intentional. They arrived by wind and rain without an invitation. I'd say my journey through curriculum and as a teacher largely resembles this. A lot of what has shaped my roots as an educator wasn't formally taught but rather experienced through various educational and invisible social environments.</p>
+<p>I've always lived on the West Coast near the water, where the tides and natural environment carried much of my learning before school ever got involved. Looking back on my time during elementary and high school, along with my general upbringing, I often felt as if I was just going through the motions, swept away in the winds around me. Freire touched on this feeling I had through the banking concept, where I look back at my time as primarily a passive receiver than someone actually engaged as a co-contributor towards my own learning during this time.</p>
+<p>The roots I have here are what ground my perspectives of the past, the good times, the bad times, and the seeds that were being planted along the way. While there is a sense of nostalgia here, Pinar frames the act of looking back not as a way to reminisce, but as a way to notice what is still active. I look back at my past as though some of the seeds of the past are still caught in flight.</p>`
+  },
+  statement: {
+    num: "", title: "Artist Statement", mode: "What the map could do that an essay could not",
+desc: "",
+col: "#c8a84b", tint: "rgba(200, 168, 75, 0.3)", photoPos: "center 50%",
+pipId: null, dotId: null, dotCol: null,
+audioFile: null,
+body: `<p>The decision to display my project through sound, prose, and a photograph manifested from the feeling that a picture alone was too still for a living curriculum. As Horst et al. describe in their work on transmodal environments, aurality carries affective knowledge, something felt rather than read, that image and text alone may struggle to convey. I shared this through the choice of chords within each of the sections as they depict cycles of tension and release, characterizing the of ebb and flow of affective knowledge that image and text alone may struggle with. Similarly, Ellis et al. write that curriculum is lived and felt before it is named. The incorporation of block chords, suspended harmony and diatonic resolutions through the artifact are meant to carry the listener through my curriculum journey through states of imaginative suspense and anticipation before returning to a sense of resolution, understanding and finality. While all audio phrases share a common tonality, each operates differently: the regressive descends nostalgically through diatonicism and movement through diminished chords, the progressive utilizes static suspended chord sounds and a faster tempo to provide a sense of forward motion, the analytical holds cycles of tensions and complexities of various suspended chords held against a root note, while the synthetical aims to make sense of each of the different orientations through a combination of suspended harmony and tensions eventually finding closure.</p>
+<p>This visual and audio format I have chosen provides a sense of simultaneousness that lives inherently within my journey through curriculum and creates an experiential multimedia that demonstrates an interplay between all four orientations of <i>currere</i> at the same time; something which could not have been conveyed through text alone. Unlike a purely written format that moves sequentially, I have strived to convey Pinar's conceptual entanglement of how our past, present, and imagined futures exist all at once.</p>
+<p>Through the construction of this artifact, my understanding of each of <i>currere's</i> orientations and how they exist together like pieces of a puzzle have come to change my perspective that each layer alone is not just a conclusion in itself, but an ongoing indistinguishable part of my own internal sense of curriculum, and journey through it as an educator and learner. Together, the foreground, mid ground, background, and sky of my photograph form an interwoven whole; a bigger picture that only exists because each layer is present. As Pinar had referenced, being "placed together" in this way was not about showcasing a resolution or a separation between each of these stages, but about establishing personal relationality and reflection towards what each orientation, together, brings into presence.</p>
+`
+  }
+};
+
+/* ═══════════════════════════════════════════════════════
+   UTILITY
+═══════════════════════════════════════════════════════ */
+function lerp(a,b,t){return a+(b-a)*t;}
+function rand(lo,hi){return lo+Math.random()*(hi-lo);}
+
+/* ═══════════════════════════════════════════════════════
+   IMAGE BOUNDS CALCULATION
+═══════════════════════════════════════════════════════ */
+let imageBounds = { x: 0, y: 0, width: window.innerWidth, height: window.innerHeight };
+
+function calculateImageBounds() {
+  const photo = document.getElementById("basePhoto");
+  const style = window.getComputedStyle(photo);
+  const objectFit = style.objectFit;
+  const viewportWidth = window.innerWidth;
+  const viewportHeight = window.innerHeight;
+  const naturalWidth = photo.naturalWidth || 1920;
+  const naturalHeight = photo.naturalHeight || 1080;
+  const imageAspectRatio = naturalWidth / naturalHeight;
+  const viewportAspectRatio = viewportWidth / viewportHeight;
+  if (objectFit === 'contain') {
+    let displayWidth, displayHeight;
+    if (imageAspectRatio > viewportAspectRatio) {
+      displayWidth = viewportWidth;
+      displayHeight = viewportWidth / imageAspectRatio;
+    } else {
+      displayHeight = viewportHeight;
+      displayWidth = viewportHeight * imageAspectRatio;
+    }
+    const x = (viewportWidth - displayWidth) / 2;
+    const y = (viewportHeight - displayHeight) / 2;
+    imageBounds = { x, y, width: displayWidth, height: displayHeight };
+  } else {
+    imageBounds = { x: 0, y: 0, width: viewportWidth, height: viewportHeight };
+  }
+  return imageBounds;
+}
+
+/* ═══════════════════════════════════════════════════════
+   UPDATE ZONE POSITIONS
+═══════════════════════════════════════════════════════ */
+function updateZonePositions() {
+  const bounds = calculateImageBounds();
+  const zones = {
+    sky:   { top: 0,  height: 35 },
+    mtn:   { top: 32, height: 30 },
+    water: { top: 55, height: 25 },
+    ground:{ top: 75, height: 25 }
+  };
+  Object.keys(zones).forEach(key => {
+    const zone = zones[key];
+    const element = document.getElementById(`${key}-zone`);
+    const top = bounds.y + (bounds.height * zone.top / 100);
+    const height = bounds.height * zone.height / 100;
+    element.style.left = `${bounds.x}px`;
+    element.style.top = `${top}px`;
+    element.style.width = `${bounds.width}px`;
+    element.style.height = `${height}px`;
+  });
+  Object.keys(ZONE_DATA).forEach(key => {
+    const zone = ZONE_DATA[key];
+    if (!zone.hotspotPercent) return;
+    const hotspot = document.getElementById(`hs-${key}`);
+    if (!hotspot) return;
+    const x = bounds.x + (bounds.width * zone.hotspotPercent.x / 100);
+    const y = bounds.y + (bounds.height * zone.hotspotPercent.y / 100);
+    hotspot.style.left = `${x}px`;
+    hotspot.style.top = `${y}px`;
+  });
+  resizeDCanvas();
+  resizeWaveCanvas();
+  resizeShimmerCanvas();
+}
+
+/* ═══════════════════════════════════════════════════════
+   ANIMATION STATE
+═══════════════════════════════════════════════════════ */
+let skyActive=false, skyOpacity=0, skyBeamT=0;
+let mtnActive=false, mtnOpacity=0;
+let waterActive=false, waterOpacity=0;
+let fgActive=false, fgOpacity=0;
+
+// Cloud drift state
+let cloudDriftX = 0;
+let cloudGroupOpacity = 0;
+
+const wisps = [
+  {el:document.getElementById("wisp1"),x:-60, speed:0.018,phase:0},
+  {el:document.getElementById("wisp2"),x:300, speed:0.012,phase:0.3},
+  {el:document.getElementById("wisp3"),x:700, speed:0.015,phase:0.6},
+];
+const skyBeam = document.getElementById("skyBeam");
+const cloudGroup = document.getElementById("cloud-group");
+const cloudA = document.getElementById("cloudA");
+const cloudB = document.getElementById("cloudB");
+const cloudC = document.getElementById("cloudC");
+
+const mistBlobs=[
+  {el:document.getElementById("mist1"),baseY:500,speed:0.0012,phase:0.0},
+  {el:document.getElementById("mist2"),baseY:515,speed:0.0008,phase:1.2},
+  {el:document.getElementById("mist3"),baseY:495,speed:0.0015,phase:2.4},
+  {el:document.getElementById("mist4"),baseY:505,speed:0.0010,phase:3.6},
+];
+
+const rippleEls = Array.from(document.querySelectorAll(".ripple"));
+const rippleWideEls = Array.from(document.querySelectorAll(".ripple-wide"));
+const rippleState = rippleEls.map(el=>({el,t:rand(0,1),speed:rand(0.0018,0.0032),maxR:rand(55,95),delay:rand(0,1)}));
+const rippleWideState = rippleWideEls.map(el=>({el,t:rand(0,1),speed:rand(0.0008,0.0014),maxR:rand(120,180),delay:rand(0,1)}));
+
+/* ── DANDELION CANVAS ── */
+const dCanvas=document.getElementById("dandelionCanvas");
+const dCtx=dCanvas.getContext("2d");
+let dParticles=[];
+const D_MAX_ACTIVE=65, D_MAX_AMBIENT=14;
+let lastSpawn=0;
+
+function resizeDCanvas(){
+  const groundZone = document.getElementById("ground-zone");
+  dCanvas.width = groundZone.offsetWidth;
+  dCanvas.height = groundZone.offsetHeight;
+}
+
+/* ── WAVE CANVAS (synthetical) ── */
+const wCanvas = document.getElementById("waveCanvas");
+const wCtx = wCanvas.getContext("2d");
+let waveOpacity = 0;
+let waveT = 0;
+
+function resizeWaveCanvas(){
+  const waterZone = document.getElementById("water-zone");
+  wCanvas.width = waterZone.offsetWidth;
+  wCanvas.height = waterZone.offsetHeight;
+}
+
+// Wave config: multiple bands at different vertical positions and speeds
+const WAVE_BANDS = [
+  { yFrac: 0.18, amp: 2.8,  freq: 0.016, speed: 0.00055, alpha: 0.22, width: 1.1 },
+  { yFrac: 0.32, amp: 3.5,  freq: 0.013, speed: 0.00040, alpha: 0.18, width: 0.9 },
+  { yFrac: 0.47, amp: 2.2,  freq: 0.019, speed: 0.00065, alpha: 0.15, width: 0.8 },
+  { yFrac: 0.61, amp: 4.0,  freq: 0.011, speed: 0.00030, alpha: 0.20, width: 1.0 },
+  { yFrac: 0.75, amp: 3.0,  freq: 0.015, speed: 0.00048, alpha: 0.16, width: 0.85 },
+  { yFrac: 0.88, amp: 2.5,  freq: 0.018, speed: 0.00058, alpha: 0.14, width: 0.75 },
+];
+
+function tickWaveCanvas(ts) {
+  waveOpacity = lerp(waveOpacity, waterActive ? 1 : 0, 0.012);
+  wCtx.clearRect(0, 0, wCanvas.width, wCanvas.height);
+  if (waveOpacity < 0.01) return;
+
+  waveT = ts;
+  const W = wCanvas.width;
+  const H = wCanvas.height;
+
+  WAVE_BANDS.forEach(band => {
+    const y = H * band.yFrac;
+    const phase = ts * band.speed;
+    // Each wave line is a gentle sine path across the full width
+    wCtx.beginPath();
+    const steps = Math.ceil(W / 3);
+    for (let i = 0; i <= steps; i++) {
+      const x = (i / steps) * W;
+      // Two sine harmonics for organic feel
+      const dy = Math.sin(x * band.freq + phase) * band.amp
+               + Math.sin(x * band.freq * 1.73 + phase * 1.31) * band.amp * 0.38;
+      if (i === 0) wCtx.moveTo(x, y + dy);
+      else         wCtx.lineTo(x, y + dy);
+    }
+    wCtx.strokeStyle = `rgba(185, 215, 228, ${band.alpha * waveOpacity})`;
+    wCtx.lineWidth = band.width;
+    wCtx.stroke();
+
+    // Soft glow duplicate slightly offset for shimmer feel
+    wCtx.beginPath();
+    for (let i = 0; i <= steps; i++) {
+      const x = (i / steps) * W;
+      const dy = Math.sin(x * band.freq + phase + 0.18) * band.amp * 0.6
+               + Math.sin(x * band.freq * 1.73 + phase * 1.31 + 0.1) * band.amp * 0.2;
+      if (i === 0) wCtx.moveTo(x, y + dy + 1.8);
+      else         wCtx.lineTo(x, y + dy + 1.8);
+    }
+    wCtx.strokeStyle = `rgba(210, 235, 245, ${band.alpha * 0.45 * waveOpacity})`;
+    wCtx.lineWidth = band.width * 0.6;
+    wCtx.stroke();
+  });
+}
+
+/* ── SHIMMER CANVAS (analytical — water glints) ── */
+const sCanvas = document.getElementById("shimmerCanvas");
+const sCtx = sCanvas.getContext("2d");
+let shimmerOpacity = 0;
+
+function resizeShimmerCanvas(){
+  const mtnZone = document.getElementById("mtn-zone");
+  sCanvas.width = mtnZone.offsetWidth;
+  sCanvas.height = mtnZone.offsetHeight;
+  initShimmerSparkles();
+}
+
+// Sparkle pool — scattered glints that live on the lower half of the mtn zone
+// (which overlaps with the water in the photo)
+const SPARKLE_COUNT = 55;
+let sparkles = [];
+
+function initShimmerSparkles() {
+  sparkles = [];
+  const W = sCanvas.width;
+  const H = sCanvas.height;
+  for (let i = 0; i < SPARKLE_COUNT; i++) {
+    sparkles.push(makeSparkle(W, H, true));
+  }
+}
+
+function makeSparkle(W, H, randomPhase) {
+  return {
+    x: rand(W * 0.02, W * 0.98),
+    // Concentrate glints in the lower 60% of the zone (where water reflection would be)
+    y: rand(H * 0.40, H * 0.98),
+    size: rand(0.8, 2.4),
+    phase: randomPhase ? rand(0, Math.PI * 2) : 0,
+    speed: rand(0.0008, 0.0022),
+    peakAlpha: rand(0.25, 0.65),
+    // Horizontal drift: very slight, back-and-forth
+    driftAmp: rand(1.2, 3.5),
+    driftFreq: rand(0.0004, 0.0009),
+    driftPhase: rand(0, Math.PI * 2),
+    // Each sparkle has its own lifespan before recycling
+    lifeT: randomPhase ? rand(0, 1) : 0,
+    lifeDur: rand(180, 480),
+  };
+}
+
+function tickShimmerCanvas(ts) {
+  shimmerOpacity = lerp(shimmerOpacity, mtnActive ? 1 : 0, 0.012);
+  sCtx.clearRect(0, 0, sCanvas.width, sCanvas.height);
+  if (shimmerOpacity < 0.01) return;
+
+  const W = sCanvas.width;
+  const H = sCanvas.height;
+
+  sparkles.forEach(sp => {
+    sp.lifeT++;
+    if (sp.lifeT > sp.lifeDur) {
+      // Recycle sparkle at new position
+      Object.assign(sp, makeSparkle(W, H, false));
+      return;
+    }
+    const lifeFrac = sp.lifeT / sp.lifeDur;
+    // Envelope: ramp in, hold, ramp out — creates a natural glint flash
+    const envelope = Math.sin(lifeFrac * Math.PI);
+    const a = envelope * sp.peakAlpha * shimmerOpacity;
+    if (a < 0.01) return;
+
+    // Gentle horizontal sway
+    const dx = Math.sin(ts * sp.driftFreq + sp.driftPhase) * sp.driftAmp;
+    const x = sp.x + dx;
+    const y = sp.y;
+
+    // Draw a 4-pointed star / cross glint
+    sCtx.save();
+    sCtx.globalAlpha = a;
+    sCtx.translate(x, y);
+
+    const r = sp.size;
+    // Long axis
+    const grad = sCtx.createRadialGradient(0, 0, 0, 0, 0, r * 3.5);
+    grad.addColorStop(0,   `rgba(230, 248, 255, ${a})`);
+    grad.addColorStop(0.3, `rgba(200, 235, 250, ${a * 0.6})`);
+    grad.addColorStop(1,   `rgba(190, 225, 245, 0)`);
+
+    // Horizontal streak
+    sCtx.beginPath();
+    sCtx.moveTo(-r * 3.5, 0);
+    sCtx.lineTo( r * 3.5, 0);
+    sCtx.strokeStyle = `rgba(225, 245, 255, ${a * 0.7})`;
+    sCtx.lineWidth = r * 0.55;
+    sCtx.stroke();
+
+    // Vertical streak (shorter)
+    sCtx.beginPath();
+    sCtx.moveTo(0, -r * 2.2);
+    sCtx.lineTo(0,  r * 2.2);
+    sCtx.lineWidth = r * 0.4;
+    sCtx.stroke();
+
+    // Central bright dot
+    sCtx.beginPath();
+    sCtx.arc(0, 0, r * 0.7, 0, Math.PI * 2);
+    sCtx.fillStyle = `rgba(245, 252, 255, ${a})`;
+    sCtx.fill();
+
+    sCtx.restore();
+  });
+}
+
+/* ── CLOUD DRIFT (progressive) ── */
+let cloudDriftT = 0;
+
+function tickCloudDrift(ts) {
+  cloudGroupOpacity = lerp(cloudGroupOpacity, skyActive ? 1 : 0, 0.010);
+  cloudGroup.setAttribute("opacity", cloudGroupOpacity.toFixed(3));
+
+  if (cloudGroupOpacity < 0.005) return;
+
+  cloudDriftT = ts;
+  // Very slow, independent drift for each cloud layer
+  // Cloud A drifts rightward at ~0.4px/s equivalent in SVG units
+  const dA = (ts * 0.0055) % 1400;
+  const dAy = Math.sin(ts * 0.00025) * 4;
+  cloudA.setAttribute("transform", `translate(${dA.toFixed(1)},${dAy.toFixed(2)})`);
+
+  // Cloud B drifts slightly faster, starts offset
+  const dB = ((ts * 0.0038) + 200) % 1400;
+  const dBy = Math.sin(ts * 0.00018 + 1.4) * 3.5;
+  cloudB.setAttribute("transform", `translate(${dB.toFixed(1)},${dBy.toFixed(2)})`);
+
+  // Cloud C is slower, at the trailing edge
+  const dC = ((ts * 0.0028) + 500) % 1400;
+  const dCy = Math.sin(ts * 0.00021 + 2.8) * 5;
+  cloudC.setAttribute("transform", `translate(${dC.toFixed(1)},${dCy.toFixed(2)})`);
+}
+
+/* ── DANDELION SEEDS ── */
+class DandelionSeed{
+  constructor(active){this.reset(active);}
+  reset(active){
+    const w=dCanvas.width,h=dCanvas.height;
+    this.x=rand(w*0.04,w*0.96);this.y=rand(h*0.80,h*0.98);
+    this.vx=rand(-0.45,0.45)*(active?1.4:0.55);
+    this.vy=-rand(0.28,active?1.35:0.48);
+    this.driftX=rand(-0.03,0.03);
+    this.size=rand(1.1,2.3);this.stemLen=rand(3,7);
+    this.angle=rand(0,Math.PI*2);this.spin=rand(-0.018,0.018);
+    this.life=0;this.maxLife=active?rand(90,175):rand(175,310);
+  }
+  update(){this.vx+=this.driftX;this.x+=this.vx;this.y+=this.vy;this.angle+=this.spin;this.life++;}
+  isDead(){return this.life>this.maxLife||this.y<-10;}
+  draw(){
+    const p=this.life/this.maxLife;
+    const a=(p<0.10?p/0.10:1-p)*0.88;
+    if(a<=0.01)return;
+    dCtx.save();dCtx.globalAlpha=a;
+    dCtx.translate(this.x,this.y);dCtx.rotate(this.angle);
+    dCtx.beginPath();dCtx.moveTo(0,0);dCtx.lineTo(0,this.stemLen);
+    dCtx.strokeStyle="rgba(248,245,232,0.82)";dCtx.lineWidth=0.55;dCtx.stroke();
+    dCtx.beginPath();dCtx.arc(0,0,this.size,0,Math.PI*2);
+    dCtx.fillStyle="rgba(252,250,240,0.94)";dCtx.fill();
+    dCtx.restore();
+  }
+}
+
+function initSeeds(){
+  dParticles=[];
+  for(let i=0;i<D_MAX_AMBIENT;i++){
+    const s=new DandelionSeed(false);s.life=Math.random()*s.maxLife;dParticles.push(s);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
+   TICK FUNCTIONS
+═══════════════════════════════════════════════════════ */
+function tickSky(ts){
+  skyOpacity=lerp(skyOpacity,skyActive?1:0,0.012);
+  skyBeamT+=0.0009;
+  const pulse=(Math.sin(skyBeamT)*0.5+0.5)*0.4+0.6;
+  skyBeam.setAttribute("opacity",(skyOpacity*0.75*pulse).toFixed(3));
+  wisps.forEach((w)=>{
+    w.x+=w.speed*0.8;
+    if(w.x>140) w.x=-30;
+    const oy=Math.sin(ts*0.00035+w.phase*5)*5;
+    w.el.setAttribute("transform",`translate(${(w.x*8).toFixed(1)},${oy.toFixed(1)})`);
+    const op=skyOpacity*(0.7+Math.sin(ts*0.00065+w.phase*4)*0.3);
+    w.el.setAttribute("opacity",op.toFixed(3));
+  });
+}
+
+function tickMountain(ts){
+  mtnOpacity=lerp(mtnOpacity,mtnActive?1:0,0.012);
+  mistBlobs.forEach(m=>{
+    const sway = Math.sin(ts*m.speed + m.phase)*18;
+    const drift = Math.sin(ts*m.speed*0.8 + m.phase)*4;
+    const alphaMod = (Math.sin(ts*m.speed*1.2 + m.phase)*0.5 + 0.5)*0.13 + 0.05;
+    const alpha = alphaMod * mtnOpacity;
+    m.el.setAttribute("transform",`translate(${sway.toFixed(1)},${drift.toFixed(1)})`);
+    m.el.setAttribute("fill",`rgba(210,228,232,${alpha.toFixed(3)})`);
+  });
+}
+
+function tickRipple(state, baseAlpha){
+  state.t+=state.speed;
+  const phase=(state.t+state.delay)%1;
+  const r=phase*state.maxR;
+  const envelope=Math.sin(phase*Math.PI);
+  const alpha=envelope*waterOpacity*baseAlpha;
+  state.el.setAttribute("r",r.toFixed(1));
+  state.el.setAttribute("stroke-opacity",alpha.toFixed(3));
+}
+
+function tickWater(){
+  waterOpacity=lerp(waterOpacity,waterActive?1:0,0.012);
+  rippleState.forEach(s=>tickRipple(s,0.75));
+  rippleWideState.forEach(s=>tickRipple(s,0.45));
+}
+
+function tickForeground(ts){
+  fgOpacity=lerp(fgOpacity,fgActive?1:0,0.014);
+  const maxCount=fgActive?D_MAX_ACTIVE:D_MAX_AMBIENT;
+  if(dParticles.length<maxCount&&ts-lastSpawn>(fgActive?110:580)){
+    dParticles.push(new DandelionSeed(fgActive));lastSpawn=ts;
+  }
+  dCtx.clearRect(0,0,dCanvas.width,dCanvas.height);
+  dParticles=dParticles.filter(s=>!s.isDead());
+  while(dParticles.length>maxCount)dParticles.shift();
+  dParticles.forEach(s=>{s.update();s.draw();});
+}
+
+function loop(ts){
+  tickSky(ts);
+  tickMountain(ts);
+  tickWater();
+  tickForeground(ts);
+  tickCloudDrift(ts);
+  tickWaveCanvas(ts);
+  tickShimmerCanvas(ts);
+  requestAnimationFrame(loop);
+}
+
+/* ═══════════════════════════════════════════════════════
+   MOUSE HOVER — zone detection
+═══════════════════════════════════════════════════════ */
+const HOVER_ZONES=[
+  {yMin:0, yMax:35, key:"sky"},
+  {yMin:27,yMax:60, key:"mtn"},
+  {yMin:50,yMax:80, key:"water"},
+  {yMin:70,yMax:100,key:"ground"},
+];
+let hoverKey=null;
+const pips={
+  sky:   document.getElementById("pip-sky"),
+  mtn:   document.getElementById("pip-mtn"),
+  water: document.getElementById("pip-water"),
+  ground:document.getElementById("pip-ground"),
+};
+
+function setHoverZone(key){
+  if(key===hoverKey)return;
+  hoverKey=key;
+  skyActive=  (key==="sky");
+  mtnActive=  (key==="mtn");
+  waterActive=(key==="water");
+  fgActive=   (key==="ground");
+  Object.keys(pips).forEach(k=>pips[k].classList.toggle("lit",k===key));
+}
+
+const catcher=document.getElementById("mouse-catcher");
+catcher.addEventListener("mousemove",e=>{
+  if(isOpen) return;
+  const y=(e.clientY/window.innerHeight)*100;
+  let found=null;
+  for(let i=HOVER_ZONES.length-1;i>=0;i--){
+    const z=HOVER_ZONES[i];if(y>=z.yMin&&y<=z.yMax){found=z.key;break;}
+  }
+  setHoverZone(found);
+});
+catcher.addEventListener("mouseleave",()=>{
+  setTimeout(()=>{if(!isOpen)setHoverZone(null);},350);
+});
+
+/* ═══════════════════════════════════════════════════════
+   AUDIO PLAYBACK
+═══════════════════════════════════════════════════════ */
+let currentAudio = null;
+
+function playAudio(key) {
+  const z = ZONE_DATA[key];
+  if (!z || !z.audioFile) return;
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+  }
+  currentAudio = new Audio(z.audioFile);
+  currentAudio.volume = 0.6;
+  currentAudio.play().catch(err => console.log("Audio play prevented:", err));
+}
+
+function stopAudio() {
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+    currentAudio = null;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
+   OPEN / CLOSE ENCOUNTER
+═══════════════════════════════════════════════════════ */
+const photo=document.getElementById("basePhoto");
+const tintEl=document.getElementById("tint");
+let isOpen=false;
+let currentKey=null;
+
+function lockZoneActive(key){
+  skyActive=  (key==="sky"||key==="statement");
+  mtnActive=  (key==="mtn");
+  waterActive=(key==="water");
+  fgActive=   (key==="ground");
+  if(key==="statement"){skyActive=true;mtnActive=false;waterActive=false;fgActive=false;}
+}
+
+function openZone(key){
+  const z=ZONE_DATA[key]; if(!z) return;
+  currentKey=key; isOpen=true;
+
+  document.getElementById("scene").classList.add("scene-zoomed");
+
+  photo.style.objectPosition=z.photoPos;
+  photo.style.filter="brightness(0.48) saturate(0.68)";
+  tintEl.style.background=z.tint;
+  tintEl.style.opacity="1";
+
+  const pz = document.getElementById("photo-zoom");
+  if (key === 'statement') {
+    pz.style.transform = "scale(1.375)";
+  } else {
+    pz.style.transform = "scale(1.65)";
+  }
+
+  lockZoneActive(key);
+
+  document.getElementById("enc-num").textContent   =z.num;
+  const titleEl=document.getElementById("enc-title");
+  titleEl.textContent=z.title; titleEl.style.color=z.col;
+  document.getElementById("enc-num").style.color    =z.col;
+  document.getElementById("enc-mode").textContent  =z.mode;
+  document.getElementById("enc-zone-desc").textContent=z.desc;
+  document.getElementById("enc-body").innerHTML    =z.body;
+
+  if(z.audioFile){
+    playAudio(key);
+  }
+
+  const wrap=document.getElementById("enc-wrap");
+  wrap.classList.add("open");
+
+  const lines=wrap.querySelectorAll(".enc-line");
+  gsap.fromTo(lines,{opacity:0,y:12},{opacity:1,y:0,stagger:0.08,duration:0.65,ease:"power3.out",delay:0.2});
+  const paras=document.querySelectorAll("#enc-body p,.enc-pull");
+  gsap.fromTo(paras,{opacity:0,y:8},{opacity:1,y:0,stagger:0.09,duration:0.6,ease:"power2.out",delay:0.48});
+
+  if(z.dotId){
+    const dot=document.getElementById(z.dotId);
+    if(dot){dot.style.background=z.dotCol;dot.style.borderColor=z.dotCol;}
+  }
+
+  document.querySelectorAll(".hotspot").forEach(h=>h.classList.remove("active"));
+  const hsEl=document.getElementById("hs-"+key);
+  if(hsEl)hsEl.classList.add("active");
+}
+
+function closeZone(){
+  isOpen=false;currentKey=null;
+
+  document.getElementById("scene").classList.remove("scene-zoomed");
+
+  document.getElementById("enc-wrap").classList.remove("open");
+  stopAudio();
+  document.querySelectorAll(".hotspot").forEach(h=>h.classList.remove("active"));
+
+  const pz = document.getElementById("photo-zoom");
+  pz.style.transform = "";
+  photo.style.objectPosition = "";
+  photo.style.filter = "";
+  tintEl.style.opacity = "0";
+
+  setTimeout(()=>{
+    if(!isOpen){
+      setHoverZone(null);
+    }
+  },300);
+}
+
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeZone();});
+document.querySelectorAll(".hotspot").forEach(h=>{
+  h.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" ")h.click();});
+});
+
+/* ═══════════════════════════════════════════════════════
+   BOOT
+═══════════════════════════════════════════════════════ */
+function init() {
+  const photo = document.getElementById("basePhoto");
+  function startApp() {
+    updateZonePositions();
+    initSeeds();
+    initShimmerSparkles();
+    requestAnimationFrame(loop);
+    setTimeout(()=>{
+      document.getElementById("corner-label").classList.add("show");
+      document.getElementById("stmt-btn").classList.add("show");
+    },1200);
+  }
+  if (photo.complete && photo.naturalWidth > 0) {
+    startApp();
+  } else {
+    photo.addEventListener('load', startApp);
+    setTimeout(startApp, 2000);
+  }
+}
+
+init();
+
+window.addEventListener("resize", () => {
+  updateZonePositions();
+});
+
+window.addEventListener("orientationchange", () => {
+  setTimeout(updateZonePositions, 100);
+});
+</script>
+</body>
+</html>
