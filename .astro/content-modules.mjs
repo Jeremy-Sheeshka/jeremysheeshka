@@ -19,5 +19,7 @@ export default new Map([
 ["src/content/post/2026-04-11-etec542-HOA5.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fpost%2F2026-04-11-etec542-HOA5.mdx&astroContentModuleFlag=true")],
 ["src/content/post/2026-04-11-etec542-learnerportfolio.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fpost%2F2026-04-11-etec542-learnerportfolio.mdx&astroContentModuleFlag=true")],
 ["src/content/post/2026-05-30-etec531-1.2doing.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fpost%2F2026-05-30-etec531-1.2doing.mdx&astroContentModuleFlag=true")],
-["src/content/post/2026-06-04-curriculum-journey.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fpost%2F2026-06-04-curriculum-journey.mdx&astroContentModuleFlag=true")]]);
+["src/content/post/2026-06-04-curriculum-journey.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fpost%2F2026-06-04-curriculum-journey.mdx&astroContentModuleFlag=true")],
+["src/content/post/2026-06-20-etec-531-new-media-idea.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fpost%2F2026-06-20-etec-531-new-media-idea.mdx&astroContentModuleFlag=true")],
+["src/content/post/2026-06-20-etec531-ai-slop.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fpost%2F2026-06-20-etec531-ai-slop.mdx&astroContentModuleFlag=true")]]);
 		

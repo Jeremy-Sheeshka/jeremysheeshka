@@ -1,0 +1,230 @@
+---
+title: "ETEC 531: The Pedagogical Cost of Generative Slop"
+description: "Examining the gap between automated creation and mindful intent in elementary education through an empirical word ladder test."
+publishDate: "2026-06-21"
+tags: ["etec531", "generative-ai", "critical-literacy"]
+---
+
+import Prose from "../../components/blocks/Prose.astro";
+import Figure from "../../components/blocks/Figure.astro";
+import Cite from "../../components/widgets/Cite.astro";
+
+<Prose>
+
+# The Pedagogical Cost of Generative "Slop"
+
+<details class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 mb-8 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800/50 dark:hover:bg-gray-800 open:bg-white dark:open:bg-gray-900 transition-colors">
+<summary class="font-bold cursor-pointer flex items-center gap-2 select-none text-gray-900 dark:text-gray-100">
+<span class="text-lg">Assignment Task: Critical Artifact Analysis</span>
+</summary>
+<div class="mt-4 space-y-4 text-sm">
+<p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+Identify an instance, phenomenon, or artifact of contemporary generative technology within educational spaces. 
+Analyze its explicit utility alongside its implicit material or psychological framework, reflecting critically on who bears the consequences of automated curriculum delivery.
+</p>
+</div>
+</details>
+
+---
+
+In my current work as an elementary teacher, I think of slop as something that happens when computer generation replaces human judgment. One working definition of Slop could be something to the likes of whether anyone who has a knowledge of, care towards, or an interest in the outcome, took the time to review and approve the work before sharing it. Slop is the gap between design, accuracy, and mindful intent, whether obvious or subtle.
+
+Jones et al. (2025) write about "careless speech," <Cite n={1} title="Careless speech" /> which I felt resonated with my definition. Slop is more than "low quality" content; it is content created with an indifference towards the outcome. In teaching elementary-aged students in particular, that indifference carries a high cost in learning outcomes since younger children may not have the ability to discern or question something presented to them as fact. 
+
+This sentiment is also carried through to the Buckingham (2019) reading, where the question is raised: "who pays the price for how this technology is used in the classroom?" <Cite n={2} title="The Media Education Manifesto" /> in relation to Slop. To me, Slop is computer generated material that lacks oversight and judgement without any human care behind it.
+
+---
+
+## The Artifact: Generative Carelessness
+
+Here is my oversaturated example of generative carelessness. Complete with misspellings, questionable graphics and information, and smiles all around: **"The Water Cycle?"**
+
+<div class="w-full my-6">
+  <Figure
+    src="https://iili.io/CIaIIY7.webp"
+    alt="AI-generated educational graphic titled 'The Water Cycle?' complete with text errors and questionable formatting."
+  />
+</div>
+
+---
+
+## The Word Ladder Experiment
+
+In addition to my main artifact, I was interested in this and decided to use the same prompt through five different AI models to check out how frequently Slop turned up when it was never intended to, and how thoroughly each free model handled the task on its own. 
+
+What I found was that there were errors in three of the five AI models, with the other two completing the task successfully. Take a look at the results below and how subtle or glaring the mistakes are. One AI even cycled to the word **CRAP** which would most definitely derail a class full of younger elementary-aged students. 
+
+The evaluation prompt used was:
+> I need help creating a word ladder. Start with the word Slop and turn it into Care by changing 1 letter at a time.
+
+Errors like this are a good example of what Slop is all about: a confident, plausible-looking final answer, but without much consideration or oversight to the depth behind what is actually being shared.
+
+<div class="switcher-container">
+  <input type="radio" id="qwen" name="switcher-group" checked />
+  <input type="radio" id="gemini" name="switcher-group" />
+  <input type="radio" id="grok" name="switcher-group" />
+  <input type="radio" id="deepseek" name="switcher-group" />
+  <input type="radio" id="claude" name="switcher-group" />
+
+  <div class="navigation">
+    <label for="qwen" class="nav-label label-qwen">Qwen</label>
+    <label for="gemini" class="nav-label label-gemini">Gemini</label>
+    <label for="grok" class="nav-label label-grok">Grok</label>
+    <label for="deepseek" class="nav-label label-deepseek">DeepSeek</label>
+    <label for="claude" class="nav-label label-claude">Claude</label>
+  </div>
+
+  <div class="display-area">
+    <div id="panel-qwen" class="image-panel">
+      <img src="https://iili.io/Cz6OM0J.webp" alt="Qwen Response" />
+    </div>
+    <div id="panel-gemini" class="image-panel">
+      <img src="https://iili.io/Cz6OVUv.webp" alt="Gemini Response" />
+    </div>
+    <div id="panel-grok" class="image-panel">
+      <img src="https://iili.io/CziF5jj.webp" alt="Grok Response" />
+    </div>
+    <div id="panel-deepseek" class="image-panel">
+      <img src="https://iili.io/Cz6SQln.webp" alt="DeepSeek Response" />
+    </div>
+    <div id="panel-claude" class="image-panel">
+      <img src="https://iili.io/Cz6OGfa.webp" alt="Claude Response" />
+    </div>
+  </div>
+</div>
+
+<style>{`
+  /* Switcher Container (Canvas Content Card) */
+  .switcher-container {
+    max-width: 900px;
+    margin: 32px auto;
+    background: #ffffff;
+    border: 1px solid #C7CDD1; /* Classic Canvas border gray */
+    border-radius: 4px;
+    padding: 24px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    box-sizing: border-box;
+  }
+
+  /* Navigation Tabs (Canvas standard structural tabs layout) */
+  .navigation {
+    display: flex;
+    justify-content: flex-start; /* Left-aligned like real Canvas tabs */
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+    border-bottom: 2px solid #E1E6E8;
+    padding-bottom: 0;
+  }
+
+  .nav-label {
+    padding: 12px 20px;
+    background-color: transparent;
+    color: #556575; /* Muted Canvas text color */
+    border-radius: 0;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 15px;
+    transition: all 0.15s ease-in-out;
+    user-select: none;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px; /* Overlap parent border cleanly */
+  }
+
+  .nav-label:hover {
+    color: #008EE2;
+    border-bottom: 3px solid #C7CDD1;
+  }
+
+  /* Canvas Active Tab State */
+  #qwen:checked ~ .navigation .label-qwen,
+  #gemini:checked ~ .navigation .label-gemini,
+  #grok:checked ~ .navigation .label-grok,
+  #deepseek:checked ~ .navigation .label-deepseek,
+  #claude:checked ~ .navigation .label-claude {
+    color: #008EE2; /* Canvas Accent Blue */
+    font-weight: 700;
+    border-bottom: 3px solid #008EE2;
+  }
+
+  /* Hide the actual radio inputs */
+  input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  /* Display Area for Submissions */
+  .display-area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    border: 1px solid #C7CDD1;
+    border-radius: 4px;
+    position: relative;
+    background-color: #18181b; /* Keeps a dark room context for readability of the dark screenshots */
+    min-height: 450px;
+  }
+
+  .image-panel {
+    width: 100%;
+    display: none;
+    position: relative;
+    padding: 12px;
+    box-sizing: border-box;
+    animation: canvasFadeIn 0.2s ease-in-out;
+  }
+
+  /* Visible Panels based on selections */
+  #qwen:checked ~ .display-area #panel-qwen,
+  #gemini:checked ~ .display-area #panel-gemini,
+  #grok:checked ~ .display-area #panel-grok,
+  #deepseek:checked ~ .display-area #panel-deepseek,
+  #claude:checked ~ .display-area #panel-claude {
+    display: block;
+  }
+
+  .image-panel img {
+    width: 100%;
+    height: auto;
+    max-height: 75vh;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+    border-radius: 2px;
+  }
+
+  @keyframes canvasFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+`}</style>
+
+<div class="clear-both"></div>
+
+---
+
+## References
+
+<div class="mt-8 border-t border-gray-200 dark:border-gray-700 pt-8">
+<div class="flex flex-col gap-4">
+
+<div id="ref-1" class="flex gap-3 text-sm scroll-mt-24 group">
+<a href="#cite-1" class="flex-none w-6 text-right font-mono text-xs text-blue-600 pt-1 hover:underline hover:font-bold" title="Jump back to citation">[1]</a>
+<div class="leading-relaxed text-gray-700 dark:text-gray-300">
+<b>Jones, L., et al. (2025).</b> Careless speech: Generative AI, epistemic indifference, and the degradation of educational content. <i>Journal of Educational Philosophy and Technology</i>, 14(2), 112–128.
+</div>
+</div>
+
+<div id="ref-2" class="flex gap-3 text-sm scroll-mt-24 group">
+<a href="#cite-2" class="flex-none w-6 text-right font-mono text-xs text-blue-600 pt-1 hover:underline hover:font-bold" title="Jump back to citation">[2]</a>
+<div class="leading-relaxed text-gray-700 dark:text-gray-300">
+<b>Buckingham, D. (2019).</b> <i>The Media Education Manifesto</i>. Polity Press.
+</div>
+</div>
+
+</div>
+</div>
+
+</Prose>
