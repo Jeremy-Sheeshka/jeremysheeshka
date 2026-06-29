@@ -1,0 +1,108 @@
+---
+title: 'MDX / Markdown Playground'
+description: 'A test file for all the cool formatting tricks'
+publishDate: 2026-06-21
+draft: true
+author: 'You'
+---
+
+{/* 
+  Import components here if you have them – comment out or remove this line if not.
+  import { Note } from '@/components/ui'; // Hypothetical – uncomment if you have it
+*/}
+
+# 🧪 The Ultimate MDX + Markdown Sandbox
+
+This file is a **living test**. Scroll down to see the source code and its rendered result side-by-side.
+
+---
+
+## 1. Basic Text Formatting
+
+- **Bold** and *italic* and ***bold-italic***.
+- ~~Strikethrough~~ (use `~~`).
+- Inline `code` with backticks.
+- `==Highlighted text==` (Obsidian) or `<mark>HTML</mark>`.
+- Subscript: H~2~O (`~`) or H<sub>2</sub>O (`<sub>`)
+- Superscript: X^2^ (`^`) or X<sup>2</sup> (`<sup>`)
+
+---
+
+## 2. Lists (Ordered, Unordered, Nested, Task)
+
+- Dairy
+  - Milk
+  - Cheese
+- Produce
+  1. Apples
+  2. Bananas
+
+**Tasks:**
+- [x] Write the MDX file
+- [ ] Test it in my project
+- [ ] Share it with friends
+
+---
+
+## 3. Tables (alignment demo)
+
+| Feature        | Markdown | MDX      |
+| :------------- | :------: | --------:|
+| Blockquotes    | ✅       | Yes      |
+| React Comp     | ❌       | ✅       |
+| JS Expressions | ❌       | ✅       |
+
+---
+
+## 4. Blockquotes (standard & nested)
+
+> Level 1
+>> Level 2
+>>> Level 3
+
+### GitHub Alerts (if supported):
+> [!NOTE]
+> This is a note.
+> [!TIP]
+> This is a tip.
+
+---
+
+## 5. Collapsible (HTML `<details>`)
+
+<details>
+<summary>📂 Click to expand</summary>
+
+Hidden content goes here. Even **nested**:
+
+<details>
+<summary>🤯 Nested</summary>
+Yo dawg...
+</details>
+</details>
+
+---
+
+## 6. Footnotes
+
+Here's a fact[^1].
+
+[^1]: This is the footnote.
+
+---
+
+## 7. Definition List
+
+Term
+: Definition here.
+
+---
+
+## 8. Code Blocks (with highlighting)
+
+```js {1,3-4} showLineNumbers
+function greet(name) {
+  const message = `Hello, ${name}!`;
+  console.log(message);
+  return message;
+}

@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sight Reading Factory: Opportunity Audit</title>
+  <meta name="description" content="An Educational Venture Analysis of Sight Reading Factory: evaluating whether a narrow, curriculum-locked music-ed tool merits investment. Conditional pass — pilot, don't roll out." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root[data-theme="dark"] {
+      --bg: #07070A; --bg2: #0C0D12; --surface: #121319; --surface-raised: #1A1C24;
+      --border: rgba(255,255,255,0.06); --border-strong: rgba(255,255,255,0.12);
+      --accent: #D4A96A; --accent-bright: #F0CD96; --accent-rgb: 212,169,106;
+      --accent-glow: rgba(212,169,106,0.08); --accent-glow-strong: rgba(212,169,106,0.14);
+      --text: #ECECEE; --text-dim: #B0B4BE; --text-muted: #6A7080; --text-faint: #3A3F4C;
+      --red: #F87171; --red-bg: rgba(248,113,113,0.08);
+      --green: #4ADE80; --green-bg: rgba(74,222,128,0.08);
+      --blue: #60A5FA; --blue-bg: rgba(96,165,250,0.08);
+      --amber: #FBBF24; --amber-bg: rgba(251,191,36,0.08);
+      --nav-bg: rgba(7,7,10,0.72); --card-hover: rgba(212,169,106,0.03);
+      --grid-line: rgba(255,255,255,0.025);
+      --img-filter: brightness(0.85) contrast(1.05);
+      --hero-overlay-1: rgba(7,7,10,0.65);
+      --hero-overlay-2: rgba(7,7,10,0.95);
+    }
+    :root[data-theme="light"] {
+      --bg: #FAFAF6; --bg2: #FFFFFF; --surface: #F2F1EB; --surface-raised: #EAE9E2;
+      --border: rgba(0,0,0,0.06); --border-strong: rgba(0,0,0,0.12);
+      --accent: #92400E; --accent-bright: #B45309; --accent-rgb: 146,64,14;
+      --accent-glow: rgba(146,64,14,0.05); --accent-glow-strong: rgba(146,64,14,0.1);
+      --text: #111114; --text-dim: #3D3D42; --text-muted: #6E6E72; --text-faint: #A0A0A4;
+      --red: #DC2626; --red-bg: rgba(220,38,38,0.06);
+      --green: #16A34A; --green-bg: rgba(22,163,74,0.06);
+      --blue: #2563EB; --blue-bg: rgba(37,99,235,0.06);
+      --amber: #D97706; --amber-bg: rgba(217,119,6,0.06);
+      --nav-bg: rgba(250,250,246,0.72); --card-hover: rgba(146,64,14,0.02);
+      --grid-line: rgba(0,0,0,0.02);
+      --img-filter: brightness(0.95) contrast(1.05);
+      --hero-overlay-1: rgba(250,250,246,0.55);
+      --hero-overlay-2: rgba(250,250,246,0.95);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: 'Inter', -apple-system, system-ui, sans-serif;
+      line-height: 1.7; transition: background 0.4s ease, color 0.4s ease;
+      overflow-x: hidden; -webkit-font-smoothing: antialiased;
+    }
+    ::selection { background: rgba(var(--accent-rgb),0.25); }
+    a { color: inherit; text-decoration: none; }
+    .container { max-width: 940px; margin: 0 auto; padding: 0 28px; }
+    .grid-bg {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image: linear-gradient(to right, var(--grid-line) 1px, transparent 1px), linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 30%, transparent 100%);
+      -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 30%, transparent 100%);
+    }
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: var(--nav-bg); backdrop-filter: blur(20px) saturate(1.6); -webkit-backdrop-filter: blur(20px) saturate(1.6);
+      border-bottom: 1px solid var(--border);
+    }
+    nav .inner { display: flex; align-items: center; justify-content: space-between; height: 58px; gap: 16px; }
+    nav .logo { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); font-weight: 600; white-space: nowrap; display: flex; align-items: center; gap: 8px; }
+    nav .logo .logo-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px rgba(var(--accent-rgb),0.5); }
+    nav .nav-right { display: flex; align-items: center; gap: 8px; }
+    nav .nav-links { display: flex; gap: 2px; list-style: none; }
+    nav .nav-links a { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint); padding: 7px 11px; border-radius: 6px; transition: all 0.2s ease; position: relative; }
+    nav .nav-links a:hover { color: var(--text-dim); background: var(--accent-glow); }
+    nav .nav-links a.active { color: var(--accent); }
+    nav .nav-links a.active::after { content: ''; position: absolute; bottom: -2px; left: 50%; transform: translateX(-50%); width: 4px; height: 4px; border-radius: 50%; background: var(--accent); }
+    #progress-bar { position: absolute; bottom: -1px; left: 0; height: 2px; background: linear-gradient(90deg, var(--accent), var(--accent-bright)); width: 0%; transition: width 0.08s linear; box-shadow: 0 0 10px rgba(var(--accent-rgb),0.5); z-index: 101; }
+    .theme-toggle { background: none; border: 1px solid var(--border-strong); border-radius: 10px; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-muted); transition: all 0.25s ease; flex-shrink: 0; }
+    .theme-toggle:hover { color: var(--accent); border-color: rgba(var(--accent-rgb),0.4); background: var(--accent-glow); }
+    .theme-toggle svg { width: 16px; height: 16px; }
+    [data-theme="dark"] .theme-toggle .sun { display: block; } [data-theme="dark"] .theme-toggle .moon { display: none; }
+    [data-theme="light"] .theme-toggle .sun { display: none; } [data-theme="light"] .theme-toggle .moon { display: block; }
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-d1 { transition-delay: 0.08s; } .reveal-d2 { transition-delay: 0.16s; } .reveal-d3 { transition-delay: 0.24s; }
+    #hero { min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; justify-content: center; position: relative; padding: 120px 0 60px; overflow: hidden; }
+    #hero .hero-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.4; filter: var(--img-filter); z-index: 0; }
+    #hero .hero-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, var(--hero-overlay-1) 0%, var(--hero-overlay-2) 85%, var(--bg) 100%); z-index: 1; }
+    #hero .hero-glow { position: absolute; top: -20%; right: -15%; width: 700px; height: 700px; background: radial-gradient(circle, rgba(var(--accent-rgb),0.07) 0%, transparent 60%); filter: blur(50px); pointer-events: none; z-index: 1; }
+    #hero .hero-content { position: relative; z-index: 2; }
+    #hero .pitch-label { display: inline-flex; align-items: center; gap: 10px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 32px; padding: 8px 16px; border: 1px solid rgba(var(--accent-rgb),0.2); border-radius: 100px; background: var(--accent-glow); }
+    #hero .pitch-label .pulse { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 0 rgba(var(--accent-rgb),0.5); animation: pulse 2s infinite; }
+    @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(var(--accent-rgb),0.5); } 70% { box-shadow: 0 0 0 10px rgba(var(--accent-rgb),0); } 100% { box-shadow: 0 0 0 0 rgba(var(--accent-rgb),0); } }
+    #hero h1 { font-size: clamp(2.5rem, 7.5vw, 5.2rem); font-weight: 800; line-height: 0.98; letter-spacing: -0.045em; color: var(--text); max-width: 820px; margin-bottom: 28px; }
+    #hero h1 .accent { background: linear-gradient(135deg, var(--accent), var(--accent-bright)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    #hero h1 .serif { font-family: 'Fraunces', Georgia, serif; font-style: italic; font-weight: 500; }
+    #hero .lede { font-size: clamp(1rem, 2vw, 1.22rem); color: var(--text-dim); max-width: 600px; line-height: 1.75; margin-bottom: 36px; font-weight: 300; }
+    #hero .verdict-bar { display: inline-flex; align-items: center; gap: 16px; padding: 14px 24px; border: 1px solid rgba(var(--accent-rgb),0.3); border-radius: 100px; background: var(--accent-glow); backdrop-filter: blur(8px); }
+    #hero .verdict-bar .vb-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); }
+    #hero .verdict-bar .vb-value { font-weight: 600; font-size: 0.95rem; color: var(--accent); }
+    #hero .verdict-bar .divider { width: 1px; height: 20px; background: var(--border-strong); }
+    #hero .scroll-cue { position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 10px; z-index: 2; }
+    #hero .scroll-cue span { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-faint); }
+    #hero .scroll-cue .scroll-line { width: 1px; height: 36px; background: linear-gradient(to bottom, var(--accent), transparent); animation: scroll-line 2s ease-in-out infinite; }
+    @keyframes scroll-line { 0%, 100% { opacity: 1; transform: scaleY(1); } 50% { opacity: 0.3; transform: scaleY(0.4); transform-origin: top; } }
+    .meta-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 32px; }
+    .meta-chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border: 1px solid var(--border); border-radius: 100px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint); }
+    .meta-chip svg { width: 12px; height: 12px; }
+    .stat-strip { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; margin: -40px 0 0; position: relative; z-index: 3; }
+    @media (min-width: 640px) { .stat-strip { grid-template-columns: repeat(4, 1fr); } }
+    .stat-strip .stat { background: var(--bg); padding: 32px 24px; transition: background 0.3s; }
+    .stat-strip .stat:hover { background: var(--card-hover); }
+    .stat-strip .stat .num { font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 800; letter-spacing: -0.04em; line-height: 1; background: linear-gradient(135deg, var(--accent), var(--accent-bright)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .stat-strip .stat .lbl { margin-top: 10px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint); line-height: 1.5; }
+    .stats-wrap { padding-bottom: 90px; }
+    .section { padding: 90px 0; border-top: 1px solid var(--border); position: relative; }
+    .section-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--accent); margin-bottom: 18px; display: flex; align-items: center; gap: 14px; }
+    .section-label::after { content: ''; flex: 1; height: 1px; max-width: 100px; background: linear-gradient(to right, rgba(var(--accent-rgb),0.3), transparent); }
+    .section h2 { font-size: clamp(1.8rem, 4.2vw, 2.8rem); font-weight: 700; line-height: 1.12; letter-spacing: -0.035em; color: var(--text); max-width: 740px; margin-bottom: 24px; }
+    .section h2 .serif { font-family: 'Fraunces', Georgia, serif; font-style: italic; font-weight: 500; }
+    .section .body { font-size: 1.05rem; line-height: 1.8; color: var(--text-dim); max-width: 660px; font-weight: 300; }
+    .section .body strong { color: var(--text); font-weight: 600; }
+    .section .body em { font-style: italic; color: var(--text); }
+    .analyst-note { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; line-height: 1.65; color: var(--text-muted); border-left: 2px solid var(--accent); padding: 14px 18px; margin: 24px 0; max-width: 660px; background: var(--surface); border-radius: 0 10px 10px 0; }
+    .product-showcase { margin: 48px 0; display: grid; grid-template-columns: 1fr; gap: 24px; }
+    @media (min-width: 768px) { .product-showcase { grid-template-columns: 1fr 1fr; } }
+    @media (min-width: 1024px) { .product-showcase { grid-template-columns: 1fr 1fr 1fr; } }
+    .product-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; transition: all 0.3s ease; }
+    .product-card:hover { border-color: var(--border-strong); transform: translateY(-3px); }
+    .product-card .img-wrap { aspect-ratio: 16/10; overflow: hidden; background: var(--bg2); position: relative; }
+    .product-card .img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+    .product-card:hover .img-wrap img { transform: scale(1.03); }
+    .product-card .img-wrap::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 60%, rgba(0,0,0,0.3) 100%); pointer-events: none; }
+    .product-card .pc-body { padding: 24px 28px; }
+    .product-card .pc-tag { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+    .product-card .pc-title { font-weight: 700; font-size: 1.05rem; margin-bottom: 6px; color: var(--text); }
+    .product-card .pc-desc { font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; font-weight: 300; }
+    .duo { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 40px; }
+    @media (min-width: 640px) { .duo { grid-template-columns: 1fr 1fr; } }
+    .duo .card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 36px; position: relative; overflow: hidden; transition: all 0.3s ease; }
+    .duo .card:hover { border-color: var(--border-strong); background: var(--surface-raised); transform: translateY(-2px); }
+    .duo .card .tag { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
+    .duo .card .tag::before { content: ''; width: 6px; height: 6px; border-radius: 50%; }
+    .duo .card.problem .tag { color: var(--red); } .duo .card.problem .tag::before { background: var(--red); }
+    .duo .card.solution .tag { color: var(--accent); } .duo .card.solution .tag::before { background: var(--accent); }
+    .duo .card.threat .tag { color: var(--amber); } .duo .card.threat .tag::before { background: var(--amber); }
+    .duo .card h3 { font-size: 1.25rem; font-weight: 700; line-height: 1.3; letter-spacing: -0.02em; color: var(--text); margin-bottom: 14px; }
+    .duo .card p { font-size: 0.95rem; line-height: 1.7; color: var(--text-muted); font-weight: 300; }
+    .thesis { background: var(--surface); border: 1px solid var(--border-strong); border-radius: 24px; padding: 56px 48px; margin: 64px 0; position: relative; overflow: hidden; }
+    .thesis::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(var(--accent-rgb),0.4), transparent); }
+    .thesis .quote-mark { position: absolute; top: 12px; left: 28px; font-size: 5rem; line-height: 1; font-family: 'Fraunces', Georgia, serif; background: linear-gradient(135deg, var(--accent), var(--accent-bright)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; opacity: 0.15; }
+    .thesis p { font-size: clamp(1.2rem, 2.5vw, 1.6rem); font-weight: 500; line-height: 1.45; letter-spacing: -0.02em; color: var(--text); position: relative; z-index: 1; font-family: 'Inter', sans-serif; }
+    .feature-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin: 40px 0; }
+    @media (min-width: 640px) { .feature-grid { grid-template-columns: 1fr 1fr; } }
+    @media (min-width: 900px) { .feature-grid { grid-template-columns: repeat(3, 1fr); } }
+    .feature-item { padding: 24px; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; transition: all 0.25s ease; }
+    .feature-item:hover { border-color: var(--border-strong); background: var(--surface-raised); }
+    .feature-item .fi-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; background: var(--accent-glow); margin-bottom: 14px; }
+    .feature-item .fi-icon svg { width: 18px; height: 18px; color: var(--accent); }
+    .feature-item .fi-title { font-weight: 600; font-size: 0.95rem; margin-bottom: 6px; color: var(--text); }
+    .feature-item .fi-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.55; font-weight: 300; }
+    .radar-wrap { margin: 48px 0; display: flex; flex-direction: column; align-items: center; gap: 32px; }
+    @media (min-width: 768px) { .radar-wrap { flex-direction: row; align-items: flex-start; } }
+    .radar-svg { width: 320px; height: 320px; flex-shrink: 0; }
+    .radar-legend { display: flex; flex-direction: column; gap: 8px; flex: 1; width: 100%; }
+    .radar-legend-item { display: flex; align-items: center; gap: 14px; padding: 12px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; cursor: pointer; transition: all 0.25s ease; user-select: none; }
+    .radar-legend-item:hover, .radar-legend-item.active { border-color: rgba(var(--accent-rgb),0.3); background: var(--accent-glow); }
+    .radar-legend-item .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .radar-legend-item .rl-label { font-size: 0.88rem; font-weight: 500; color: var(--text); flex: 1; }
+    .radar-legend-item .rl-score { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--text-muted); }
+    .radar-tooltip { font-family: 'JetBrains Mono', monospace; font-size: 9px; fill: var(--text-muted); pointer-events: none; text-anchor: middle; }
+    .score-grid { display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 24px; }
+    @media (min-width: 640px) { .score-grid { grid-template-columns: 1fr 1fr; } }
+    .score-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 22px; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; transition: all 0.25s ease; cursor: pointer; }
+    .score-row:hover { border-color: var(--border-strong); transform: translateX(4px); }
+    .score-row .left { display: flex; align-items: center; gap: 14px; flex: 1; min-width: 0; }
+    .score-row .num { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--text-faint); flex-shrink: 0; width: 22px; }
+    .score-row .label { font-size: 0.92rem; font-weight: 500; color: var(--text); }
+    .score-row .chev { color: var(--text-faint); transition: transform 0.3s ease; flex-shrink: 0; }
+    .score-row.open .chev { transform: rotate(90deg); color: var(--accent); }
+    .score-row .rating { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; padding: 5px 12px; border-radius: 100px; flex-shrink: 0; font-weight: 500; white-space: nowrap; }
+    .rating.strong { background: var(--green-bg); color: var(--green); }
+    .rating.fragile { background: var(--accent-glow-strong); color: var(--accent); }
+    .rating.thin { background: var(--red-bg); color: var(--red); }
+    .score-detail { max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.4s ease; padding: 0 22px; background: var(--surface); border: 1px solid var(--border); border-top: none; border-radius: 0 0 14px 14px; margin-top: -9px; margin-bottom: 8px; }
+    .score-detail.open { max-height: 250px; padding: 14px 22px 18px; }
+    .score-detail p { font-size: 0.85rem; line-height: 1.65; color: var(--text-muted); font-weight: 300; }
+    .testimonial { background: var(--surface); border: 1px solid var(--border-strong); border-radius: 24px; padding: 48px 40px; margin: 56px 0; display: grid; grid-template-columns: 1fr; gap: 32px; align-items: center; position: relative; overflow: hidden; }
+    @media (min-width: 768px) { .testimonial { grid-template-columns: 200px 1fr; padding: 56px 48px; } }
+    .testimonial::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(var(--accent-rgb),0.4), transparent); }
+    .testimonial .t-avatar { width: 100%; max-width: 200px; aspect-ratio: 1; border-radius: 20px; overflow: hidden; margin: 0 auto; border: 1px solid var(--border-strong); position: relative; }
+    .testimonial .t-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .testimonial .t-content { position: relative; }
+    .testimonial .t-stars { display: flex; gap: 3px; margin-bottom: 16px; }
+    .testimonial .t-stars svg { width: 18px; height: 18px; color: var(--accent); fill: var(--accent); }
+    .testimonial blockquote { font-family: 'Fraunces', Georgia, serif; font-size: clamp(1.15rem, 2.5vw, 1.5rem); line-height: 1.5; font-style: italic; font-weight: 500; color: var(--text); margin-bottom: 20px; letter-spacing: -0.01em; }
+    .testimonial .t-author { display: flex; flex-direction: column; gap: 2px; }
+    .testimonial .t-name { font-weight: 700; font-size: 0.95rem; color: var(--text); }
+    .testimonial .t-role { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
+    .lens-grid { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 36px; }
+    @media (min-width: 640px) { .lens-grid { grid-template-columns: repeat(3, 1fr); } }
+    .lens-card { border: 1px solid; border-radius: 20px; padding: 32px; text-align: center; transition: all 0.3s ease; position: relative; overflow: hidden; }
+    .lens-card:hover { transform: translateY(-3px); }
+    .lens-card .who { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 12px; }
+    .lens-card .verdict { font-size: 1.4rem; font-weight: 800; margin-bottom: 14px; letter-spacing: -0.02em; }
+    .lens-card .desc { font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; font-weight: 300; }
+    .lens-card.pass { border-color: rgba(var(--accent-rgb),0.25); background: var(--accent-glow); }
+    .lens-card.pass .verdict { color: var(--accent); }
+    .lens-card.skip { border-color: rgba(248,113,113,0.15); background: var(--red-bg); }
+    .lens-card.skip .verdict { color: var(--red); }
+    .lens-card.interest { border-color: rgba(96,165,250,0.15); background: var(--blue-bg); }
+    .lens-card.interest .verdict { color: var(--blue); }
+    .timeline { margin: 48px 0; position: relative; }
+    .timeline::before { content: ''; position: absolute; left: 20px; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, var(--accent), var(--border)); }
+    @media (min-width: 640px) { .timeline::before { left: 50%; transform: translateX(-50%); } }
+    .tl-item { position: relative; padding: 0 0 40px 52px; opacity: 0; transform: translateY(20px); transition: all 0.6s cubic-bezier(0.16,1,0.3,1); }
+    .tl-item.visible { opacity: 1; transform: translateY(0); }
+    @media (min-width: 640px) { .tl-item { width: 50%; padding: 0 40px 40px 0; } .tl-item:nth-child(even) { margin-left: 50%; padding: 0 0 40px 40px; } }
+    .tl-item .tl-dot { position: absolute; left: 14px; top: 4px; width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--accent); background: var(--bg); }
+    @media (min-width: 640px) { .tl-item .tl-dot { left: auto; right: -7px; } .tl-item:nth-child(even) .tl-dot { left: -7px; right: auto; } }
+    .tl-item .tl-year { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.15em; color: var(--accent); text-transform: uppercase; margin-bottom: 8px; }
+    .tl-item .tl-title { font-weight: 700; font-size: 1.05rem; margin-bottom: 6px; color: var(--text); }
+    .tl-item .tl-desc { font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; font-weight: 300; }
+    .pricing-grid { display: grid; grid-template-columns: 1fr; gap: 14px; margin: 36px 0; }
+    @media (min-width: 640px) { .pricing-grid { grid-template-columns: repeat(3, 1fr); } }
+    .price-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 28px 24px; text-align: center; transition: all 0.3s ease; }
+    .price-card:hover { border-color: var(--border-strong); transform: translateY(-2px); }
+    .price-card .pc-type { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 12px; }
+    .price-card .pc-price { font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; color: var(--text); margin-bottom: 4px; }
+    .price-card .pc-unit { font-size: 0.8rem; color: var(--text-muted); font-weight: 300; }
+    .price-card.featured { border-color: rgba(var(--accent-rgb),0.3); background: var(--accent-glow); }
+    .price-card.featured .pc-price { background: linear-gradient(135deg, var(--accent), var(--accent-bright)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .cta { text-align: center; padding: 100px 0 80px; position: relative; overflow: hidden; }
+    .cta::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at center, var(--accent-glow) 0%, transparent 60%); }
+    .cta h2 { font-size: clamp(1.8rem, 4.5vw, 2.8rem); font-weight: 700; line-height: 1.12; letter-spacing: -0.03em; margin-bottom: 16px; position: relative; }
+    .cta h2 .serif { font-family: 'Fraunces', Georgia, serif; font-style: italic; font-weight: 500; }
+    .cta p { font-size: 1.05rem; color: var(--text-muted); max-width: 540px; margin: 0 auto 36px; position: relative; font-weight: 300; line-height: 1.7; }
+    .cta .btn { display: inline-flex; align-items: center; gap: 10px; padding: 16px 32px; background: linear-gradient(135deg, var(--accent), var(--accent-bright)); color: #0a0a0a; font-weight: 700; font-size: 0.95rem; border-radius: 100px; transition: all 0.25s ease; letter-spacing: -0.01em; border: none; cursor: pointer; position: relative; }
+    .cta .btn:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(var(--accent-rgb),0.3); }
+    .cta .btn svg { width: 16px; height: 16px; }
+    footer { border-top: 1px solid var(--border); padding: 48px 0 40px; position: relative; }
+    footer .inner { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 24px; }
+    footer p { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); line-height: 1.6; }
+    footer p b { color: var(--accent); font-weight: 500; }
+    footer .refs { margin-top: 16px; }
+    footer .refs a { display: inline-block; font-size: 10px; font-family: 'JetBrains Mono', monospace; color: var(--text-faint); text-decoration: underline; text-underline-offset: 3px; margin-right: 16px; transition: color 0.2s; }
+    footer .refs a:hover { color: var(--accent); }
+    .mobile-menu-btn { display: none; background: none; border: 1px solid var(--border-strong); border-radius: 10px; width: 36px; height: 36px; align-items: center; justify-content: center; cursor: pointer; color: var(--text-muted); transition: all 0.2s; }
+    .mobile-menu-btn:hover { color: var(--accent); border-color: rgba(var(--accent-rgb),0.4); }
+    .mobile-menu-btn svg { width: 16px; height: 16px; }
+    .mobile-nav { display: none; position: fixed; inset: 0; z-index: 150; background: var(--bg); flex-direction: column; align-items: center; justify-content: center; gap: 20px; }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav a { font-family: 'JetBrains Mono', monospace; font-size: 14px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim); padding: 12px 24px; border-radius: 8px; transition: all 0.2s; }
+    .mobile-nav a:hover { color: var(--accent); background: var(--accent-glow); }
+    .mobile-nav .close-btn { position: absolute; top: 16px; right: 28px; background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 28px; }
+    @media (max-width: 768px) { nav .nav-links { display: none; } .mobile-menu-btn { display: flex; } .thesis { padding: 36px 24px; } .testimonial { padding: 32px 24px; } .duo .card { padding: 28px; } #hero { padding-top: 90px; } .radar-svg { width: 280px; height: 280px; } }
+    .back-to-top { position: fixed; bottom: 28px; right: 28px; width: 44px; height: 44px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border-strong); display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-muted); z-index: 50; opacity: 0; pointer-events: none; transition: all 0.3s ease; box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
+    .back-to-top.visible { opacity: 1; pointer-events: auto; }
+    .back-to-top:hover { color: var(--accent); border-color: rgba(var(--accent-rgb),0.4); transform: translateY(-2px); }
+    .back-to-top svg { width: 18px; height: 18px; }
+    .ai-card { background: var(--surface); border: 1px solid var(--border-strong); border-radius: 24px; padding: 40px 44px; margin: 40px 0; position: relative; overflow: hidden; }
+    .ai-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(var(--accent-rgb),0.4), transparent); }
+    .ai-card .ai-tag { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
+    .ai-card h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 14px; color: var(--text); }
+    .ai-card p { font-size: 0.95rem; line-height: 1.78; color: var(--text-dim); font-weight: 300; }
+    .ai-card p + p { margin-top: 14px; }
+    .ai-card strong { color: var(--text); font-weight: 600; }
+    .ref-list { margin: 36px 0; display: flex; flex-direction: column; gap: 10px; }
+    .ref-item { display: flex; gap: 18px; padding: 20px 24px; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; transition: all 0.25s ease; }
+    .ref-item:hover { border-color: var(--border-strong); transform: translateX(4px); }
+    .ref-num { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--accent); font-weight: 600; flex-shrink: 0; width: 26px; padding-top: 3px; }
+    .ref-content { flex: 1; }
+    .ref-content p { font-size: 0.88rem; color: var(--text-dim); line-height: 1.65; font-weight: 300; }
+    .ref-content .ref-type { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 5px; }
+    .ref-content a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; word-break: break-all; }
+    .ref-content a:hover { color: var(--accent-bright); }
+    
+    /* ═══ ADDED IMAGES CSS ═══ */
+    .img-break-full { position: relative; height: 280px; overflow: hidden; margin: 0; }
+    .img-break-full img { width: 100%; height: 100%; object-fit: cover; filter: var(--img-filter); }
+    .img-break-full .overlay { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 0%, var(--bg) 100%); }
+    .img-break-full .overlay-top { position: absolute; inset: 0; background: linear-gradient(0deg, transparent 0%, var(--bg) 100%); }
+    @media (min-width: 640px) { .img-break-full { height: 380px; } }
+
+    @media (max-width: 600px) { .ai-card { padding: 28px 24px; } }
+  </style>
+</head>
+<body>
+<div class="grid-bg"></div>
+<nav id="main-nav">
+  <div class="container">
+    <div class="inner">
+      <a href="#hero" class="logo"><span class="logo-dot"></span>SRF · EVA</a>
+      <div class="nav-right">
+        <ul class="nav-links">
+          <li><a href="#rationale">Rationale</a></li>
+          <li><a href="#market">Market</a></li>
+          <li><a href="#product-eval">Product</a></li>
+          <li><a href="#risks">Risks</a></li>
+          <li><a href="#recommendation">Score</a></li>
+          <li><a href="#reflections">Reflections</a></li>
+          <li><a href="#references">Sources</a></li>
+        </ul>
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+          <svg class="sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          <svg class="moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div id="progress-bar"></div>
+</nav>
+<div class="mobile-nav" id="mobileNav">
+  <button class="close-btn" id="mobileNavClose">&times;</button>
+  <a href="#hero" onclick="closeMobileNav()">Home</a>
+  <a href="#rationale" onclick="closeMobileNav()">Rationale</a>
+  <a href="#market" onclick="closeMobileNav()">Market</a>
+  <a href="#product-eval" onclick="closeMobileNav()">Product</a>
+  <a href="#risks" onclick="closeMobileNav()">Risks</a>
+  <a href="#recommendation" onclick="closeMobileNav()">Score</a>
+  <a href="#reflections" onclick="closeMobileNav()">Reflections</a>
+  <a href="#references" onclick="closeMobileNav()">Sources</a>
+</div>
+
+<section id="hero">
+  <img class="hero-bg" src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=1600&q=80" alt="Brass trumpet valves in dramatic chiaroscuro lighting" />
+  <div class="hero-overlay"></div>
+  <div class="hero-glow"></div>
+  <div class="container hero-content">
+    <div class="pitch-label reveal">
+      <span class="pulse"></span>
+      ETEC 522 · UBC MET · Jeremy Sheeshka
+    </div>
+    <h1 class="reveal reveal-d1">
+      Sight Reading Factory<span class="accent">:</span><br>
+      <span class="serif">Opportunity Audit</span>
+    </h1>
+    <p class="lede reveal reveal-d2">
+      Setting my own appreciation of the tool aside and looking at Sight Reading Factory through the lens of an Educational Venture Analyst, the question this report focuses on is whether that classroom potential translates into investment potential.
+    </p>
+    <div class="meta-chips reveal reveal-d2">
+      <span class="meta-chip">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        8 min read
+      </span>
+      <span class="meta-chip">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        Data-driven
+      </span>
+      <span class="meta-chip">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><path d="M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9c2.39 0 4.68.94 6.36 2.64"/></svg>
+        Conditional Pass
+      </span>
+    </div>
+    <div class="verdict-bar reveal reveal-d3">
+      <span class="vb-label">Verdict</span>
+      <span class="divider"></span>
+      <span class="vb-value">Conditional Pass — Pilot, don't roll out</span>
+    </div>
+  </div>
+  <div class="scroll-cue">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<div class="container stats-wrap">
+  <div class="stat-strip reveal">
+    <div class="stat"><div class="num">$35</div><div class="lbl">Teacher pricing per year — lower than the cost of a method book</div></div>
+    <div class="stat"><div class="num">60+</div><div class="lbl">Instruments supported with instrument-specific generation</div></div>
+    <div class="stat"><div class="num">85/100</div><div class="lbl">Market durability score in the EVA framework</div></div>
+    <div class="stat"><div class="num">2–4 yrs</div><div class="lbl">AI disruption window before it narrows</div></div>
+  </div>
+</div>
+
+<section id="rationale" class="section">
+  <div class="container">
+    <div class="section-label reveal">Rationale</div>
+    <h2 class="reveal reveal-d1">Why I Chose <span class="serif">This Topic</span></h2>
+    <div class="body reveal reveal-d2">
+      <p>As a music educator, I've always placed a high value on music literacy, the ability to read notation, sight-read a melody or set of chord changes you've never seen before, and grow more comfortable on your instrument every time you play. That's the exact skill Sight Reading Factory is built around. I chose it for this analysis because I see real potential for this kind of technology in the classroom. Setting my own appreciation of the tool aside and looking at Sight Reading Factory through the lens of an Educational Venture Analyst, the question this report focuses on is whether that classroom potential translates into investment potential.</p>
+    </div>
+  </div>
+</section>
+
+<section id="market" class="section">
+  <div class="container">
+    <div class="section-label reveal">The Problem &amp; Product</div>
+    <h2 class="reveal reveal-d1">Sight-reading is a <span class="serif">difficult</span> skill.</h2>
+    <div class="body reveal reveal-d2">
+      <p>Sight-reading is a difficult skill: the ability to accurately play a piece of music you've never seen before. It appears across the BC music curriculum and is tested constantly, in ensembles, competitions, auditions, and juries.</p>
+    </div>
+    <div class="duo reveal">
+      <div class="card problem">
+        <div class="tag">The Problem</div>
+        <h3>Hard to practice, whether in a group or individually.</h3>
+        <p>This skill is hard to practice, whether in a group or individually, because the moment a piece of music has been practiced or seen, it's no longer sight-reading. That means music directors and educators constantly need fresh, level-appropriate, instrument-specific material for students to read.</p>
+      </div>
+      <div class="card solution" id="product">
+        <div class="tag">The Product</div>
+        <h3>Unlimited, customizable exercises.</h3>
+        <p>Sight Reading Factory generates unlimited, customizable exercises for different instruments, with a rhythm-only mode, microphone-based auto-assessment, and multiple difficulty levels.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="img-break-full reveal">
+  <img src="https://images.unsplash.com/photo-1465821185615-20b3c2fbf41b?w=1600&q=80" alt="Sheet music and piano keys in warm light" loading="lazy" />
+  <div class="overlay-top"></div>
+  <div class="overlay"></div>
+</div>
+
+<section id="product-eval" class="section" style="border-top: 1px solid var(--border);">
+  <div class="container">
+    <div class="section-label reveal">Product Evaluation</div>
+    <h2 class="reveal reveal-d1">Built for the first five minutes of a <span class="serif">lesson</span>.</h2>
+    <div class="body reveal reveal-d2" style="margin-bottom: 8px;">
+      <p>Sight Reading Factory is built for the first five minutes of a lesson. The interface is simple: pick your parameters, hit generate, and get a fresh exercise in seconds. There are no student logins, no setup, and no extra features getting in the way. What stood out most in testing was how quickly it became part of the routine. That's usually a good sign a tool will actually stick in a classroom long term.</p>
+    </div>
+    <div class="product-showcase reveal">
+      <div class="product-card">
+        <div class="img-wrap">
+          <img src="https://static.sightreadingfactory.com/assets/images/blog/09179d33596840fae1a0a7f5b5c90916-rhythm-only.png" alt="Sight Reading Factory rhythm-only exercise mode" loading="lazy" />
+        </div>
+        <div class="pc-body">
+          <div class="pc-tag">Rhythm-Only Mode</div>
+          <div class="pc-title">Isolate rhythm from pitch</div>
+          <div class="pc-desc">Strips out pitch so students can focus only on rhythmic accuracy. Educators see this kind of isolation as essential to effective practice.</div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="img-wrap">
+          <img src="https://static.sightreadingfactory.com/assets/images/blog/25398ebaae32029220b742871cefdf2c-customRhythms.png" alt="Sight Reading Factory custom rhythm parameters menu" loading="lazy" />
+        </div>
+        <div class="pc-body">
+          <div class="pc-tag">Custom Parameters</div>
+          <div class="pc-title">Dial in exactly what each student needs</div>
+          <div class="pc-desc">You can set time signature, key signature, pitch range, rhythm complexity, interval size, and measure count for each exercise, student, or ensemble.</div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="img-wrap">
+          <img src="https://i.imgur.com/tyJEjoX.png" alt="Sight Reading Factory auto-assessment singer feedback screen" loading="lazy" />
+        </div>
+        <div class="pc-body">
+          <div class="pc-tag">Auto-Assessment Mode</div>
+          <div class="pc-title">Real-time pitch grading for singers</div>
+          <div class="pc-desc">Real-time pitch grading for singers. The microphone picks up which notes were sharp or flat and by how much, giving vocalists specific feedback without needing a pianist in the room.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-label reveal">Feature Set</div>
+    <h2 class="reveal reveal-d1">These are the six features that matter most to a <span class="serif">working</span> director.</h2>
+    <div class="feature-grid">
+      <div class="feature-item reveal">
+        <div class="fi-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+        <div class="fi-title">Instrument-Specific Generation</div>
+        <div class="fi-desc">Exercises built for each instrument's range and transposition, covering over 60 instruments.</div>
+      </div>
+      <div class="feature-item reveal reveal-d1">
+        <div class="fi-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div>
+        <div class="fi-title">Built-in Metronome &amp; Playback</div>
+        <div class="fi-desc">Steady tempo guidance, click-to-hear notes, and a display that resizes to any screen.</div>
+      </div>
+      <div class="feature-item reveal reveal-d2">
+        <div class="fi-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div class="fi-title">Challenge Mode</div>
+        <div class="fi-desc">A countdown timer, recording, cursor tracking, and measures that disappear after they're played. Built for auditions and assessments.</div>
+      </div>
+      <div class="feature-item reveal">
+        <div class="fi-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M20 8v6"/><path d="M23 11h-6"/></svg></div>
+        <div class="fi-title">Ensemble Configurations</div>
+        <div class="fi-desc">Concert band, choir, and orchestra, with room to grow into brass quintets and mixed ensembles.</div>
+      </div>
+      <div class="feature-item reveal reveal-d1">
+        <div class="fi-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+        <div class="fi-title">Free Tier</div>
+        <div class="fi-desc">A generous free tier that gives students without a budget a way to still access the tool.</div>
+      </div>
+      <div class="feature-item reveal reveal-d2">
+        <div class="fi-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+        <div class="fi-title">Free Play Mode</div>
+        <div class="fi-desc">Resizable display, a print option, and fast generation. This is where most educators spend their time.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="review" class="section">
+  <div class="container">
+    <div class="section-label reveal">Educator Reviews</div>
+    <h2 class="reveal reveal-d1">Two educators' <span class="serif">assessments</span> of the tool.</h2>
+    <div class="body reveal reveal-d2" style="margin-bottom: 8px;">
+      <p>I also looked at two educators' assessments of the tool, one from a traditional instrumental angle and one from the platform's auto-assessment feature for singers. Comparing their experience against my own testing gave me a fuller picture than I would have gotten on my own.</p>
+    </div>
+    <div class="testimonial reveal reveal-d2">
+      <div class="t-avatar">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRktbkVM7du1lYmIxr-mli9epgdd7A02t4tVQ&s" alt="Brian Garland, trumpet instructor and music educator" loading="lazy" />
+      </div>
+      <div class="t-content">
+        <div class="t-stars">
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <blockquote>"Just a few minutes of practice each lesson, or better yet, each day, will transform your players' abilities. It solves a genuine problem for music educators with elegance, speed, and affordability."</blockquote>
+        <div class="t-author">
+          <div class="t-name">Brian Garland</div>
+          <div class="t-role">Trumpet Instructor &amp; Music Educator · <a href="https://www.youtube.com/watch?v=gJC78WWLXfo" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:underline;text-underline-offset:3px;">YouTube Review</a></div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial reveal reveal-d2">
+      <div class="t-avatar">
+        <img src="https://i.imgur.com/tyJEjoX.png" alt="Sight Reading Factory auto-assessment singer review screenshot" loading="lazy" />
+      </div>
+      <div class="t-content">
+        <div class="t-stars">
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <blockquote>"Sight reading isn't about something telling you whether you did it right or wrong. It's about once you learn how to sight read, you can get better at it by just doing more. This tool gives you the immediate, objective feedback you need to self-correct."</blockquote>
+        <div class="t-author">
+          <div class="t-name">Piano &amp; Vocal Music Instructor</div>
+          <div class="t-role">Auto-Assessment Feature Review · Singer Sight-Reading · <a href="https://www.youtube.com/watch?v=WPYH7AirWU8" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:underline;text-underline-offset:3px;">YouTube Review</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-label reveal">Pricing</div>
+    <h2 class="reveal reveal-d1">Pricing is lower than the cost of a <span class="serif">method book</span>.</h2>
+    <div class="body reveal reveal-d2" style="margin-bottom: 8px;">
+      <p>Pricing is lower than the cost of a method book, and it's built around how fine-arts budgets actually work: individual teachers paying out of pocket, or small studio packages that bring the per-student cost down to pennies per use.</p>
+    </div>
+    <div class="pricing-grid reveal">
+      <div class="price-card">
+        <div class="pc-type">Teacher</div>
+        <div class="pc-price">$35</div>
+        <div class="pc-unit">per year</div>
+      </div>
+      <div class="price-card">
+        <div class="pc-type">Student (Base)</div>
+        <div class="pc-price">$26</div>
+        <div class="pc-unit">per year</div>
+      </div>
+      <div class="price-card featured">
+        <div class="pc-type">Student (10+)</div>
+        <div class="pc-price">~$10</div>
+        <div class="pc-unit">per student / year</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="thesis-anchor">
+  <div class="container">
+    <div class="section-label reveal">Investment Thesis</div>
+    <div class="thesis reveal reveal-d1">
+      <span class="quote-mark">"</span>
+      <p>The real question for investors is whether a single-skill tool like Sight Reading Factory is still worth backing while generative AI changes the rest of music education.</p>
+    </div>
+    <div class="body reveal reveal-d2" style="margin-top: 32px;">
+      <p>My answer is yes, but only for a limited time. SRF's narrow focus is actually what protects it. It's built around one mandatory, formally graded skill, so it doesn't need to compete feature for feature with a broader AI tutor built for something nobody is required to prove.</p>
+      <p style="margin-top:16px;">That protection won't last forever, though. It holds only as long as nobody else builds something closer to what directors actually need into a cheaper or already-bundled product, and that's likely a 2 to 4 year window. So the real question for an investor isn't whether SRF works today. It's whether the company can move first.</p>
+    </div>
+  </div>
+</section>
+
+<section id="risks" class="section">
+  <div class="container">
+    <div class="section-label reveal">Educational Value &amp; Risks</div>
+    <h2 class="reveal reveal-d1">The real threat isn't a new app. It's a <span class="serif">smarter</span> way of practicing.</h2>
+    <div class="body reveal reveal-d2">
+      <p>SRF's exercises are correct but disconnected from context: a generated line for trumpet in B-flat that has nothing to do with what the student is actually rehearsing. That disconnect is where a challenger could get in.</p>
+    </div>
+    <div class="duo reveal">
+      <div class="card threat">
+        <div class="tag">Incumbent Bundling</div>
+        <h3>MakeMusic doesn't need to out-innovate SRF, it just needs to bundle.</h3>
+        <p>SmartMusic already has the district-level relationship for accompaniment and assessment. If they fold a "good enough" sight-reading generator into that suite, there's no reason left to buy a second, separate subscription.</p>
+      </div>
+      <div class="card solution">
+        <div class="tag">Repertoire-Aware Generation</div>
+        <h3>Practice material tied to what the ensemble is actually playing.</h3>
+        <p>A generative competitor could build exercises from the chord language of the jazz standards a combo is learning, or preview the harmonic moves in this term's festival piece, tailored to a student's specific trouble spots. That's the kind of feature generative AI could build quickly.</p>
+      </div>
+    </div>
+    <div style="margin-top: 56px;">
+      <div class="section-label reveal">Disruption Timeline</div>
+      <div class="timeline">
+        <div class="tl-item reveal">
+          <div class="tl-dot"></div>
+          <div class="tl-year">Now to Year 1</div>
+          <div class="tl-title">SRF's edge holds</div>
+          <div class="tl-desc">No competitor currently builds repertoire-aware, level-calibrated sight-reading exercises, and SRF still has 15 years of trust built up.</div>
+        </div>
+        <div class="tl-item reveal">
+          <div class="tl-dot"></div>
+          <div class="tl-year">Year 1 to 2</div>
+          <div class="tl-title">SmartMusic bundles a good enough version</div>
+          <div class="tl-desc">The most likely move: MakeMusic adds procedural sight-reading into its existing subscription, so there's no need to buy a second tool.</div>
+        </div>
+        <div class="tl-item reveal">
+          <div class="tl-dot"></div>
+          <div class="tl-year">Year 2 to 3</div>
+          <div class="tl-title">Repertoire-aware AI shows up</div>
+          <div class="tl-desc">A startup or existing player builds exercises tied to the actual repertoire a student is rehearsing, something SRF's current architecture can't do.</div>
+        </div>
+        <div class="tl-item reveal">
+          <div class="tl-dot"></div>
+          <div class="tl-year">Year 3 to 4</div>
+          <div class="tl-title">The window closes</div>
+          <div class="tl-desc">If SRF hasn't added repertoire-aware generation or locked in distribution by this point, being a single-skill tool stops being enough.</div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+</section>
+
+<section id="recommendation" class="section">
+  <div class="container">
+    <div class="section-label reveal">EVA Recommendation</div>
+    <h2 class="reveal reveal-d1">Here's how I'd score this <span class="serif">venture</span>.</h2>
+    <p class="body reveal reveal-d2" style="margin-bottom: 24px;">Click any row to expand the reasoning behind each rating.</p>
+    <div class="radar-wrap reveal">
+      <svg class="radar-svg" viewBox="0 0 320 320" id="radarChart"></svg>
+      <div class="radar-legend" id="radarLegend"></div>
+    </div>
+    <div class="score-grid reveal" id="scoreGrid"></div>
+  </div>
+</section>
+
+<section class="section" style="border-top: none; padding-top: 0;">
+  <div class="container">
+    <div class="section-label reveal">Investor Lens</div>
+    <h2 class="reveal reveal-d1">My recommendation changes depending on <span class="serif">who's</span> asking.</h2>
+    <div class="lens-grid reveal reveal-d2">
+      <div class="lens-card pass">
+        <div class="who">For a Superintendent</div>
+        <div class="verdict">Conditional Pass</div>
+        <p class="desc">Pricing fits a typical budget cycle. Run a one-year pilot across 3 programs with a decision rule agreed on ahead of time. Don't skip the pilot.</p>
+      </div>
+      <div class="lens-card skip">
+        <div class="who">For a VC / Growth Investor</div>
+        <div class="verdict">Pass</div>
+        <p class="desc">The market is real but small, the team is unfunded and private, and there's no sign of venture-scale ambition. This isn't a VC play.</p>
+      </div>
+      <div class="lens-card interest">
+        <div class="who">For a Foundation / Grant Funder</div>
+        <div class="verdict">Conditional Interest</div>
+        <p class="desc">The evidence gap here is actually an opportunity. Fund a multi-district, multi-year efficacy study. The field needs one.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="container">
+    <div class="section-label reveal" style="justify-content: center;">The Ask</div>
+    <h2 class="reveal reveal-d1">Don't invest blind, <span class="serif">invest in evidence.</span></h2>
+    <p class="reveal reveal-d2">A structured one-year pilot turns a speculative commitment into something that actually generates evidence. That's a good use of public funds. Rolling it out cold across an entire district is not.</p>
+    <a href="https://www.sightreadingfactory.com/" target="_blank" rel="noopener" class="btn reveal reveal-d3">
+      Visit Sight Reading Factory
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </a>
+  </div>
+</section>
+
+<section id="reflections" class="section">
+  <div class="container">
+    <div class="section-label reveal">Reflections</div>
+    <h2 class="reveal reveal-d1">AI use, lessons learned, and the road to <span class="serif">Assignment 3</span>.</h2>
+
+    <div class="ai-card reveal reveal-d1">
+      <div class="ai-tag">AI Use Statement</div>
+      <h3>How AI Supported This Analysis</h3>
+      <p>This report was developed with help from generative AI (Claude, Anthropic), which I used to structure the competitive analysis framework, pull together publicly available product and market data, draft an initial outline, and refine the writing to fit an investor-audience format and word limit. AI also generated the HTML/CSS for this presentation. Every factual claim, like pricing, market stats, and product features, was checked against primary sources, and all the analytical conclusions, EVA ratings, and the investment recommendation are my own professional judgment as the analyst, not the AI's.</p>
+    </div>
+
+    <div class="ai-card reveal reveal-d2">
+      <div class="ai-tag">Reflection on the EVA Process</div>
+      <h3>What Acting as an Educational Venture Analyst Taught Me</h3>
+      <p>Looking at SRF as an investment, instead of just a product I find useful, changed the questions I was asking. Instead of listing features, I had to think about market durability, competitive advantage, renewal risk, and how fast this could be disrupted. That's a more structured and critical way of thinking than I'd normally apply to learning technologies.</p>
+      <p style="margin-top:16px;">The clearest insight for me: SRF's value comes from sight-reading being a formally assessed, non-optional skill, not something a school can just walk away from. That puts it in a different risk category than products that rely on teacher enthusiasm alone. But it also showed me the weak spot: the advantage is real, but it's not technically complicated, so a well-funded competitor could copy it inside a bundle within a few years. A product can be genuinely valuable right now and still be fragile at the same time.</p>
+    </div>
+
+    <div class="ai-card reveal reveal-d3">
+      <div class="ai-tag">Connection to Assignment 3</div>
+      <h3>How This Shapes My Own Opportunity Pitch</h3>
+      <p>Three things from this analysis are going to carry into my own opportunity pitch (Assignment 3):</p>
+      <p><strong>1. Anchor to an obligation, not just a need.</strong> The most defensible learning technologies are tied to an outcome educators are required to produce, not just encouraged to pursue. I'm now framing my pitch around whether my problem has a real forcing function, or whether it depends on discretionary enthusiasm that could disappear with the next budget cut.</p>
+      <p><strong>2. Evaluate the advantage honestly.</strong> SRF's edge holds today but is fragile over a 2 to 4 year horizon. I'm asking the same question of my own venture: what happens when a bigger, better-funded competitor folds this feature into their existing bundle, and do we have a plan to move first?</p>
+      <p><strong>3. Separate product quality from investment readiness.</strong> SRF is a genuinely good product, but that alone doesn't make it a compelling investment. That gap, between working well in a classroom and actually being worth the capital, is the frame I'm carrying into A3.</p>
+    </div>
+  </div>
+</section>
+
+<section id="references" class="section">
+  <div class="container">
+    <div class="section-label reveal">References &amp; Sources</div>
+    <h2 class="reveal reveal-d1">Here's the evidence <span class="serif">base</span> I used.</h2>
+    <div class="ref-list reveal reveal-d1">
+      <div class="ref-item">
+        <div class="ref-num">01</div>
+        <div class="ref-content">
+          <div class="ref-type">Video Review</div>
+          <p>Garland, B. (2023). <em>Sight Reading Factory — Product Review.</em> YouTube. <a href="https://www.youtube.com/watch?v=gJC78WWLXfo" target="_blank" rel="noopener">youtube.com/watch?v=gJC78WWLXfo</a></p>
+        </div>
+      </div>
+      <div class="ref-item">
+        <div class="ref-num">02</div>
+        <div class="ref-content">
+          <div class="ref-type">Video Review</div>
+          <p>Piano &amp; Vocal Instructor. (n.d.). <em>Sight Reading Factory — Auto-Assessment for Singers.</em> YouTube. <a href="https://www.youtube.com/watch?v=WPYH7AirWU8" target="_blank" rel="noopener">youtube.com/watch?v=WPYH7AirWU8</a></p>
+        </div>
+      </div>
+      <div class="ref-item">
+        <div class="ref-num">03</div>
+        <div class="ref-content">
+          <div class="ref-type">Peer-Reviewed Journal</div>
+          <p>Elpus, K., &amp; Abril, C. R. (2019). Who enrolls in high school music? A national profile of U.S. high school music students. <em>Journal of Research in Music Education, 67</em>(3), 323–338.</p>
+        </div>
+      </div>
+      <div class="ref-item">
+        <div class="ref-num">04</div>
+        <div class="ref-content">
+          <div class="ref-type">Primary Source</div>
+          <p>Sight Reading Factory. (2024). <em>Sight Reading Factory — Music Sight-Reading Practice.</em> <a href="https://www.sightreadingfactory.com/" target="_blank" rel="noopener">sightreadingfactory.com</a></p>
+        </div>
+      </div>
+      <div class="ref-item">
+        <div class="ref-num">05</div>
+        <div class="ref-content">
+          <div class="ref-type">Competitor Reference</div>
+          <p>MakeMusic. (2024). <em>SmartMusic — Music Practice &amp; Assessment Platform.</em> <a href="https://www.smartmusic.com/" target="_blank" rel="noopener">smartmusic.com</a></p>
+        </div>
+      </div>
+      <div class="ref-item">
+        <div class="ref-num">06</div>
+        <div class="ref-content">
+          <div class="ref-type">Industry Association</div>
+          <p>National Association for Music Education (NAfME). (2024). <em>National standards, advocacy resources, and enrollment data.</em> <a href="https://nafme.org/" target="_blank" rel="noopener">nafme.org</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="inner">
+      <div>
+        <p><b>Sight Reading Factory</b> · Educational Venture Analysis</p>
+        <p>ETEC 522 · UBC MET · Jeremy Sheeshka</p>
+        <div class="refs">
+          <a href="https://www.sightreadingfactory.com/" target="_blank" rel="noopener">SRF</a>
+          <a href="https://www.smartmusic.com/" target="_blank" rel="noopener">SmartMusic</a>
+          <a href="https://nafme.org/" target="_blank" rel="noopener">NAfME</a>
+          <a href="https://www.youtube.com/watch?v=gJC78WWLXfo" target="_blank" rel="noopener">Review 1 (Garland)</a>
+          <a href="https://www.youtube.com/watch?v=WPYH7AirWU8" target="_blank" rel="noopener">Review 2 (Auto-Assessment)</a>
+        </div>
+      </div>
+      <div>
+        <p>Images: sightreadingfactory.com/blog</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<button class="back-to-top" id="backToTop" aria-label="Back to top">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+</button>
+
+<script>
+(function() {
+  var themeToggle = document.getElementById('themeToggle');
+  var root = document.documentElement;
+  var savedTheme = 'dark';
+  try { savedTheme = localStorage.getItem('eva-pitch-theme') || 'dark'; } catch(e) {}
+  root.setAttribute('data-theme', savedTheme);
+  themeToggle.addEventListener('click', function() {
+    var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('eva-pitch-theme', next); } catch(e) {}
+  });
+  var mobileMenuBtn = document.getElementById('mobileMenuBtn');
+  var mobileNav = document.getElementById('mobileNav');
+  var mobileNavClose = document.getElementById('mobileNavClose');
+  mobileMenuBtn.addEventListener('click', function() { mobileNav.classList.add('open'); });
+  mobileNavClose.addEventListener('click', function() { mobileNav.classList.remove('open'); });
+  window.closeMobileNav = function() { mobileNav.classList.remove('open'); };
+  var progressBar = document.getElementById('progress-bar');
+  function updateProgress() {
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    progressBar.style.width = h > 0 ? (window.scrollY / h * 100) + '%' : '0%';
+  }
+  var navLinks = document.querySelectorAll('nav .nav-links a');
+  var sections = document.querySelectorAll('section[id]');
+  function setActive() {
+    var current = 'hero';
+    sections.forEach(function(s) { if (window.scrollY >= s.offsetTop - 140) current = s.id; });
+    navLinks.forEach(function(a) { a.classList.toggle('active', a.getAttribute('href') === '#' + current); });
+  }
+  var backToTop = document.getElementById('backToTop');
+  function handleBackToTop() { backToTop.classList.toggle('visible', window.scrollY > 600); }
+  backToTop.addEventListener('click', function() { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+  function handleReveal() {
+    document.querySelectorAll('.reveal').forEach(function(el) {
+      var rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight * 0.88) el.classList.add('visible');
+    });
+  }
+  window.addEventListener('scroll', function() { updateProgress(); setActive(); handleBackToTop(); handleReveal(); }, { passive: true });
+  handleReveal(); updateProgress(); setActive();
+  var scoreData = [
+    { num: '01', label: 'Market durability', rating: 'Strong', cls: 'strong', score: 85, detail: 'Sight-reading appears across the BC music curriculum and is tested constantly, in ensembles, competitions, auditions, and juries — a forcing function the tool doesn\'t have to manufacture on its own.' },
+    { num: '02', label: 'Competitive edge', rating: 'Fragile', cls: 'fragile', score: 50, detail: 'SRF\'s narrow focus on one mandatory, formally graded skill is what protects it today. But that protection won\'t last forever — it holds only as long as nobody else builds something closer to what directors actually need into a cheaper or already-bundled product, likely a 2 to 4 year window.' },
+    { num: '03', label: 'Monetisation fit', rating: 'Good, with a catch', cls: 'fragile', score: 65, detail: 'Pricing is lower than the cost of a method book and matches how fine-arts budgets actually work — individual teachers paying out of pocket, or studio packages bringing the per-student cost down to pennies per use. The catch is the renewal risk tied to that same individual teacher.' },
+    { num: '04', label: 'Evidence of efficacy', rating: 'Thin', cls: 'thin', score: 25, detail: 'The evidence gap here is actually an opportunity. The field needs a multi-district, multi-year efficacy study, and right now that study doesn\'t exist.' },
+    { num: '05', label: 'Organisational risk', rating: 'Concentrated', cls: 'fragile', score: 40, detail: 'This analysis doesn\'t have visibility into SRF\'s internal team or succession plan — it\'s flagged in the EVA framework as a risk dimension to watch rather than one this report can verify directly.' },
+    { num: '06', label: 'Renewal risk', rating: 'Single-teacher dependent', cls: 'thin', score: 30, detail: 'SRF\'s pricing is built around individual teachers paying out of pocket, or small studio packages. That means renewal depends on one teacher\'s continued buy-in rather than an institutional contract.' },
+    { num: '07', label: 'AI disruption window', rating: '2 to 4 years, narrowing', cls: 'fragile', score: 45, detail: 'That protection holds only as long as nobody else builds something closer to what directors need into a cheaper or bundled product — a 2 to 4 year window, mapped out in the disruption timeline above.' }
+  ];
+  var scoreGrid = document.getElementById('scoreGrid');
+  scoreData.forEach(function(item, idx) {
+    var row = document.createElement('div');
+    row.className = 'score-row';
+    row.setAttribute('data-idx', idx);
+    row.innerHTML = '<div class="left"><span class="num">' + item.num + '</span><span class="label">' + item.label + '</span></div><span class="rating ' + item.cls + '">' + item.rating + '</span><svg class="chev" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>';
+    var detail = document.createElement('div');
+    detail.className = 'score-detail';
+    detail.id = 'detail-' + idx;
+    detail.innerHTML = '<p>' + item.detail + '</p>';
+    row.addEventListener('click', function() {
+      var isOpen = detail.classList.contains('open');
+      document.querySelectorAll('.score-detail.open').forEach(function(d) { d.classList.remove('open'); });
+      document.querySelectorAll('.score-row.open').forEach(function(r) { r.classList.remove('open'); });
+      if (!isOpen) { detail.classList.add('open'); row.classList.add('open'); }
+    });
+    scoreGrid.appendChild(row);
+    scoreGrid.appendChild(detail);
+  });
+  var radarSvg = document.getElementById('radarChart');
+  var radarLegend = document.getElementById('radarLegend');
+  var cx = 160, cy = 160, maxR = 115;
+  var labels = scoreData.map(function(d) { return d.label; });
+  var scores = scoreData.map(function(d) { return d.score; });
+  var n = labels.length;
+  var angleStep = (2 * Math.PI) / n;
+  function polarToXY(angle, r) { return { x: cx + r * Math.cos(angle - Math.PI / 2), y: cy + r * Math.sin(angle - Math.PI / 2) }; }
+  [0.25, 0.5, 0.75, 1].forEach(function(frac) {
+    var r = maxR * frac; var points = [];
+    for (var i = 0; i < n; i++) { var p = polarToXY(i * angleStep, r); points.push(p.x.toFixed(1) + ',' + p.y.toFixed(1)); }
+    var poly = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+    poly.setAttribute('points', points.join(' ')); poly.setAttribute('fill', 'none'); poly.setAttribute('stroke', 'var(--border-strong)'); poly.setAttribute('stroke-width', '0.5');
+    radarSvg.appendChild(poly);
+  });
+  for (var i = 0; i < n; i++) {
+    var p = polarToXY(i * angleStep, maxR);
+    var line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', cx); line.setAttribute('y1', cy); line.setAttribute('x2', p.x.toFixed(1)); line.setAttribute('y2', p.y.toFixed(1));
+    line.setAttribute('stroke', 'var(--border)'); line.setAttribute('stroke-width', '0.5');
+    radarSvg.appendChild(line);
+  }
+  for (var i = 0; i < n; i++) {
+    var p = polarToXY(i * angleStep, maxR + 22);
+    var text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    text.setAttribute('x', p.x.toFixed(1)); text.setAttribute('y', p.y.toFixed(1)); text.setAttribute('class', 'radar-tooltip');
+    var shortLabel = labels[i].length > 14 ? labels[i].substring(0, 12) + '...' : labels[i];
+    text.textContent = shortLabel; text.setAttribute('dominant-baseline', 'middle');
+    radarSvg.appendChild(text);
+  }
+  var dataPoints = [];
+  for (var i = 0; i < n; i++) { var r = (scores[i] / 100) * maxR; var p = polarToXY(i * angleStep, r); dataPoints.push(p.x.toFixed(1) + ',' + p.y.toFixed(1)); }
+  var dataPoly = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+  dataPoly.setAttribute('points', dataPoints.join(' ')); dataPoly.setAttribute('fill', 'rgba(var(--accent-rgb),0.12)'); dataPoly.setAttribute('stroke', 'var(--accent)'); dataPoly.setAttribute('stroke-width', '2'); dataPoly.setAttribute('stroke-linejoin', 'round');
+  radarSvg.appendChild(dataPoly);
+  for (var i = 0; i < n; i++) {
+    var r = (scores[i] / 100) * maxR; var p = polarToXY(i * angleStep, r);
+    var circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    circle.setAttribute('cx', p.x.toFixed(1)); circle.setAttribute('cy', p.y.toFixed(1)); circle.setAttribute('r', '4'); circle.setAttribute('fill', 'var(--accent)'); circle.setAttribute('stroke', 'var(--bg)'); circle.setAttribute('stroke-width', '2'); circle.setAttribute('data-idx', i);
+    circle.style.cursor = 'pointer'; circle.style.transition = 'r 0.2s ease';
+    circle.addEventListener('mouseenter', function() { this.setAttribute('r', '7'); });
+    circle.addEventListener('mouseleave', function() { this.setAttribute('r', '4'); });
+    circle.addEventListener('click', function() {
+      var idx = parseInt(this.getAttribute('data-idx'));
+      var detailEl = document.getElementById('detail-' + idx);
+      if (detailEl) {
+        detailEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        document.querySelectorAll('.score-detail.open').forEach(function(d) { d.classList.remove('open'); });
+        document.querySelectorAll('.score-row.open').forEach(function(r) { r.classList.remove('open'); });
+        detailEl.classList.add('open');
+        var row = document.querySelector('.score-row[data-idx="' + idx + '"]');
+        if (row) row.classList.add('open');
+      }
+    });
+    radarSvg.appendChild(circle);
+  }
+  var ratingColors = { strong: 'var(--green)', fragile: 'var(--accent)', thin: 'var(--red)' };
+  scoreData.forEach(function(item, idx) {
+    var div = document.createElement('div');
+    div.className = 'radar-legend-item';
+    div.innerHTML = '<div class="dot" style="background:' + ratingColors[item.cls] + '"></div><span class="rl-label">' + item.label + '</span><span class="rl-score">' + item.score + '/100</span>';
+    div.addEventListener('click', function() {
+      var detailEl = document.getElementById('detail-' + idx);
+      if (detailEl) {
+        detailEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        document.querySelectorAll('.score-detail.open').forEach(function(d) { d.classList.remove('open'); });
+        document.querySelectorAll('.score-row.open').forEach(function(r) { r.classList.remove('open'); });
+        detailEl.classList.add('open');
+        var row = document.querySelector('.score-row[data-idx="' + idx + '"]');
+        if (row) row.classList.add('open');
+      }
+    });
+    radarLegend.appendChild(div);
+  });
+  var tlObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+  }, { threshold: 0.2 });
+  document.querySelectorAll('.tl-item').forEach(function(el) { tlObserver.observe(el); });
+})();
+</script>
+</body>
+</html>

@@ -3,13 +3,12 @@
 ---
 
 <theme-toggle>
-    <button class="theme-toggle-btn" type="button" aria-label="Toggle Dark Mode">
-        <span class="sr-only">Dark Theme</span>
+    <button class="theme-toggle-btn" type="button" aria-label="Toggle dark mode" aria-pressed="false">
         <svg width="133" height="281" viewBox="0 0 133 281" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="lightbulb">
             <g id="bulb">
                 <ellipse id="lightcircle" cx="66.5" cy="213.5" rx="66.5" ry="67.5" fill="var(--bulb-primary)" class="bulb-glow" />
                 
-                <path id="Line 1" stroke="var(--bulb-text)" stroke-width="2" d="M73-5v179" />
+                <path id="wire-line" stroke="var(--bulb-text)" stroke-width="2" d="M73-5v179" />
                 
                 <g id="mainbulb">
                     <path id="innerbulb" d="M57.278 213.158c0 8.475 6.87 15.345 15.345 15.345 8.474 0 15.344-6.869 15.344-15.345 0-5.511-3.67-10.111-4.551-11.688-.882-1.579-1.56-4.058-1.681-5.574-.4-4.957-4.08-9.113-9.112-9.113-5.031 0-8.392 4.076-9.111 9.113-.215 1.507-.64 3.996-1.681 5.574-1.014 1.537-4.553 6.177-4.553 11.688Z" fill="var(--bulb-primary)" />
@@ -71,7 +70,13 @@
         transform-origin: 50% 0;
         transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         pointer-events: auto !important; 
-        outline: none;
+    }
+
+    /* Visible focus ring for keyboard users only, not removed entirely */
+    .theme-toggle-btn:focus-visible {
+        outline: 2px solid var(--bulb-primary);
+        outline-offset: 6px;
+        border-radius: 9999px;
     }
 
     .lightbulb {
@@ -119,6 +124,14 @@
         stroke: var(--bulb-primary);
     }
 
+    /* Smooth color transition for the bulb body itself, so it doesn't
+       snap while the glow and rays around it are fading */
+    #mainbulb path,
+    #mainbulb ellipse,
+    #innerbulb {
+        transition: fill 0.3s ease, stroke 0.3s ease;
+    }
+
     /* --- DARK MODE (OFF STATE) --- */
 
     :global([data-theme="dark"]) .bulb-rays { 
@@ -133,23 +146,63 @@
         stroke: var(--bulb-text);
         opacity: 0.5;
     }
+
+    /* Respect users who'd rather not see motion */
+    @media (prefers-reduced-motion: reduce) {
+        .theme-toggle-btn,
+        .bulb-rays,
+        .bulb-glow,
+        .filament-coil,
+        #mainbulb path,
+        #mainbulb ellipse,
+        #innerbulb {
+            transition: none;
+        }
+        .theme-toggle-btn:hover,
+        .theme-toggle-btn:active {
+            transform: none;
+        }
+    }
 </style>
 
 <script>
     import { rootInDarkMode } from "@/utils/domElement";
+
     class ThemeToggle extends HTMLElement {
-        constructor() {
-            super();
+        connectedCallback() {
             const button = this.querySelector("button");
-            if (button) {
-                button.addEventListener("click", () => {
-                    const event = new CustomEvent("theme-change", {
-                        detail: { theme: rootInDarkMode() ? "light" : "dark" },
-                    });
-                    document.dispatchEvent(event);
-                });
-            }
+            if (!button) return;
+            this.button = button;
+
+            this.syncState();
+
+            button.addEventListener("click", () => {
+                const goingDark = !rootInDarkMode();
+                document.dispatchEvent(
+                    new CustomEvent("theme-change", {
+                        detail: { theme: goingDark ? "dark" : "light" },
+                    })
+                );
+            });
+
+            // Keep this toggle's aria state correct even if the theme
+            // changes some other way, like another toggle on the page
+            // or a system preference being picked up elsewhere.
+            this.observer = new MutationObserver(() => this.syncState());
+            this.observer.observe(document.documentElement, {
+                attributes: true,
+                attributeFilter: ["data-theme"],
+            });
+        }
+
+        disconnectedCallback() {
+            this.observer?.disconnect();
+        }
+
+        syncState() {
+            this.button.setAttribute("aria-pressed", String(rootInDarkMode()));
         }
     }
+
     customElements.define("theme-toggle", ThemeToggle);
 </script>
