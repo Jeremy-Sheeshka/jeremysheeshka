@@ -1,861 +1,2128 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sight Reading Factory: Opportunity Audit</title>
-  <meta name="description" content="An Educational Venture Analysis of Sight Reading Factory." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root[data-theme="dark"] {
-      --bg: #07070A; --bg2: #0C0D12; --surface: #121319; --surface-raised: #1A1C24;
-      --border: rgba(255,255,255,0.06); --border-strong: rgba(255,255,255,0.12);
-      --accent: #D4A96A; --accent-bright: #F0CD96; --accent-rgb: 212,169,106;
-      --accent-glow: rgba(212,169,106,0.08); --accent-glow-strong: rgba(212,169,106,0.14);
-      --text: #ECECEE; --text-dim: #B0B4BE; --text-muted: #6A7080; --text-faint: #3A3F4C;
-      --red: #F87171; --red-bg: rgba(248,113,113,0.08);
-      --green: #4ADE80; --green-bg: rgba(74,222,128,0.08);
-      --blue: #60A5FA; --blue-bg: rgba(96,165,250,0.08);
-      --amber: #FBBF24; --amber-bg: rgba(251,191,36,0.08);
-      --nav-bg: rgba(7,7,10,0.72); --card-hover: rgba(212,169,106,0.03);
-      --grid-line: rgba(255,255,255,0.025);
-      --img-filter: brightness(0.85) contrast(1.05);
-      --hero-overlay-1: rgba(7,7,10,0.65);
-      --hero-overlay-2: rgba(7,7,10,0.95);
-    }
-    :root[data-theme="light"] {
-      --bg: #FAFAF6; --bg2: #FFFFFF; --surface: #F2F1EB; --surface-raised: #EAE9E2;
-      --border: rgba(0,0,0,0.06); --border-strong: rgba(0,0,0,0.12);
-      --accent: #92400E; --accent-bright: #B45309; --accent-rgb: 146,64,14;
-      --accent-glow: rgba(146,64,14,0.05); --accent-glow-strong: rgba(146,64,14,0.1);
-      --text: #111114; --text-dim: #3D3D42; --text-muted: #6E6E72; --text-faint: #A0A0A4;
-      --red: #DC2626; --red-bg: rgba(220,38,38,0.06);
-      --green: #16A34A; --green-bg: rgba(22,163,74,0.06);
-      --blue: #2563EB; --blue-bg: rgba(37,99,235,0.06);
-      --amber: #D97706; --amber-bg: rgba(217,119,6,0.06);
-      --nav-bg: rgba(250,250,246,0.72); --card-hover: rgba(146,64,14,0.02);
-      --grid-line: rgba(0,0,0,0.02);
-      --img-filter: brightness(0.95) contrast(1.05);
-      --hero-overlay-1: rgba(250,250,246,0.55);
-      --hero-overlay-2: rgba(250,250,246,0.95);
-    }
-    html { scroll-behavior: smooth; }
-    body {
-      background: var(--bg); color: var(--text);
-      font-family: 'Inter', -apple-system, system-ui, sans-serif;
-      line-height: 1.7; transition: background 0.4s ease, color 0.4s ease;
-      overflow-x: hidden; -webkit-font-smoothing: antialiased;
-    }
-    ::selection { background: rgba(var(--accent-rgb),0.25); }
-    a { color: inherit; text-decoration: none; }
-    .container { max-width: 940px; margin: 0 auto; padding: 0 28px; }
-    .grid-bg {
-      position: fixed; inset: 0; z-index: 0; pointer-events: none;
-      background-image: linear-gradient(to right, var(--grid-line) 1px, transparent 1px), linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
-      background-size: 60px 60px;
-      mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 30%, transparent 100%);
-      -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 30%, transparent 100%);
-    }
-    nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      background: var(--nav-bg); backdrop-filter: blur(20px) saturate(1.6); -webkit-backdrop-filter: blur(20px) saturate(1.6);
-      border-bottom: 1px solid var(--border);
-    }
-    nav .inner { display: flex; align-items: center; justify-content: space-between; height: 58px; gap: 16px; }
-    nav .logo { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); font-weight: 600; white-space: nowrap; display: flex; align-items: center; gap: 8px; }
-    nav .logo .logo-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px rgba(var(--accent-rgb),0.5); }
-    nav .nav-right { display: flex; align-items: center; gap: 8px; }
-    nav .nav-links { display: flex; gap: 2px; list-style: none; }
-    nav .nav-links a { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint); padding: 7px 11px; border-radius: 6px; transition: all 0.2s ease; position: relative; }
-    nav .nav-links a:hover { color: var(--text-dim); background: var(--accent-glow); }
-    nav .nav-links a.active { color: var(--accent); }
-    nav .nav-links a.active::after { content: ''; position: absolute; bottom: -2px; left: 50%; transform: translateX(-50%); width: 4px; height: 4px; border-radius: 50%; background: var(--accent); }
-    #progress-bar { position: absolute; bottom: -1px; left: 0; height: 2px; background: linear-gradient(90deg, var(--accent), var(--accent-bright)); width: 0%; transition: width 0.08s linear; box-shadow: 0 0 10px rgba(var(--accent-rgb),0.5); z-index: 101; }
-    .theme-toggle { background: none; border: 1px solid var(--border-strong); border-radius: 10px; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-muted); transition: all 0.25s ease; flex-shrink: 0; }
-    .theme-toggle:hover { color: var(--accent); border-color: rgba(var(--accent-rgb),0.4); background: var(--accent-glow); }
-    .theme-toggle svg { width: 16px; height: 16px; }
-    [data-theme="dark"] .theme-toggle .sun { display: block; } [data-theme="dark"] .theme-toggle .moon { display: none; }
-    [data-theme="light"] .theme-toggle .sun { display: none; } [data-theme="light"] .theme-toggle .moon { display: block; }
-    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
-    .reveal-d1 { transition-delay: 0.08s; } .reveal-d2 { transition-delay: 0.16s; } .reveal-d3 { transition-delay: 0.24s; }
-    #hero { min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; justify-content: center; position: relative; padding: 120px 0 60px; overflow: hidden; }
-    #hero .hero-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.4; filter: var(--img-filter); z-index: 0; }
-    #hero .hero-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, var(--hero-overlay-1) 0%, var(--hero-overlay-2) 85%, var(--bg) 100%); z-index: 1; }
-    #hero .hero-glow { position: absolute; top: -20%; right: -15%; width: 700px; height: 700px; background: radial-gradient(circle, rgba(var(--accent-rgb),0.07) 0%, transparent 60%); filter: blur(50px); pointer-events: none; z-index: 1; }
-    #hero .hero-content { position: relative; z-index: 2; }
-    #hero .pitch-label { display: inline-flex; align-items: center; gap: 10px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 32px; padding: 8px 16px; border: 1px solid rgba(var(--accent-rgb),0.2); border-radius: 100px; background: var(--accent-glow); }
-    #hero .pitch-label .pulse { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 0 rgba(var(--accent-rgb),0.5); animation: pulse 2s infinite; }
-    @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(var(--accent-rgb),0.5); } 70% { box-shadow: 0 0 0 10px rgba(var(--accent-rgb),0); } 100% { box-shadow: 0 0 0 0 rgba(var(--accent-rgb),0); } }
-    #hero h1 { font-size: clamp(2.5rem, 7.5vw, 5.2rem); font-weight: 800; line-height: 0.98; letter-spacing: -0.045em; color: var(--text); max-width: 820px; margin-bottom: 28px; }
-    #hero h1 .accent { background: linear-gradient(135deg, var(--accent), var(--accent-bright)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    #hero h1 .serif { font-family: 'Fraunces', Georgia, serif; font-style: italic; font-weight: 500; }
-    #hero .lede { font-size: clamp(1rem, 2vw, 1.22rem); color: var(--text-dim); max-width: 600px; line-height: 1.75; margin-bottom: 36px; font-weight: 300; }
-    #hero .verdict-bar { display: inline-flex; align-items: center; gap: 16px; padding: 14px 24px; border: 1px solid rgba(var(--accent-rgb),0.3); border-radius: 100px; background: var(--accent-glow); backdrop-filter: blur(8px); }
-    #hero .verdict-bar .vb-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); }
-    #hero .verdict-bar .vb-value { font-weight: 600; font-size: 0.95rem; color: var(--accent); }
-    #hero .verdict-bar .divider { width: 1px; height: 20px; background: var(--border-strong); }
-    #hero .scroll-cue { position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 10px; z-index: 2; }
-    #hero .scroll-cue span { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-faint); }
-    #hero .scroll-cue .scroll-line { width: 1px; height: 36px; background: linear-gradient(to bottom, var(--accent), transparent); animation: scroll-line 2s ease-in-out infinite; }
-    @keyframes scroll-line { 0%, 100% { opacity: 1; transform: scaleY(1); } 50% { opacity: 0.3; transform: scaleY(0.4); transform-origin: top; } }
-    .meta-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 32px; }
-    .meta-chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border: 1px solid var(--border); border-radius: 100px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint); }
-    .meta-chip svg { width: 12px; height: 12px; }
-    .stat-strip { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; margin: -40px 0 0; position: relative; z-index: 3; }
-    @media (min-width: 640px) { .stat-strip { grid-template-columns: repeat(4, 1fr); } }
-    .stat-strip .stat { background: var(--bg); padding: 32px 24px; transition: background 0.3s; }
-    .stat-strip .stat:hover { background: var(--card-hover); }
-    .stat-strip .stat .num { font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 800; letter-spacing: -0.04em; line-height: 1; background: linear-gradient(135deg, var(--accent), var(--accent-bright)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .stat-strip .stat .lbl { margin-top: 10px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint); line-height: 1.5; }
-    .stats-wrap { padding-bottom: 90px; }
-    .section { padding: 90px 0; border-top: 1px solid var(--border); position: relative; }
-    .section-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--accent); margin-bottom: 18px; display: flex; align-items: center; gap: 14px; }
-    .section-label::after { content: ''; flex: 1; height: 1px; max-width: 100px; background: linear-gradient(to right, rgba(var(--accent-rgb),0.3), transparent); }
-    .section h2 { font-size: clamp(1.8rem, 4.2vw, 2.8rem); font-weight: 700; line-height: 1.12; letter-spacing: -0.035em; color: var(--text); max-width: 740px; margin-bottom: 24px; }
-    .section h2 .serif { font-family: 'Fraunces', Georgia, serif; font-style: italic; font-weight: 500; }
-    .section .body { font-size: 1.05rem; line-height: 1.8; color: var(--text-dim); max-width: 660px; font-weight: 300; }
-    .section .body strong { color: var(--text); font-weight: 600; }
-    .section .body em { font-style: italic; color: var(--text); }
-    .analyst-note { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; line-height: 1.65; color: var(--text-muted); border-left: 2px solid var(--accent); padding: 14px 18px; margin: 24px 0; max-width: 660px; background: var(--surface); border-radius: 0 10px 10px 0; }
-    .product-showcase { margin: 48px 0; display: grid; grid-template-columns: 1fr; gap: 24px; }
-    @media (min-width: 768px) { .product-showcase { grid-template-columns: 1fr 1fr; } }
-    @media (min-width: 1024px) { .product-showcase { grid-template-columns: 1fr 1fr 1fr; } }
-    .product-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; transition: all 0.3s ease; }
-    .product-card:hover { border-color: var(--border-strong); transform: translateY(-3px); }
-    .product-card .img-wrap { aspect-ratio: 16/10; overflow: hidden; background: var(--bg2); position: relative; }
-    .product-card .img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
-    .product-card:hover .img-wrap img { transform: scale(1.03); }
-    .product-card .img-wrap::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 60%, rgba(0,0,0,0.3) 100%); pointer-events: none; }
-    .product-card .pc-body { padding: 24px 28px; }
-    .product-card .pc-tag { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
-    .product-card .pc-title { font-weight: 700; font-size: 1.05rem; margin-bottom: 6px; color: var(--text); }
-    .product-card .pc-desc { font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; font-weight: 300; }
-    .duo { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 40px; }
-    @media (min-width: 640px) { .duo { grid-template-columns: 1fr 1fr; } }
-    .duo .card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 36px; position: relative; overflow: hidden; transition: all 0.3s ease; }
-    .duo .card:hover { border-color: var(--border-strong); background: var(--surface-raised); transform: translateY(-2px); }
-    .duo .card .tag { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
-    .duo .card .tag::before { content: ''; width: 6px; height: 6px; border-radius: 50%; }
-    .duo .card.problem .tag { color: var(--red); } .duo .card.problem .tag::before { background: var(--red); }
-    .duo .card.solution .tag { color: var(--accent); } .duo .card.solution .tag::before { background: var(--accent); }
-    .duo .card.threat .tag { color: var(--amber); } .duo .card.threat .tag::before { background: var(--amber); }
-    .duo .card h3 { font-size: 1.25rem; font-weight: 700; line-height: 1.3; letter-spacing: -0.02em; color: var(--text); margin-bottom: 14px; }
-    .duo .card p { font-size: 0.95rem; line-height: 1.7; color: var(--text-muted); font-weight: 300; }
-    .thesis { background: var(--surface); border: 1px solid var(--border-strong); border-radius: 24px; padding: 56px 48px; margin: 64px 0; position: relative; overflow: hidden; }
-    .thesis::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(var(--accent-rgb),0.4), transparent); }
-    .thesis .quote-mark { position: absolute; top: 12px; left: 28px; font-size: 5rem; line-height: 1; font-family: 'Fraunces', Georgia, serif; background: linear-gradient(135deg, var(--accent), var(--accent-bright)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; opacity: 0.15; }
-    .thesis p { font-size: clamp(1.2rem, 2.5vw, 1.6rem); font-weight: 500; line-height: 1.45; letter-spacing: -0.02em; color: var(--text); position: relative; z-index: 1; font-family: 'Inter', sans-serif; }
-    .feature-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin: 40px 0; }
-    @media (min-width: 640px) { .feature-grid { grid-template-columns: 1fr 1fr; } }
-    @media (min-width: 900px) { .feature-grid { grid-template-columns: repeat(3, 1fr); } }
-    .feature-item { padding: 24px; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; transition: all 0.25s ease; }
-    .feature-item:hover { border-color: var(--border-strong); background: var(--surface-raised); }
-    .feature-item .fi-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; background: var(--accent-glow); margin-bottom: 14px; }
-    .feature-item .fi-icon svg { width: 18px; height: 18px; color: var(--accent); }
-    .feature-item .fi-title { font-weight: 600; font-size: 0.95rem; margin-bottom: 6px; color: var(--text); }
-    .feature-item .fi-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.55; font-weight: 300; }
-    .radar-wrap { margin: 48px 0; display: flex; flex-direction: column; align-items: center; gap: 32px; }
-    @media (min-width: 768px) { .radar-wrap { flex-direction: row; align-items: flex-start; } }
-    .radar-svg { width: 320px; height: 320px; flex-shrink: 0; }
-    .radar-legend { display: flex; flex-direction: column; gap: 8px; flex: 1; width: 100%; }
-    .radar-legend-item { display: flex; align-items: center; gap: 14px; padding: 12px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; cursor: pointer; transition: all 0.25s ease; user-select: none; }
-    .radar-legend-item:hover, .radar-legend-item.active { border-color: rgba(var(--accent-rgb),0.3); background: var(--accent-glow); }
-    .radar-legend-item .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-    .radar-legend-item .rl-label { font-size: 0.88rem; font-weight: 500; color: var(--text); flex: 1; }
-    .radar-legend-item .rl-score { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--text-muted); }
-    .radar-tooltip { font-family: 'JetBrains Mono', monospace; font-size: 9px; fill: var(--text-muted); pointer-events: none; text-anchor: middle; }
-    .score-grid { display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 24px; }
-    @media (min-width: 640px) { .score-grid { grid-template-columns: 1fr 1fr; } }
-    .score-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 22px; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; transition: all 0.25s ease; cursor: pointer; }
-    .score-row:hover { border-color: var(--border-strong); transform: translateX(4px); }
-    .score-row .left { display: flex; align-items: center; gap: 14px; flex: 1; min-width: 0; }
-    .score-row .num { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--text-faint); flex-shrink: 0; width: 22px; }
-    .score-row .label { font-size: 0.92rem; font-weight: 500; color: var(--text); }
-    .score-row .chev { color: var(--text-faint); transition: transform 0.3s ease; flex-shrink: 0; }
-    .score-row.open .chev { transform: rotate(90deg); color: var(--accent); }
-    .score-row .rating { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; padding: 5px 12px; border-radius: 100px; flex-shrink: 0; font-weight: 500; white-space: nowrap; }
-    .rating.strong { background: var(--green-bg); color: var(--green); }
-    .rating.fragile { background: var(--accent-glow-strong); color: var(--accent); }
-    .rating.thin { background: var(--red-bg); color: var(--red); }
-    .score-detail { max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.4s ease; padding: 0 22px; background: var(--surface); border: 1px solid var(--border); border-top: none; border-radius: 0 0 14px 14px; margin-top: -9px; margin-bottom: 8px; }
-    .score-detail.open { max-height: 250px; padding: 14px 22px 18px; }
-    .score-detail p { font-size: 0.85rem; line-height: 1.65; color: var(--text-muted); font-weight: 300; }
-    .testimonial { background: var(--surface); border: 1px solid var(--border-strong); border-radius: 24px; padding: 48px 40px; margin: 56px 0; display: grid; grid-template-columns: 1fr; gap: 32px; align-items: center; position: relative; overflow: hidden; }
-    @media (min-width: 768px) { .testimonial { grid-template-columns: 200px 1fr; padding: 56px 48px; } }
-    .testimonial::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(var(--accent-rgb),0.4), transparent); }
-    .testimonial .t-avatar { width: 100%; max-width: 200px; aspect-ratio: 1; border-radius: 20px; overflow: hidden; margin: 0 auto; border: 1px solid var(--border-strong); position: relative; }
-    .testimonial .t-avatar img { width: 100%; height: 100%; object-fit: cover; }
-    .testimonial .t-content { position: relative; }
-    .testimonial .t-stars { display: flex; gap: 3px; margin-bottom: 16px; }
-    .testimonial .t-stars svg { width: 18px; height: 18px; color: var(--accent); fill: var(--accent); }
-    .testimonial blockquote { font-family: 'Fraunces', Georgia, serif; font-size: clamp(1.15rem, 2.5vw, 1.5rem); line-height: 1.5; font-style: italic; font-weight: 500; color: var(--text); margin-bottom: 20px; letter-spacing: -0.01em; }
-    .testimonial .t-author { display: flex; flex-direction: column; gap: 2px; }
-    .testimonial .t-name { font-weight: 700; font-size: 0.95rem; color: var(--text); }
-    .testimonial .t-role { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
-    .lens-grid { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 36px; }
-    @media (min-width: 640px) { .lens-grid { grid-template-columns: repeat(3, 1fr); } }
-    .lens-card { border: 1px solid; border-radius: 20px; padding: 32px; text-align: center; transition: all 0.3s ease; position: relative; overflow: hidden; }
-    .lens-card:hover { transform: translateY(-3px); }
-    .lens-card .who { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 12px; }
-    .lens-card .verdict { font-size: 1.4rem; font-weight: 800; margin-bottom: 14px; letter-spacing: -0.02em; }
-    .lens-card .desc { font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; font-weight: 300; }
-    .lens-card.pass { border-color: rgba(var(--accent-rgb),0.25); background: var(--accent-glow); }
-    .lens-card.pass .verdict { color: var(--accent); }
-    .lens-card.skip { border-color: rgba(248,113,113,0.15); background: var(--red-bg); }
-    .lens-card.skip .verdict { color: var(--red); }
-    .lens-card.interest { border-color: rgba(96,165,250,0.15); background: var(--blue-bg); }
-    .lens-card.interest .verdict { color: var(--blue); }
-    .timeline { margin: 48px 0; position: relative; }
-    .timeline::before { content: ''; position: absolute; left: 20px; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, var(--accent), var(--border)); }
-    @media (min-width: 640px) { .timeline::before { left: 50%; transform: translateX(-50%); } }
-    .tl-item { position: relative; padding: 0 0 40px 52px; opacity: 0; transform: translateY(20px); transition: all 0.6s cubic-bezier(0.16,1,0.3,1); }
-    .tl-item.visible { opacity: 1; transform: translateY(0); }
-    @media (min-width: 640px) { .tl-item { width: 50%; padding: 0 40px 40px 0; } .tl-item:nth-child(even) { margin-left: 50%; padding: 0 0 40px 40px; } }
-    .tl-item .tl-dot { position: absolute; left: 14px; top: 4px; width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--accent); background: var(--bg); }
-    @media (min-width: 640px) { .tl-item .tl-dot { left: auto; right: -7px; } .tl-item:nth-child(even) .tl-dot { left: -7px; right: auto; } }
-    .tl-item .tl-year { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.15em; color: var(--accent); text-transform: uppercase; margin-bottom: 8px; }
-    .tl-item .tl-title { font-weight: 700; font-size: 1.05rem; margin-bottom: 6px; color: var(--text); }
-    .tl-item .tl-desc { font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; font-weight: 300; }
-    .pricing-grid { display: grid; grid-template-columns: 1fr; gap: 14px; margin: 36px 0; }
-    @media (min-width: 640px) { .pricing-grid { grid-template-columns: repeat(3, 1fr); } }
-    .price-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 28px 24px; text-align: center; transition: all 0.3s ease; }
-    .price-card:hover { border-color: var(--border-strong); transform: translateY(-2px); }
-    .price-card .pc-type { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 12px; }
-    .price-card .pc-price { font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; color: var(--text); margin-bottom: 4px; }
-    .price-card .pc-unit { font-size: 0.8rem; color: var(--text-muted); font-weight: 300; }
-    .price-card.featured { border-color: rgba(var(--accent-rgb),0.3); background: var(--accent-glow); }
-    .price-card.featured .pc-price { background: linear-gradient(135deg, var(--accent), var(--accent-bright)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .cta { text-align: center; padding: 100px 0 80px; position: relative; overflow: hidden; }
-    .cta::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at center, var(--accent-glow) 0%, transparent 60%); }
-    .cta h2 { font-size: clamp(1.8rem, 4.5vw, 2.8rem); font-weight: 700; line-height: 1.12; letter-spacing: -0.03em; margin-bottom: 16px; position: relative; }
-    .cta h2 .serif { font-family: 'Fraunces', Georgia, serif; font-style: italic; font-weight: 500; }
-    .cta p { font-size: 1.05rem; color: var(--text-muted); max-width: 540px; margin: 0 auto 36px; position: relative; font-weight: 300; line-height: 1.7; }
-    .cta .btn { display: inline-flex; align-items: center; gap: 10px; padding: 16px 32px; background: linear-gradient(135deg, var(--accent), var(--accent-bright)); color: #0a0a0a; font-weight: 700; font-size: 0.95rem; border-radius: 100px; transition: all 0.25s ease; letter-spacing: -0.01em; border: none; cursor: pointer; position: relative; }
-    .cta .btn:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(var(--accent-rgb),0.3); }
-    .cta .btn svg { width: 16px; height: 16px; }
-    footer { border-top: 1px solid var(--border); padding: 48px 0 40px; position: relative; }
-    footer .inner { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 24px; }
-    footer p { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); line-height: 1.6; }
-    footer p b { color: var(--accent); font-weight: 500; }
-    footer .refs { margin-top: 16px; }
-    footer .refs a { display: inline-block; font-size: 10px; font-family: 'JetBrains Mono', monospace; color: var(--text-faint); text-decoration: underline; text-underline-offset: 3px; margin-right: 16px; transition: color 0.2s; }
-    footer .refs a:hover { color: var(--accent); }
-    .mobile-menu-btn { display: none; background: none; border: 1px solid var(--border-strong); border-radius: 10px; width: 36px; height: 36px; align-items: center; justify-content: center; cursor: pointer; color: var(--text-muted); transition: all 0.2s; }
-    .mobile-menu-btn:hover { color: var(--accent); border-color: rgba(var(--accent-rgb),0.4); }
-    .mobile-menu-btn svg { width: 16px; height: 16px; }
-    .mobile-nav { display: none; position: fixed; inset: 0; z-index: 150; background: var(--bg); flex-direction: column; align-items: center; justify-content: center; gap: 20px; }
-    .mobile-nav.open { display: flex; }
-    .mobile-nav a { font-family: 'JetBrains Mono', monospace; font-size: 14px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim); padding: 12px 24px; border-radius: 8px; transition: all 0.2s; }
-    .mobile-nav a:hover { color: var(--accent); background: var(--accent-glow); }
-    .mobile-nav .close-btn { position: absolute; top: 16px; right: 28px; background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 28px; }
-    @media (max-width: 768px) { nav .nav-links { display: none; } .mobile-menu-btn { display: flex; } .thesis { padding: 36px 24px; } .testimonial { padding: 32px 24px; } .duo .card { padding: 28px; } #hero { padding-top: 90px; } .radar-svg { width: 280px; height: 280px; } }
-    .back-to-top { position: fixed; bottom: 28px; right: 28px; width: 44px; height: 44px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border-strong); display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-muted); z-index: 50; opacity: 0; pointer-events: none; transition: all 0.3s ease; box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
-    .back-to-top.visible { opacity: 1; pointer-events: auto; }
-    .back-to-top:hover { color: var(--accent); border-color: rgba(var(--accent-rgb),0.4); transform: translateY(-2px); }
-    .back-to-top svg { width: 18px; height: 18px; }
-    .ai-card { background: var(--surface); border: 1px solid var(--border-strong); border-radius: 24px; padding: 40px 44px; margin: 40px 0; position: relative; overflow: hidden; }
-    .ai-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(var(--accent-rgb),0.4), transparent); }
-    .ai-card .ai-tag { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
-    .ai-card h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 14px; color: var(--text); }
-    .ai-card p { font-size: 0.95rem; line-height: 1.78; color: var(--text-dim); font-weight: 300; }
-    .ai-card p + p { margin-top: 14px; }
-    .ai-card strong { color: var(--text); font-weight: 600; }
-    .ref-list { margin: 36px 0; display: flex; flex-direction: column; gap: 10px; }
-    .ref-item { display: flex; gap: 18px; padding: 20px 24px; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; transition: all 0.25s ease; }
-    .ref-item:hover { border-color: var(--border-strong); transform: translateX(4px); }
-    .ref-num { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--accent); font-weight: 600; flex-shrink: 0; width: 26px; padding-top: 3px; }
-    .ref-content { flex: 1; }
-    .ref-content p { font-size: 0.88rem; color: var(--text-dim); line-height: 1.65; font-weight: 300; }
-    .ref-content .ref-type { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 5px; }
-    .ref-content a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; word-break: break-all; }
-    .ref-content a:hover { color: var(--accent-bright); }
-    
-    /* ═══ ADDED IMAGES CSS ═══ */
-    .img-break-full { position: relative; height: 280px; overflow: hidden; margin: 0; }
-    .img-break-full img { width: 100%; height: 100%; object-fit: cover; filter: var(--img-filter); }
-    .img-break-full .overlay { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 0%, var(--bg) 100%); }
-    .img-break-full .overlay-top { position: absolute; inset: 0; background: linear-gradient(0deg, transparent 0%, var(--bg) 100%); }
-    @media (min-width: 640px) { .img-break-full { height: 380px; } }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sight Reading Factory: Opportunity Audit</title>
+    <meta name="description" content="An Educational Venture Analysis of Sight Reading Factory." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet" />
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        :root[data-theme="dark"] {
+            --bg: #07070A;
+            --bg2: #0C0D12;
+            --surface: #121319;
+            --surface-raised: #1A1C24;
+            --border: rgba(255, 255, 255, 0.06);
+            --border-strong: rgba(255, 255, 255, 0.12);
+            --accent: #D4A96A;
+            --accent-bright: #F0CD96;
+            --accent-rgb: 212, 169, 106;
+            --accent-glow: rgba(212, 169, 106, 0.08);
+            --accent-glow-strong: rgba(212, 169, 106, 0.14);
+            --text: #ECECEE;
+            --text-dim: #B0B4BE;
+            --text-muted: #6A7080;
+            --text-faint: #3A3F4C;
+            --red: #F87171;
+            --red-bg: rgba(248, 113, 113, 0.08);
+            --green: #4ADE80;
+            --green-bg: rgba(74, 222, 128, 0.08);
+            --blue: #60A5FA;
+            --blue-bg: rgba(96, 165, 250, 0.08);
+            --amber: #FBBF24;
+            --amber-bg: rgba(251, 191, 36, 0.08);
+            --nav-bg: rgba(7, 7, 10, 0.72);
+            --card-hover: rgba(212, 169, 106, 0.03);
+            --grid-line: rgba(255, 255, 255, 0.025);
+            --img-filter: brightness(0.85) contrast(1.05);
+            --hero-overlay-1: rgba(7, 7, 10, 0.65);
+            --hero-overlay-2: rgba(7, 7, 10, 0.95);
+        }
+        :root[data-theme="light"] {
+            --bg: #FAFAF6;
+            --bg2: #FFFFFF;
+            --surface: #F2F1EB;
+            --surface-raised: #EAE9E2;
+            --border: rgba(0, 0, 0, 0.06);
+            --border-strong: rgba(0, 0, 0, 0.12);
+            --accent: #92400E;
+            --accent-bright: #B45309;
+            --accent-rgb: 146, 64, 14;
+            --accent-glow: rgba(146, 64, 14, 0.05);
+            --accent-glow-strong: rgba(146, 64, 14, 0.1);
+            --text: #111114;
+            --text-dim: #3D3D42;
+            --text-muted: #6E6E72;
+            --text-faint: #A0A0A4;
+            --red: #DC2626;
+            --red-bg: rgba(220, 38, 38, 0.06);
+            --green: #16A34A;
+            --green-bg: rgba(22, 163, 74, 0.06);
+            --blue: #2563EB;
+            --blue-bg: rgba(37, 99, 235, 0.06);
+            --amber: #D97706;
+            --amber-bg: rgba(217, 119, 6, 0.06);
+            --nav-bg: rgba(250, 250, 246, 0.72);
+            --card-hover: rgba(146, 64, 14, 0.02);
+            --grid-line: rgba(0, 0, 0, 0.02);
+            --img-filter: brightness(0.95) contrast(1.05);
+            --hero-overlay-1: rgba(250, 250, 246, 0.55);
+            --hero-overlay-2: rgba(250, 250, 246, 0.95);
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', -apple-system, system-ui, sans-serif;
+            line-height: 1.7;
+            transition: background 0.4s ease, color 0.4s ease;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+        ::selection {
+            background: rgba(var(--accent-rgb), 0.25);
+        }
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+        .container {
+            max-width: 940px;
+            margin: 0 auto;
+            padding: 0 28px;
+        }
+        .grid-bg {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background-image: linear-gradient(to right, var(--grid-line) 1px, transparent 1px), linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+            background-size: 60px 60px;
+            mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 30%, transparent 100%);
+            -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 30%, transparent 100%);
+        }
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: var(--nav-bg);
+            backdrop-filter: blur(20px) saturate(1.6);
+            -webkit-backdrop-filter: blur(20px) saturate(1.6);
+            border-bottom: 1px solid var(--border);
+        }
+        nav .inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 58px;
+            gap: 16px;
+        }
+        nav .logo {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--accent);
+            font-weight: 600;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        nav .logo .logo-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent);
+            box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.5);
+        }
+        nav .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        nav .nav-links {
+            display: flex;
+            gap: 2px;
+            list-style: none;
+        }
+        nav .nav-links a {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text-faint);
+            padding: 7px 11px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        nav .nav-links a:hover {
+            color: var(--text-dim);
+            background: var(--accent-glow);
+        }
+        nav .nav-links a.active {
+            color: var(--accent);
+        }
+        nav .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--accent);
+        }
+        #progress-bar {
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-bright));
+            width: 0%;
+            transition: width 0.08s linear;
+            box-shadow: 0 0 10px rgba(var(--accent-rgb), 0.5);
+            z-index: 101;
+        }
+        .theme-toggle {
+            background: none;
+            border: 1px solid var(--border-strong);
+            border-radius: 10px;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: all 0.25s ease;
+            flex-shrink: 0;
+        }
+        .theme-toggle:hover {
+            color: var(--accent);
+            border-color: rgba(var(--accent-rgb), 0.4);
+            background: var(--accent-glow);
+        }
+        .theme-toggle svg {
+            width: 16px;
+            height: 16px;
+        }
+        [data-theme="dark"] .theme-toggle .sun {
+            display: block;
+        }
+        [data-theme="dark"] .theme-toggle .moon {
+            display: none;
+        }
+        [data-theme="light"] .theme-toggle .sun {
+            display: none;
+        }
+        [data-theme="light"] .theme-toggle .moon {
+            display: block;
+        }
+        .reveal {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .reveal-d1 {
+            transition-delay: 0.08s;
+        }
+        .reveal-d2 {
+            transition-delay: 0.16s;
+        }
+        .reveal-d3 {
+            transition-delay: 0.24s;
+        }
+        #hero {
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            padding: 120px 0 60px;
+            overflow: hidden;
+        }
+        #hero .hero-bg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.4;
+            filter: var(--img-filter);
+            z-index: 0;
+        }
+        #hero .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, var(--hero-overlay-1) 0%, var(--hero-overlay-2) 85%, var(--bg) 100%);
+            z-index: 1;
+        }
+        #hero .hero-glow {
+            position: absolute;
+            top: -20%;
+            right: -15%;
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, rgba(var(--accent-rgb), 0.07) 0%, transparent 60%);
+            filter: blur(50px);
+            pointer-events: none;
+            z-index: 1;
+        }
+        #hero .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        #hero .pitch-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 32px;
+            padding: 8px 16px;
+            border: 1px solid rgba(var(--accent-rgb), 0.2);
+            border-radius: 100px;
+            background: var(--accent-glow);
+        }
+        #hero .pitch-label .pulse {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--accent);
+            box-shadow: 0 0 0 0 rgba(var(--accent-rgb), 0.5);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(var(--accent-rgb), 0.5);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(var(--accent-rgb), 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(var(--accent-rgb), 0);
+            }
+        }
+        #hero h1 {
+            font-size: clamp(2.5rem, 7.5vw, 5.2rem);
+            font-weight: 800;
+            line-height: 0.98;
+            letter-spacing: -0.045em;
+            color: var(--text);
+            max-width: 820px;
+            margin-bottom: 28px;
+        }
+        #hero h1 .accent {
+            background: linear-gradient(135deg, var(--accent), var(--accent-bright));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        #hero h1 .serif {
+            font-family: 'Fraunces', Georgia, serif;
+            font-style: italic;
+            font-weight: 500;
+        }
+        #hero .lede {
+            font-size: clamp(1rem, 2vw, 1.22rem);
+            color: var(--text-dim);
+            max-width: 600px;
+            line-height: 1.75;
+            margin-bottom: 36px;
+            font-weight: 300;
+        }
+        .meta-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 32px;
+        }
+        .meta-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text-faint);
+        }
+        .meta-chip svg {
+            width: 12px;
+            height: 12px;
+        }
+        .stat-strip {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1px;
+            background: var(--border);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            overflow: hidden;
+            margin: -40px 0 0;
+            position: relative;
+            z-index: 3;
+        }
+        @media (min-width: 640px) {
+            .stat-strip {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        .stat-strip .stat {
+            background: var(--bg);
+            padding: 32px 24px;
+            transition: background 0.3s;
+        }
+        .stat-strip .stat:hover {
+            background: var(--card-hover);
+        }
+        .stat-strip .stat .num {
+            font-size: clamp(1.6rem, 4vw, 2.2rem);
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            line-height: 1;
+            background: linear-gradient(135deg, var(--accent), var(--accent-bright));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .stat-strip .stat .lbl {
+            margin-top: 10px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text-faint);
+            line-height: 1.5;
+        }
+        .stats-wrap {
+            padding-bottom: 90px;
+        }
+        .section {
+            padding: 90px 0;
+            border-top: 1px solid var(--border);
+            position: relative;
+        }
+        .section-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.24em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .section-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            max-width: 100px;
+            background: linear-gradient(to right, rgba(var(--accent-rgb), 0.3), transparent);
+        }
+        .section h2 {
+            font-size: clamp(1.8rem, 4.2vw, 2.8rem);
+            font-weight: 700;
+            line-height: 1.12;
+            letter-spacing: -0.035em;
+            color: var(--text);
+            max-width: 740px;
+            margin-bottom: 24px;
+        }
+        .section h2 .serif {
+            font-family: 'Fraunces', Georgia, serif;
+            font-style: italic;
+            font-weight: 500;
+        }
+        .section .body {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: var(--text-dim);
+            max-width: 660px;
+            font-weight: 300;
+        }
+        .section .body strong {
+            color: var(--text);
+            font-weight: 600;
+        }
+        .section .body em {
+            font-style: italic;
+            color: var(--text);
+        }
+        .analyst-note {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            line-height: 1.65;
+            color: var(--text-muted);
+            border-left: 2px solid var(--accent);
+            padding: 14px 18px;
+            margin: 24px 0;
+            max-width: 660px;
+            background: var(--surface);
+            border-radius: 0 10px 10px 0;
+        }
+        .product-showcase {
+            margin: 48px 0;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+        @media (min-width: 768px) {
+            .product-showcase {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        @media (min-width: 1024px) {
+            .product-showcase {
+                grid-template-columns: 1fr 1fr 1fr;
+            }
+        }
+        .product-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .product-card:hover {
+            border-color: var(--border-strong);
+            transform: translateY(-3px);
+        }
+        .product-card .img-wrap {
+            aspect-ratio: 16/10;
+            overflow: hidden;
+            background: var(--bg2);
+            position: relative;
+        }
+        .product-card .img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .product-card:hover .img-wrap img {
+            transform: scale(1.03);
+        }
+        .product-card .img-wrap::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 60%, rgba(0, 0, 0, 0.3) 100%);
+            pointer-events: none;
+        }
+        .product-card .pc-body {
+            padding: 24px 28px;
+        }
+        .product-card .pc-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+        .product-card .pc-title {
+            font-weight: 700;
+            font-size: 1.05rem;
+            margin-bottom: 6px;
+            color: var(--text);
+        }
+        .product-card .pc-desc {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            font-weight: 300;
+        }
+        .duo {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+            margin-top: 40px;
+        }
+        @media (min-width: 640px) {
+            .duo {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        .duo .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 36px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .duo .card:hover {
+            border-color: var(--border-strong);
+            background: var(--surface-raised);
+            transform: translateY(-2px);
+        }
+        .duo .card .tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .duo .card .tag::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+        }
+        .duo .card.problem .tag {
+            color: var(--red);
+        }
+        .duo .card.problem .tag::before {
+            background: var(--red);
+        }
+        .duo .card.solution .tag {
+            color: var(--accent);
+        }
+        .duo .card.solution .tag::before {
+            background: var(--accent);
+        }
+        .duo .card.threat .tag {
+            color: var(--amber);
+        }
+        .duo .card.threat .tag::before {
+            background: var(--amber);
+        }
+        .duo .card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            line-height: 1.3;
+            letter-spacing: -0.02em;
+            color: var(--text);
+            margin-bottom: 14px;
+        }
+        .duo .card p {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: var(--text-muted);
+            font-weight: 300;
+        }
+        .thesis {
+            background: var(--surface);
+            border: 1px solid var(--border-strong);
+            border-radius: 24px;
+            padding: 56px 48px;
+            margin: 64px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .thesis::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(var(--accent-rgb), 0.4), transparent);
+        }
+        .thesis .quote-mark {
+            position: absolute;
+            top: 12px;
+            left: 28px;
+            font-size: 5rem;
+            line-height: 1;
+            font-family: 'Fraunces', Georgia, serif;
+            background: linear-gradient(135deg, var(--accent), var(--accent-bright));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            opacity: 0.15;
+        }
+        .thesis p {
+            font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+            font-weight: 500;
+            line-height: 1.45;
+            letter-spacing: -0.02em;
+            color: var(--text);
+            position: relative;
+            z-index: 1;
+            font-family: 'Inter', sans-serif;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin: 40px 0;
+        }
+        @media (min-width: 640px) {
+            .feature-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        @media (min-width: 900px) {
+            .feature-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        .feature-item {
+            padding: 24px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            transition: all 0.25s ease;
+        }
+        .feature-item:hover {
+            border-color: var(--border-strong);
+            background: var(--surface-raised);
+        }
+        .feature-item .fi-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--accent-glow);
+            margin-bottom: 14px;
+        }
+        .feature-item .fi-icon svg {
+            width: 18px;
+            height: 18px;
+            color: var(--accent);
+        }
+        .feature-item .fi-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 6px;
+            color: var(--text);
+        }
+        .feature-item .fi-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.55;
+            font-weight: 300;
+        }
+        .radar-wrap {
+            margin: 48px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 32px;
+        }
+        @media (min-width: 768px) {
+            .radar-wrap {
+                flex-direction: row;
+                align-items: flex-start;
+            }
+        }
+        .radar-svg {
+            width: 320px;
+            height: 320px;
+            flex-shrink: 0;
+        }
+        .radar-legend {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+            width: 100%;
+        }
+        .radar-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 12px 16px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            user-select: none;
+        }
+        .radar-legend-item:hover,
+        .radar-legend-item.active {
+            border-color: rgba(var(--accent-rgb), 0.3);
+            background: var(--accent-glow);
+        }
+        .radar-legend-item .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .radar-legend-item .rl-label {
+            font-size: 0.88rem;
+            font-weight: 500;
+            color: var(--text);
+            flex: 1;
+        }
+        .radar-legend-item .rl-score {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+        .radar-tooltip {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            fill: var(--text-muted);
+            pointer-events: none;
+            text-anchor: middle;
+        }
+        .score-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
+            margin-top: 24px;
+        }
+        @media (min-width: 640px) {
+            .score-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        .score-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 18px 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            transition: all 0.25s ease;
+            cursor: pointer;
+        }
+        .score-row:hover {
+            border-color: var(--border-strong);
+            transform: translateX(4px);
+        }
+        .score-row .left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex: 1;
+            min-width: 0;
+        }
+        .score-row .num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-faint);
+            flex-shrink: 0;
+            width: 22px;
+        }
+        .score-row .label {
+            font-size: 0.92rem;
+            font-weight: 500;
+            color: var(--text);
+        }
+        .score-row .chev {
+            color: var(--text-faint);
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+        }
+        .score-row.open .chev {
+            transform: rotate(90deg);
+            color: var(--accent);
+        }
+        .score-row .rating {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 5px 12px;
+            border-radius: 100px;
+            flex-shrink: 0;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        .rating.strong {
+            background: var(--green-bg);
+            color: var(--green);
+        }
+        .rating.fragile {
+            background: var(--accent-glow-strong);
+            color: var(--accent);
+        }
+        .rating.thin {
+            background: var(--red-bg);
+            color: var(--red);
+        }
+        .score-detail {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.4s ease;
+            padding: 0 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-top: none;
+            border-radius: 0 0 14px 14px;
+            margin-top: -9px;
+            margin-bottom: 8px;
+        }
+        .score-detail.open {
+            max-height: 250px;
+            padding: 14px 22px 18px;
+        }
+        .score-detail p {
+            font-size: 0.85rem;
+            line-height: 1.65;
+            color: var(--text-muted);
+            font-weight: 300;
+        }
+        .testimonial {
+            background: var(--surface);
+            border: 1px solid var(--border-strong);
+            border-radius: 24px;
+            padding: 48px 40px;
+            margin: 56px 0;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 32px;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        @media (min-width: 768px) {
+            .testimonial {
+                grid-template-columns: 200px 1fr;
+                padding: 56px 48px;
+            }
+        }
+        .testimonial::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(var(--accent-rgb), 0.4), transparent);
+        }
+        .testimonial .t-avatar {
+            width: 100%;
+            max-width: 200px;
+            aspect-ratio: 1;
+            border-radius: 20px;
+            overflow: hidden;
+            margin: 0 auto;
+            border: 1px solid var(--border-strong);
+            position: relative;
+        }
+        .testimonial .t-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .testimonial .t-content {
+            position: relative;
+        }
+        .testimonial .t-stars {
+            display: flex;
+            gap: 3px;
+            margin-bottom: 16px;
+        }
+        .testimonial .t-stars svg {
+            width: 18px;
+            height: 18px;
+            color: var(--accent);
+            fill: var(--accent);
+        }
+        .testimonial blockquote {
+            font-family: 'Fraunces', Georgia, serif;
+            font-size: clamp(1.15rem, 2.5vw, 1.5rem);
+            line-height: 1.5;
+            font-style: italic;
+            font-weight: 500;
+            color: var(--text);
+            margin-bottom: 20px;
+            letter-spacing: -0.01em;
+        }
+        .testimonial .t-author {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .testimonial .t-name {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--text);
+        }
+        .testimonial .t-role {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--accent);
+        }
+        .lens-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+            margin-top: 36px;
+        }
+        @media (min-width: 640px) {
+            .lens-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        .lens-card {
+            border: 1px solid;
+            border-radius: 20px;
+            padding: 32px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .lens-card:hover {
+            transform: translateY(-3px);
+        }
+        .lens-card .who {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--text-faint);
+            margin-bottom: 12px;
+        }
+        .lens-card .verdict {
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin-bottom: 14px;
+            letter-spacing: -0.02em;
+        }
+        .lens-card .desc {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            font-weight: 300;
+        }
+        .lens-card.pass {
+            border-color: rgba(var(--accent-rgb), 0.25);
+            background: var(--accent-glow);
+        }
+        .lens-card.pass .verdict {
+            color: var(--accent);
+        }
+        .lens-card.skip {
+            border-color: rgba(248, 113, 113, 0.15);
+            background: var(--red-bg);
+        }
+        .lens-card.skip .verdict {
+            color: var(--red);
+        }
+        .lens-card.interest {
+            border-color: rgba(96, 165, 250, 0.15);
+            background: var(--blue-bg);
+        }
+        .lens-card.interest .verdict {
+            color: var(--blue);
+        }
+        .timeline {
+            margin: 48px 0;
+            position: relative;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--accent), var(--border));
+        }
+        @media (min-width: 640px) {
+            .timeline::before {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+        .tl-item {
+            position: relative;
+            padding: 0 0 40px 52px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .tl-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        @media (min-width: 640px) {
+            .tl-item {
+                width: 50%;
+                padding: 0 40px 40px 0;
+            }
+            .tl-item:nth-child(even) {
+                margin-left: 50%;
+                padding: 0 0 40px 40px;
+            }
+        }
+        .tl-item .tl-dot {
+            position: absolute;
+            left: 14px;
+            top: 4px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 2px solid var(--accent);
+            background: var(--bg);
+        }
+        @media (min-width: 640px) {
+            .tl-item .tl-dot {
+                left: auto;
+                right: -7px;
+            }
+            .tl-item:nth-child(even) .tl-dot {
+                left: -7px;
+                right: auto;
+            }
+        }
+        .tl-item .tl-year {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.15em;
+            color: var(--accent);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        .tl-item .tl-title {
+            font-weight: 700;
+            font-size: 1.05rem;
+            margin-bottom: 6px;
+            color: var(--text);
+        }
+        .tl-item .tl-desc {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            font-weight: 300;
+        }
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 14px;
+            margin: 36px 0;
+        }
+        @media (min-width: 640px) {
+            .pricing-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        .price-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 28px 24px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .price-card:hover {
+            border-color: var(--border-strong);
+            transform: translateY(-2px);
+        }
+        .price-card .pc-type {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--text-faint);
+            margin-bottom: 12px;
+        }
+        .price-card .pc-price {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+        .price-card .pc-unit {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 300;
+        }
+        .price-card.featured {
+            border-color: rgba(var(--accent-rgb), 0.3);
+            background: var(--accent-glow);
+        }
+        .price-card.featured .pc-price {
+            background: linear-gradient(135deg, var(--accent), var(--accent-bright));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .cta {
+            text-align: center;
+            padding: 100px 0 80px;
+            position: relative;
+            overflow: hidden;
+        }
+        .cta::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at center, var(--accent-glow) 0%, transparent 60%);
+        }
+        .cta h2 {
+            font-size: clamp(1.8rem, 4.5vw, 2.8rem);
+            font-weight: 700;
+            line-height: 1.12;
+            letter-spacing: -0.03em;
+            margin-bottom: 16px;
+            position: relative;
+        }
+        .cta h2 .serif {
+            font-family: 'Fraunces', Georgia, serif;
+            font-style: italic;
+            font-weight: 500;
+        }
+        .cta p {
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            max-width: 540px;
+            margin: 0 auto 36px;
+            position: relative;
+            font-weight: 300;
+            line-height: 1.7;
+        }
+        .cta .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 32px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-bright));
+            color: #0a0a0a;
+            font-weight: 700;
+            font-size: 0.95rem;
+            border-radius: 100px;
+            transition: all 0.25s ease;
+            letter-spacing: -0.01em;
+            border: none;
+            cursor: pointer;
+            position: relative;
+        }
+        .cta .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(var(--accent-rgb), 0.3);
+        }
+        .cta .btn svg {
+            width: 16px;
+            height: 16px;
+        }
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 48px 0 40px;
+            position: relative;
+        }
+        footer .inner {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 24px;
+        }
+        footer p {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--text-faint);
+            line-height: 1.6;
+        }
+        footer p b {
+            color: var(--accent);
+            font-weight: 500;
+        }
+        footer .refs {
+            margin-top: 16px;
+        }
+        footer .refs a {
+            display: inline-block;
+            font-size: 10px;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-faint);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            margin-right: 16px;
+            transition: color 0.2s;
+        }
+        footer .refs a:hover {
+            color: var(--accent);
+        }
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: 1px solid var(--border-strong);
+            border-radius: 10px;
+            width: 36px;
+            height: 36px;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: all 0.2s;
+        }
+        .mobile-menu-btn:hover {
+            color: var(--accent);
+            border-color: rgba(var(--accent-rgb), 0.4);
+        }
+        .mobile-menu-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 150;
+            background: var(--bg);
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+        .mobile-nav.open {
+            display: flex;
+        }
+        .mobile-nav a {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            padding: 12px 24px;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        .mobile-nav a:hover {
+            color: var(--accent);
+            background: var(--accent-glow);
+        }
+        .mobile-nav .close-btn {
+            position: absolute;
+            top: 16px;
+            right: 28px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 28px;
+        }
+        @media (max-width: 768px) {
+            nav .nav-links {
+                display: none;
+            }
+            .mobile-menu-btn {
+                display: flex;
+            }
+            .thesis {
+                padding: 36px 24px;
+            }
+            .testimonial {
+                padding: 32px 24px;
+            }
+            .duo .card {
+                padding: 28px;
+            }
+            #hero {
+                padding-top: 90px;
+            }
+            .radar-svg {
+                width: 280px;
+                height: 280px;
+            }
+        }
+        .back-to-top {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--surface);
+            border: 1px solid var(--border-strong);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-muted);
+            z-index: 50;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+        }
+        .back-to-top.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .back-to-top:hover {
+            color: var(--accent);
+            border-color: rgba(var(--accent-rgb), 0.4);
+            transform: translateY(-2px);
+        }
+        .back-to-top svg {
+            width: 18px;
+            height: 18px;
+        }
+        .ai-card {
+            background: var(--surface);
+            border: 1px solid var(--border-strong);
+            border-radius: 24px;
+            padding: 40px 44px;
+            margin: 40px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .ai-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(var(--accent-rgb), 0.4), transparent);
+        }
+        .ai-card .ai-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 14px;
+        }
+        .ai-card h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 14px;
+            color: var(--text);
+        }
+        .ai-card p {
+            font-size: 0.95rem;
+            line-height: 1.78;
+            color: var(--text-dim);
+            font-weight: 300;
+        }
+        .ai-card p+p {
+            margin-top: 14px;
+        }
+        .ai-card strong {
+            color: var(--text);
+            font-weight: 600;
+        }
+        .ref-list {
+            margin: 36px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .ref-item {
+            display: flex;
+            gap: 18px;
+            padding: 20px 24px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            transition: all 0.25s ease;
+        }
+        .ref-item:hover {
+            border-color: var(--border-strong);
+            transform: translateX(4px);
+        }
+        .ref-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--accent);
+            font-weight: 600;
+            flex-shrink: 0;
+            width: 26px;
+            padding-top: 3px;
+        }
+        .ref-content {
+            flex: 1;
+        }
+        .ref-content p {
+            font-size: 0.88rem;
+            color: var(--text-dim);
+            line-height: 1.65;
+            font-weight: 300;
+        }
+        .ref-content .ref-type {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--text-faint);
+            margin-bottom: 5px;
+        }
+        .ref-content a {
+            color: var(--accent);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            word-break: break-all;
+        }
+        .ref-content a:hover {
+            color: var(--accent-bright);
+        }
 
-    @media (max-width: 600px) { .ai-card { padding: 28px 24px; } }
-  </style>
+        /* ═══ ADDED IMAGES CSS ═══ */
+        .img-break-full {
+            position: relative;
+            height: 280px;
+            overflow: hidden;
+            margin: 0;
+        }
+        .img-break-full img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: var(--img-filter);
+        }
+        .img-break-full .overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 0%, var(--bg) 100%);
+        }
+        .img-break-full .overlay-top {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(0deg, transparent 0%, var(--bg) 100%);
+        }
+        @media (min-width: 640px) {
+            .img-break-full {
+                height: 380px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .ai-card {
+                padding: 28px 24px;
+            }
+        }
+    </style>
 </head>
 <body>
-<div class="grid-bg"></div>
-<nav id="main-nav">
-  <div class="container">
-    <div class="inner">
-      <a href="#hero" class="logo">Jeremy Sheeshka</a>
-      <div class="nav-right">
-        <ul class="nav-links">
-          <li><a href="#rationale">Rationale</a></li>
-          <li><a href="#market">Market</a></li>
-          <li><a href="#product-eval">Product</a></li>
-          <li><a href="#risks">Risks</a></li>
-          <li><a href="#recommendation">Score</a></li>
-          <li><a href="#reflections">Reflections</a></li>
-          <li><a href="#references">Sources</a></li>
-        </ul>
-        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-        </button>
-        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
-          <svg class="sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-          <svg class="moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-        </button>
-      </div>
+    <div class="grid-bg"></div>
+    <nav id="main-nav">
+        <div class="container">
+            <div class="inner">
+                <a href="#hero" class="logo">Jeremy Sheeshka</a>
+                <div class="nav-right">
+                    <ul class="nav-links">
+                        <li><a href="#rationale">Rationale</a></li>
+                        <li><a href="#market">Market</a></li>
+                        <li><a href="#product-eval">Product</a></li>
+                        <li><a href="#risks">Risks</a></li>
+                        <li><a href="#recommendation">Score</a></li>
+                        <li><a href="#reflections">Reflections</a></li>
+                        <li><a href="#references">Sources</a></li>
+                    </ul>
+                    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                    </button>
+                    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                        <svg class="sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                        <svg class="moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="progress-bar"></div>
+    </nav>
+    <div class="mobile-nav" id="mobileNav">
+        <button class="close-btn" id="mobileNavClose">&times;</button>
+        <a href="#hero" onclick="closeMobileNav()">Home</a>
+        <a href="#rationale" onclick="closeMobileNav()">Rationale</a>
+        <a href="#market" onclick="closeMobileNav()">Market</a>
+        <a href="#product-eval" onclick="closeMobileNav()">Product</a>
+        <a href="#risks" onclick="closeMobileNav()">Risks</a>
+        <a href="#recommendation" onclick="closeMobileNav()">Score</a>
+        <a href="#reflections" onclick="closeMobileNav()">Reflections</a>
+        <a href="#references" onclick="closeMobileNav()">Sources</a>
     </div>
-  </div>
-  <div id="progress-bar"></div>
-</nav>
-<div class="mobile-nav" id="mobileNav">
-  <button class="close-btn" id="mobileNavClose">&times;</button>
-  <a href="#hero" onclick="closeMobileNav()">Home</a>
-  <a href="#rationale" onclick="closeMobileNav()">Rationale</a>
-  <a href="#market" onclick="closeMobileNav()">Market</a>
-  <a href="#product-eval" onclick="closeMobileNav()">Product</a>
-  <a href="#risks" onclick="closeMobileNav()">Risks</a>
-  <a href="#recommendation" onclick="closeMobileNav()">Score</a>
-  <a href="#reflections" onclick="closeMobileNav()">Reflections</a>
-  <a href="#references" onclick="closeMobileNav()">Sources</a>
-</div>
 
-<section id="hero">
-  <img class="hero-bg" src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=1600&q=80" alt="Brass trumpet valves in dramatic chiaroscuro lighting" />
-  <div class="hero-overlay"></div>
-  <div class="hero-glow"></div>
-  <div class="container hero-content">
-    <div class="pitch-label reveal">
-      <span class="pulse"></span>
-      ETEC 522 · Analyst Report
-    </div>
-    <h1 class="reveal reveal-d1">
-      Sight Reading Factory<span class="accent">:</span><br>
-      <span class="serif">Opportunity Audit</span>
-    </h1>
-    <p class="lede reveal reveal-d2">
-      Setting my own appreciation of the tool aside and looking at Sight Reading Factory through the lens of an Educational Venture Analyst, the question this report focuses on is whether that classroom potential translates into investment potential.
-    </p>
-    <div class="meta-chips reveal reveal-d2">
-      <span class="meta-chip">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-        8 min read
-      </span>
-      <span class="meta-chip">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-        Data-driven
-      </span>
-      <span class="meta-chip">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><path d="M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9c2.39 0 4.68.94 6.36 2.64"/></svg>
-        Conditional Investment Interest
-      </span>
-    </div>
-  
-  </div>
-  </div>
-</section>
+    <section id="hero">
+        <img class="hero-bg" src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=1600&q=80" alt="Brass trumpet valves in dramatic chiaroscuro lighting" />
+        <div class="hero-overlay"></div>
+        <div class="hero-glow"></div>
+        <div class="container hero-content">
+            <div class="pitch-label reveal">
+                <span class="pulse"></span>
+                ETEC 522 · Analyst Report
+            </div>
+            <h1 class="reveal reveal-d1">
+                Sight Reading Factory<span class="accent">:</span><br>
+                <span class="serif">Opportunity Audit</span>
+            </h1>
+            <p class="lede reveal reveal-d2">
+                Looking at Sight Reading Factory through the lens of an Educational Venture Analyst.
+            </p>
+        </div>
+    </section>
 
-<div class="container stats-wrap">
-  <div class="stat-strip reveal">
-    <div class="stat"><div class="num">$45</div><div class="lbl">Yearly teacher plans with student access starting at $3 per student.</div></div>
-    <div class="stat"><div class="num">60+</div><div class="lbl">Instruments and voice types supported with range-specific generation.</div></div>
-    <div class="stat"><div class="num">90/100</div><div class="lbl">Durability score reflecting retention, integration, monetisation and marketability factors.</div></div>
-    <div class="stat"><div class="num">2–4 yrs</div><div class="lbl">Of strategic runway to leverage an established educational ecosystem ahead of generic AI tools.</div></div>
-  </div>
-</div>
+    <section id="rationale" class="section">
+        <div class="container">
+            <div class="section-label reveal">Rationale</div>
+            <h2 class="reveal reveal-d1">Why I Chose <span class="serif">Sight Reading Factory</span></h2>
+            <div class="body reveal reveal-d2">
+                <p>As a music educator, I've always placed a high value on music literacy in my teaching. The ability to read notation and hear or play a set of chord changes, a melody, or an individual part you've never seen before is an essential curriculum competency in music education. I chose to analyze this venture because the tension between a single-skill tool and a coming wave of generative AI competitors is one of the questions investors are asking across learning technology right now, not just in music. Setting my own appreciation of the tool aside, I aim to critically examine Sight Reading Factory through the lens of an Educational Venture Analyst in order to report and assess whether classroom potential translates into investment potential and whether this technology can maintain its market edge in the future.</p>
+            </div>
+        </div>
+    </section>
 
-<section id="rationale" class="section">
-  <div class="container">
-    <div class="section-label reveal">Rationale</div>
-    <h2 class="reveal reveal-d1">Why I Chose <span class="serif">Sight Reading Factory</span></h2>
-    <div class="body reveal reveal-d2">
-<p>As a music educator, I've always placed a high value on music literacy in my teaching. The ability to read notation and hear or play a set of chord changes, a melody, or an individual part you've never seen before is an essential curriculum competency in music education. I chose to analyze this venture because I see future potential for this kind of technology in the classroom from an investment standpoint. Setting my own appreciation of the tool aside, I aim to critically examine <i>Sight Reading Factory</i> through the lens of an Educational Venture Analyst in order to report and assess whether classroom potential translates into investment potential and whether this technology can maintain its market edge in the future.</p>
-</div>
-  </div>
-</section>
+    <section id="market" class="section">
+        <div class="container">
+            <div class="section-label reveal">The Problem &amp; Product</div>
+            <h2 class="reveal reveal-d1">Sight-reading is a <span class="serif">difficult</span> skill.</h2>
+            <div class="body reveal reveal-d2">
+                <p>Learning to accurately play a piece of music you've never seen before is a challenge. It is a core competency within the BC music curriculum and a practiced fluency that applies across various musical contexts, such as playing in an ensemble, learning a new piece, or auditioning for a part.</p>
+            </div>
+            <div class="duo reveal">
+                <div class="card problem">
+                    <div class="tag">The Problem</div>
+                    <h3>Hard to practice individually or in a group; requires large amounts of material.</h3>
+                    <p>This skill is hard to practice, whether in a group or individually, because the moment a piece of music has been seen or played, it is no longer sight-reading. This means music directors and educators constantly need a fresh supply of level-appropriate, instrument-specific material for their students.</p>
+                </div>
+                <div class="card solution" id="product">
+                    <div class="tag">The Product</div>
+                    <h3>Unlimited, customizable exercises.</h3>
+                    <p>Sight Reading Factory generates unlimited, customizable exercises for dozens of instruments, featuring a rhythm-only mode, microphone-based auto-assessment, and multiple progressive difficulty levels.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<section id="market" class="section">
-  <div class="container">
-    <div class="section-label reveal">The Problem &amp; Product</div>
-    <h2 class="reveal reveal-d1">Sight-reading is a <span class="serif">difficult</span> skill.</h2>
-    <div class="body reveal reveal-sic curriculum and is tested constantly, in ensembles, competitions, auditions, and juries.</p>
-    </div>d2">
-<p>Learning to accurately play a piece of music you've never seen before is a challenge. It is a core competency within the BC music curriculum and a practiced fluency that applies across various musical contexts, such as playing in an ensemble, learning a new piece, or auditioning for a part.</p>    <div class="duo reveal">
-     <div class="card problem">
-  <div class="tag">The Problem</div>
-<h3>Hard to practice individually or in a group; requires large amounts of material.</h3>
-  <p>This skill is hard to practice, whether in a group or individually, because the moment a piece of music has been seen or played, it is no longer sight-reading. This means music directors and educators constantly need a fresh supply of level-appropriate, instrument-specific material for their students.</p>
-</div>
+    <div class="img-break-full reveal">
+        <img src="https://images.unsplash.com/photo-1465821185615-20b3c2fbf41b?w=1600&q=80" alt="Sheet music and piano keys in warm light" loading="lazy" />
+        <div class="overlay-top"></div>
+        <div class="overlay"></div>
+    </div>
+    <section id="product-eval" class="section" style="border-top: 1px solid var(--border);">
+        <div class="container">
+            <div class="section-label reveal">Product Evaluation</div>
+            <h2 class="reveal reveal-d1">Built to practice <span class="serif">reading</span>.</h2>
+            <div class="body reveal reveal-d2" style="margin-bottom: 8px;">
+                <p>Sight Reading Factory is built for short but focused practice sessions. The interface is simple: pick your parameters, hit generate, and get a fresh exercise in seconds. Whether displaying it in front of a class or assigning practice material for students, integrating SRF as part of a daily routine can be useful for cultivating strong music literacy skills among students.</p>
+            </div>
+            <div class="product-showcase reveal">
+                <div class="product-card">
+                    <div class="img-wrap">
+                        <img src="https://static.sightreadingfactory.com/assets/images/blog/09179d33596840fae1a0a7f5b5c90916-rhythm-only.png" alt="Sight Reading Factory rhythm-only exercise mode" loading="lazy" />
+                    </div>
+                    <div class="pc-body">
+                        <div class="pc-tag">Rhythm-Only Mode</div>
+                        <div class="pc-title">Isolate rhythm from pitch</div>
+                        <div class="pc-desc">Focus solely on reading rhythms to help build and evaluate rhythmic accuracy.</div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="img-wrap">
+                        <img src="https://static.sightreadingfactory.com/assets/images/blog/25398ebaae32029220b742871cefdf2c-customRhythms.png" alt="Sight Reading Factory custom rhythm parameters menu" loading="lazy" />
+                    </div>
+                    <div class="pc-body">
+                        <div class="pc-tag">Custom Parameters</div>
+                        <div class="pc-title">Dial in exactly what each student should practice</div>
+                        <div class="pc-desc">Set the time signature, key signature, pitch range, rhythmic complexity, interval sizes, and measure count for any exercise, student, or ensemble.</div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="img-wrap">
+                        <img src="https://i.imgur.com/tyJEjoX.png" alt="Sight Reading Factory auto-assessment singer feedback screen" loading="lazy" />
+                    </div>
+                    <div class="pc-body">
+                        <div class="pc-tag">Auto-Assessment Mode</div>
+                        <div class="pc-title">Real-time pitch assessment for singers</div>
+                        <div class="pc-desc">SRF gives vocalists algorithmic evaluation on correct notes, rhythms, intonation, and other user-specific performance data.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="review" class="section">
+        <div class="container">
+            <div class="section-label reveal">Educator Reviews</div>
+            <h2 class="reveal reveal-d1">Two educators' <span class="serif">assessments</span> of the tool.</h2>
+            <div class="body reveal reveal-d2" style="margin-bottom: 8px;">
+                <p>I also looked at two educators' assessments of the tool, one from a traditional instrumental angle and one from the platform's auto-assessment feature for singers to see what they had to say:</p>
+            </div>
+            <div class="testimonial reveal reveal-d2">
+                <div class="t-avatar">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRktbkVM7du1lYmIxr-mli9epgdd7A02t4tVQ&s" alt="Brian Garland, trumpet instructor and music educator" loading="lazy" />
+                </div>
+                <div class="t-content">
+                    <div class="t-stars">
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    </div>
+                    <blockquote>"Just a few minutes each lesson, better yet a few minutes each day will totally turn around your players and get them getting the scores they want but more importantly get them to be better musicians."</blockquote>
+                    <div class="t-author">
+                        <div class="t-name">Brian Garland</div>
+                        <div class="t-role">Trumpet Instructor &amp; Music Educator</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial reveal reveal-d2">
+                <div class="t-avatar">
+                    <img src="https://i.imgur.com/tyJEjoX.png" alt="Sight Reading Factory auto-assessment singer review screenshot" loading="lazy" />
+                </div>
+                <div class="t-content">
+                    <div class="t-stars">
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    </div>
+                    <blockquote>"The tool's purpose isn't just to tell you if you are 'right or wrong,' but to empower you with the feedback necessary to improve through consistent, independent practice."</blockquote>
+                    <div class="t-author">
+                        <div class="t-name">Phillip Fullerton</div>
+                        <div class="t-role">Piano &amp; Voice with Phillip</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="section">
+        <div class="container">
+            <div class="section-label reveal">Pricing</div>
+            <h2 class="reveal reveal-d1">Pricing lower than <span class="serif">method books</span>.</h2>
+            <div class="body reveal reveal-d2" style="margin-bottom: 8px;">
+                <p>The product offers subscription-based pricing lower than the cost of a traditional method book. Structuring the bulk of the fees around the teacher with a smaller per-student cost provides educational decision-makers flexibility in how this technology can be implemented across different levels (district-wide, per teacher, or by individual classes), giving flexible entry point opportunities for clients from an EVA's standpoint.</p>
+            </div>
+            <div class="pricing-grid reveal">
+                <div class="price-card">
+                    <div class="pc-type">Teacher</div>
+                    <div class="pc-price">$45</div>
+                    <div class="pc-unit">per year</div>
+                </div>
+                <div class="price-card">
+                    <div class="pc-type">Student (Base fee)</div>
+                    <div class="pc-price">$3</div>
+                    <div class="pc-unit">per year</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="section" id="thesis-anchor">
+        <div class="container">
+            <div class="section-label reveal">Present and Future Markets</div>
+            <div class="thesis reveal reveal-d1">
+                <span class="quote-mark">"</span>
+                <p>Will investors see value in a single-skill tool like Sight Reading Factory in the face of upcoming generative AI tools and shifting market changes within the music education technology industry?</p>
+            </div>
+            <div class="body reveal reveal-d2" style="margin-top: 32px;">
+                <p>Right now, my instinct tells me that it is a safe bet for investment, but only for a limited time. SRF's narrow focus on sight-reading is one of the protective market forces shielding it, as it isolates a real-time performative skill. While this market protection won't last forever, SRF will be able to hold its own as long as competitor markets fail to deliver an equally streamlined classroom alternative. Ultimately, the critical consideration here for an investor isn't whether SRF works today, but how the company can leverage its captured markets to out-innovate generic AI competitors.</p>
+                <p style="margin-top:16px;">With the rise of groups working on next-generation, web-optimized open standards for computer-readable music notation formats (such as the W3C's MNX standard), exponential developments are in the pipeline for the future of Large Language Models trained natively on composed musical works. This shift will inevitably lower the barrier to entry for automated, algorithmic notation generation technologies, thereby potentially shrinking SRF's competitive window to a 2-to-4-year window if future product growth isn't orchestrated to align these emerging technological developments with their current market control.</p>
+            </div>
+        </div>
+    </section>
 
-<div class="card solution" id="product">
-  <div class="tag">The Product</div>
-  <h3>Unlimited, customizable exercises.</h3>
-  <p>Sight Reading Factory generates unlimited, customizable exercises for dozens of instruments, featuring a rhythm-only mode, microphone-based auto-assessment, and multiple progressive difficulty levels.</p>
-</div>
-    </div>
-  </div>
-</section>
+    <section class="section">
+        <div class="container">
+            <div class="section-label reveal">The Context Gap &amp; Future Horizons</div>
+            <h2 class="reveal reveal-d1">Real-world value among <span class="serif">shifting markets</span>.</h2>
+            <div class="body reveal reveal-d2">
+                <p>While it currently leads its market niche, SRF has the clear potential to grow horizontally alongside future AI market disruptions. By shifting focus toward internal rehearsals and classroom sessions, the platform could contextualize its algorithmically generated repertoire to align directly with the specific musical works and skills students are tackling in class. From an investment perspective, there is immense market potential in integrating concepts from distinct jazz standard chord progressions directly into the generated notation, or designing targeted algorithmic sight-reading practice based on the unique structural characteristics of the repertoire an ensemble is actively working on.</p>
+            </div>
 
-<div class="img-break-full reveal">
-  <img src="https://images.unsplash.com/photo-1465821185615-20b3c2fbf41b?w=1600&q=80" alt="Sheet music and piano keys in warm light" loading="lazy" />
-  <div class="overlay-top"></div>
-  <div class="overlay"></div>
-</div>
-<section id="product-eval" class="section" style="border-top: 1px solid var(--border);">
-  <div class="container">
-    <div class="section-label reveal">Product Evaluation</div>
-    <h2 class="reveal reveal-d1">Built to practice <span class="serif">reading</span>.</h2>
-    <div class="body reveal reveal-d2" style="margin-bottom: 8px;">
-      <p>Sight Reading Factory is built for short but focused practice sessions. The interface is simple: pick your parameters, hit generate, and get a fresh exercise in seconds. Whether displaying it in front of a class or assigning practice material for students, integrating SRF as part of a daily routine can be useful for cultivating strong music literacy skills among students.</p>
-    </div>
-    <div class="product-showcase reveal">
-      <div class="product-card">
-        <div class="img-wrap">
-          <img src="https://static.sightreadingfactory.com/assets/images/blog/09179d33596840fae1a0a7f5b5c90916-rhythm-only.png" alt="Sight Reading Factory rhythm-only exercise mode" loading="lazy" />
-        </div>
-        <div class="pc-body">
-          <div class="pc-tag">Rhythm-Only Mode</div>
-          <div class="pc-title">Isolate rhythm from pitch</div>
-          <div class="pc-desc">Focuses solely on reading rhythms to help build and evaluate rhythmic accuracy.</div>
-        </div>
-      </div>
-      <div class="product-card">
-        <div class="img-wrap">
-          <img src="https://static.sightreadingfactory.com/assets/images/blog/25398ebaae32029220b742871cefdf2c-customRhythms.png" alt="Sight Reading Factory custom rhythm parameters menu" loading="lazy" />
-        </div>
-        <div class="pc-body">
-          <div class="pc-tag">Custom Parameters</div>
-          <div class="pc-title">Dial in exactly what each student should practice</div>
-          <div class="pc-desc">You can set the time signature, key signature, pitch range, rhythmic complexity, interval sizes, and measure count for any exercise, student, or ensemble.</div>
-        </div>
-      </div>
-      <div class="product-card">
-        <div class="img-wrap">
-          <img src="https://i.imgur.com/tyJEjoX.png" alt="Sight Reading Factory auto-assessment singer feedback screen" loading="lazy" />
-        </div>
-        <div class="pc-body">
-          <div class="pc-tag">Auto-Assessment Mode</div>
-          <div class="pc-title">Real-time pitch assessment for singers</div>
-          <div class="pc-desc">Featuring real-time auto-assessment for singers, SRF provides vocalists algorithmic evaluation on correct notes, rhythms, intonation, and other user-specific performance data.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-<section id="review" class="section">
-  <div class="container">
-    <div class="section-label reveal">Educator Reviews</div>
-    <h2 class="reveal reveal-d1">Two educators' <span class="serif">assessments</span> of the tool.</h2>
-    <div class="body reveal reveal-d2" style="margin-bottom: 8px;">
-      <p>I also looked at two educators' assessments of the tool, one from a traditional instrumental angle and one from the platform's auto-assessment feature for singers to see what they had to say:</p>
-    </div>
-    <div class="testimonial reveal reveal-d2">
-      <div class="t-avatar">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRktbkVM7du1lYmIxr-mli9epgdd7A02t4tVQ&s" alt="Brian Garland, trumpet instructor and music educator" loading="lazy" />
-      </div>
-      <div class="t-content">
-        <div class="t-stars">
-          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        </div>
-        <blockquote>"Just a few minutes each lesson, better yet a few minutes each day will totally turn around your players and get them getting the scores they want but more importantly get them to be better musicians."</blockquote>
-        <div class="t-author">
-          <div class="t-name">Brian Garland</div>
-          <div class="t-role">Trumpet Instructor &amp; Music Educator · <a href="https://www.youtube.com/watch?v=gJC78WWLXfo" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:underline;text-underline-offset:3px;">YouTube Video Transcript (2020, 14:07–14:16)</a></div>
-        </div>
-      </div>
-    </div>
-    <div class="testimonial reveal reveal-d2">
-      <div class="t-avatar">
-        <img src="https://i.imgur.com/tyJEjoX.png" alt="Sight Reading Factory auto-assessment singer review screenshot" loading="lazy" />
-      </div>
-      <div class="t-content">
-        <div class="t-stars">
-          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        </div>
-        <blockquote>"The tool's purpose isn't just to tell you if you are 'right or wrong,' but to empower you with the feedback necessary to improve through consistent, independent practice."</blockquote>
-        <div class="t-author">
-          <div class="t-name">Phillip Fullerton</div>
-          <div class="t-role">Piano &amp; Voice with Phillip · <a href="https://www.youtube.com/watch?v=WPYH7AirWU8" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:underline;text-underline-offset:3px;">YouTube Video Transcript (2023, 5:32–5:45)</a></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-<section class="section">
-  <div class="container">
-    <div class="section-label reveal">Pricing</div>
-    <h2 class="reveal reveal-d1">Pricing lower than <span class="serif">method books</span>.</h2>
-    <div class="body reveal reveal-d2" style="margin-bottom: 8px;">
-      <p>The product offers subscription-based pricing lower than the cost of a traditional method book. Structuring the bulk of the fees around the teacher with a smaller per-student cost provides educational decision-makers flexibility in how this technology can be implemented across different levels (district-wide, per teacher, or by individual classes), giving flexible entry point opportunities for clients from an EVA's standpoint.</p>
-    </div>
-    <div class="pricing-grid reveal">
-      <div class="price-card">
-        <div class="pc-type">Teacher</div>
-        <div class="pc-price">$45</div>
-        <div class="pc-unit">per year</div>
-      </div>
-      <div class="price-card">
-        <div class="pc-type">Student (Base fee)</div>
-        <div class="pc-price">$3</div>
-        <div class="pc-unit">per year</div>
-      </div>
-    </div>
-  </div>
-</section>
-<section class="section" id="thesis-anchor">
-  <div class="container">
-    <div class="section-label reveal">Present and Future Markets</div>
-    <div class="thesis reveal reveal-d1">
-      <span class="quote-mark">"</span>
-      <p>Will investors see value in a single-skill tool like Sight Reading Factory in the face of upcoming generative AI tools and shifting market changes within the music education technology industry?</p>
-    </div>
-    <div class="body reveal reveal-d2" style="margin-top: 32px;">
-      <p>Right now, my instinct tells me that it is a safe bet for investment, but only for a limited time. SRF's narrow focus on sight-reading is one of the protective market forces shielding it, as it isolates a real-time performative skill. While this market protection won't last forever, SRF will be able to hold its own as long as competitor markets fail to deliver an equally streamlined classroom alternative. Ultimately, the critical consideration here for an investor isn't whether SRF works today, but how the company can leverage its captured markets to out-innovate generic AI competitors.</p>
-      <p style="margin-top:16px;">With the rise of groups working on next-generation, web-optimized open standards for computer-readable music notation formats (such as the W3C's MNX standard), exponential developments are in the pipeline for the future of Large Language Models trained natively on composed musical works. This shift will inevitably lower the barrier to entry for automated, algorithmic notation generation technologies, thereby potentially shrinking SRF's competitive window to a 2-to-4-year window if future product growth isn't orchestrated to align these emerging technological developments with their current market control.</p>
-    </div>
-  </div>
-</section>
+            <div style="margin-top: 56px;">
+                <div class="section-label reveal">Disruption Timeline</div>
+                <div class="timeline">
+                    <div class="tl-item reveal">
+                        <div class="tl-dot"></div>
+                        <div class="tl-year">Year 1-2</div>
+                        <div class="tl-title">Market Standards &amp; Protection</div>
+                        <div class="tl-desc">SRF's market hold is secured by over a decade of industry trust. Meanwhile, web-optimized open notation standards (like W3C's MNX) grow, laying the data groundwork for the advancement of computer-readable music notation.</div>
+                    </div>
 
-<section class="section">
-  <div class="container">
-    <div class="section-label reveal">The Context Gap &amp; Future Horizons</div>
-    <h2 class="reveal reveal-d1">Real-world value among <span class="serif">shifting markets</span>.</h2>
-    <div class="body reveal reveal-d2">
-      <p>While it currently leads its market niche, SRF has the clear potential to grow horizontally alongside future AI market disruptions. By shifting focus toward internal rehearsals and classroom sessions, the platform could contextualize its algorithmically generated repertoire to align directly with the specific musical works and skills students are tackling in class. From an investment perspective, there is immense market potential in integrating concepts from distinct jazz standard chord progressions directly into the generated notation, or designing targeted algorithmic sight-reading practice based on the unique structural characteristics of the repertoire an ensemble is actively working on.</p>
-    </div>
-    
-    <div style="margin-top: 56px;">
-      <div class="section-label reveal">Disruption Timeline</div>
-      <div class="timeline">
-        <div class="tl-item reveal">
-          <div class="tl-dot"></div>
-          <div class="tl-year">Year 1-2</div>
-          <div class="tl-title">Market Standards &amp; Protection</div>
-          <div class="tl-desc">SRF's market hold is secured by over a decade of industry trust. Meanwhile, web-optimized open notation standards (like W3C's MNX) grow, laying the data groundwork for the advancement of computer-readable music notation.</div>
+                    <div class="tl-item reveal">
+                        <div class="tl-dot"></div>
+                        <div class="tl-year">Years 2 to 3</div>
+                        <div class="tl-title">Turning the Page</div>
+                        <div class="tl-desc">As new AI music education competitors emerge, innovation in the market will depend heavily on advanced model training. Having existing market share and strong community trust within the sight-reading space offers massive potential to accelerate horizontal product growth in whatever direction users and technology move next.</div>
+                    </div>
+
+                    <div class="tl-item reveal">
+                        <div class="tl-dot"></div>
+                        <div class="tl-year">Years 3 to 4</div>
+                        <div class="tl-title">Play the Market</div>
+                        <div class="tl-desc">As competitors bundle generative notation tools into existing ecosystems, SRF may face disruptive market compression. To transcend these generic sight-reading tools, growth depends on leveraging user credibility to develop personalized algorithmic alignments that seamlessly contextualize the active classroom repertoire for individual students or ensembles.</div>
+                    </div>
+
+                    <div class="tl-item reveal">
+                        <div class="tl-dot"></div>
+                        <div class="tl-year">Year 4+</div>
+                        <div class="tl-title">Re-assess Investment</div>
+                        <div class="tl-desc">If SRF has not expanded horizontally or leveraged its captured market to out-innovate generic AI platforms during this time, SRF may lose its competitive edge to other technologies. A reassessment of SRF's role in the music education technology market after this time becomes paramount.</div>
+                    </div>
+                </div>
+            </div>
+
         </div>
-        
-        <div class="tl-item reveal">
-          <div class="tl-dot"></div>
-          <div class="tl-year">Years 2 to 3</div>
-          <div class="tl-title">Turning the Page</div>
-          <div class="tl-desc">As new AI music education competitors emerge, innovation in the market will depend heavily on advanced model training. Having existing market share and strong community trust within the sight-reading space offers massive potential to accelerate horizontal product growth in whatever direction users and technology move next.</div>
+    </section>
+
+    <section id="recommendation" class="section">
+        <div class="container">
+            <div class="section-label reveal">EVA Recommendation</div>
+            <h2 class="reveal reveal-d1">Here's how I score <span class="serif">Sight Reading Factory</span>.</h2>
+            <p class="body reveal reveal-d2" style="margin-bottom: 24px;">Pulling the market and competitive picture above into a single framework, here's how each factor scores on its own and where the real risk concentrates.</p>
+            <div class="radar-wrap reveal">
+                <svg class="radar-svg" viewBox="0 0 320 320" id="radarChart"></svg>
+                <div class="radar-legend" id="radarLegend"></div>
+            </div>
+            <div class="score-grid reveal" id="scoreGrid"></div>
         </div>
-        
-        <div class="tl-item reveal">
-          <div class="tl-dot"></div>
-          <div class="tl-year">Years 3 to 4</div>
-          <div class="tl-title">Play the Market</div>
-          <div class="tl-desc">As competitors bundle generative notation tools into existing ecosystems, SRF may face disruptive market compression. To transcend these generic sight-reading tools, growth depends on leveraging user credibility to develop personalized algorithmic alignments that seamlessly contextualize the active classroom repertoire for individual students or ensembles.</div>
+    </section>
+    <section class="section" style="border-top: none; padding-top: 0;">
+        <div class="container">
+            <div class="section-label reveal">Investor Lens</div>
+            <h2 class="reveal reveal-d1">My advice depends on <span class="serif">who's</span> asking.</h2>
+            <div class="lens-grid reveal reveal-d2">
+                <div class="lens-card pass">
+                    <div class="who">For a Superintendent</div>
+                    <div class="verdict">Pass</div>
+                    <p class="desc">Pricing fits a typical budget cycle, but that's not the real test. A license across the whole district only works if individual teachers choose to use it, and that adoption is never guaranteed just because the tool is available.</p>
+                </div>
+                <div class="lens-card skip">
+                    <div class="who">For a Venture Capitalist</div>
+                    <div class="verdict">Pass</div>
+                    <p class="desc">The market here is real, but it's small, the team is unfunded and private, and there's no sign of ambition at venture scale. This isn't a venture play.</p>
+                </div>
+                <div class="lens-card interest">
+                    <div class="who">For a Foundation / Grant Funder</div>
+                    <div class="verdict">Conditional Interest</div>
+                    <p class="desc">While the evidence gap between scholarly research and real world potential is an interest aspect, an efficacy study spanning multiple districts and several years is what is missing. That's the opportunity here, not a financial return.</p>
+                </div>
+            </div>
         </div>
-        
-        <div class="tl-item reveal">
-          <div class="tl-dot"></div>
-          <div class="tl-year">Year 4+</div>
-          <div class="tl-title">Re-assess Investment</div>
-          <div class="tl-desc">If SRF has not expanded horizontally or leveraged its captured market to out-innovate generic AI platforms during this time, SRF may lose its competitive edge to other technologies. A reassessment of SRF's role in the music education technology market after this time becomes paramount.</div>
+    </section>
+
+    <section id="reflections" class="section">
+        <div class="container">
+            <div class="section-label reveal">Reflections</div>
+            <h2 class="reveal reveal-d1">AI Usage <span class="serif">Disclaimer</span></h2>
+            <div class="ai-card reveal reveal-d1">
+                <div class="ai-tag">AI Use Statement</div>
+                <h3>How AI Supported This Analysis</h3>
+                <p>This report was developed with help from generative AI tooling. Base44 was used to help establish boilerplate HTML/CSS/JS and the overarching visual structure. Claude (Anthropic, Sonnet 4.6) and Gemini (3.5 Flash) were used to debug and format sections of the code within a local coding environment. AI was used to help structure the visual timeline and scoring diagram of the competitive analysis framework. The final wording reflects my own thoughts and opinions, tailored to fit an investor audience analyst report format. Every factual claim, including pricing, market stats, and product features, has been verified against primary sources. The analytical forecast, EVA ratings, and investment recommendations represent my own professional judgment and research.</p>
+            </div>
+            <div class="ai-card reveal reveal-d2">
+                <div class="ai-tag">Reflection on the EVA Process</div>
+                <h3>Reflection</h3>
+                <p>Looking at SRF as an investment rather than just a product changed the questions I was asking about the technology. I found myself weighing forces like market durability, competitive pressure, user base size, and the risk of outside disruption, rather than just whether the tool worked well in a classroom.</p>
+                <p style="margin-top:16px;">As an EVA, one insight that worked in SRF's favor was how it could double as both an informal practice tool and a formal way to capture learning data straight from students as they use it. While a back end analytics layer may be a real advantage for music educators, the question remains: is that edge defensible, or will a feature like that eventually become a standard for competitors to integrate into their own platform.</p>
+            </div>
         </div>
-      </div>
-    </div>
-    
-  </div>
-</section>
-
-<section id="recommendation" class="section">
-  <div class="container">
-    <div class="section-label reveal">EVA Recommendation</div>
-    <h2 class="reveal reveal-d1">Here's how I score <span class="serif">Sight Reading Factory</span>.</h2>
-    <p class="body reveal reveal-d2" style="margin-bottom: 24px;">Pulling the market and competitive picture above into a single framework, here's how each factor scores on its own and where the real risk concentrates. Click any row to expand the analytical breakdown behind each rating.</p>
-    <div class="radar-wrap reveal">
-      <svg class="radar-svg" viewBox="0 0 320 320" id="radarChart"></svg>
-      <div class="radar-legend" id="radarLegend"></div>
-    </div>
-    <div class="score-grid reveal" id="scoreGrid"></div>
-  </div>
-</section>
-<section class="section" style="border-top: none; padding-top: 0;">
-  <div class="container">
-<div class="section-label reveal">Investor Lens</div>
-<h2 class="reveal reveal-d1">My advice depends on <span class="serif">who's</span> asking.</h2>
-<div class="lens-grid reveal reveal-d2">
-<div class="lens-card pass">
-<div class="who">For a Superintendent</div>
-<div class="verdict">Pass</div>
-<p class="desc">Pricing fits a typical budget cycle, but that's not the real test. A license across the whole district only works if individual teachers choose to use it, and that adoption is never guaranteed just because the tool is available.</p>
-</div>
-<div class="lens-card skip">
-<div class="who">For a Venture Capitalist</div>
-<div class="verdict">Pass</div>
-<p class="desc">The market here is real, but it's small, the team is unfunded and private, and there's no sign of ambition at venture scale. This isn't a venture play.</p>
-</div>
-<div class="lens-card interest">
-<div class="who">For a Foundation / Grant Funder</div>
-<div class="verdict">Conditional Interest</div>
-<p class="desc">The evidence gap between scholarly research and real world potential is exactly what makes this worth funding. An efficacy study spanning multiple districts and several years is exactly what the field is missing. That's the opportunity here, not a financial return.</p>
-</div>
-</div>
-</div>
-</section>
-
-<section id="reflections" class="section">
-  <div class="container">
-    <div class="section-label reveal">Reflections</div>
-    <h2 class="reveal reveal-d1">AI usage <span class="serif"> disclaimer</span>.</h2>
-<div class="ai-card reveal reveal-d1">
-      <div class="ai-tag">AI Use Statement</div>
-<h3>How AI Supported This Analysis</h3>
-<p>This report was developed with help from generative AI tooling. Base44 was used to help establish boilerplate HTML/CSS/JS and the overarching visual structure. Claude (Anthropic, Sonnet 4.6) and Gemini (3.5 Flash) were used to debug and format sections of the code within a local coding environment. AI was used to help structure the visual timeline and scoring diagram of the competitive analysis framework. The final wording reflects my own thoughts and opinions, tailored to fit an investor audience analyst report format. Every factual claim, including pricing, market stats, and product features, has been verified against primary sources. The analytical forecast, EVA ratings, and investment recommendations represent my own professional judgment and research.</p>
-</div>
-<div class="ai-card reveal reveal-d2">
-<div class="ai-tag">Reflection on the EVA Process</div>
-<h3>Thinking about the Investor</h3>
-<p>Looking at SRF as an investment rather than just a product changed the questions I was asking about the technology. I found myself weighing forces like market durability, competitive pressure, user base size, and the risk of outside disruption, rather than just whether the tool worked well in a classroom.</p>
-<p style="margin-top:16px;">As an EVA, one insight that worked in SRF's favor was how it could double as both an informal practice tool and a formal way to capture learning data straight from students as they use it. While a back end analytics layer may be a real advantage for music educators, the question remains: is that edge defensible, or will a feature like that eventually become a standard for competitors to integrate into their own platform.</p>
-</div>
-</section>
-<section id="references" class="section">
-  <div class="container">
-<div class="section-label reveal">References &amp; Sources</div>
-<div class="ref-list reveal reveal-d1">
-<div class="ref-item">
-<div class="ref-num">01</div>
-<div class="ref-content">
-<div class="ref-type">Peer-Reviewed Journal</div>
-<p>Bovin, A. J. (2018). The effects of frequent use of a web-based sight-reading software on eighth graders' music notational literacy. <em>Journal of Music, Technology &amp; Education, 11</em>(2), 131–147. <a href="https://doi.org/10.1386/jmte.11.2.131_1" target="_blank" rel="noopener">doi.org/10.1386/jmte.11.2.131_1</a></p>
-</div>
-</div>
-<div class="ref-item">
-<div class="ref-num">02</div>
-<div class="ref-content">
-<div class="ref-type">Government Curriculum</div>
-<p>British Columbia Ministry of Education and Child Care. (2024). <em>Arts Education curriculum.</em> <a href="https://curriculum.gov.bc.ca/curriculum/arts-education" target="_blank" rel="noopener">curriculum.gov.bc.ca/curriculum/arts-education</a></p>
-</div>
-</div>
-<div class="ref-item">
-<div class="ref-num">03</div>
-<div class="ref-content">
-<div class="ref-type">Video Review</div>
-<p>Garland, B. (2021, March 8). <em>CA Review of SightreadingFactory.com.</em> YouTube. <a href="https://www.youtube.com/watch?v=gJC78WWLXfo" target="_blank" rel="noopener">youtube.com/watch?v=gJC78WWLXfo</a></p>
-</div>
-</div>
-<div class="ref-item">
-<div class="ref-num">04</div>
-<div class="ref-content">
-<div class="ref-type">Competitor Reference</div>
-<p>MakeMusic. (2024). <em>SmartMusic — Music Practice &amp; Assessment Platform.</em> <a href="https://www.smartmusic.com/" target="_blank" rel="noopener">smartmusic.com</a></p>
-</div>
-</div>
-<div class="ref-item">
-<div class="ref-num">05</div>
-<div class="ref-content">
-<div class="ref-type">Industry Association</div>
-<p>National Association for Music Education (NAfME). (2024). <em>National standards, advocacy resources, and enrollment data.</em> <a href="https://nafme.org/" target="_blank" rel="noopener">nafme.org</a></p>
-</div>
-</div>
-<div class="ref-item">
-<div class="ref-num">06</div>
-<div class="ref-content">
-<div class="ref-type">Video Review</div>
-<p>Piano &amp; Vocal Instructor. (2024, September 5). <em>Sight Reading Site Review - Sight Reading Factory.</em> YouTube. <a href="https://www.youtube.com/watch?v=WPYH7AirWU8" target="_blank" rel="noopener">youtube.com/watch?v=WPYH7AirWU8</a></p>
-</div>
-</div>
-<div class="ref-item">
-<div class="ref-num">07</div>
-<div class="ref-content">
-<div class="ref-type">Primary Source</div>
-<p>Sight Reading Factory. (2024). <em>Sight Reading Factory — Music Sight-Reading Practice.</em> <a href="https://www.sightreadingfactory.com/" target="_blank" rel="noopener">sightreadingfactory.com</a></p>
-</div>
-</div>
-</div>
-</div>
-</section>
-
-<footer>
-  <div class="container">
-    <div class="inner">
-      <div>
-        <p><b>Sight Reading Factory</b> · Educational Venture Analysis</p>
-        <p>ETEC 522 · Jeremy Sheeshka</p>
-        <div class="refs">
-          <a href="https://www.sightreadingfactory.com/" target="_blank" rel="noopener">SRF</a>
-          <a href="https://www.smartmusic.com/" target="_blank" rel="noopener">SmartMusic</a>
-          <a href="https://nafme.org/" target="_blank" rel="noopener">NAfME</a>
-          <a href="https://www.youtube.com/watch?v=gJC78WWLXfo" target="_blank" rel="noopener">Review 1 (Garland)</a>
-          <a href="https://www.youtube.com/watch?v=WPYH7AirWU8" target="_blank" rel="noopener">Review 2 (Auto-Assessment)</a>
+    </section>
+    <section id="references" class="section">
+        <div class="container">
+            <div class="section-label reveal">References &amp; Sources</div>
+            <div class="ref-list reveal reveal-d1">
+                <div class="ref-item">
+                    <div class="ref-num">01</div>
+                    <div class="ref-content">
+                        <div class="ref-type">Peer-Reviewed Journal</div>
+                        <p>Bovin, A. J. (2018). The effects of frequent use of a web-based sight-reading software on eighth graders' music notational literacy. <em>Journal of Music, Technology &amp; Education, 11</em>(2), 131-147. <a href="https://doi.org/10.1386/jmte.11.2.131_1" target="_blank" rel="noopener">doi.org/10.1386/jmte.11.2.131_1</a></p>
+                    </div>
+                </div>
+                <div class="ref-item">
+                    <div class="ref-num">02</div>
+                    <div class="ref-content">
+                        <div class="ref-type">Provincial Curriculum</div>
+                        <p>British Columbia Ministry of Education and Child Care. (2024). <em>Arts Education curriculum.</em> <a href="https://curriculum.gov.bc.ca/curriculum/arts-education" target="_blank" rel="noopener">curriculum.gov.bc.ca/curriculum/arts-education</a></p>
+                    </div>
+                </div>
+                <div class="ref-item">
+                    <div class="ref-num">03</div>
+                    <div class="ref-content">
+                        <div class="ref-type">Video Review</div>
+                        <p>Garland, B. (2021, March 8). <em>CA Review of SightreadingFactory.com.</em> YouTube. <a href="https://www.youtube.com/watch?v=gJC78WWLXfo" target="_blank" rel="noopener">youtube.com/watch?v=gJC78WWLXfo</a></p>
+                    </div>
+                </div>
+                <div class="ref-item">
+                    <div class="ref-num">04</div>
+                    <div class="ref-content">
+                        <div class="ref-type">Competitor Reference</div>
+                        <p>MakeMusic. (2024). <em>SmartMusic: Music Practice &amp; Assessment Platform.</em> <a href="https://www.smartmusic.com/" target="_blank" rel="noopener">smartmusic.com</a></p>
+                    </div>
+                </div>
+                <div class="ref-item">
+                    <div class="ref-num">05</div>
+                    <div class="ref-content">
+                        <div class="ref-type">Industry Association</div>
+                        <p>National Association for Music Education (NAfME). (2024). <em>National standards, advocacy resources, and enrollment data.</em> <a href="https://nafme.org/" target="_blank" rel="noopener">nafme.org</a></p>
+                    </div>
+                </div>
+                <div class="ref-item">
+                    <div class="ref-num">06</div>
+                    <div class="ref-content">
+                        <div class="ref-type">Video Review</div>
+                        <p>Piano &amp; Vocal Instructor. (2024, September 5). <em>Sight Reading Site Review - Sight Reading Factory.</em> YouTube. <a href="https://www.youtube.com/watch?v=WPYH7AirWU8" target="_blank" rel="noopener">youtube.com/watch?v=WPYH7AirWU8</a></p>
+                    </div>
+                </div>
+                <div class="ref-item">
+                    <div class="ref-num">07</div>
+                    <div class="ref-content">
+                        <div class="ref-type">Primary Source</div>
+                        <p>Sight Reading Factory. (2024). <em>Sight Reading Factory: Music Sight-Reading Practice.</em> <a href="https://www.sightreadingfactory.com/" target="_blank" rel="noopener">sightreadingfactory.com</a></p>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-      <div>
-        <p>Images: sightreadingfactory.com/blog</p>
-      </div>
-    </div>
-  </div>
-</footer>
+    </section>
 
-<button class="back-to-top" id="backToTop" aria-label="Back to top">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
-</button>
+    <footer>
+        <div class="container">
+            <div class="inner">
+                <div>
+                    <p><b>Analyst Report</b></p>
+                    <p>June 2026</p>
+                </div>
+            </div>
+        </div>
+    </footer>
 
-<script>
-(function() {
-  var themeToggle = document.getElementById('themeToggle');
-  var root = document.documentElement;
-  var savedTheme = 'dark';
-  try { savedTheme = localStorage.getItem('eva-pitch-theme') || 'dark'; } catch(e) {}
-  root.setAttribute('data-theme', savedTheme);
-  themeToggle.addEventListener('click', function() {
-    var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-    root.setAttribute('data-theme', next);
-    try { localStorage.setItem('eva-pitch-theme', next); } catch(e) {}
-  });
-  var mobileMenuBtn = document.getElementById('mobileMenuBtn');
-  var mobileNav = document.getElementById('mobileNav');
-  var mobileNavClose = document.getElementById('mobileNavClose');
-  mobileMenuBtn.addEventListener('click', function() { mobileNav.classList.add('open'); });
-  mobileNavClose.addEventListener('click', function() { mobileNav.classList.remove('open'); });
-  window.closeMobileNav = function() { mobileNav.classList.remove('open'); };
-  var progressBar = document.getElementById('progress-bar');
-  function updateProgress() {
-    var h = document.documentElement.scrollHeight - window.innerHeight;
-    progressBar.style.width = h > 0 ? (window.scrollY / h * 100) + '%' : '0%';
-  }
-  var navLinks = document.querySelectorAll('nav .nav-links a');
-  var sections = document.querySelectorAll('section[id]');
-  function setActive() {
-    var current = 'hero';
-    sections.forEach(function(s) { if (window.scrollY >= s.offsetTop - 140) current = s.id; });
-    navLinks.forEach(function(a) { a.classList.toggle('active', a.getAttribute('href') === '#' + current); });
-  }
-  var backToTop = document.getElementById('backToTop');
-  function handleBackToTop() { backToTop.classList.toggle('visible', window.scrollY > 600); }
-  backToTop.addEventListener('click', function() { window.scrollTo({ top: 0, behavior: 'smooth' }); });
-  function handleReveal() {
-    document.querySelectorAll('.reveal').forEach(function(el) {
-      var rect = el.getBoundingClientRect();
-      if (rect.top < window.innerHeight * 0.88) el.classList.add('visible');
-    });
-  }
-  window.addEventListener('scroll', function() { updateProgress(); setActive(); handleBackToTop(); handleReveal(); }, { passive: true });
-  handleReveal(); updateProgress(); setActive();
+    <button class="back-to-top" id="backToTop" aria-label="Back to top">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+    </button>
 
-var scoreData = [
-    { num: '01', label: 'Market durability', rating: 'Strong', cls: 'strong', score: 90, detail: 'As reading music literacy is part of the curriculum, SRF doesn\'t need to be sustained through marketing in order to remain competitive. There will always be a demand to teach sight reading more efficiently.' },
-    { num: '02', label: 'Competitive edge', rating: 'Fragile', cls: 'fragile', score: 60, detail: 'SRF scores 60 here. While it currently has leadership in the market, the underlying technology is not deeply proprietary and can be disrupted by external market forces or competition in the future.' },
-    { num: '03', label: 'Monetisation fit', rating: 'Good, with a catch', cls: 'fragile', score: 65, detail: 'Pricing undercuts the cost of a physical method book and fits comfortably within a fine arts budget. The catch is that most subscriptions belong to individual teachers rather than schools, so renewal isn\'t guaranteed.' },
-    { num: '04', label: 'Evidence of efficacy', rating: 'Emerging', cls: 'thin', score: 50, detail: 'A 2018 study by Bovin on the effects of frequent use of web-based sight-reading software found that SRF users gained notation literacy at a significantly higher rate than a control group. It\'s only one peer-reviewed study, but it gives the efficacy claims real data to stand on rather than just intuition.' },
-    { num: '05', label: 'Organisational risk', rating: 'Concentrated', cls: 'fragile', score: 50, detail: 'Being a small, privately held company, SRF doesn\'t publish much about its core team size or succession planning. That said, founder Don Crafton is fairly active on social media, regularly sharing updates on SRF\'s development, which offers some transparency the numbers alone don\'t.' },
-    { num: '06', label: 'Renewal risk', rating: 'Teacher dependent', cls: 'thin', score: 30, detail: 'Because subscriptions generally belong to individual teachers rather than schools, repeat subscriptions are contingent on educators continuing to use SRF rather than on any fixed institutional commitment.' },
-    { num: '07', label: 'AI disruption window', rating: '2 to 4 years', cls: 'fragile', score: 30, detail: 'The advantage SRF holds today won\'t last indefinitely as the underlying technology continues to advance. As computer-readable music notation tools become easier to build and train, competitors may likely be able to replicate or compete with SRF\'s current functionality.' }
-  ];
+    <script>
+        (function() {
+            var themeToggle = document.getElementById('themeToggle');
+            var root = document.documentElement;
+            var savedTheme = 'dark';
+            try { savedTheme = localStorage.getItem('eva-pitch-theme') || 'dark'; } catch (e) {}
+            root.setAttribute('data-theme', savedTheme);
+            themeToggle.addEventListener('click', function() {
+                var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+                root.setAttribute('data-theme', next);
+                try { localStorage.setItem('eva-pitch-theme', next); } catch (e) {}
+            });
+            var mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            var mobileNav = document.getElementById('mobileNav');
+            var mobileNavClose = document.getElementById('mobileNavClose');
+            mobileMenuBtn.addEventListener('click', function() { mobileNav.classList.add('open'); });
+            mobileNavClose.addEventListener('click', function() { mobileNav.classList.remove('open'); });
+            window.closeMobileNav = function() { mobileNav.classList.remove('open'); };
+            var progressBar = document.getElementById('progress-bar');
 
-  var scoreGrid = document.getElementById('scoreGrid');
-  scoreData.forEach(function(item, idx) {
-    var row = document.createElement('div');
-    row.className = 'score-row';
-    row.setAttribute('data-idx', idx);
-    row.innerHTML = '<div class="left"><span class="num">' + item.num + '</span><span class="label">' + item.label + '</span></div><span class="rating ' + item.cls + '">' + item.rating + '</span><svg class="chev" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>';
-    var detail = document.createElement('div');
-    detail.className = 'score-detail';
-    detail.id = 'detail-' + idx;
-    detail.innerHTML = '<p>' + item.detail + '</p>';
-    row.addEventListener('click', function() {
-      var isOpen = detail.classList.contains('open');
-      document.querySelectorAll('.score-detail.open').forEach(function(d) { d.classList.remove('open'); });
-      document.querySelectorAll('.score-row.open').forEach(function(r) { r.classList.remove('open'); });
-      if (!isOpen) { detail.classList.add('open'); row.classList.add('open'); }
-    });
-    scoreGrid.appendChild(row);
-    scoreGrid.appendChild(detail);
-  });
-  var radarSvg = document.getElementById('radarChart');
-  var radarLegend = document.getElementById('radarLegend');
-  var cx = 160, cy = 160, maxR = 115;
-  var labels = scoreData.map(function(d) { return d.label; });
-  var scores = scoreData.map(function(d) { return d.score; });
-  var n = labels.length;
-  var angleStep = (2 * Math.PI) / n;
-  function polarToXY(angle, r) { return { x: cx + r * Math.cos(angle - Math.PI / 2), y: cy + r * Math.sin(angle - Math.PI / 2) }; }
-  [0.25, 0.5, 0.75, 1].forEach(function(frac) {
-    var r = maxR * frac; var points = [];
-    for (var i = 0; i < n; i++) { var p = polarToXY(i * angleStep, r); points.push(p.x.toFixed(1) + ',' + p.y.toFixed(1)); }
-    var poly = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
-    poly.setAttribute('points', points.join(' ')); poly.setAttribute('fill', 'none'); poly.setAttribute('stroke', 'var(--border-strong)'); poly.setAttribute('stroke-width', '0.5');
-    radarSvg.appendChild(poly);
-  });
-  for (var i = 0; i < n; i++) {
-    var p = polarToXY(i * angleStep, maxR);
-    var line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-    line.setAttribute('x1', cx); line.setAttribute('y1', cy); line.setAttribute('x2', p.x.toFixed(1)); line.setAttribute('y2', p.y.toFixed(1));
-    line.setAttribute('stroke', 'var(--border)'); line.setAttribute('stroke-width', '0.5');
-    radarSvg.appendChild(line);
-  }
-  for (var i = 0; i < n; i++) {
-    var p = polarToXY(i * angleStep, maxR + 22);
-    var text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-    text.setAttribute('x', p.x.toFixed(1)); text.setAttribute('y', p.y.toFixed(1)); text.setAttribute('class', 'radar-tooltip');
-    var shortLabel = labels[i].length > 14 ? labels[i].substring(0, 12) + '...' : labels[i];
-    text.textContent = shortLabel; text.setAttribute('dominant-baseline', 'middle');
-    radarSvg.appendChild(text);
-  }
-  var dataPoints = [];
-  for (var i = 0; i < n; i++) { var r = (scores[i] / 100) * maxR; var p = polarToXY(i * angleStep, r); dataPoints.push(p.x.toFixed(1) + ',' + p.y.toFixed(1)); }
-  var dataPoly = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
-  dataPoly.setAttribute('points', dataPoints.join(' ')); dataPoly.setAttribute('fill', 'rgba(var(--accent-rgb),0.12)'); dataPoly.setAttribute('stroke', 'var(--accent)'); dataPoly.setAttribute('stroke-width', '2'); dataPoly.setAttribute('stroke-linejoin', 'round');
-  radarSvg.appendChild(dataPoly);
-  for (var i = 0; i < n; i++) {
-    var r = (scores[i] / 100) * maxR; var p = polarToXY(i * angleStep, r);
-    var circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-    circle.setAttribute('cx', p.x.toFixed(1)); circle.setAttribute('cy', p.y.toFixed(1)); circle.setAttribute('r', '4'); circle.setAttribute('fill', 'var(--accent)'); circle.setAttribute('stroke', 'var(--bg)'); circle.setAttribute('stroke-width', '2'); circle.setAttribute('data-idx', i);
-    circle.style.cursor = 'pointer'; circle.style.transition = 'r 0.2s ease';
-    circle.addEventListener('mouseenter', function() { this.setAttribute('r', '7'); });
-    circle.addEventListener('mouseleave', function() { this.setAttribute('r', '4'); });
-    circle.addEventListener('click', function() {
-      var idx = parseInt(this.getAttribute('data-idx'));
-      var detailEl = document.getElementById('detail-' + idx);
-      if (detailEl) {
-        detailEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        document.querySelectorAll('.score-detail.open').forEach(function(d) { d.classList.remove('open'); });
-        document.querySelectorAll('.score-row.open').forEach(function(r) { r.classList.remove('open'); });
-        detailEl.classList.add('open');
-        var row = document.querySelector('.score-row[data-idx="' + idx + '"]');
-        if (row) row.classList.add('open');
-      }
-    });
-    radarSvg.appendChild(circle);
-  }
-  var ratingColors = { strong: 'var(--green)', fragile: 'var(--accent)', thin: 'var(--red)' };
-  scoreData.forEach(function(item, idx) {
-    var div = document.createElement('div');
-    div.className = 'radar-legend-item';
-    div.innerHTML = '<div class="dot" style="background:' + ratingColors[item.cls] + '"></div><span class="rl-label">' + item.label + '</span><span class="rl-score">' + item.score + '/100</span>';
-    div.addEventListener('click', function() {
-      var detailEl = document.getElementById('detail-' + idx);
-      if (detailEl) {
-        detailEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        document.querySelectorAll('.score-detail.open').forEach(function(d) { d.classList.remove('open'); });
-        document.querySelectorAll('.score-row.open').forEach(function(r) { r.classList.remove('open'); });
-        detailEl.classList.add('open');
-        var row = document.querySelector('.score-row[data-idx="' + idx + '"]');
-        if (row) row.classList.add('open');
-      }
-    });
-    radarLegend.appendChild(div);
-  });
-  var tlObserver = new IntersectionObserver(function(entries) {
-    entries.forEach(function(entry) { if (entry.isIntersecting) entry.target.classList.add('visible'); });
-  }, { threshold: 0.2 });
-  document.querySelectorAll('.tl-item').forEach(function(el) { tlObserver.observe(el); });
-})();
-</script>
+            function updateProgress() {
+                var h = document.documentElement.scrollHeight - window.innerHeight;
+                progressBar.style.width = h > 0 ? (window.scrollY / h * 100) + '%' : '0%';
+            }
+            var navLinks = document.querySelectorAll('nav .nav-links a');
+            var sections = document.querySelectorAll('section[id]');
+
+            function setActive() {
+                var current = 'hero';
+                sections.forEach(function(s) { if (window.scrollY >= s.offsetTop - 140) current = s.id; });
+                navLinks.forEach(function(a) { a.classList.toggle('active', a.getAttribute('href') === '#' + current); });
+            }
+            var backToTop = document.getElementById('backToTop');
+
+            function handleBackToTop() { backToTop.classList.toggle('visible', window.scrollY > 600); }
+            backToTop.addEventListener('click', function() { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+
+            function handleReveal() {
+                document.querySelectorAll('.reveal').forEach(function(el) {
+                    var rect = el.getBoundingClientRect();
+                    if (rect.top < window.innerHeight * 0.88) el.classList.add('visible');
+                });
+            }
+            window.addEventListener('scroll', function() { updateProgress();
+                setActive();
+                handleBackToTop();
+                handleReveal(); }, { passive: true });
+            handleReveal();
+            updateProgress();
+            setActive();
+
+            var scoreData = [
+                { num: '01', label: 'Market durability', rating: 'Strong', cls: 'strong', score: 90,
+                    detail: 'As reading music literacy is part of the curriculum, SRF doesn\'t need to be sustained through marketing in order to remain competitive. There will always be a demand to teach sight reading more efficiently.' },
+                { num: '02', label: 'Competitive edge', rating: 'Fragile', cls: 'fragile', score: 60,
+                    detail: '"SRF scores 60 here. While it currently has leadership in the market, the underlying technology is not deeply proprietary and can be disrupted by external market forces or competition in the future. In this way, MakeMusic\'s SmartMusic technology already blends a Sight Reading Studio into a much larger suite of subscription services that cover, composing tools, and a teacher gradebook.' },
+                { num: '03', label: 'Monetisation fit', rating: 'Good, with a catch', cls: 'fragile', score: 65,
+                    detail: 'Pricing undercuts the cost of a physical method book and fits comfortably within a fine arts budget. The catch is that most subscriptions belong to individual teachers rather than schools, so renewal isn\'t guaranteed.' },
+                { num: '04', label: 'Evidence of efficacy', rating: 'Emerging', cls: 'thin', score: 50,
+                    detail: 'A 2018 study by Bovin on the effects of frequent use of web-based sight-reading software found that SRF users gained notation literacy at a significantly higher rate than a control group. It\'s only one peer-reviewed study, but it gives the efficacy claims real data to stand on rather than just intuition.' },
+                { num: '05', label: 'Organisational risk', rating: 'Concentrated', cls: 'fragile', score: 50,
+                    detail: 'Being a small, privately held company, SRF doesn\'t publish much about its core team size or succession planning. That said, founder Don Crafton is fairly active on social media, regularly sharing updates on SRF\'s development, which offers some transparency the numbers alone don\'t.' },
+                { num: '06', label: 'Renewal risk', rating: 'Teacher dependent', cls: 'thin', score: 30,
+                    detail: 'Because subscriptions generally belong to individual teachers rather than schools, repeat subscriptions are contingent on educators continuing to use SRF rather than on any fixed institutional commitment.' },
+                { num: '07', label: 'AI disruption window', rating: '2 to 4 years', cls: 'fragile', score: 30,
+                    detail: 'The advantage SRF holds today won\'t last indefinitely as the underlying technology continues to advance. As computer-readable music notation tools become easier to build and train, competitors may likely be able to replicate or compete with SRF\'s current functionality.' }
+            ];
+
+            var scoreGrid = document.getElementById('scoreGrid');
+            scoreData.forEach(function(item, idx) {
+                var row = document.createElement('div');
+                row.className = 'score-row';
+                row.setAttribute('data-idx', idx);
+                row.innerHTML =
+                    '<div class="left"><span class="num">' + item.num + '</span><span class="label">' + item
+                    .label + '</span></div><span class="rating ' + item.cls + '">' + item.rating +
+                    '</span><svg class="chev" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>';
+                var detail = document.createElement('div');
+                detail.className = 'score-detail';
+                detail.id = 'detail-' + idx;
+                detail.innerHTML = '<p>' + item.detail + '</p>';
+                row.addEventListener('click', function() {
+                    var isOpen = detail.classList.contains('open');
+                    document.querySelectorAll('.score-detail.open').forEach(function(d) { d.classList.remove(
+                            'open'); });
+                    document.querySelectorAll('.score-row.open').forEach(function(r) { r.classList.remove(
+                            'open'); });
+                    if (!isOpen) { detail.classList.add('open');
+                        row.classList.add('open'); }
+                });
+                scoreGrid.appendChild(row);
+                scoreGrid.appendChild(detail);
+            });
+            var radarSvg = document.getElementById('radarChart');
+            var radarLegend = document.getElementById('radarLegend');
+            var cx = 160,
+                cy = 160,
+                maxR = 115;
+            var labels = scoreData.map(function(d) { return d.label; });
+            var scores = scoreData.map(function(d) { return d.score; });
+            var n = labels.length;
+            var angleStep = (2 * Math.PI) / n;
+
+            function polarToXY(angle, r) { return { x: cx + r * Math.cos(angle - Math.PI / 2), y: cy + r * Math.sin(
+                        angle - Math.PI / 2) }; }
+            [0.25, 0.5, 0.75, 1].forEach(function(frac) {
+                var r = maxR * frac;
+                var points = [];
+                for (var i = 0; i < n; i++) { var p = polarToXY(i * angleStep, r);
+                    points.push(p.x.toFixed(1) + ',' + p.y.toFixed(1)); }
+                var poly = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+                poly.setAttribute('points', points.join(' '));
+                poly.setAttribute('fill', 'none');
+                poly.setAttribute('stroke', 'var(--border-strong)');
+                poly.setAttribute('stroke-width', '0.5');
+                radarSvg.appendChild(poly);
+            });
+            for (var i = 0; i < n; i++) {
+                var p = polarToXY(i * angleStep, maxR);
+                var line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', cx);
+                line.setAttribute('y1', cy);
+                line.setAttribute('x2', p.x.toFixed(1));
+                line.setAttribute('y2', p.y.toFixed(1));
+                line.setAttribute('stroke', 'var(--border)');
+                line.setAttribute('stroke-width', '0.5');
+                radarSvg.appendChild(line);
+            }
+            for (var i = 0; i < n; i++) {
+                var p = polarToXY(i * angleStep, maxR + 22);
+                var text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                text.setAttribute('x', p.x.toFixed(1));
+                text.setAttribute('y', p.y.toFixed(1));
+                text.setAttribute('class', 'radar-tooltip');
+                var shortLabel = labels[i].length > 14 ? labels[i].substring(0, 12) + '...' : labels[i];
+                text.textContent = shortLabel;
+                text.setAttribute('dominant-baseline', 'middle');
+                radarSvg.appendChild(text);
+            }
+            var dataPoints = [];
+            for (var i = 0; i < n; i++) { var r = (scores[i] / 100) * maxR;
+                var p = polarToXY(i * angleStep, r);
+                dataPoints.push(p.x.toFixed(1) + ',' + p.y.toFixed(1)); }
+            var dataPoly = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+            dataPoly.setAttribute('points', dataPoints.join(' '));
+            dataPoly.setAttribute('fill', 'rgba(var(--accent-rgb),0.12)');
+            dataPoly.setAttribute('stroke', 'var(--accent)');
+            dataPoly.setAttribute('stroke-width', '2');
+            dataPoly.setAttribute('stroke-linejoin', 'round');
+            radarSvg.appendChild(dataPoly);
+            for (var i = 0; i < n; i++) {
+                var r = (scores[i] / 100) * maxR;
+                var p = polarToXY(i * angleStep, r);
+                var circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                circle.setAttribute('cx', p.x.toFixed(1));
+                circle.setAttribute('cy', p.y.toFixed(1));
+                circle.setAttribute('r', '4');
+                circle.setAttribute('fill', 'var(--accent)');
+                circle.setAttribute('stroke', 'var(--bg)');
+                circle.setAttribute('stroke-width', '2');
+                circle.setAttribute('data-idx', i);
+                circle.style.cursor = 'pointer';
+                circle.style.transition = 'r 0.2s ease';
+                circle.addEventListener('mouseenter', function() { this.setAttribute('r', '7'); });
+                circle.addEventListener('mouseleave', function() { this.setAttribute('r', '4'); });
+                circle.addEventListener('click', function() {
+                    var idx = parseInt(this.getAttribute('data-idx'));
+                    var detailEl = document.getElementById('detail-' + idx);
+                    if (detailEl) {
+                        detailEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        document.querySelectorAll('.score-detail.open').forEach(function(d) { d.classList
+                                .remove('open'); });
+                        document.querySelectorAll('.score-row.open').forEach(function(r) { r.classList
+                                .remove('open'); });
+                        detailEl.classList.add('open');
+                        var row = document.querySelector('.score-row[data-idx="' + idx + '"]');
+                        if (row) row.classList.add('open');
+                    }
+                });
+                radarSvg.appendChild(circle);
+            }
+            var ratingColors = { strong: 'var(--green)', fragile: 'var(--accent)', thin: 'var(--red)' };
+            scoreData.forEach(function(item, idx) {
+                var div = document.createElement('div');
+                div.className = 'radar-legend-item';
+                div.innerHTML = '<div class="dot" style="background:' + ratingColors[item.cls] +
+                    '"></div><span class="rl-label">' + item.label + '</span><span class="rl-score">' + item
+                    .score + '/100</span>';
+                div.addEventListener('click', function() {
+                    var detailEl = document.getElementById('detail-' + idx);
+                    if (detailEl) {
+                        detailEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        document.querySelectorAll('.score-detail.open').forEach(function(d) { d.classList
+                                .remove('open'); });
+                        document.querySelectorAll('.score-row.open').forEach(function(r) { r.classList
+                                .remove('open'); });
+                        detailEl.classList.add('open');
+                        var row = document.querySelector('.score-row[data-idx="' + idx + '"]');
+                        if (row) row.classList.add('open');
+                    }
+                });
+                radarLegend.appendChild(div);
+            });
+            var tlObserver = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) { if (entry.isIntersecting) entry.target.classList.add(
+                        'visible'); });
+            }, { threshold: 0.2 });
+            document.querySelectorAll('.tl-item').forEach(function(el) { tlObserver.observe(el); });
+        })();
+    </script>
 </body>
 </html>
