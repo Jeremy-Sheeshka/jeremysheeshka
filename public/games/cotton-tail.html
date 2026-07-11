@@ -867,14 +867,11 @@
                 }
                 this._playHopNote(scale[Math.floor(Math.random() * scale.length)], 0.30, 0.34);
             }
-            // Final chord — Bb maj9, arrived at gently
-            playFinalChord() {
-                if (!this.ctx) return;
-                const t = this.ctx.currentTime;
-                const arpeggio = [698.46, 587.33, 466.16, 440.00];
-                arpeggio.forEach((f, i) => { this._playPluck(f, t + i * 0.22, 0.075, 1.1); });
-                const chordStart = t + arpeggio.length * 0.22 + 0.1;
-                const voicing = [116.54, 174.61, 233.08, 349.23, 523.25];
+            // Shared "grand chord" voice for both bookends — sine + triangle blend,
+            // so the ending's arrival and the intro's hush are the same instrument,
+            // just with a different sweep direction, sustain, and set of peaks.
+            _playChordSwell(voicing, peaks, time, opts = {}) {
+                const { filterFrom = 900, filterTo = 2400, filterTime = 1.5, attack = 0.6, decay = 5.5, stopAt = 6 } = opts;
                 voicing.forEach((f, i) => {
                     const a = this.ctx.createOscillator();
                     const b = this.ctx.createOscillator();
@@ -885,12 +882,11 @@
                     a.frequency.value = f;
                     b.frequency.value = f * 2;
                     lp.type = 'lowpass';
-                    lp.frequency.setValueAtTime(900, chordStart);
-                    lp.frequency.linearRampToValueAtTime(2400, chordStart + 1.5);
-                    const peak = i === 4 ? 0.02 : (i === 0 ? 0.05 : 0.035);
-                    g.gain.setValueAtTime(0, chordStart);
-                    g.gain.linearRampToValueAtTime(peak, chordStart + 0.6);
-                    g.gain.exponentialRampToValueAtTime(0.001, chordStart + 5.5);
+                    lp.frequency.setValueAtTime(filterFrom, time);
+                    lp.frequency.linearRampToValueAtTime(filterTo, time + filterTime);
+                    g.gain.setValueAtTime(0, time);
+                    g.gain.linearRampToValueAtTime(peaks[i], time + attack);
+                    g.gain.exponentialRampToValueAtTime(0.001, time + decay);
                     const bMix = this.ctx.createGain();
                     bMix.gain.value = 0.22;
                     a.connect(lp);
@@ -899,10 +895,55 @@
                     lp.connect(g);
                     g.connect(this.master);
                     g.connect(this.revSend);
-                    a.start(chordStart);
-                    b.start(chordStart);
-                    a.stop(chordStart + 6);
-                    b.stop(chordStart + 6);
+                    a.start(time);
+                    b.start(time);
+                    a.stop(time + stopAt);
+                    b.stop(time + stopAt);
+                });
+            }
+            // Final chord — Bb maj9, arrived at gently. Timing/dynamics are the exact
+            // mirror of playIntroChime()'s reversed arpeggio below: same offsets,
+            // peaks, and ring lengths, read back to front.
+            playFinalChord() {
+                if (!this.ctx) return;
+                const t = this.ctx.currentTime;
+                const arpeggio = [698.46, 587.33, 466.16, 440.00];
+                const offsets = [0, 0.26, 0.49, 0.70];
+                const peaks = [0.07, 0.062, 0.055, 0.05];
+                const durs = [2.0, 1.85, 1.75, 1.7];
+                arpeggio.forEach((f, i) => { this._playPluck(f, t + offsets[i], peaks[i], durs[i]); });
+                const chordStart = t + offsets[offsets.length - 1] + 0.3;
+                const voicing = [116.54, 174.61, 233.08, 349.23, 523.25];
+                const voicingPeaks = [0.05, 0.035, 0.035, 0.035, 0.02];
+                this._playChordSwell(voicing, voicingPeaks, chordStart);
+            }
+            // Opening chime — the ending arpeggio above, copied and reversed, built
+            // from the exact same two voices (plucks + chord swell) so the two
+            // bookends are true mirror images rather than separate-sounding cues.
+            playIntroChime() {
+                if (!this.ctx) return;
+                const t = this.ctx.currentTime;
+                // playFinalChord()'s arpeggio [698.46, 587.33, 466.16, 440.00], reversed.
+                const arpeggio = [440.00, 466.16, 587.33, 698.46];
+                // Timing eases open very slightly instead of a strict grid, and both
+                // volume and ring grow a touch note to note — the mirror image, note
+                // for note, of the ending's decelerating, decrescendo-ing close above.
+                const offsets = [0, 0.21, 0.44, 0.70];
+                const peaks = [0.05, 0.055, 0.062, 0.07];
+                const durs = [1.7, 1.75, 1.85, 2.0];
+                arpeggio.forEach((f, i) => { this._playPluck(f, t + offsets[i], peaks[i], durs[i]); });
+                // A little twinkle above the last note — the same high-octave sparkle
+                // that caps each music-box arpeggio during play (see _playMusicBoxArp).
+                const lastOffset = offsets[offsets.length - 1];
+                this._playPluck(arpeggio[arpeggio.length - 1] * 2, t + lastOffset + 0.16, 0.028, 1.7);
+                // The same chord that arrives at the end of the game, blooming in here
+                // as a hush instead — same notes, same voice, just softer and slower to
+                // bloom, and settling from bright to warm instead of warm to bright.
+                const voicing = [116.54, 174.61, 233.08, 349.23, 523.25];
+                const voicingPeaks = [0.032, 0.022, 0.022, 0.022, 0.013];
+                const padStart = t + lastOffset + 0.3;
+                this._playChordSwell(voicing, voicingPeaks, padStart, {
+                    filterFrom: 2400, filterTo: 900, filterTime: 1.8, attack: 0.9, decay: 3.4, stopAt: 3.8,
                 });
             }
             _makeReverbIR(seconds = 2.4, decay = 2.8) {
@@ -2584,6 +2625,34 @@
 
         // UI / LIFECYCLE
         let phaserGame = null;
+
+        // Opening chime — plays playIntroChime() once as the intro screen loads.
+        // Browsers block audio until a user gesture, so this tries right away and,
+        // if that's blocked, falls back to firing on the visitor's first interaction
+        // with the page (still only once).
+        (function() {
+            let introChimePlayed = false;
+            const introAudio = new AudioEngine();
+            function tryPlayIntroChime() {
+                if (introChimePlayed) return;
+                introAudio.init();
+                const fire = () => {
+                    if (introChimePlayed) return;
+                    introChimePlayed = true;
+                    introAudio.playIntroChime();
+                    setTimeout(() => { if (introAudio.ctx) introAudio.ctx.close(); }, 7500);
+                };
+                if (introAudio.ctx.state === 'suspended') {
+                    introAudio.ctx.resume().then(() => { if (introAudio.ctx.state === 'running') fire(); });
+                } else {
+                    fire();
+                }
+            }
+            tryPlayIntroChime();
+            ['pointerdown', 'keydown', 'touchstart'].forEach(evt => {
+                window.addEventListener(evt, tryPlayIntroChime, { once: true, passive: true });
+            });
+        })();
 
         function startGame() {
             const playerName = PLAYER_NAMES[Math.floor(Math.random() * PLAYER_NAMES.length)];
