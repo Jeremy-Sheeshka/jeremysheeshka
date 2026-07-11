@@ -1,0 +1,162 @@
+---
+title: "ETEC 531: Week 8 Doings - Cotton Tail"
+description: "A Rhythm Changes portrayed an embodied game built with Phaser and Web Audio."
+publishDate: "2026-07-09"
+tags: ["etec531"]
+---
+
+import Prose from "../../components/blocks/Prose.astro";
+import Figure from "../../components/blocks/Figure.astro";
+import Cite from "../../components/widgets/Cite.astro";
+import SparklyText from "../../components/SparklyText.astro";
+
+<Prose>
+
+# Cotton Tail: A Rhythm Changes Journey
+
+<details class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 mb-8 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800/50 dark:hover:bg-gray-800 open:bg-white dark:open:bg-gray-900 transition-colors">
+<summary class="font-bold cursor-pointer flex items-center gap-2 select-none text-gray-900 dark:text-gray-100">
+<span class="text-lg">Assignment Task: 8.3 Doing ~ Shifting Modalities</span>
+</summary>
+<div class="mt-4 space-y-4 text-sm">
+<p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+Choose a curricular artifact, a lesson plan, an assignment, a learning outcome, a syllabus page, something you made or were given or have been assessed by.
+</p>
+<p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+Move it into a different mode: writing into image, text into gesture, linear document into spatial arrangement, print into sound. Rethink the artifact's purpose and redesign it for the new mode.
+</p>
+<p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+<strong>The reflection (200–300 words), drawing on the week's readings:</strong><br/>
+- What did the original mode assume about who could access it?<br/>
+- What was carried across in the translation, and what was lost?<br/>
+- What does this reveal about the bodyminds the curriculum was designed for, and those it was not?
+</p>
+</div>
+</details>
+
+---
+
+## The Artifact & Translation
+
+<div class="md:float-left md:w-1/4 md:mr-6 w-2/3 sm:w-1/2 mx-auto md:mx-0 flex flex-col items-center justify-center">
+  <img
+    src="/assets/images/blog/cottontaillogo.jpg"
+    alt="Cotton Tail Game App Icon"
+    class="w-full h-auto rounded-xl"
+  />
+  <a href="/games/cotton-tail.html" target="_blank" rel="noopener noreferrer" class="group mt-4 flex items-center justify-center gap-3 px-6 py-3 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-full font-bold text-base shadow-md hover:bg-[#D4A96A] dark:hover:bg-[#D4A96A] hover:text-gray-900 transition-colors duration-300 no-underline">
+    <SparklyText class="text-inherit" numberOfSparkles={5} color="currentColor">
+      Hop To It!
+    </SparklyText>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="group-hover:translate-x-1 transition-transform duration-300"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+  </a>
+</div>
+
+For my Week 8 Doings post, I took a lead sheet of a jazz standard and shifted its modality into an interactive music-education/art game. <i>Cotton Tail</i> was what I ended up with. It is a game where the player (Bunny Webster) follows, imitates, and trades movement phrases with a mentor rabbit (The Duke). As a nod to the great Jazz Musicians Duke Ellington and Ben Webster, <i>Cotton Tail</i> serves as a precursor to jazz education, through an interactive entanglement of jazz history and aural pedagogy. 
+
+The game is built with Phaser and the Web Audio API, and it's designed to have the user experience call-and-response, improvisation, AABA form, and observational skills through spatial gameplay rather than music notation or other written literacies. Together, two rabbits take the player on a natural journey progressing through a cycle of learning, following, imitating, internalizing, experimenting, and creating.
+
+The idea behind translating this song into another modality began as a pun, but it grew into a chance to examine how gamification can support "musicking" (simultaneously celebrating, listening to, and producing music) alongside other media. By inviting the user to follow, imitate, and eventually carve their own path through the game, I have been able to represent the essence of what it means to teach, learn, and engage with music concepts through the transmutation of spatial improvisation.
+
+<div class="clear-both"></div>
+
+---
+
+## Reflection
+
+<div class="md:float-left md:w-1/4 md:mr-6 md:mb-4 w-3/4 sm:w-1/2 mx-auto md:mx-0 mb-6">
+  <Figure
+    src="/assets/images/blog/cottontail-sheet.png"
+    alt="Lead sheet excerpt of Duke Ellington's Cotton Tail"
+  />
+</div>
+
+**What did the original mode assume about who could access it?** Engaging with "Cotton Tail" in its original form assumes a player proficient enough on an instrument to navigate the chord progression, in print or by ear. That said, knowing how to decode the chord symbols and melody alone doesn't mean someone can play the tune with others or improvise freely over it, since those are separate skills the sheet assumes of the user. Kress <Cite n={2} title="Multimodality" /> argues that a curriculum built on one linear mode of representation can "entrench inequality" and privilege learners who already have access to that mode over those who don't.
+
+**What was carried across in the translation, and what was lost?** Transforming this into a game meant leaving behind the melody in favor of the tune's underlying harmony and the AABA format holding the song together. I also chose to highlight the iterative, mentor-guided learning of following, imitating, and improvising that characterizes an oral tradition. While I used AI throughout this process to help put together my artifact, I had to navigate its own register of authority and foreclosures rather than treat it as a neutral tool, especially around tempo versus time and the gestural cues I tried to embody in the game. What I ended up with reminds me of what Christine Sun Kim described in her TED talk: sight and sound functioning simultaneously, like a chord, rather than sequentially, the way notes on a page might be read one at a time <Cite n={5} title="The enchanting music of sign language" />.
+
+<div class="md:float-right md:w-1/4 md:ml-6 md:mb-4 w-3/4 sm:w-1/2 mx-auto md:mx-0 mb-6 mt-2">
+  <Figure
+    src="/assets/images/blog/duke-and-ben.jpg"
+    alt="Duke Ellington (left) and Ben Webster (right)"
+  />
+  <p class="text-xs text-center text-gray-500 dark:text-gray-400 mt-2">Duke Ellington (left) and Ben Webster (right) <Cite n={6} title="Duke Ellington and Ben Webster" /></p>
+</div>
+
+**What does this reveal about the bodyminds the curriculum was designed for, and those it was not?** My transfiguration of Cotton Tail reveals that the original curriculum assumed a bodymind capable of solitary, page-based decoding, disadvantaging those who learn relationally and through other multimodal means <Cite n={1} title="DisCrit Solidarity" />. In a musical tradition built on listening, imitation, creation, and improvisation, a print modality can't capture the rich history and performative depth possible beyond the page. Moving this artifact away from a modality of isolated, individual mastery brings out the holistic spirit of performative arts, where bodyminds rely on each other's messy cues and interdependence.
+
+<details class="md:w-3/5 border border-gray-200 dark:border-gray-700 rounded-lg p-4 mb-8 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800/50 dark:hover:bg-gray-800 open:bg-white dark:open:bg-gray-900 transition-colors">
+<summary class="font-bold cursor-pointer flex items-center gap-2 select-none text-gray-900 dark:text-gray-100">
+<span class="text-lg">AI Tooling Disclosure:</span>
+</summary>
+<div class="mt-4 space-y-4 text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+<p><strong>What I did:</strong></p>
+<ul class="list-disc pl-5 space-y-1">
+  <li>Conceptualized the pedagogical translation of Rhythm Changes into a spatial game.</li>
+  <li>Heavily edited and refined the AI-generated game design prompt to align with my core learning philosophy.</li>
+  <li>Amalgamated the generated prototypes into a single, self-contained HTML file with no dependencies.</li>
+  <li>Manually fine-tuned the gameplay mechanics, audio pitches, harmonies, and interaction flow.</li>
+</ul>
+<p><strong>How AI assisted:</strong></p>
+<ul class="list-disc pl-5 space-y-1">
+  <li><strong>Claude (Sonnet):</strong> Brainstormed and structured the initial prompt based on my descriptions of the game engine and desired translation.</li>
+  <li><strong>Base44 & Lovable.dev:</strong> Generated the initial working prototypes, implementing the Phaser 3 coding and Web Audio API integration based on my refined prompt.</li>
+</ul>
+</div>
+</details>
+
+<div class="clear-both"></div>
+
+---
+
+## References
+
+<div class="mt-8 border-t border-gray-200 dark:border-gray-700 pt-8">
+<div class="flex flex-col gap-4">
+
+<div id="ref-1" class="flex gap-3 text-sm scroll-mt-24 group">
+<a href="#cite-1" class="flex-none w-6 text-right font-mono text-xs text-blue-600 pt-1 hover:underline hover:font-bold" title="Jump back to citation">[1]</a>
+<div class="leading-relaxed text-gray-700 dark:text-gray-300">
+<b>Annamma, S. A., & Handy, T. (2019).</b> DisCrit solidarity as curriculum studies and transformative praxis. <i>Curriculum Inquiry</i>, 49(4), 442–463. <a href="https://doi.org/10.1080/03626784.2019.1665456" target="_blank" rel="noopener noreferrer" class="hover:underline text-blue-600">https://doi.org/10.1080/03626784.2019.1665456</a>
+</div>
+</div>
+
+<div id="ref-2" class="flex gap-3 text-sm scroll-mt-24 group">
+<a href="#cite-2" class="flex-none w-6 text-right font-mono text-xs text-blue-600 pt-1 hover:underline hover:font-bold" title="Jump back to citation">[2]</a>
+<div class="leading-relaxed text-gray-700 dark:text-gray-300">
+<b>Kress, G. (2010).</b> <i>Multimodality: A Social Semiotic Approach to Contemporary Communication</i> (Chapter 1, pp. 1–17). Routledge.
+</div>
+</div>
+
+<div id="ref-3" class="flex gap-3 text-sm scroll-mt-24 group">
+<a href="#cite-3" class="flex-none w-6 text-right font-mono text-xs text-blue-600 pt-1 hover:underline hover:font-bold" title="Jump back to citation">[3]</a>
+<div class="leading-relaxed text-gray-700 dark:text-gray-300">
+<b>Musescore. (n.d.).</b> <i>Cotton tail - Duke Ellington</i>. Retrieved from https://musescore.com/static/musescore/scoredata/g/a840bb1769f6afa365498fb666d773abb1067ff8/score_0.svg?no-cache=1738732800
+</div>
+</div>
+
+<div id="ref-4" class="flex gap-3 text-sm scroll-mt-24 group">
+<a href="#cite-4" class="flex-none w-6 text-right font-mono text-xs text-blue-600 pt-1 hover:underline hover:font-bold" title="Jump back to citation">[4]</a>
+<div class="leading-relaxed text-gray-700 dark:text-gray-300">
+<b>Silvestri, K. N., Barrett, N., & Nyachae, T. M. (2023).</b> Troubling, disrupting, and reimagining educational spaces: The need for critical multimodality now. In K. N. Silvestri, N. Barrett, & T. M. Nyachae (Eds.), <i>Toward Critical Multimodality: Theory, Research, and Practice in Transformative Educational Spaces</i> (pp. 1–29). Information Age Publishing.
+</div>
+</div>
+
+<div id="ref-5" class="flex gap-3 text-sm scroll-mt-24 group">
+<a href="#cite-5" class="flex-none w-6 text-right font-mono text-xs text-blue-600 pt-1 hover:underline hover:font-bold" title="Jump back to citation">[5]</a>
+<div class="leading-relaxed text-gray-700 dark:text-gray-300">
+<b>Sun Kim, C. (2015).</b> <i>The enchanting music of sign language</i> [Video]. TED Conferences. <a href="https://www.ted.com/talks/christine_sun_kim_the_enchanting_music_of_sign_language" target="_blank" rel="noopener noreferrer" class="hover:underline text-blue-600">https://www.ted.com/talks/christine_sun_kim_the_enchanting_music_of_sign_language</a>
+</div>
+</div>
+
+<div id="ref-6" class="flex gap-3 text-sm scroll-mt-24 group">
+<a href="#cite-6" class="flex-none w-6 text-right font-mono text-xs text-blue-600 pt-1 hover:underline hover:font-bold" title="Jump back to citation">[6]</a>
+<div class="leading-relaxed text-gray-700 dark:text-gray-300">
+<b>Swing and Beyond. (2018).</b> <i>“Cotton Tail” (1940) Duke Ellington and Ben Webster</i>. Retrieved from https://swingandbeyond.com/2018/02/02/cotton-tail-1940-duke-ellington-and-ben-webster/
+</div>
+</div>
+
+</div>
+</div>
+
+</Prose>

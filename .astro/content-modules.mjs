@@ -23,5 +23,6 @@ export default new Map([
 ["src/content/post/2026-06-20-etec-531-new-media-idea.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fpost%2F2026-06-20-etec-531-new-media-idea.mdx&astroContentModuleFlag=true")],
 ["src/content/post/2026-06-20-etec531-ai-slop.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fpost%2F2026-06-20-etec531-ai-slop.mdx&astroContentModuleFlag=true")],
 ["src/content/post/2026-06-21-md-playground.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fpost%2F2026-06-21-md-playground.mdx&astroContentModuleFlag=true")],
-["src/content/post/2026-06-28-etec522-analyst-report.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fpost%2F2026-06-28-etec522-analyst-report.mdx&astroContentModuleFlag=true")]]);
+["src/content/post/2026-06-28-etec522-analyst-report.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fpost%2F2026-06-28-etec522-analyst-report.mdx&astroContentModuleFlag=true")],
+["src/content/post/2026-07-08-etec531-week8-doings.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fpost%2F2026-07-08-etec531-week8-doings.mdx&astroContentModuleFlag=true")]]);
 		
