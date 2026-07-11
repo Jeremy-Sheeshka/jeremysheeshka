@@ -1765,9 +1765,12 @@
                 this.beatDecorations = [];
                 this.playerName = this.registry.get('playerName') || 'Player';
                 this.ended = false;
-                // Frozen until the mentor actually begins moving (see _startPhase),
-                // so no stray hop/chime can fire during the intro name-reveal.
-                this.playerFrozen = true;
+                this._musicStarted = false;
+                this._a1TagArmed = false;
+                // Player can move freely from the start — this only controls their own
+                // hop sound (see _updatePlayer / playPlayerMotif), never the mentor's
+                // music or motif, which stay gated behind _musicStarted elsewhere.
+                this.playerFrozen = false;
                 this.trackingTexts = [];
                 this.audioEngine = new AudioEngine();
                 this.audioEngine.onBeat = (beat) => this._onBeat(beat);
@@ -2261,7 +2264,10 @@
                 this.audioEngine.onSectionEnd = () => this._advancePhase();
                 this.audioEngine.setSection(phase.section === 'B' ? 'B' : 'A');
                 this.audioEngine.setChorus(phase.chorus);
-                if (!this.audioEngine.isPlaying) this.audioEngine.start();
+                // Only auto-(re)start here on phase transitions AFTER the music has already
+                // begun once. The very first start is deferred to _startMusicIfNeeded(),
+                // which fires right as the mentor's first hop is triggered — not before.
+                if (!this.audioEngine.isPlaying && this._musicStarted) this.audioEngine.start();
             }
             _startPhaseContent() {
                 const phase = FLOW[this.phaseIndex];
@@ -2277,7 +2283,13 @@
                 this._runPhaseMode(phase);
                 this._setupPhaseVisuals(phase);
             }
+            _startMusicIfNeeded() {
+                if (this._musicStarted) return;
+                this._musicStarted = true;
+                this.audioEngine.start();
+            }
             _runPhaseMode(phase) {
+                this._startMusicIfNeeded();
                 switch (phase.mode) {
                     case 'follow': {
                         // Shorter hops (140-230px instead of 180-350px) and a slower hop
@@ -2495,7 +2507,7 @@
                 this.mentorBrain.cleanup();
                 this.audioEngine.stop();
                 this.audioEngine.playFinalChord();
-                const message = '"None of us are completely independent" (Mingus, 2013, as cited in Annamma & Handy, 2019).\nYou find your voice by listening.';
+                const message = '"None of us are completely independent"\n(Mingus, 2013, as cited in Annamma & Handy, 2019).\n\nYou find your voice by listening.';
                 const TOP_BLOCK_Y = 130;
                 const BOTTOM_BLOCK_Y = 480;
                 const overlapsBlock = (blockY) => {
@@ -2546,13 +2558,22 @@
                 this._checkA1FollowTag(delta);
             }
             _checkA1FollowTag(delta) {
+                if (!this._musicStarted) { this._a1TagCooldown = 0; this._a1TagArmed = false; return; }
                 const phase = FLOW[this.phaseIndex];
-                if (!phase || phase.mode !== 'follow' || phase.chorus !== 1) { this._a1TagCooldown = 0; return; }
+                if (!phase || phase.mode !== 'follow' || phase.chorus !== 1) { this._a1TagCooldown = 0; this._a1TagArmed = false; return; }
                 this._a1TagCooldown = Math.max(0, (this._a1TagCooldown || 0) - delta);
-                if (this._a1TagCooldown > 0) return;
                 const dx = this.player.x - this.mentor.x;
                 const dy = this.player.y - this.mentor.y;
-                if (dx * dx + dy * dy < 260 * 260) {
+                const distSq = dx * dx + dy * dy;
+                if (!this._a1TagArmed) {
+                    // The mentor starts right next to the player at the top of this phase —
+                    // require him to actually hop away past the tag radius once before the
+                    // proximity tag can trigger, so it can't fire off the shared start position.
+                    if (distSq > 260 * 260) this._a1TagArmed = true;
+                    return;
+                }
+                if (this._a1TagCooldown > 0) return;
+                if (distSq < 260 * 260) {
                     this._a1TagCooldown = 300;
                     this.audioEngine.playMentorMotif();
                     this.playerFrozen = true;
