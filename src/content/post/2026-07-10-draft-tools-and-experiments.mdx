@@ -37,7 +37,7 @@ import Prose from "../../components/blocks/Prose.astro";
   <div id="posts"></div>
 </div>
 
-<style>
+<style>{`
   .diary-wrapper { 
     max-width: 600px; 
     margin: auto; 
@@ -142,7 +142,7 @@ import Prose from "../../components/blocks/Prose.astro";
     font-size: 0.75rem;
     margin-top: 8px;
   }
-</style>
+`}</style>
 
 {/* The 'is:inline' directive is required in Astro to load external CDN scripts as globals */}
 <script is:inline src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
