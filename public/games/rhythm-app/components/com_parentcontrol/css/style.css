@@ -1,0 +1,34 @@
+.pc-hidden-msg{
+	display: none;
+}
+
+/********************
+Moved to the main CSS
+.alert.alert-message .alert-message a{
+	color: #c09853;
+	text-decoration: underline;
+	transition: .25s ease;	
+	text-shadow: none;
+} 
+	.alert.alert-message .alert-message a:hover{
+		text-decoration: none;
+	}
+
+
+.alert.alert-notice {
+	background-color: rgba(255, 0, 0, 0.44);
+	border-color: red;
+	color: #410000;
+	text-shadow: none;
+}
+
+.alert.alert-notice .alert-message a{
+	color: #410000;
+	text-decoration: underline;
+	transition: .25s ease;	
+	text-shadow: none;
+} 
+	.alert.alert-notice .alert-message a:hover{
+		text-decoration: none;
+	}
+*/
