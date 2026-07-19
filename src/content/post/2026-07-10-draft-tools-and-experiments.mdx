@@ -14,7 +14,7 @@ draft: true
   3. Replace the placeholder values (YOUR_API_KEY_HERE, etc.) with your 
      actual Firebase project credentials.
   =====================================================================
---> */}
+*/}
 
 import Prose from "../../components/blocks/Prose.astro";
 
@@ -38,7 +38,6 @@ import Prose from "../../components/blocks/Prose.astro";
 </div>
 
 <style>
-  /* Scoped wrapper to prevent overriding your blog's global body styles */
   .diary-wrapper { 
     max-width: 600px; 
     margin: auto; 
@@ -145,14 +144,11 @@ import Prose from "../../components/blocks/Prose.astro";
   }
 </style>
 
-<!-- The 'is:inline' directive is required in Astro to load external CDN scripts as globals -->
+{/* The 'is:inline' directive is required in Astro to load external CDN scripts as globals */}
 <script is:inline src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script is:inline src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 
 <script is:inline>
-  // ==========================================
-  // TODO: REPLACE THIS CONFIG WITH YOUR OWN
-  // ==========================================
   const firebaseConfig = {
     apiKey: "YOUR_API_KEY_HERE",
     authDomain: "YOUR_AUTH_DOMAIN_HERE",
@@ -161,7 +157,6 @@ import Prose from "../../components/blocks/Prose.astro";
     messagingSenderId: "YOUR_MESSAGING_SENDER_ID_HERE",
     appId: "YOUR_APP_ID_HERE"
   };
-  // ==========================================
 
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
