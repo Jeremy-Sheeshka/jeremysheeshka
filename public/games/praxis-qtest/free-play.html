@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Praxis — Free Play</title>
+  <meta name="description" content="Praxis Free Play rhythm studio." />
+
+  <style>
+    :root {
+      color-scheme: light dark;
+
+      /*
+        Match these to your existing app palette if desired.
+      */
+      --praxis-bg: #f6f7f9;
+      --praxis-surface: #ffffff;
+      --praxis-surface-2: #eef2f6;
+      --praxis-ink: #111827;
+      --praxis-muted: #5b6472;
+      --praxis-line: #d8dee7;
+      --praxis-accent: #1d4ed8;
+      --praxis-accent-2: #1840a8;
+      --praxis-accent-ink: #ffffff;
+      --praxis-focus: rgba(29, 78, 216, 0.30);
+      --praxis-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
+      --praxis-topbar-height: 72px;
+      --praxis-dock-min: 84px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --praxis-bg: #0b1017;
+        --praxis-surface: #121924;
+        --praxis-surface-2: #18212e;
+        --praxis-ink: #e8edf4;
+        --praxis-muted: #9aa6b5;
+        --praxis-line: #2a3646;
+        --praxis-accent: #60a5fa;
+        --praxis-accent-2: #93c5fd;
+        --praxis-accent-ink: #071018;
+        --praxis-focus: rgba(96, 165, 250, 0.34);
+        --praxis-shadow: 0 14px 34px rgba(0, 0, 0, 0.34);
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      height: 100%;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Open Sans", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--praxis-bg);
+      color: var(--praxis-ink);
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr) auto;
+      overflow: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input,
+    select,
+    output {
+      font: inherit;
+    }
+
+    .topbar {
+      min-height: var(--praxis-topbar-height);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 12px 16px;
+      background: color-mix(in srgb, var(--praxis-surface) 90%, transparent);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--praxis-line);
+      box-shadow: var(--praxis-shadow);
+      z-index: 30;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .brand__badge {
+      width: 40px;
+      height: 40px;
+      border-radius: 13px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--praxis-accent), #7c3aed);
+      color: white;
+      font-weight: 800;
+      flex: 0 0 auto;
+      box-shadow: var(--praxis-shadow);
+    }
+
+    .brand__text {
+      min-width: 0;
+      line-height: 1.15;
+    }
+
+    .brand__title {
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      white-space: nowrap;
+    }
+
+    .brand__subtitle {
+      color: var(--praxis-muted);
+      font-size: 0.9rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .topbar__nav {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-right: auto;
+    }
+
+    .topbar__nav a {
+      padding: 9px 12px;
+      border-radius: 999px;
+      color: var(--praxis-muted);
+      border: 1px solid transparent;
+      white-space: nowrap;
+    }
+
+    .topbar__nav a:hover {
+      background: var(--praxis-surface-2);
+      color: var(--praxis-ink);
+    }
+
+    .topbar__nav a[aria-current="page"] {
+      background: color-mix(in srgb, var(--praxis-accent) 12%, transparent);
+      color: var(--praxis-ink);
+      border-color: color-mix(in srgb, var(--praxis-accent) 30%, transparent);
+      font-weight: 700;
+    }
+
+    .topbar__nav a:focus-visible,
+    .metro-toggle:focus-visible,
+    .metro-select:focus-visible,
+    .metro-range:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 4px var(--praxis-focus);
+      border-radius: 10px;
+    }
+
+    .metronome {
+      display: none;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 10px 12px;
+      border: 1px solid var(--praxis-line);
+      border-radius: 16px;
+      background: color-mix(in srgb, var(--praxis-surface-2) 88%, transparent);
+      margin-left: auto;
+    }
+
+    .metronome--top {
+      margin-left: auto;
+    }
+
+    .metro-toggle {
+      min-width: 88px;
+      min-height: 42px;
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      background: var(--praxis-accent);
+      color: var(--praxis-accent-ink);
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .metro-toggle.active {
+      background: #dc2626;
+      color: white;
+    }
+
+    .metro-field {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--praxis-muted);
+      font-size: 0.94rem;
+      white-space: nowrap;
+    }
+
+    .metro-range {
+      width: 150px;
+      accent-color: var(--praxis-accent);
+      cursor: pointer;
+    }
+
+    .metro-output {
+      min-width: 76px;
+      text-align: center;
+      padding: 8px 10px;
+      border-radius: 10px;
+      background: var(--praxis-surface);
+      border: 1px solid var(--praxis-line);
+      font-weight: 800;
+      color: var(--praxis-ink);
+    }
+
+    .metro-select {
+      min-height: 40px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: 1px solid var(--praxis-line);
+      background: var(--praxis-surface);
+      color: var(--praxis-ink);
+      cursor: pointer;
+    }
+
+    .metro-lights {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 0 4px;
+    }
+
+    .metro-lights i {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: color-mix(in srgb, var(--praxis-muted) 35%, transparent);
+      border: 1px solid color-mix(in srgb, var(--praxis-muted) 45%, transparent);
+      transition: transform 80ms ease, background 80ms ease;
+    }
+
+    .metro-lights i.accent {
+      border-color: color-mix(in srgb, var(--praxis-accent) 55%, transparent);
+    }
+
+    .metro-lights i.on {
+      background: var(--praxis-accent);
+      transform: scale(1.22);
+    }
+
+    .stage {
+      position: relative;
+      min-height: 0;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.02), transparent),
+        #ffffff;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .stage {
+        background:
+          linear-gradient(180deg, rgba(255,255,255,0.02), transparent),
+          #0f1520;
+      }
+    }
+
+    .stage iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: transparent;
+    }
+
+    .dock {
+      display: grid;
+      gap: 10px;
+      padding: 12px 14px calc(12px + env(safe-area-inset-bottom));
+      background: color-mix(in srgb, var(--praxis-surface) 94%, transparent);
+      backdrop-filter: blur(16px);
+      border-top: 1px solid var(--praxis-line);
+      box-shadow: 0 -10px 26px rgba(15, 23, 42, 0.08);
+      z-index: 30;
+    }
+
+    .dock__row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .dock__row--main {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      align-items: center;
+    }
+
+    .dock__tempo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .dock__range {
+      width: 100%;
+      min-width: 120px;
+    }
+
+    .dock__meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      color: var(--praxis-muted);
+      font-size: 0.9rem;
+    }
+
+    .open-original {
+      color: var(--praxis-accent);
+      font-weight: 700;
+    }
+
+    /* Full screens: metronome in top bar, no bottom dock */
+    @media (min-width: 1024px) {
+      .metronome--top {
+        display: flex;
+      }
+
+      .dock {
+        display: none;
+      }
+
+      .topbar {
+        flex-wrap: nowrap;
+      }
+    }
+
+    /* Medium and smaller: bottom metronome dock */
+    @media (max-width: 1023px) {
+      .metronome--top {
+        display: none;
+      }
+
+      .topbar {
+        align-items: flex-start;
+      }
+
+      .topbar__nav {
+        width: 100%;
+        margin: 0;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .brand__subtitle {
+        display: none;
+      }
+
+      .dock__row--main {
+        grid-template-columns: auto 1fr;
+      }
+
+      .dock__output {
+        grid-column: 1 / -1;
+        justify-self: stretch;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="./index.html">
+      <span class="brand__badge">PR</span>
+      <span class="brand__text">
+        <span class="brand__title">Praxis</span>
+        <span class="brand__subtitle">Rhythm Studio · Free Play</span>
+      </span>
+    </a>
+
+    <nav class="topbar__nav" aria-label="Free Play navigation">
+      <a href="./index.html">Dashboard</a>
+      <a href="./free-play.html" aria-current="page">Free Play</a>
+      <a href="./co-op.html">Co-Op</a>
+    </nav>
+
+    <section
+      class="metronome metronome--top"
+      aria-label="Metronome"
+      data-metronome
+    >
+      <button
+        type="button"
+        class="metro-toggle"
+        data-metro-toggle
+        aria-pressed="false"
+      >
+        Play
+      </button>
+
+      <label class="metro-field">
+        Tempo
+        <input
+          class="metro-range"
+          type="range"
+          min="40"
+          max="208"
+          step="1"
+          value="88"
+          data-metro-tempo
+          aria-label="Tempo"
+        />
+      </label>
+
+      <output class="metro-output" data-metro-bpm>88 BPM</output>
+
+      <label class="metro-field">
+        Beats
+        <select class="metro-select" data-metro-beats aria-label="Beats per bar">
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4" selected>4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+        </select>
+      </label>
+
+      <div class="metro-lights" data-metro-lights aria-hidden="true"></div>
+    </section>
+  </header>
+
+  <main class="stage">
+    <!--
+      If your rhythm app is on the same domain, keep this:
+      /games/rhythm-app/exercise/720/
+
+      If not, use the full URL:
+      https://jeremysheeshka.ca/games/rhythm-app/exercise/720/
+    -->
+    <iframe
+      title="Free Play rhythm exercise"
+      src="http://localhost:4735/games/rhythm-app/exercise/720/"
+      loading="lazy"
+      allow="autoplay; fullscreen"
+    ></iframe>
+  </main>
+
+  <footer class="dock" aria-label="Metronome dock">
+    <div class="dock__row dock__row--main">
+      <button
+        type="button"
+        class="metro-toggle"
+        data-metro-toggle
+        aria-pressed="false"
+      >
+        Play
+      </button>
+
+      <div class="dock__tempo">
+        <input
+          class="metro-range dock__range"
+          type="range"
+          min="40"
+          max="208"
+          step="1"
+          value="88"
+          data-metro-tempo
+          aria-label="Tempo"
+        />
+      </div>
+
+      <output class="metro-output dock__output" data-metro-bpm>88 BPM</output>
+    </div>
+
+    <div class="dock__row">
+      <div class="metro-lights" data-metro-lights aria-hidden="true"></div>
+
+      <label class="metro-field">
+        Beats
+        <select class="metro-select" data-metro-beats aria-label="Beats per bar">
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4" selected>4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="dock__meta">
+      <span>Free Play · exploratory mode</span>
+      <a
+        class="open-original"
+        href="http://localhost:4735/games/rhythm-app/exercise/720/"
+        target="_blank"
+        rel="noopener"
+      >
+        Open exercise in new tab ↗
+      </a>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      const params = new URLSearchParams(window.location.search);
+
+      const state = {
+        tempo: clamp(parseInt(params.get("tempo"), 10) || 88, 40, 208),
+        beats: clamp(parseInt(params.get("beats"), 10) || 4, 2, 7),
+        playing: false,
+        currentBeat: 0,
+        nextNoteTime: 0,
+        timerId: null,
+        audioCtx: null,
+        session: 0
+      };
+
+      const toggleButtons = Array.from(document.querySelectorAll("[data-metro-toggle]"));
+      const tempoInputs = Array.from(document.querySelectorAll("[data-metro-tempo]"));
+      const bpmOutputs = Array.from(document.querySelectorAll("[data-metro-bpm]"));
+      const beatsSelects = Array.from(document.querySelectorAll("[data-metro-beats]"));
+      const lightContainers = Array.from(document.querySelectorAll("[data-metro-lights]"));
+
+      function clamp(value, min, max) {
+        if (Number.isNaN(value)) return min;
+        return Math.min(max, Math.max(min, value));
+      }
+
+      function ensureAudioContext() {
+        if (!state.audioCtx) {
+          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+          if (!AudioContextClass) return null;
+          state.audioCtx = new AudioContextClass();
+        }
+
+        if (state.audioCtx.state === "suspended") {
+          state.audioCtx.resume();
+        }
+
+        return state.audioCtx;
+      }
+
+      function scheduleClick(time, isAccent) {
+        const ctx = state.audioCtx;
+        if (!ctx) return;
+
+        const oscillator = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        oscillator.type = "sine";
+        oscillator.frequency.value = isAccent ? 1250 : 820;
+
+        gain.gain.setValueAtTime(0.0001, time);
+        gain.gain.exponentialRampToValueAtTime(isAccent ? 0.46 : 0.24, time + 0.002);
+        gain.gain.exponentialRampToValueAtTime(0.0001, time + 0.062);
+
+        oscillator.connect(gain);
+        gain.connect(ctx.destination);
+
+        oscillator.start(time);
+        oscillator.stop(time + 0.075);
+      }
+
+      function rebuildLights() {
+        lightContainers.forEach((container) => {
+          container.innerHTML = "";
+
+          for (let i = 0; i < state.beats; i += 1) {
+            const dot = document.createElement("i");
+            if (i === 0) dot.classList.add("accent");
+            container.appendChild(dot);
+          }
+        });
+      }
+
+      function updateLights(activeBeat) {
+        lightContainers.forEach((container) => {
+          Array.from(container.children).forEach((dot, index) => {
+            dot.classList.toggle("on", index === activeBeat);
+          });
+        });
+      }
+
+      function updateControls() {
+        toggleButtons.forEach((button) => {
+          button.textContent = state.playing ? "Stop" : "Play";
+          button.classList.toggle("active", state.playing);
+          button.setAttribute("aria-pressed", String(state.playing));
+        });
+
+        tempoInputs.forEach((input) => {
+          input.value = String(state.tempo);
+        });
+
+        bpmOutputs.forEach((output) => {
+          output.textContent = `${state.tempo} BPM`;
+        });
+
+        beatsSelects.forEach((select) => {
+          select.value = String(state.beats);
+        });
+      }
+
+      function advanceNote() {
+        const secondsPerBeat = 60.0 / state.tempo;
+        state.nextNoteTime += secondsPerBeat;
+        state.currentBeat = (state.currentBeat + 1) % state.beats;
+      }
+
+      function scheduler() {
+        const ctx = state.audioCtx;
+        if (!ctx) return;
+
+        const session = state.session;
+        const scheduleAheadTime = 0.12;
+        const lookahead = 25;
+
+        while (state.nextNoteTime < ctx.currentTime + scheduleAheadTime) {
+          const beatToDraw = state.currentBeat;
+          const timeToDraw = state.nextNoteTime;
+
+          scheduleClick(state.nextNoteTime, state.currentBeat === 0);
+
+          const delay = Math.max(0, (timeToDraw - ctx.currentTime) * 1000);
+          window.setTimeout(() => {
+            if (state.session === session && state.playing) {
+              updateLights(beatToDraw);
+            }
+          }, delay);
+
+          advanceNote();
+        }
+
+        state.timerId = window.setTimeout(scheduler, lookahead);
+      }
+
+      function start() {
+        const ctx = ensureAudioContext();
+        if (!ctx) return;
+
+        state.session += 1;
+        state.playing = true;
+        state.currentBeat = 0;
+        state.nextNoteTime = ctx.currentTime + 0.08;
+
+        updateControls();
+        scheduler();
+      }
+
+      function stop() {
+        state.session += 1;
+        state.playing = false;
+
+        if (state.timerId) {
+          window.clearTimeout(state.timerId);
+          state.timerId = null;
+        }
+
+        updateLights(-1);
+        updateControls();
+      }
+
+      toggleButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          if (state.playing) {
+            stop();
+          } else {
+            start();
+          }
+        });
+      });
+
+      tempoInputs.forEach((input) => {
+        input.addEventListener("input", (event) => {
+          state.tempo = clamp(parseInt(event.target.value, 10), 40, 208);
+          updateControls();
+        });
+      });
+
+      beatsSelects.forEach((select) => {
+        select.addEventListener("change", (event) => {
+          state.beats = clamp(parseInt(event.target.value, 10), 2, 7);
+          state.currentBeat = 0;
+          rebuildLights();
+
+          if (!state.playing) {
+            updateLights(-1);
+          }
+
+          updateControls();
+        });
+      });
+
+      rebuildLights();
+      updateControls();
+      updateLights(-1);
+    })();
+  </script>
+</body>
+</html>

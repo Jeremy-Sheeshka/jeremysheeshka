@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Praxis — Guided Rhythm Studio</title>
+  <meta name="description" content="Praxis — a reimagined guided rhythm studio." />
+
+  <style>
+    :root {
+      color-scheme: light dark;
+
+      /*
+        Replace these with your exact app palette if needed.
+        These are neutral and should sit safely beside your existing rhythm app.
+      */
+      --praxis-bg: #f6f7f9;
+      --praxis-surface: #ffffff;
+      --praxis-surface-2: #f0f2f5;
+      --praxis-ink: #111827;
+      --praxis-muted: #5b6472;
+      --praxis-line: #d8dee7;
+      --praxis-accent: #1d4ed8;
+      --praxis-accent-2: #1840a8;
+      --praxis-accent-ink: #ffffff;
+      --praxis-focus: rgba(29, 78, 216, 0.30);
+      --praxis-shadow: 0 12px 32px rgba(15, 23, 42, 0.10);
+      --praxis-radius: 18px;
+      --praxis-radius-sm: 12px;
+      --praxis-max: 1180px;
+
+      --tag-resist-bg: rgba(220, 38, 38, 0.10);
+      --tag-resist-ink: #b91c1c;
+
+      --tag-relate-bg: rgba(37, 99, 235, 0.10);
+      --tag-relate-ink: #1d4ed8;
+
+      --tag-imagine-bg: rgba(124, 58, 237, 0.10);
+      --tag-imagine-ink: #6d28d9;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --praxis-bg: #0b1017;
+        --praxis-surface: #121924;
+        --praxis-surface-2: #18212e;
+        --praxis-ink: #e8edf4;
+        --praxis-muted: #9aa6b5;
+        --praxis-line: #2a3646;
+        --praxis-accent: #60a5fa;
+        --praxis-accent-2: #93c5fd;
+        --praxis-accent-ink: #071018;
+        --praxis-focus: rgba(96, 165, 250, 0.34);
+        --praxis-shadow: 0 14px 34px rgba(0, 0, 0, 0.34);
+
+        --tag-resist-bg: rgba(248, 113, 113, 0.12);
+        --tag-resist-ink: #fca5a5;
+
+        --tag-relate-bg: rgba(96, 165, 250, 0.12);
+        --tag-relate-ink: #93c5fd;
+
+        --tag-imagine-bg: rgba(167, 139, 250, 0.12);
+        --tag-imagine-ink: #c4b5fd;
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Open Sans", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(29, 78, 216, 0.08), transparent 28%),
+        radial-gradient(circle at top right, rgba(124, 58, 237, 0.07), transparent 24%),
+        var(--praxis-bg);
+      color: var(--praxis-ink);
+      line-height: 1.55;
+    }
+
+    img,
+    svg,
+    iframe {
+      max-width: 100%;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    .skip-link {
+      position: absolute;
+      left: -999px;
+      top: 12px;
+      z-index: 1000;
+      background: var(--praxis-accent);
+      color: var(--praxis-accent-ink);
+      padding: 10px 14px;
+      border-radius: 10px;
+    }
+
+    .skip-link:focus {
+      left: 12px;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(14px);
+      background: color-mix(in srgb, var(--praxis-surface) 86%, transparent);
+      border-bottom: 1px solid var(--praxis-line);
+    }
+
+    .site-header__inner {
+      max-width: var(--praxis-max);
+      margin: 0 auto;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .brand__badge {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--praxis-accent), #7c3aed);
+      color: white;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      box-shadow: var(--praxis-shadow);
+      flex: 0 0 auto;
+    }
+
+    .brand__text {
+      min-width: 0;
+    }
+
+    .brand__title {
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .brand__subtitle {
+      color: var(--praxis-muted);
+      font-size: 0.92rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .site-nav {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .site-nav a {
+      padding: 9px 12px;
+      border-radius: 999px;
+      color: var(--praxis-muted);
+      border: 1px solid transparent;
+    }
+
+    .site-nav a:hover {
+      color: var(--praxis-ink);
+      background: var(--praxis-surface-2);
+    }
+
+    .site-nav a:focus-visible,
+    .button:focus-visible,
+    .mode-card:focus-visible,
+    .mini-action:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 4px var(--praxis-focus);
+    }
+
+    .page {
+      max-width: var(--praxis-max);
+      margin: 0 auto;
+      padding: 28px 20px 56px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 22px;
+      align-items: stretch;
+      margin-bottom: 26px;
+    }
+
+    .panel {
+      background: color-mix(in srgb, var(--praxis-surface) 92%, transparent);
+      border: 1px solid var(--praxis-line);
+      border-radius: var(--praxis-radius);
+      box-shadow: var(--praxis-shadow);
+    }
+
+    .hero__main,
+    .hero__aside {
+      padding: 26px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 12px;
+      color: var(--praxis-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 0.78rem;
+      font-weight: 800;
+    }
+
+    h1 {
+      margin: 0 0 14px;
+      font-size: clamp(2rem, 3.4vw, 3.35rem);
+      line-height: 1.04;
+      letter-spacing: -0.045em;
+      max-width: 12ch;
+    }
+
+    .lead {
+      margin: 0;
+      color: var(--praxis-muted);
+      font-size: 1.02rem;
+      max-width: 62ch;
+    }
+
+    .hero__actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 46px;
+      padding: 12px 18px;
+      border-radius: 14px;
+      border: 1px solid var(--praxis-line);
+      background: var(--praxis-surface-2);
+      color: var(--praxis-ink);
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .button--primary {
+      background: var(--praxis-accent);
+      border-color: transparent;
+      color: var(--praxis-accent-ink);
+    }
+
+    .button--primary:hover {
+      background: var(--praxis-accent-2);
+    }
+
+    .hero__aside {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .status-list {
+      display: grid;
+      gap: 12px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .status-list li {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      padding: 14px;
+      border: 1px solid var(--praxis-line);
+      border-radius: 16px;
+      background: var(--praxis-surface-2);
+    }
+
+    .status-list strong {
+      display: block;
+    }
+
+    .status-list span {
+      color: var(--praxis-muted);
+      font-size: 0.94rem;
+    }
+
+    .section {
+      margin-top: 28px;
+    }
+
+    .section__head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+
+    .section__head h2 {
+      margin: 0;
+      font-size: 1.45rem;
+      letter-spacing: -0.03em;
+    }
+
+    .section__head p {
+      margin: 0;
+      color: var(--praxis-muted);
+      max-width: 58ch;
+    }
+
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .grid--3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .grid--2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .card {
+      padding: 20px;
+    }
+
+    .card h3 {
+      margin: 0 0 8px;
+      font-size: 1.05rem;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--praxis-muted);
+    }
+
+    .card__meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 32px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: var(--praxis-surface-2);
+      border: 1px solid var(--praxis-line);
+      color: var(--praxis-muted);
+      font-size: 0.9rem;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .tag--resist {
+      background: var(--tag-resist-bg);
+      color: var(--tag-resist-ink);
+    }
+
+    .tag--relate {
+      background: var(--tag-relate-bg);
+      color: var(--tag-relate-ink);
+    }
+
+    .tag--imagine {
+      background: var(--tag-imagine-bg);
+      color: var(--tag-imagine-ink);
+    }
+
+    .mode-card {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      padding: 22px;
+      border: 1px solid var(--praxis-line);
+      border-radius: 22px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.03), transparent),
+        var(--praxis-surface);
+      box-shadow: var(--praxis-shadow);
+      transition: transform 140ms ease, border-color 140ms ease;
+    }
+
+    .mode-card:hover {
+      transform: translateY(-2px);
+      border-color: color-mix(in srgb, var(--praxis-accent) 40%, var(--praxis-line));
+    }
+
+    .mode-card__top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .mode-card__title {
+      margin: 0;
+      font-size: 1.35rem;
+      letter-spacing: -0.03em;
+    }
+
+    .mode-card p {
+      margin: 0;
+      color: var(--praxis-muted);
+    }
+
+    .mode-card__footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: auto;
+    }
+
+    .mini-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      color: var(--praxis-accent);
+    }
+
+    .gallery {
+      padding: 24px;
+    }
+
+    .gallery h2 {
+      margin: 0 0 10px;
+      font-size: 1.5rem;
+      letter-spacing: -0.03em;
+    }
+
+    .gallery > p {
+      margin: 0 0 18px;
+      color: var(--praxis-muted);
+      max-width: 75ch;
+    }
+
+    .literature {
+      display: grid;
+      gap: 12px;
+      margin: 0 0 20px;
+      padding: 0;
+      list-style: none;
+    }
+
+    .literature li {
+      padding: 15px;
+      border: 1px solid var(--praxis-line);
+      border-radius: 16px;
+      background: var(--praxis-surface-2);
+    }
+
+    .literature strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .literature span {
+      color: var(--praxis-muted);
+      display: block;
+    }
+
+    .prompt-box {
+      padding: 18px;
+      border: 1px dashed color-mix(in srgb, var(--praxis-accent) 45%, var(--praxis-line));
+      border-radius: 18px;
+      background: color-mix(in srgb, var(--praxis-accent) 6%, var(--praxis-surface));
+    }
+
+    .prompt-box h3 {
+      margin: 0 0 8px;
+    }
+
+    .prompt-box p {
+      margin: 0 0 14px;
+      color: var(--praxis-muted);
+    }
+
+    .site-footer {
+      border-top: 1px solid var(--praxis-line);
+      background: color-mix(in srgb, var(--praxis-surface) 88%, transparent);
+    }
+
+    .site-footer__inner {
+      max-width: var(--praxis-max);
+      margin: 0 auto;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      color: var(--praxis-muted);
+      font-size: 0.94rem;
+    }
+
+    @media (max-width: 980px) {
+      .hero,
+      .grid--3,
+      .grid--2 {
+        grid-template-columns: 1fr;
+      }
+
+      .site-header__inner {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .site-nav {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page {
+        padding-inline: 14px;
+      }
+
+      .hero__main,
+      .hero__aside,
+      .card,
+      .gallery {
+        padding: 18px;
+      }
+
+      .hero__actions .button {
+        width: 100%;
+      }
+
+      .site-footer__inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="./index.html">
+        <span class="brand__badge">PR</span>
+        <span class="brand__text">
+          <span class="brand__title">Praxis / Rhythm Studio</span>
+          <span class="brand__subtitle">Curriculum Otherwise · a reimagined sight-reading studio</span>
+        </span>
+      </a>
+
+      <nav class="site-nav" aria-label="Primary">
+        <a href="./index.html">Dashboard</a>
+        <a href="./free-play.html">Free Play</a>
+        <a href="./co-op.html">Trade Fours · Co-Op</a>
+        <a href="#gallery">Gallery</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="page">
+    <section class="hero">
+      <div class="panel hero__main">
+        <p class="eyebrow">Studio Dashboard</p>
+        <h1>Rhythm literacy built with the room, not around it.</h1>
+        <p class="lead">
+          Praxis began as a standard rhythm drill: a fixed canon, a metronome, a red mark for a wrong answer.
+          This studio reimagines that premise as a universal, constructivist environment — one that assumes
+          every student already arrives with rhythm, and asks the platform to notice, hold, and build from
+          what they bring in.
+        </p>
+
+        <div class="hero__actions">
+          <a class="button button--primary" href="./free-play.html">Enter Free Play →</a>
+          <a class="button" href="./co-op.html">Enter Trade Fours · Co-Op</a>
+          <a class="button" href="#gallery">Gallery &amp; doing prompt</a>
+        </div>
+      </div>
+
+      <aside class="panel hero__aside" aria-label="Current studio state">
+        <ul class="status-list">
+          <li>
+            <div>
+              <strong>Current collection</strong>
+              <span>Afro-Cuban Claves</span>
+            </div>
+            <span class="tag tag--resist">Resist</span>
+          </li>
+
+          <li>
+            <div>
+              <strong>Studio setup</strong>
+              <span>Developing · 4/4 · 88 BPM</span>
+            </div>
+            <span class="pill">Ready</span>
+          </li>
+
+          <li>
+            <div>
+              <strong>Recent session</strong>
+              <span>Trade Fours · 8 bars explored</span>
+            </div>
+            <span class="tag tag--relate">Relate</span>
+          </li>
+
+          <li>
+            <div>
+              <strong>Cultural datasets</strong>
+              <span>Community, family, and listening-led sets</span>
+            </div>
+            <span class="tag tag--imagine">Imagine</span>
+          </li>
+        </ul>
+      </aside>
+    </section>
+
+    <section class="section" aria-label="Collections and setup">
+      <div class="section__head">
+        <div>
+          <h2>The communal dashboard</h2>
+          <p>Begin with the music already in the room.</p>
+        </div>
+      </div>
+
+      <div class="grid grid--3">
+        <article class="panel card">
+          <h3>Afro-Cuban Claves</h3>
+          <p>Community rhythm set · 12 patterns</p>
+          <div class="card__meta">
+            <span class="pill">Developing</span>
+            <span class="pill">4/4</span>
+            <span class="pill">88 BPM</span>
+          </div>
+        </article>
+
+        <article class="panel card">
+          <h3>Traditional Aboriginal Rhythms</h3>
+          <p>Listening-led study · 8 patterns</p>
+          <div class="card__meta">
+            <span class="tag tag--resist">Resist</span>
+            <span class="pill">Listening first</span>
+          </div>
+        </article>
+
+        <article class="panel card">
+          <h3>Local Family Database</h3>
+          <p>Teacher-curated archive · 21 patterns</p>
+          <div class="card__meta">
+            <span class="tag tag--relate">Relate</span>
+            <span class="pill">Funds of knowledge</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" aria-label="Practice pathways">
+      <div class="section__head">
+        <div>
+          <h2>Choose a pathway</h2>
+          <p>
+            The same material can support exploration or reciprocal learning. These modes now open in
+            separate studio pages so the main dashboard stays light and the practice environment stays focused.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid grid--2">
+        <a class="mode-card" href="./free-play.html">
+          <div class="mode-card__top">
+            <h3 class="mode-card__title">Free Play</h3>
+            <span class="tag tag--imagine">Imagine</span>
+          </div>
+          <p>
+            Find the pulse your way. Listen, tap, loop, and alter the pattern. Observations describe the
+            session without grading it.
+          </p>
+          <div class="mode-card__footer">
+            <span class="pill">Exploratory mode</span>
+            <span class="mini-action">Open Free Play →</span>
+          </div>
+        </a>
+
+        <a class="mode-card" href="./co-op.html">
+          <div class="mode-card__top">
+            <h3 class="mode-card__title">Trade Fours · Co-Op</h3>
+            <span class="tag tag--relate">Relate</span>
+          </div>
+          <p>
+            Read it. Discuss it. Trade it. Audition each phrase, choose a pulse language, and leave a note
+            for your partner before agreeing together.
+          </p>
+          <div class="mode-card__footer">
+            <span class="pill">SPAL / reciprocal learning</span>
+            <span class="mini-action">Open Co-Op →</span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <section class="section panel gallery" id="gallery" aria-label="Gallery and literature">
+      <h2>Gallery · literature and an invitation</h2>
+      <p>
+        This studio was built in conversation with a handful of ideas about datasets, feedback, and who a
+        “universal” exercise is designed for. The reading below informed specific decisions inside the app;
+        the prompt at the end is for you.
+      </p>
+
+      <ul class="literature">
+        <li>
+          <strong>Onuoha, M. (2016). The Library of Missing Datasets.</strong>
+          <span>
+            Treats absence itself as a design choice — whose rhythms, whose music, never made it into the
+            training set. Sits directly behind the Cultural Datasets feature and its RESIST annotation.
+          </span>
+        </li>
+        <li>
+          <strong>Paris, D., &amp; Alim, H. S. (2014). Culturally sustaining pedagogy.</strong>
+          <span>
+            Argues classrooms should sustain, not just accommodate, the cultural practices students already bring.
+            Behind the decision to let a family or community collection sit beside “Afro-Cuban Claves” without
+            ranking one tradition above another.
+          </span>
+        </li>
+        <li>
+          <strong>Moll, L., Amanti, C., Neff, D., &amp; Gonzalez, N. (1992). Funds of knowledge.</strong>
+          <span>
+            Frames a household’s everyday practices as intellectual resources, not a gap to close.
+            Behind the Local Family Database preset.
+          </span>
+        </li>
+        <li>
+          <strong>Freire, P. (1970). Pedagogy of the Oppressed.</strong>
+          <span>
+            Critiques the “banking model,” where a teacher deposits correct answers into a passive student.
+            Behind moving feedback away from a pass/fail score.
+          </span>
+        </li>
+        <li>
+          <strong>CAST (2018). Universal Design for Learning Guidelines.</strong>
+          <span>
+            Argues that flexible means of representation, action, and engagement serve every learner.
+            Behind offering listening, clapping, and chanting as equally valid routes through a rhythm.
+          </span>
+        </li>
+        <li>
+          <strong>Varela, F., Thompson, E., &amp; Rosch, E. (1991). The Embodied Mind.</strong>
+          <span>
+            Source of “enactive” cognition — understanding built through embodied action, not just correction.
+            Behind the Enactive Scaffold.
+          </span>
+        </li>
+      </ul>
+
+      <div class="prompt-box">
+        <h3>A doing prompt for the cohort</h3>
+        <p>
+          Open the Cultural Datasets card and select Local Family Database. Then go to Trade Fours and play
+          through a phrase with a partner as if it came from your own household — a lullaby, a chant, a rhythm
+          from a game, anything with a pulse.
+        </p>
+        <a class="button button--primary" href="./co-op.html">Try the prompt →</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <div>Praxis — Guided Rhythm Studio</div>
+      <div>Dashboard · Free Play · Trade Fours · Gallery</div>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Praxis — Trade Fours · Co-Op</title>
+  <meta name="description" content="Praxis Trade Fours co-op rhythm studio." />
+
+  <style>
+    :root {
+      color-scheme: light dark;
+
+      --praxis-bg: #f6f7f9;
+      --praxis-surface: #ffffff;
+      --praxis-surface-2: #eef2f6;
+      --praxis-ink: #111827;
+      --praxis-muted: #5b6472;
+      --praxis-line: #d8dee7;
+      --praxis-accent: #1d4ed8;
+      --praxis-accent-2: #1840a8;
+      --praxis-accent-ink: #ffffff;
+      --praxis-focus: rgba(29, 78, 216, 0.30);
+      --praxis-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
+      --praxis-topbar-height: 72px;
+
+      --tag-relate-bg: rgba(37, 99, 235, 0.10);
+      --tag-relate-ink: #1d4ed8;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --praxis-bg: #0b1017;
+        --praxis-surface: #121924;
+        --praxis-surface-2: #18212e;
+        --praxis-ink: #e8edf4;
+        --praxis-muted: #9aa6b5;
+        --praxis-line: #2a3646;
+        --praxis-accent: #60a5fa;
+        --praxis-accent-2: #93c5fd;
+        --praxis-accent-ink: #071018;
+        --praxis-focus: rgba(96, 165, 250, 0.34);
+        --praxis-shadow: 0 14px 34px rgba(0, 0, 0, 0.34);
+
+        --tag-relate-bg: rgba(96, 165, 250, 0.12);
+        --tag-relate-ink: #93c5fd;
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      height: 100%;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Open Sans", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--praxis-bg);
+      color: var(--praxis-ink);
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr) auto;
+      overflow: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input,
+    select,
+    output {
+      font: inherit;
+    }
+
+    .topbar {
+      min-height: var(--praxis-topbar-height);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 12px 16px;
+      background: color-mix(in srgb, var(--praxis-surface) 90%, transparent);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--praxis-line);
+      box-shadow: var(--praxis-shadow);
+      z-index: 30;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .brand__badge {
+      width: 40px;
+      height: 40px;
+      border-radius: 13px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--praxis-accent), #059669);
+      color: white;
+      font-weight: 800;
+      flex: 0 0 auto;
+      box-shadow: var(--praxis-shadow);
+    }
+
+    .brand__text {
+      min-width: 0;
+      line-height: 1.15;
+    }
+
+    .brand__title {
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      white-space: nowrap;
+    }
+
+    .brand__subtitle {
+      color: var(--praxis-muted);
+      font-size: 0.9rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .topbar__nav {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-right: auto;
+    }
+
+    .topbar__nav a {
+      padding: 9px 12px;
+      border-radius: 999px;
+      color: var(--praxis-muted);
+      border: 1px solid transparent;
+      white-space: nowrap;
+    }
+
+    .topbar__nav a:hover {
+      background: var(--praxis-surface-2);
+      color: var(--praxis-ink);
+    }
+
+    .topbar__nav a[aria-current="page"] {
+      background: color-mix(in srgb, var(--praxis-accent) 12%, transparent);
+      color: var(--praxis-ink);
+      border-color: color-mix(in srgb, var(--praxis-accent) 30%, transparent);
+      font-weight: 700;
+    }
+
+    .topbar__nav a:focus-visible,
+    .metro-toggle:focus-visible,
+    .metro-select:focus-visible,
+    .metro-range:focus-visible,
+    .choice-button:focus-visible,
+    .agree-button:focus-visible,
+    .ready-button:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 4px var(--praxis-focus);
+      border-radius: 10px;
+    }
+
+    .metronome {
+      display: none;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 10px 12px;
+      border: 1px solid var(--praxis-line);
+      border-radius: 16px;
+      background: color-mix(in srgb, var(--praxis-surface-2) 88%, transparent);
+      margin-left: auto;
+    }
+
+    .metro-toggle {
+      min-width: 88px;
+      min-height: 42px;
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      background: var(--praxis-accent);
+      color: var(--praxis-accent-ink);
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .metro-toggle.active {
+      background: #dc2626;
+      color: white;
+    }
+
+    .metro-field {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--praxis-muted);
+      font-size: 0.94rem;
+      white-space: nowrap;
+    }
+
+    .metro-range {
+      width: 150px;
+      accent-color: var(--praxis-accent);
+      cursor: pointer;
+    }
+
+    .metro-output {
+      min-width: 76px;
+      text-align: center;
+      padding: 8px 10px;
+      border-radius: 10px;
+      background: var(--praxis-surface);
+      border: 1px solid var(--praxis-line);
+      font-weight: 800;
+      color: var(--praxis-ink);
+    }
+
+    .metro-select {
+      min-height: 40px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: 1px solid var(--praxis-line);
+      background: var(--praxis-surface);
+      color: var(--praxis-ink);
+      cursor: pointer;
+    }
+
+    .metro-lights {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 0 4px;
+    }
+
+    .metro-lights i {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: color-mix(in srgb, var(--praxis-muted) 35%, transparent);
+      border: 1px solid color-mix(in srgb, var(--praxis-muted) 45%, transparent);
+      transition: transform 80ms ease, background 80ms ease;
+    }
+
+    .metro-lights i.accent {
+      border-color: color-mix(in srgb, var(--praxis-accent) 55%, transparent);
+    }
+
+    .metro-lights i.on {
+      background: var(--praxis-accent);
+      transform: scale(1.22);
+    }
+
+    .main {
+      min-height: 0;
+      overflow: auto;
+      padding: 16px;
+    }
+
+    .coop-layout {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: 1fr;
+      align-items: start;
+      min-height: 0;
+    }
+
+    .panel {
+      background: color-mix(in srgb, var(--praxis-surface) 94%, transparent);
+      border: 1px solid var(--praxis-line);
+      border-radius: 20px;
+      box-shadow: var(--praxis-shadow);
+    }
+
+    .protocol {
+      padding: 20px;
+    }
+
+    .protocol__head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .protocol h1 {
+      margin: 0;
+      font-size: 1.5rem;
+      letter-spacing: -0.035em;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: var(--tag-relate-bg);
+      color: var(--tag-relate-ink);
+    }
+
+    .protocol > p {
+      margin: 0 0 18px;
+      color: var(--praxis-muted);
+    }
+
+    .student-grid {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: 1fr;
+      margin-bottom: 16px;
+    }
+
+    .student-card {
+      border: 1px solid var(--praxis-line);
+      border-radius: 18px;
+      background: var(--praxis-surface-2);
+      padding: 16px;
+    }
+
+    .student-card h2 {
+      margin: 0 0 6px;
+      font-size: 1.08rem;
+    }
+
+    .student-card p {
+      margin: 0 0 12px;
+      color: var(--praxis-muted);
+      font-size: 0.95rem;
+    }
+
+    .phrase-list {
+      display: grid;
+      gap: 8px;
+      margin: 0 0 12px;
+      padding: 0;
+      list-style: none;
+    }
+
+    .phrase-list li {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      border: 1px solid var(--praxis-line);
+      border-radius: 12px;
+      background: var(--praxis-surface);
+    }
+
+    .phrase {
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .phrase small {
+      display: block;
+      color: var(--praxis-muted);
+      font-weight: 600;
+    }
+
+    .choice-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .choice-button {
+      min-height: 38px;
+      padding: 8px 11px;
+      border-radius: 999px;
+      border: 1px solid var(--praxis-line);
+      background: var(--praxis-surface);
+      color: var(--praxis-ink);
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .choice-button.selected {
+      background: color-mix(in srgb, var(--praxis-accent) 14%, transparent);
+      border-color: color-mix(in srgb, var(--praxis-accent) 38%, transparent);
+      color: var(--praxis-ink);
+    }
+
+    .agreement {
+      display: grid;
+      gap: 12px;
+      padding: 16px;
+      border: 1px dashed color-mix(in srgb, var(--praxis-accent) 38%, var(--praxis-line));
+      border-radius: 18px;
+      background: color-mix(in srgb, var(--praxis-accent) 5%, var(--praxis-surface));
+    }
+
+    .agreement h2 {
+      margin: 0;
+      font-size: 1.08rem;
+    }
+
+    .agree-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .agree-button {
+      min-height: 44px;
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--praxis-line);
+      background: var(--praxis-surface);
+      color: var(--praxis-ink);
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .agree-button.is-agreed {
+      background: #16a34a;
+      border-color: transparent;
+      color: white;
+    }
+
+    .ready-button {
+      min-height: 48px;
+      border-radius: 14px;
+      border: 1px solid transparent;
+      background: var(--praxis-accent);
+      color: var(--praxis-accent-ink);
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .ready-button:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .embed-panel {
+      padding: 12px;
+      min-height: 0;
+    }
+
+    .embed-panel__frame {
+      position: relative;
+      border: 1px solid var(--praxis-line);
+      border-radius: 16px;
+      overflow: hidden;
+      background: #fff;
+      min-height: 65vh;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .embed-panel__frame {
+        background: #0f1520;
+      }
+    }
+
+    .embed-panel iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .dock {
+      display: grid;
+      gap: 10px;
+      padding: 12px 14px calc(12px + env(safe-area-inset-bottom));
+      background: color-mix(in srgb, var(--praxis-surface) 94%, transparent);
+      backdrop-filter: blur(16px);
+      border-top: 1px solid var(--praxis-line);
+      box-shadow: 0 -10px 26px rgba(15, 23, 42, 0.08);
+      z-index: 30;
+    }
+
+    .dock__row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .dock__row--main {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      align-items: center;
+    }
+
+    .dock__tempo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .dock__range {
+      width: 100%;
+      min-width: 120px;
+    }
+
+    .dock__meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      color: var(--praxis-muted);
+      font-size: 0.9rem;
+    }
+
+    .open-original {
+      color: var(--praxis-accent);
+      font-weight: 700;
+    }
+
+    @media (min-width: 1024px) {
+      .metronome--top {
+        display: flex;
+      }
+
+      .dock {
+        display: none;
+      }
+
+      .topbar {
+        flex-wrap: nowrap;
+      }
+
+      .main {
+        overflow: hidden;
+      }
+
+      .coop-layout {
+        grid-template-columns: minmax(360px, 42fr) minmax(0, 58fr);
+        height: 100%;
+      }
+
+      .protocol {
+        overflow: auto;
+        height: 100%;
+      }
+
+      .embed-panel {
+        height: 100%;
+        display: grid;
+      }
+
+      .embed-panel__frame {
+        min-height: 0;
+        height: 100%;
+      }
+    }
+
+    @media (max-width: 1023px) {
+      .metronome--top {
+        display: none;
+      }
+
+      .topbar {
+        align-items: flex-start;
+      }
+
+      .topbar__nav {
+        width: 100%;
+        margin: 0;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .brand__subtitle {
+        display: none;
+      }
+
+      .dock__row--main {
+        grid-template-columns: auto 1fr;
+      }
+
+      .dock__output {
+        grid-column: 1 / -1;
+        justify-self: stretch;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="./index.html">
+      <span class="brand__badge">PR</span>
+      <span class="brand__text">
+        <span class="brand__title">Praxis</span>
+        <span class="brand__subtitle">Rhythm Studio · Trade Fours</span>
+      </span>
+    </a>
+
+    <nav class="topbar__nav" aria-label="Co-Op navigation">
+      <a href="./index.html">Dashboard</a>
+      <a href="./free-play.html">Free Play</a>
+      <a href="./co-op.html" aria-current="page">Co-Op</a>
+    </nav>
+
+    <section
+      class="metronome metronome--top"
+      aria-label="Metronome"
+      data-metronome
+    >
+      <button
+        type="button"
+        class="metro-toggle"
+        data-metro-toggle
+        aria-pressed="false"
+      >
+        Play
+      </button>
+
+      <label class="metro-field">
+        Tempo
+        <input
+          class="metro-range"
+          type="range"
+          min="40"
+          max="208"
+          step="1"
+          value="88"
+          data-metro-tempo
+          aria-label="Tempo"
+        />
+      </label>
+
+      <output class="metro-output" data-metro-bpm>88 BPM</output>
+
+      <label class="metro-field">
+        Beats
+        <select class="metro-select" data-metro-beats aria-label="Beats per bar">
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4" selected>4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+        </select>
+      </label>
+
+      <div class="metro-lights" data-metro-lights aria-hidden="true"></div>
+    </section>
+  </header>
+
+  <main class="main">
+    <div class="coop-layout">
+      <section class="panel protocol" aria-label="Trade Fours protocol">
+        <div class="protocol__head">
+          <h1>Trade Fours · SPAL</h1>
+          <span class="tag">Relate</span>
+        </div>
+
+        <p>
+          Read it. Discuss it. Trade it. Audition each phrase, choose a pulse language, and leave a note
+          for your partner before agreeing together.
+        </p>
+
+        <div class="student-grid">
+          <article class="student-card" aria-label="Student A">
+            <h2>Student A · Bars 1–2 &amp; 5–6</h2>
+            <p>Read your two bars, then choose a pulse language.</p>
+
+            <ul class="phrase-list">
+              <li>
+                <span class="phrase">01 ♩ ♩ ♪♪ <small>A leads</small></span>
+                <button type="button" class="choice-button" data-audition>
+                  Audition
+                </button>
+              </li>
+              <li>
+                <span class="phrase">02 ♪♪ ♩ ♩ <small>A leads</small></span>
+                <button type="button" class="choice-button" data-audition>
+                  Audition
+                </button>
+              </li>
+              <li>
+                <span class="phrase">05 ♩ ♪♪ ♩ <small>A returns</small></span>
+                <button type="button" class="choice-button" data-audition>
+                  Audition
+                </button>
+              </li>
+              <li>
+                <span class="phrase">06 ♪♪ ♪♪ ♩ <small>A returns</small></span>
+                <button type="button" class="choice-button" data-audition>
+                  Audition
+                </button>
+              </li>
+            </ul>
+
+            <div class="choice-row" data-choice-group="a">
+              <button type="button" class="choice-button" data-choice="ta">Ta / ti-ti</button>
+              <button type="button" class="choice-button" data-choice="numbers">Numbers</button>
+              <button type="button" class="choice-button" data-choice="movement">Movement</button>
+            </div>
+          </article>
+
+          <article class="student-card" aria-label="Student B">
+            <h2>Student B · Bars 3–4 &amp; 7–8</h2>
+            <p>Read your two bars, then choose a pulse language.</p>
+
+            <ul class="phrase-list">
+              <li>
+                <span class="phrase">03 ♩ ♪♪ ♩ <small>B leads</small></span>
+                <button type="button" class="choice-button" data-audition>
+                  Audition
+                </button>
+              </li>
+              <li>
+                <span class="phrase">04 ♪♪ ♩ ♪♪ <small>B leads</small></span>
+                <button type="button" class="choice-button" data-audition>
+                  Audition
+                </button>
+              </li>
+              <li>
+                <span class="phrase">07 ♩ ♩ ♩ <small>B returns</small></span>
+                <button type="button" class="choice-button" data-audition>
+                  Audition
+                </button>
+              </li>
+              <li>
+                <span class="phrase">08 ♪♪ ♩ ♩ <small>Together</small></span>
+                <button type="button" class="choice-button" data-audition>
+                  Audition
+                </button>
+              </li>
+            </ul>
+
+            <div class="choice-row" data-choice-group="b">
+              <button type="button" class="choice-button" data-choice="ta">Ta / ti-ti</button>
+              <button type="button" class="choice-button" data-choice="numbers">Numbers</button>
+              <button type="button" class="choice-button" data-choice="movement">Movement</button>
+            </div>
+          </article>
+        </div>
+
+        <div class="agreement">
+          <h2>Rehearsal agreement</h2>
+
+          <div class="agree-row">
+            <button type="button" class="agree-button" id="student-a-agree">
+              Student A agrees
+            </button>
+
+            <button type="button" class="agree-button" id="student-b-agree">
+              Student B agrees
+            </button>
+          </div>
+
+          <button
+            type="button"
+            class="ready-button"
+            id="we-are-ready"
+            disabled
+          >
+            We Are Ready →
+          </button>
+        </div>
+      </section>
+
+      <section class="panel embed-panel" aria-label="Co-Op rehearsal exercise">
+        <div class="embed-panel__frame">
+          <!--
+            If you later create a dedicated co-op exercise URL, replace this src.
+          -->
+          <iframe
+            title="Co-Op rhythm exercise"
+            src="http://localhost:4735/games/rhythm-app/exercise/720/"
+            loading="lazy"
+            allow="autoplay; fullscreen"
+          ></iframe>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="dock" aria-label="Metronome dock">
+    <div class="dock__row dock__row--main">
+      <button
+        type="button"
+        class="metro-toggle"
+        data-metro-toggle
+        aria-pressed="false"
+      >
+        Play
+      </button>
+
+      <div class="dock__tempo">
+        <input
+          class="metro-range dock__range"
+          type="range"
+          min="40"
+          max="208"
+          step="1"
+          value="88"
+          data-metro-tempo
+          aria-label="Tempo"
+        />
+      </div>
+
+      <output class="metro-output dock__output" data-metro-bpm>88 BPM</output>
+    </div>
+
+    <div class="dock__row">
+      <div class="metro-lights" data-metro-lights aria-hidden="true"></div>
+
+      <label class="metro-field">
+        Beats
+        <select class="metro-select" data-metro-beats aria-label="Beats per bar">
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4" selected>4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="dock__meta">
+      <span>Trade Fours · Co-Op</span>
+      <a
+        class="open-original"
+        href="http://localhost:4735/games/rhythm-app/exercise/720/"
+        target="_blank"
+        rel="noopener"
+      >
+        Open exercise in new tab ↗
+      </a>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      const params = new URLSearchParams(window.location.search);
+
+      const state = {
+        tempo: clamp(parseInt(params.get("tempo"), 10) || 88, 40, 208),
+        beats: clamp(parseInt(params.get("beats"), 10) || 4, 2, 7),
+        playing: false,
+        currentBeat: 0,
+        nextNoteTime: 0,
+        timerId: null,
+        audioCtx: null,
+        session: 0
+      };
+
+      const toggleButtons = Array.from(document.querySelectorAll("[data-metro-toggle]"));
+      const tempoInputs = Array.from(document.querySelectorAll("[data-metro-tempo]"));
+      const bpmOutputs = Array.from(document.querySelectorAll("[data-metro-bpm]"));
+      const beatsSelects = Array.from(document.querySelectorAll("[data-metro-beats]"));
+      const lightContainers = Array.from(document.querySelectorAll("[data-metro-lights]"));
+
+      function clamp(value, min, max) {
+        if (Number.isNaN(value)) return min;
+        return Math.min(max, Math.max(min, value));
+      }
+
+      function ensureAudioContext() {
+        if (!state.audioCtx) {
+          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+          if (!AudioContextClass) return null;
+          state.audioCtx = new AudioContextClass();
+        }
+
+        if (state.audioCtx.state === "suspended") {
+          state.audioCtx.resume();
+        }
+
+        return state.audioCtx;
+      }
+
+      function scheduleClick(time, isAccent) {
+        const ctx = state.audioCtx;
+        if (!ctx) return;
+
+        const oscillator = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        oscillator.type = "sine";
+        oscillator.frequency.value = isAccent ? 1250 : 820;
+
+        gain.gain.setValueAtTime(0.0001, time);
+        gain.gain.exponentialRampToValueAtTime(isAccent ? 0.46 : 0.24, time + 0.002);
+        gain.gain.exponentialRampToValueAtTime(0.0001, time + 0.062);
+
+        oscillator.connect(gain);
+        gain.connect(ctx.destination);
+
+        oscillator.start(time);
+        oscillator.stop(time + 0.075);
+      }
+
+      function rebuildLights() {
+        lightContainers.forEach((container) => {
+          container.innerHTML = "";
+
+          for (let i = 0; i < state.beats; i += 1) {
+            const dot = document.createElement("i");
+            if (i === 0) dot.classList.add("accent");
+            container.appendChild(dot);
+          }
+        });
+      }
+
+      function updateLights(activeBeat) {
+        lightContainers.forEach((container) => {
+          Array.from(container.children).forEach((dot, index) => {
+            dot.classList.toggle("on", index === activeBeat);
+          });
+        });
+      }
+
+      function updateControls() {
+        toggleButtons.forEach((button) => {
+          button.textContent = state.playing ? "Stop" : "Play";
+          button.classList.toggle("active", state.playing);
+          button.setAttribute("aria-pressed", String(state.playing));
+        });
+
+        tempoInputs.forEach((input) => {
+          input.value = String(state.tempo);
+        });
+
+        bpmOutputs.forEach((output) => {
+          output.textContent = `${state.tempo} BPM`;
+        });
+
+        beatsSelects.forEach((select) => {
+          select.value = String(state.beats);
+        });
+      }
+
+      function advanceNote() {
+        const secondsPerBeat = 60.0 / state.tempo;
+        state.nextNoteTime += secondsPerBeat;
+        state.currentBeat = (state.currentBeat + 1) % state.beats;
+      }
+
+      function scheduler() {
+        const ctx = state.audioCtx;
+        if (!ctx) return;
+
+        const session = state.session;
+        const scheduleAheadTime = 0.12;
+        const lookahead = 25;
+
+        while (state.nextNoteTime < ctx.currentTime + scheduleAheadTime) {
+          const beatToDraw = state.currentBeat;
+          const timeToDraw = state.nextNoteTime;
+
+          scheduleClick(state.nextNoteTime, state.currentBeat === 0);
+
+          const delay = Math.max(0, (timeToDraw - ctx.currentTime) * 1000);
+          window.setTimeout(() => {
+            if (state.session === session && state.playing) {
+              updateLights(beatToDraw);
+            }
+          }, delay);
+
+          advanceNote();
+        }
+
+        state.timerId = window.setTimeout(scheduler, lookahead);
+      }
+
+      function start() {
+        const ctx = ensureAudioContext();
+        if (!ctx) return;
+
+        state.session += 1;
+        state.playing = true;
+        state.currentBeat = 0;
+        state.nextNoteTime = ctx.currentTime + 0.08;
+
+        updateControls();
+        scheduler();
+      }
+
+      function stop() {
+        state.session += 1;
+        state.playing = false;
+
+        if (state.timerId) {
+          window.clearTimeout(state.timerId);
+          state.timerId = null;
+        }
+
+        updateLights(-1);
+        updateControls();
+      }
+
+      toggleButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          if (state.playing) {
+            stop();
+          } else {
+            start();
+          }
+        });
+      });
+
+      tempoInputs.forEach((input) => {
+        input.addEventListener("input", (event) => {
+          state.tempo = clamp(parseInt(event.target.value, 10), 40, 208);
+          updateControls();
+        });
+      });
+
+      beatsSelects.forEach((select) => {
+        select.addEventListener("change", (event) => {
+          state.beats = clamp(parseInt(event.target.value, 10), 2, 7);
+          state.currentBeat = 0;
+          rebuildLights();
+
+          if (!state.playing) {
+            updateLights(-1);
+          }
+
+          updateControls();
+        });
+      });
+
+      rebuildLights();
+      updateControls();
+      updateLights(-1);
+    })();
+
+    (function () {
+      const choiceGroups = Array.from(document.querySelectorAll("[data-choice-group]"));
+
+      choiceGroups.forEach((group) => {
+        const buttons = Array.from(group.querySelectorAll("[data-choice]"));
+
+        buttons.forEach((button) => {
+          button.addEventListener("click", () => {
+            buttons.forEach((item) => item.classList.remove("selected"));
+            button.classList.add("selected");
+          });
+        });
+      });
+
+      const auditionButtons = Array.from(document.querySelectorAll("[data-audition]"));
+
+      auditionButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const original = button.textContent;
+          button.textContent = "Auditioned ✓";
+          button.classList.add("selected");
+
+          window.setTimeout(() => {
+            button.textContent = original;
+            button.classList.remove("selected");
+          }, 1200);
+        });
+      });
+
+      const studentAAgree = document.getElementById("student-a-agree");
+      const studentBAgree = document.getElementById("student-b-agree");
+      const readyButton = document.getElementById("we-are-ready");
+
+      function updateReadyState() {
+        const aReady = studentAAgree.classList.contains("is-agreed");
+        const bReady = studentBAgree.classList.contains("is-agreed");
+        const bothReady = aReady && bReady;
+
+        readyButton.disabled = !bothReady;
+        readyButton.textContent = bothReady
+          ? "We Are Ready →"
+          : "Waiting for both students…";
+      }
+
+      studentAAgree.addEventListener("click", () => {
+        studentAAgree.classList.toggle("is-agreed");
+        studentAAgree.textContent = studentAAgree.classList.contains("is-agreed")
+          ? "Student A agreed ✓"
+          : "Student A agrees";
+        updateReadyState();
+      });
+
+      studentBAgree.addEventListener("click", () => {
+        studentBAgree.classList.toggle("is-agreed");
+        studentBAgree.textContent = studentBAgree.classList.contains("is-agreed")
+          ? "Student B agreed ✓"
+          : "Student B agrees";
+        updateReadyState();
+      });
+
+      readyButton.addEventListener("click", () => {
+        if (!readyButton.disabled) {
+          window.location.href = "./free-play.html?from=co-op";
+        }
+      });
+
+      updateReadyState();
+    })();
+  </script>
+</body>
+</html>

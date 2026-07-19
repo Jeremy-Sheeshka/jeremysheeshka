@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Rhythm Engine — Phase 2 Harness</title>
+<style>
+  @font-face {
+    font-family: 'Helsinki Std';
+    src: url('/games/rhythm-app/ovelser/css/HelsinkiStd.otf') format('opentype');
+  }
+  body { font-family: system-ui, sans-serif; max-width: 700px; margin: 40px auto; padding: 0 20px; }
+  h1 { font-size: 1.3rem; }
+  #rhythm-container { border: 1px solid #ccc; margin: 20px 0; min-height: 220px; background: #fafafa; }
+  #button-container { display: inline-block; vertical-align: middle; margin-right: 12px; }
+  .controls { margin: 20px 0; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  button { padding: 8px 16px; font-size: 1rem; cursor: pointer; }
+  label { font-size: 0.9rem; }
+  #log { font-family: monospace; font-size: 0.8rem; white-space: pre-wrap; background: #111; color: #0f0; padding: 10px; margin-top: 20px; max-height: 200px; overflow-y: auto; }
+</style>
+</head>
+<body>
+
+<h1>Phase 2 Harness — Free Play Pattern Generator</h1>
+
+<div class="controls">
+  <div id="button-container"></div>
+  <button id="tap-btn">TAP</button>
+  <button id="new-pattern-btn">New Random Pattern</button>
+  <label>Bars: <input type="number" id="bars-input" value="2" min="1" max="4" style="width:50px"></label>
+  <label>Tempo: <input type="number" id="tempo-input" value="84" min="30" max="240" style="width:60px"></label>
+</div>
+
+<div id="rhythm-container"></div>
+
+<div id="log"></div>
+
+<script src="/games/rhythm-app/vendor/howler/howler.core.min.js"></script>
+<script src="/games/rhythm-app/ovelser/js/min/rhythm-min.js"></script>
+<script src="/games/rhythm-app/ovelser/js/min/rhythm_image-min.js"></script>
+<script src="/games/rhythm-app/ovelser/js/min/rhythm_player-min.js"></script>
+
+<script>
+  const logEl = document.getElementById('log');
+  function log(msg) {
+    console.log(msg);
+    logEl.textContent += msg + "\n";
+    logEl.scrollTop = logEl.scrollHeight;
+  }
+  window.addEventListener('error', (e) => log('ERROR: ' + e.message));
+
+  // ---- Phase 2: client-side pattern generator, matching §4 schema exactly ----
+  const BAR_LENGTH = 576;   // 4/4 bar at this resolution
+  const NOTE_OPTIONS = [288, 144, 72]; // half, quarter, eighth
+  const REST_PROBABILITY = 0.2;
+
+  function randomBarComponents() {
+    let remaining = BAR_LENGTH;
+    const components = [];
+    while (remaining > 0) {
+      const options = NOTE_OPTIONS.filter(n => n <= remaining);
+      const len = options.length ? options[Math.floor(Math.random() * options.length)] : remaining;
+      const isRest = Math.random() < REST_PROBABILITY;
+      components.push(isRest ? { length: len, rest: true } : { length: len });
+      remaining -= len;
+    }
+    return components;
+  }
+
+  function generateRandomPattern(tempo, numBars) {
+    const bars = [];
+    for (let b = 0; b < numBars; b++) {
+      bars.push({ barNumber: b, components: randomBarComponents() });
+    }
+    return {
+      metricalStructure: {
+        length: BAR_LENGTH,
+        structure: [
+          { pos: 0,   level: 0 },
+          { pos: 144, level: 2 },
+          { pos: 288, level: 1 },
+          { pos: 432, level: 2 }
+        ],
+        tactusLevel: 2,
+        countingNoteLevel: 2,
+        timeSignature: { beats: 4, length: 144 },
+        tempo: tempo
+      },
+      bars: bars
+    };
+  }
+
+  const rhythmImage = new MusicRhythmImage({
+    elementToWhichTheRhythmImageAreCreated: document.getElementById('rhythm-container'),
+    editMode: false,
+    zoom: 1,
+    distanceFromTop: 110
+  });
+
+  MusicRhythmPlayer.initialisation({
+    unitsPerStep: 24,
+    rhythmImage: rhythmImage,
+    elementWithButton: document.getElementById('button-container'),
+    includeCountIn: true,
+    includePlaying: true,
+    includeTapping: true,
+    includeCountOut: false,
+    markNotesDuringTapping: true,
+    tapVolume: 0.44,
+    changeStatusCallback: (newStatus, oldStatus) => log(`status: ${oldStatus} -> ${newStatus}`),
+    countInCallback: (beatNumber) => log(`count-in beat ${beatNumber}`),
+    finishedTappingCallback: () => log('finished tapping. any wrong? ' + MusicRhythmPlayer.atLeastOneNoteWasWrongDuringTapping())
+  });
+
+  function loadPattern(patternData) {
+    const rawRhythm = new MusicRhythm(patternData);
+    rhythmImage.setRhythm(rawRhythm);
+    const renderedRhythm = rhythmImage.getRhythm();
+    MusicRhythmPlayer.setRhythm(renderedRhythm);
+  }
+
+  function currentTempo() { return parseInt(document.getElementById('tempo-input').value, 10); }
+  function currentBars() { return parseInt(document.getElementById('bars-input').value, 10); }
+
+  loadPattern(generateRandomPattern(currentTempo(), currentBars()));
+  log('Random pattern loaded.');
+
+  document.getElementById('tap-btn').addEventListener('click', () => {
+    MusicRhythmPlayer.tap();
+  });
+
+  document.getElementById('new-pattern-btn').addEventListener('click', () => {
+    loadPattern(generateRandomPattern(currentTempo(), currentBars()));
+    log('New random pattern, tempo ' + currentTempo() + ', bars ' + currentBars());
+  });
+
+  document.getElementById('tempo-input').addEventListener('change', () => {
+    loadPattern(generateRandomPattern(currentTempo(), currentBars()));
+    log('Tempo changed to ' + currentTempo());
+  });
+
+  document.getElementById('bars-input').addEventListener('change', () => {
+    loadPattern(generateRandomPattern(currentTempo(), currentBars()));
+    log('Bars changed to ' + currentBars());
+  });
+</script>
+
+</body>
+</html>
