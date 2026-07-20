@@ -1,0 +1,15 @@
+.topbar{min-height:54px;padding:8px 12px}
+.brand__badge{width:34px;height:34px;border-radius:11px;font-size:.8rem}
+.brand__title{font-size:1rem}
+.brand__subtitle{display:none}
+.topbar__nav{gap:4px}
+.topbar__nav a{padding:6px 10px;font-size:.9rem}
+.metronome--top{border:0;background:transparent;box-shadow:none;padding:0;gap:8px}
+.metronome--top .metro-toggle{min-width:64px;min-height:36px;padding:7px 12px;border-radius:10px;font-size:.85rem}
+.metronome--top .metro-range{width:120px}
+.metronome--top .metro-output{min-width:62px;padding:6px 8px;font-size:.85rem}
+.metronome--top .metro-field{font-size:0}
+.metronome--top .metro-field > *{font-size:1rem}
+.metronome--top .metro-field:has(select){display:none}
+.metronome--top .metro-lights i{width:9px;height:9px}
+.dock .metro-field:has(select){display:none}

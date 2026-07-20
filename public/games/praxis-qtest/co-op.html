@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Praxis — Trade Fours · Co-Op</title>
+  <title>ETEC 531 — Trade Fours</title>
   <meta name="description" content="Praxis Trade Fours co-op rhythm studio." />
 
   <style>
@@ -597,14 +597,14 @@
       }
     }
   </style>
-</head>
+<link rel="stylesheet" href="/games/praxis-qtest/embed-nav.css"></head>
 <body>
   <header class="topbar">
     <a class="brand" href="./index.html">
       <span class="brand__badge">PR</span>
       <span class="brand__text">
-        <span class="brand__title">Praxis</span>
-        <span class="brand__subtitle">Rhythm Studio · Trade Fours</span>
+        <span class="brand__title">ETEC 531</span>
+        <span class="brand__subtitle">Rhythm Prototype · Trade Fours</span>
       </span>
     </a>
 
@@ -780,7 +780,7 @@
           <!--
             If you later create a dedicated co-op exercise URL, replace this src.
           -->
-          <iframe
+          <iframe id="drill-frame" 
             title="Co-Op rhythm exercise"
             src="http://localhost:4735/games/rhythm-app/exercise/720/"
             loading="lazy"
@@ -1112,5 +1112,5 @@
       updateReadyState();
     })();
   </script>
-</body>
+<script src="/games/praxis-qtest/metro-sender.js"></script></body>
 </html>

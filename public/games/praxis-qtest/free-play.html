@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Praxis — Free Play</title>
+  <title>ETEC 531 — Free Play</title>
   <meta name="description" content="Praxis Free Play rhythm studio." />
 
   <style>
@@ -383,14 +383,47 @@
       }
     }
   </style>
+<link rel="stylesheet" href="/games/praxis-qtest/embed-nav.css">
+
+<style id="praxis-layout2">
+.topbar,.topbar__nav,.metronome--top{overflow:visible !important;height:auto !important;max-height:none !important}
+.topbar{flex-wrap:wrap !important}
+[data-bpm-wrap]{display:inline-flex !important;align-items:center !important;gap:6px !important;visibility:visible !important;opacity:1 !important;flex:0 0 auto !important;white-space:nowrap !important}
+[data-metro-bpm-input]{color:var(--praxis-ink,#111) !important;background:var(--praxis-surface,#fff) !important}
+label.metro-field:has([data-metro-beats]){display:none !important}
+[data-metro-gear]{min-width:44px !important;min-height:42px !important;font-size:2rem !important;line-height:1 !important;padding:4px 8px !important}
+#praxis-gear-pop select{min-height:34px;padding:6px 8px;border-radius:8px;border:1px solid var(--praxis-line,#ccc);background:var(--praxis-surface,#fff);color:var(--praxis-ink,#111)}
+.metronome--top{flex-wrap:wrap !important;align-items:center !important}
+.metronome--top>.metro-toggle,.metronome--top>:has(>.metro-toggle){order:1}
+.metronome--top>.metro-lights,.metronome--top>:has([data-metro-lights]){order:2}
+.metronome--top label.metro-field:has([data-metro-bars]){display:flex !important;order:3;visibility:visible !important;opacity:1 !important}
+.metronome--top label.metro-field:has([data-metro-tempo]){order:4;flex:0 0 auto !important}
+.metronome--top [data-metro-tempo]{width:130px !important;flex:0 0 auto !important}
+.metronome--top>[data-bpm-wrap],.metronome--top>:has([data-metro-bpm-input]){order:5}
+.metronome--top>[data-metro-gear],.metronome--top>:has([data-metro-gear]){order:6}
+@media (max-width:1023px){
+  .dock{display:flex !important;flex-wrap:nowrap !important;align-items:center !important;gap:8px !important}
+  .dock__row{display:contents !important}
+  .dock__tempo{display:contents !important}
+  .dock__meta{display:none !important}
+  .dock [data-metro-toggle]{order:1;flex:0 0 auto !important;min-width:64px !important}
+  .dock [data-metro-lights]{order:2;flex:0 0 auto !important}
+  .dock label.metro-field:has([data-metro-bars]){order:3;flex:0 0 auto !important;display:flex !important}
+  .dock [data-metro-tempo]{order:4;flex:1 1 60px !important;min-width:60px !important;width:auto !important}
+  .dock [data-bpm-wrap]{order:5}
+  .dock [data-metro-gear]{order:6;flex:0 0 auto !important}
+  .dock .metro-range{width:100% !important}
+}
+@media (max-width:560px){ .dock{flex-wrap:wrap !important} }
+</style>
 </head>
 <body>
   <header class="topbar">
     <a class="brand" href="./index.html">
       <span class="brand__badge">PR</span>
       <span class="brand__text">
-        <span class="brand__title">Praxis</span>
-        <span class="brand__subtitle">Rhythm Studio · Free Play</span>
+        <span class="brand__title">ETEC 531</span>
+        <span class="brand__subtitle">Rhythm Prototype · Free Play</span>
       </span>
     </a>
 
@@ -428,7 +461,7 @@
         />
       </label>
 
-      <output class="metro-output" data-metro-bpm>88 BPM</output>
+      <span class="metro-field" data-bpm-wrap style="display:inline-flex;align-items:center;gap:6px;white-space:nowrap"><span style="opacity:.75">BPM</span><input type="number" class="metro-output" data-metro-bpm-input min="40" max="208" value="88" aria-label="BPM" style="width:4.6em;text-align:center;font-size:1rem;font-family:inherit;font-weight:800;padding:6px 8px;border:1px solid var(--praxis-line,#555);border-radius:8px"></span>
 
       <label class="metro-field">
         Beats
@@ -441,6 +474,16 @@
           <option value="7">7</option>
         </select>
       </label>
+      <label class="metro-field" style="display:flex !important;align-items:center;gap:8px;color:var(--praxis-muted,#aaa);font-size:0.94rem;white-space:nowrap">
+        Bars
+        <select class="metro-select" data-metro-bars aria-label="Bars per exercise">
+          <option value="2" selected>2</option>
+          <option value="4">4</option>
+          <option value="8">8</option>
+          <option value="12">12</option><option value="16">16</option>
+        </select>
+      </label>
+      <button type="button" class="metro-toggle" data-metro-gear aria-label="Tools" title="Tools" style="min-width:44px;min-height:42px;padding:8px 12px;font-size:1.15rem;line-height:1">&#9881;</button>
 
       <div class="metro-lights" data-metro-lights aria-hidden="true"></div>
     </section>
@@ -454,7 +497,7 @@
       If not, use the full URL:
       https://jeremysheeshka.ca/games/rhythm-app/exercise/720/
     -->
-    <iframe
+    <iframe id="drill-frame" 
       title="Free Play rhythm exercise"
       src="http://localhost:4735/games/rhythm-app/exercise/720/"
       loading="lazy"
@@ -486,7 +529,7 @@
         />
       </div>
 
-      <output class="metro-output dock__output" data-metro-bpm>88 BPM</output>
+      <span class="metro-field" data-bpm-wrap style="display:inline-flex;align-items:center;gap:6px;white-space:nowrap"><span style="opacity:.75">BPM</span><input type="number" class="metro-output" data-metro-bpm-input min="40" max="208" value="88" aria-label="BPM" style="width:4.6em;text-align:center;font-size:1rem;font-family:inherit;font-weight:800;padding:6px 8px;border:1px solid var(--praxis-line,#555);border-radius:8px"></span>
     </div>
 
     <div class="dock__row">
@@ -503,6 +546,16 @@
           <option value="7">7</option>
         </select>
       </label>
+      <label class="metro-field" style="display:flex !important;align-items:center;gap:8px;color:var(--praxis-muted,#aaa);font-size:0.94rem;white-space:nowrap">
+        Bars
+        <select class="metro-select" data-metro-bars aria-label="Bars per exercise">
+          <option value="2" selected>2</option>
+          <option value="4">4</option>
+          <option value="8">8</option>
+          <option value="12">12</option><option value="16">16</option>
+        </select>
+      </label>
+      <button type="button" class="metro-toggle" data-metro-gear aria-label="Tools" title="Tools" style="min-width:44px;min-height:42px;padding:8px 12px;font-size:1.15rem;line-height:1">&#9881;</button>
     </div>
 
     <div class="dock__meta">
@@ -714,5 +767,7 @@
       updateLights(-1);
     })();
   </script>
+<script src="/games/praxis-qtest/metro-sender.js"></script>
+
 </body>
 </html>

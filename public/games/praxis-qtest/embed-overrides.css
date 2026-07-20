@@ -1,0 +1,7 @@
+html{display:block !important}
+#lukopgaveknap,#opgavetip,#titlebutton{display:none !important}
+#spoergsmaaltaeller,.spoergsmaalTaeller{display:none !important}
+[id*="rogress"],[class*="rogress"]{display:none !important}
+#vissvar,#vissvarknap,#respons,#resultat{display:none !important}
+#afspil-lyd-felt{display:none !important}
+.main__footer,#footericons,.after__content{display:none !important}
