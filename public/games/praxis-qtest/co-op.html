@@ -141,14 +141,23 @@
   (function(){
     var f=document.getElementById('drill-frame'); if(!f)return;
     var host=location.hostname, isLocal=(host==='localhost'||host==='127.0.0.1');
-    if(isLocal){ f.src='http://localhost:4735/games/rhythm-app/exercise/720/?praxis=coop'; }
-    else{
-      var DRILL='/games/rhythm-app/exercise/720/';
-      function stripBust(h){ h=h.replace(/if\s*\(\s*top\s*==\s*self\s*\)/g,'if(true)'); h=h.replace(/if\s*\(\s*self\s*==\s*top\s*\)/g,'if(true)'); h=h.replace(/if\s*\(\s*top\s*!=\s*self\s*\)/g,'if(false)'); h=h.replace(/if\s*\(\s*self\s*!=\s*top\s*\)/g,'if(false)'); h=h.replace(/if\s*\(\s*window\.top\s*===?\s*window\.self\s*\)/g,'if(true)'); h=h.replace(/if\s*\(\s*window\.top\s*!==?\s*window\.self\s*\)/g,'if(false)'); h=h.replace(/top\.location\s*=\s*self\.location[^;}\n]*/g,'/*x*/'); h=h.replace(/self\.location\s*=\s*top\.location[^;}\n]*/g,'/*x*/'); h=h.replace(/top\.location\.href\s*=[^;}\n]*/g,'/*x*/'); h=h.replace(/top\.location\.replace\([^)]*\)/g,'/*x*/'); h=h.replace(/top\.location\.assign\([^)]*\)/g,'/*x*/'); h=h.replace(/window\.top\.location\s*=[^;}\n]*/g,'/*x*/'); h=h.replace(/window\.top\.location\.href\s*=[^;}\n]*/g,'/*x*/'); h=h.replace(/window\.top\.location\.replace\([^)]*\)/g,'/*x*/'); h=h.replace(/parent\.location\s*=[^;}\n]*/g,'/*x*/'); h=h.replace(/<meta[^>]*content-security-policy[^>]*>/gi,''); return h; }
-      Promise.all([ fetch(DRILL).then(function(r){return r.text();}), fetch('/games/praxis-qtest/embed-bridge.js').then(function(r){return r.text();}).catch(function(){return '';}), fetch('/games/praxis-qtest/embed-overrides.css').then(function(r){return r.text();}).catch(function(){return '';}) ])
-      .then(function(res){ var h=stripBust(res[0]), bridge=res[1], ov=res[2]; if(ov && h.indexOf('</head>')!==-1) h=h.replace('</head>','<style>'+ov+'</style></head>'); if(bridge){ bridge=bridge.replace(/<\/script/gi,'<\\/script'); var inj='<scr'+'ipt>window.__PRAXIS_COOP=true;</scr'+'ipt><scr'+'ipt>'+bridge+'</scr'+'ipt>'; h=(h.indexOf('</body>')!==-1)?h.replace('</body>',inj+'</body>'):h+inj; } f.srcdoc=h; })
-      .catch(function(e){ console.error('[praxis-coop] load failed',e); });
-    }
+    if(isLocal){ f.src='http://localhost:4735/games/rhythm-app/exercise/720/?praxis=coop'; return; }
+    var DRILL='/games/rhythm-app/exercise/720/';
+    var VER='v=20260721c';
+    function stripBust(h){ h=h.replace(/if\s*\(\s*top\s*==\s*self\s*\)/g,'if(true)'); h=h.replace(/if\s*\(\s*self\s*==\s*top\s*\)/g,'if(true)'); h=h.replace(/if\s*\(\s*top\s*!=\s*self\s*\)/g,'if(false)'); h=h.replace(/if\s*\(\s*self\s*!=\s*top\s*\)/g,'if(false)'); h=h.replace(/if\s*\(\s*window\.top\s*===?\s*window\.self\s*\)/g,'if(true)'); h=h.replace(/if\s*\(\s*window\.top\s*!==?\s*window\.self\s*\)/g,'if(false)'); h=h.replace(/top\.location\s*=\s*self\.location[^;}\n]*/g,'/*x*/'); h=h.replace(/self\.location\s*=\s*top\.location[^;}\n]*/g,'/*x*/'); h=h.replace(/top\.location\.href\s*=[^;}\n]*/g,'/*x*/'); h=h.replace(/top\.location\.replace\([^)]*\)/g,'/*x*/'); h=h.replace(/top\.location\.assign\([^)]*\)/g,'/*x*/'); h=h.replace(/window\.top\.location\s*=[^;}\n]*/g,'/*x*/'); h=h.replace(/window\.top\.location\.href\s*=[^;}\n]*/g,'/*x*/'); h=h.replace(/window\.top\.location\.replace\([^)]*\)/g,'/*x*/'); h=h.replace(/parent\.location\s*=[^;}\n]*/g,'/*x*/'); h=h.replace(/<meta[^>]*content-security-policy[^>]*>/gi,''); return h; }
+    function grab(url){ return fetch(url).then(function(r){ if(!r.ok){ console.warn('[praxis-coop] HTTP '+r.status+' for '+url); return ''; } return r.text(); }).catch(function(e){ console.warn('[praxis-coop] fetch failed '+url,e); return ''; }); }
+    Promise.all([ grab(DRILL), grab('/games/praxis-qtest/embed-bridge.js?'+VER), grab('/games/praxis-qtest/embed-overrides.css?'+VER) ])
+    .then(function(res){
+      var h=res[0], bridge=res[1], ov=res[2];
+      console.log('[praxis-coop] loaded drill='+(h?h.length:0)+' bridge='+(bridge?bridge.length:0)+' css='+(ov?ov.length:0));
+      if(!h){ f.srcdoc='<html><body style="font-family:system-ui;padding:2rem;color:#666"><p>Could not load the exercise (drill fetch failed).</p></body></html>'; return; }
+      h=stripBust(h);
+      if(ov && h.indexOf('</head>')!==-1) h=h.replace('</head>','<style>'+ov+'</style></head>');
+      if(bridge){ bridge=bridge.replace(/<\/script/gi,'<\\/script'); var inj='<scr'+'ipt>window.__PRAXIS_COOP=true;console.log("[coop-bridge] injected ok");</scr'+'ipt><scr'+'ipt>'+bridge+'</scr'+'ipt>'; h=(h.indexOf('</body>')!==-1)?h.replace('</body>',inj+'</body>'):h+inj; }
+      else { console.error('[praxis-coop] embed-bridge.js did NOT load - overlays will be missing. Verify /games/praxis-qtest/embed-bridge.js is deployed.'); }
+      f.srcdoc=h;
+    })
+    .catch(function(e){ console.error('[praxis-coop] load failed',e); });
   })();
   </script>
 

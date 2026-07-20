@@ -62,6 +62,7 @@
     var flowState='init', exerciseCount=0, currentTempo=88;
     var numBars=8, splitMode='2s', lastData=null, owner=[], seq=0;
     var settings={loop:false,ab:true,cue:true,metroSound:true,master:false};
+    console.log('[coop-bridge] co-op branch active');
     var clockTimer=null, clockEighth=0, runId=0, completedId=-1, aidMode='none';
     document.addEventListener('keydown',function(e){ if(e.key===' '||e.code==='Space'){ e.preventDefault(); e.stopImmediatePropagation(); } },true);/*sp-coop*/
 
@@ -130,6 +131,7 @@
       rhythmImage.showInfoBox(true); p.showButton(); p.setMarkNotesDuringTapping(false);
       owner=computeSplit(numBars,splitMode); seq++; flowState='showing'; setInfo('Press Play','','1'); postSplit(); post({type:'praxis-new-exercise'});/*nx-coop*/
       renderAB(); renderAids(); setTimeout(function(){renderAB();renderAids();},160); watchOverlays(refreshOverlays);
+      console.log('[coop-bridge] rendered bars='+numBars+' split='+splitMode+' spoergsmaal='+(document.getElementById('spoergsmaal')?'found':'MISSING')+' svg='+(document.querySelector('#spoergsmaal svg')?'found':'MISSING'));
     }
     function nextExercise(){ exerciseCount++; showExercise(randRhythm()); post({type:'drill-state',playing:false,exercise:exerciseCount}); }
     function beginPlay(){
