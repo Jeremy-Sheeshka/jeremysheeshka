@@ -20,6 +20,7 @@
     .metronome{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-left:auto}
     .metro-toggle{min-width:66px;min-height:38px;padding:7px 13px;border-radius:10px;border:1px solid transparent;background:var(--praxis-accent);color:var(--praxis-accent-ink);font-weight:800;cursor:pointer}
     .metro-toggle.active{background:#dc2626;color:#fff}
+    .metro-toggle.draw-on{background:var(--praxis-gold);color:var(--praxis-gold-ink)}
     .metro-gear{min-width:42px;font-size:1.35rem;line-height:1;padding:5px 9px;background:var(--praxis-surface);color:var(--praxis-ink);border:1px solid var(--praxis-line)}
     .metro-field{display:flex;align-items:center;gap:7px;color:var(--praxis-muted);font-size:.88rem;white-space:nowrap}
     .metro-range{width:120px;accent-color:var(--praxis-accent)}
@@ -27,40 +28,34 @@
     .metro-select{min-height:36px;padding:6px 9px;border-radius:9px;border:1px solid var(--praxis-line);background:var(--praxis-surface);color:var(--praxis-ink)}
     .metronome--top{display:none}.dock{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 12px;border-top:1px solid var(--praxis-line);background:var(--praxis-surface-2)}
     @media (min-width:1024px){.metronome--top{display:flex}.dock{display:none}}
-    .coop{padding:10px clamp(12px,3vw,28px);border-bottom:1px solid var(--praxis-line);background:var(--praxis-surface-2)}
+    .seg{display:inline-flex;border:1px solid var(--praxis-line);border-radius:9px;overflow:hidden}
+    .seg button{border:0;background:var(--praxis-surface);padding:6px 10px;font-size:.8rem;font-weight:700;cursor:pointer;color:var(--praxis-muted)}
+    .seg button.on{background:var(--praxis-accent);color:var(--praxis-accent-ink)}
+    .coop{padding:8px clamp(12px,3vw,28px);border-bottom:1px solid var(--praxis-line);background:var(--praxis-surface-2)}
     .coop-head{display:flex;gap:10px;flex-wrap:wrap}
-    .student-card{flex:1;min-width:150px;display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;border:1px solid var(--praxis-line);background:var(--praxis-surface);font-weight:800;transition:box-shadow .1s,transform .1s}
+    .student-card{flex:1;min-width:150px;display:flex;align-items:center;gap:8px;padding:7px 12px;border-radius:10px;border:1px solid var(--praxis-line);background:var(--praxis-surface);font-weight:800}
     .student-card .dot{width:12px;height:12px;border-radius:50%}
     .student-card.a .dot{background:var(--praxis-accent)}.student-card.b .dot{background:var(--praxis-gold)}
     .student-card small{font-weight:600;color:var(--praxis-muted);margin-left:auto}
     .student-card .key{margin-left:6px;font-size:.7rem;font-weight:800;border:1px solid var(--praxis-line);border-radius:5px;padding:1px 6px;color:var(--praxis-muted)}
-    .student-card.flash{box-shadow:0 0 0 3px var(--praxis-focus);transform:translateY(-1px)}
-    .turn-banner{margin:10px 0 6px;padding:8px 14px;border-radius:10px;font-weight:800;text-align:center;background:var(--praxis-surface);border:1px solid var(--praxis-line);font-size:.92rem}
+    .turn-banner{margin:8px 0 6px;padding:7px 14px;border-radius:10px;font-weight:800;text-align:center;background:var(--praxis-surface);border:1px solid var(--praxis-line);font-size:.9rem}
     .turn-banner.owner-a{border-color:var(--praxis-accent);color:var(--praxis-accent)}
     .turn-banner.owner-b{border-color:var(--praxis-gold);color:var(--praxis-gold)}
-    .beat-dots{display:flex;justify-content:center;gap:8px;margin-bottom:8px}
+    .beat-dots{display:flex;justify-content:center;gap:8px}
     .beat-dots i{width:11px;height:11px;border-radius:50%;background:color-mix(in srgb,var(--praxis-muted) 35%,transparent);transition:transform .08s,background .08s}
     .beat-dots i.on{background:var(--praxis-accent);transform:scale(1.25)}
-    .aid-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:.85rem;color:var(--praxis-muted);flex-wrap:wrap}
-    .seg{display:inline-flex;border:1px solid var(--praxis-line);border-radius:9px;overflow:hidden}
-    .seg button{border:0;background:var(--praxis-surface);padding:6px 10px;font-size:.8rem;font-weight:700;cursor:pointer;color:var(--praxis-muted)}
-    .seg button.on{background:var(--praxis-accent);color:var(--praxis-accent-ink)}
-    .draw-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px;font-size:.85rem;color:var(--praxis-muted)}
-    .swatches{display:flex;gap:6px;align-items:center;transition:opacity .15s}
-    .sw{width:22px;height:22px;border-radius:50%;border:2px solid transparent;cursor:pointer;padding:0}
-    .sw.on{outline:2px solid var(--praxis-accent);outline-offset:2px}
-    .sw.eraser{background:var(--praxis-surface);border:1px solid var(--praxis-line);color:var(--praxis-ink);font-size:.8rem;line-height:1;display:grid;place-items:center}
-    .form-map{display:flex;flex-wrap:wrap;gap:6px}
-    .bar-cell{flex:1 1 0;min-width:62px;border:2px solid var(--praxis-line);border-radius:9px;padding:6px 8px;background:var(--praxis-surface);display:flex;flex-direction:column;gap:3px;transition:box-shadow .08s,transform .08s}
-    .bar-cell.owner-a{border-color:color-mix(in srgb,var(--praxis-accent) 55%,var(--praxis-line));background:color-mix(in srgb,var(--praxis-accent) 8%,var(--praxis-surface))}
-    .bar-cell.owner-b{border-color:color-mix(in srgb,var(--praxis-gold) 60%,var(--praxis-line));background:color-mix(in srgb,var(--praxis-gold) 10%,var(--praxis-surface))}
-    .bar-cell.active{box-shadow:0 0 0 3px var(--praxis-focus);transform:translateY(-1px)}
-    .bc-top{display:flex;justify-content:space-between;font-size:.7rem;font-weight:800;color:var(--praxis-muted)}
-    .bc-who.a{color:var(--praxis-accent)}.bc-who.b{color:var(--praxis-gold)}
     .stage{position:relative;min-height:0}
     .stage iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:transparent;z-index:1}
     #draw-canvas{position:absolute;inset:0;z-index:2;pointer-events:none;touch-action:none}
-    #gear-pop{position:fixed;top:60px;right:14px;z-index:99999;width:252px;background:var(--praxis-surface);color:var(--praxis-ink);border:1px solid var(--praxis-line);border-radius:14px;box-shadow:var(--praxis-shadow);padding:16px;font-size:.9rem}
+    #draw-palette{position:absolute;top:6px;left:50%;transform:translateX(-50%);z-index:3;display:none;align-items:center;gap:8px;flex-wrap:wrap;background:var(--praxis-surface);border:1px solid var(--praxis-line);border-radius:12px;padding:7px 10px;box-shadow:var(--praxis-shadow)}
+    #draw-palette.show{display:flex}
+    .sw{width:22px;height:22px;border-radius:50%;border:2px solid transparent;cursor:pointer;padding:0}
+    .sw.on{outline:2px solid var(--praxis-accent);outline-offset:2px}
+    .sw.eraser{background:var(--praxis-surface);border:1px solid var(--praxis-line);color:var(--praxis-ink);font-size:.85rem;display:grid;place-items:center}
+    .pal-btn{border:1px solid var(--praxis-line);background:var(--praxis-surface);border-radius:8px;padding:5px 9px;font-size:.78rem;font-weight:700;cursor:pointer;color:var(--praxis-ink)}
+    #mute-btn{position:fixed;top:8px;right:8px;z-index:70;width:40px;height:40px;border-radius:50%;border:1px solid var(--praxis-line);background:var(--praxis-surface);color:var(--praxis-ink);font-size:1.1rem;cursor:pointer;box-shadow:var(--praxis-shadow)}
+    #mute-btn.muted{background:#dc2626;color:#fff;border-color:#dc2626}
+    #gear-pop{position:fixed;top:58px;right:14px;z-index:99999;width:268px;background:var(--praxis-surface);color:var(--praxis-ink);border:1px solid var(--praxis-line);border-radius:14px;box-shadow:var(--praxis-shadow);padding:16px;font-size:.9rem}
     #gear-pop h4{margin:0 0 12px;font-size:13px;letter-spacing:.05em}
     #gear-pop label{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--praxis-line);cursor:pointer}
     #gear-pop label:last-child{border-bottom:0}
@@ -82,47 +77,36 @@
       <label class="metro-field">Split <select class="metro-select" data-coop-split><option value="2s" selected>Trade 2s</option><option value="4s">Trade 4s</option></select></label>
       <label class="metro-field">Tempo <input class="metro-range" type="range" min="40" max="208" step="1" value="88" data-metro-tempo></label>
       <span class="metro-field" data-bpm-wrap><span>BPM</span><input type="number" class="metro-output" data-metro-bpm-input min="40" max="208" value="88"></span>
+      <button type="button" class="metro-toggle js-draw-toggle" data-draw-toggle style="display:none">Draw</button>
+      <span class="metro-field js-aid-wrap" style="display:none">Aid <span class="seg" data-aid-seg><button type="button" data-aid="none" class="on">None</button><button type="button" data-aid="syllables">Ta/ti</button><button type="button" data-aid="numbers">1 +</button></span></span>
       <button type="button" class="metro-toggle metro-gear" data-metro-gear aria-label="Settings">⚙</button>
     </section>
   </header>
 
-  <section class="coop" aria-label="Co-op form map">
+  <section class="coop" aria-label="Co-op status">
     <div class="coop-head">
       <div class="student-card a" id="card-a"><span class="dot"></span> Student A <span class="key">A</span><small id="coop-a-bars"></small></div>
       <div class="student-card b" id="card-b"><span class="dot"></span> Student B <span class="key">L</span><small id="coop-b-bars"></small></div>
     </div>
     <div class="turn-banner" id="turn-banner">Ready</div>
     <div class="beat-dots" id="coop-dots" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-    <div class="aid-row">
-      <span>Counting aid (under the notes)</span>
-      <div class="seg" id="aid-seg">
-        <button type="button" data-aid="none" class="on">None</button>
-        <button type="button" data-aid="syllables">Ta / ti-ti</button>
-        <button type="button" data-aid="numbers">Numbers</button>
-      </div>
-      <span style="opacity:.7">Tap with <strong>A</strong> / <strong>L</strong> · use Annotate to draw on the score.</span>
-    </div>
-    <div class="draw-row">
-      <span>Annotate</span>
-      <button type="button" class="btn small" id="draw-toggle">Draw on score</button>
-      <div class="swatches" id="swatches">
-        <button type="button" class="sw on" data-color="#ef4444" style="background:#ef4444" title="Red"></button>
-        <button type="button" class="sw" data-color="#2563eb" style="background:#2563eb" title="Blue"></button>
-        <button type="button" class="sw" data-color="#16a34a" style="background:#16a34a" title="Green"></button>
-        <button type="button" class="sw" data-color="#f59e0b" style="background:#f59e0b" title="Orange"></button>
-        <button type="button" class="sw" data-color="#9333ea" style="background:#9333ea" title="Purple"></button>
-        <button type="button" class="sw" data-color="#111827" style="background:#111827" title="Black"></button>
-        <button type="button" class="sw" data-color="#ffffff" style="background:#ffffff;border:1px solid #999" title="White"></button>
-        <button type="button" class="sw eraser" id="eraser-btn" title="Eraser">⌫</button>
-      </div>
-      <button type="button" class="btn small" id="draw-clear">Clear</button>
-    </div>
-    <div class="form-map" id="form-map"></div>
   </section>
 
   <main class="stage">
     <iframe id="drill-frame" title="Co-Op rhythm exercise" src="about:blank" allow="autoplay; fullscreen"></iframe>
     <canvas id="draw-canvas"></canvas>
+    <div id="draw-palette">
+      <button type="button" class="sw on" data-color="#ef4444" style="background:#ef4444" title="Red"></button>
+      <button type="button" class="sw" data-color="#2563eb" style="background:#2563eb" title="Blue"></button>
+      <button type="button" class="sw" data-color="#16a34a" style="background:#16a34a" title="Green"></button>
+      <button type="button" class="sw" data-color="#f59e0b" style="background:#f59e0b" title="Orange"></button>
+      <button type="button" class="sw" data-color="#9333ea" style="background:#9333ea" title="Purple"></button>
+      <button type="button" class="sw" data-color="#111827" style="background:#111827" title="Black"></button>
+      <button type="button" class="sw" data-color="#ffffff" style="background:#fff;border:1px solid #999" title="White"></button>
+      <button type="button" class="sw eraser" data-eraser title="Eraser">⌫</button>
+      <button type="button" class="pal-btn" data-undo>Undo</button>
+      <button type="button" class="pal-btn" data-clear>Clear</button>
+    </div>
   </main>
 
   <footer class="dock" aria-label="Transport dock">
@@ -131,57 +115,37 @@
     <label class="metro-field">Split <select class="metro-select" data-coop-split><option value="2s" selected>Trade 2s</option><option value="4s">Trade 4s</option></select></label>
     <label class="metro-field">Tempo <input class="metro-range" type="range" min="40" max="208" step="1" value="88" data-metro-tempo></label>
     <span class="metro-field" data-bpm-wrap><span>BPM</span><input type="number" class="metro-output" data-metro-bpm-input min="40" max="208" value="88"></span>
+    <button type="button" class="metro-toggle js-draw-toggle" data-draw-toggle style="display:none">Draw</button>
+    <span class="metro-field js-aid-wrap" style="display:none">Aid <span class="seg" data-aid-seg><button type="button" data-aid="none" class="on">None</button><button type="button" data-aid="syllables">Ta/ti</button><button type="button" data-aid="numbers">1 +</button></span></span>
     <button type="button" class="metro-toggle metro-gear" data-metro-gear aria-label="Settings">⚙</button>
   </footer>
 
+  <button id="mute-btn" title="Mute / unmute" aria-pressed="false">🔊</button>
+
   <div id="gear-pop" hidden>
     <h4>SETTINGS</h4>
-    <label><span>Master: self-count (no pulse at all)</span><input type="checkbox" id="set-master"></label>
-    <label><span>Metronome click (visual only when off)</span><input type="checkbox" id="set-sound" checked></label>
-    <label><span>Beat cursor / bar highlight</span><input type="checkbox" id="set-cursor" checked></label>
-    <label><span>A / B turn cue (two sounds)</span><input type="checkbox" id="set-cue" checked></label>
+    <label><span>Show “Draw” in bar</span><input type="checkbox" id="set-showdraw"></label>
+    <label><span>Show “Counting aid” in bar</span><input type="checkbox" id="set-showaid"></label>
+    <label><span>Master: self-count (silent)</span><input type="checkbox" id="set-master"></label>
+    <label><span>Metronome click</span><input type="checkbox" id="set-sound" checked></label>
+    <label><span>Beat cursor (dots)</span><input type="checkbox" id="set-cursor" checked></label>
+    <label><span>A / B turn cue + overlay</span><input type="checkbox" id="set-ab" checked></label>
     <label><span>Loop pattern</span><input type="checkbox" id="set-loop"></label>
-    <div class="hint">A = higher cue, B = lower cue. Sound unlocks on your first click/keypress.</div>
+    <div class="hint">Metronome &amp; master apply on the next exercise. Draw / aid appear in the bar once enabled. A = higher cue + blue tint, B = lower cue + gold tint.</div>
   </div>
 
   <script>
   (function(){
     var f=document.getElementById('drill-frame'); if(!f)return;
     var host=location.hostname, isLocal=(host==='localhost'||host==='127.0.0.1');
-    if(isLocal){
-      f.src='http://localhost:4735/games/rhythm-app/exercise/720/?praxis=coop';
-      return;
+    if(isLocal){ f.src='http://localhost:4735/games/rhythm-app/exercise/720/?praxis=coop'; }
+    else{
+      var DRILL='/games/rhythm-app/exercise/720/';
+      function stripBust(h){ h=h.replace(/if\s*\(\s*top\s*==\s*self\s*\)/g,'if(true)'); h=h.replace(/if\s*\(\s*self\s*==\s*top\s*\)/g,'if(true)'); h=h.replace(/if\s*\(\s*top\s*!=\s*self\s*\)/g,'if(false)'); h=h.replace(/if\s*\(\s*self\s*!=\s*top\s*\)/g,'if(false)'); h=h.replace(/if\s*\(\s*window\.top\s*===?\s*window\.self\s*\)/g,'if(true)'); h=h.replace(/if\s*\(\s*window\.top\s*!==?\s*window\.self\s*\)/g,'if(false)'); h=h.replace(/top\.location\s*=\s*self\.location[^;}\n]*/g,'/*x*/'); h=h.replace(/self\.location\s*=\s*top\.location[^;}\n]*/g,'/*x*/'); h=h.replace(/top\.location\.href\s*=[^;}\n]*/g,'/*x*/'); h=h.replace(/top\.location\.replace\([^)]*\)/g,'/*x*/'); h=h.replace(/top\.location\.assign\([^)]*\)/g,'/*x*/'); h=h.replace(/window\.top\.location\s*=[^;}\n]*/g,'/*x*/'); h=h.replace(/window\.top\.location\.href\s*=[^;}\n]*/g,'/*x*/'); h=h.replace(/window\.top\.location\.replace\([^)]*\)/g,'/*x*/'); h=h.replace(/parent\.location\s*=[^;}\n]*/g,'/*x*/'); h=h.replace(/<meta[^>]*content-security-policy[^>]*>/gi,''); return h; }
+      Promise.all([ fetch(DRILL).then(function(r){return r.text();}), fetch('/games/praxis-qtest/embed-bridge.js').then(function(r){return r.text();}).catch(function(){return '';}), fetch('/games/praxis-qtest/embed-overrides.css').then(function(r){return r.text();}).catch(function(){return '';}) ])
+      .then(function(res){ var h=stripBust(res[0]), bridge=res[1], ov=res[2]; if(ov && h.indexOf('</head>')!==-1) h=h.replace('</head>','<style>'+ov+'</style></head>'); if(bridge){ bridge=bridge.replace(/<\/script/gi,'<\\/script'); var inj='<scr'+'ipt>window.__PRAXIS_COOP=true;</scr'+'ipt><scr'+'ipt>'+bridge+'</scr'+'ipt>'; h=(h.indexOf('</body>')!==-1)?h.replace('</body>',inj+'</body>'):h+inj; } f.srcdoc=h; })
+      .catch(function(e){ console.error('[praxis-coop] load failed',e); });
     }
-    var DRILL='/games/rhythm-app/exercise/720/';
-    function stripBust(h){
-      h=h.replace(/if\s*\(\s*top\s*==\s*self\s*\)/g,'if(true)');
-      h=h.replace(/if\s*\(\s*self\s*==\s*top\s*\)/g,'if(true)');
-      h=h.replace(/if\s*\(\s*top\s*!=\s*self\s*\)/g,'if(false)');
-      h=h.replace(/if\s*\(\s*self\s*!=\s*top\s*\)/g,'if(false)');
-      h=h.replace(/if\s*\(\s*window\.top\s*===?\s*window\.self\s*\)/g,'if(true)');
-      h=h.replace(/if\s*\(\s*window\.top\s*!==?\s*window\.self\s*\)/g,'if(false)');
-      h=h.replace(/top\.location\s*=\s*self\.location[^;}\n]*/g,'/*x*/');
-      h=h.replace(/self\.location\s*=\s*top\.location[^;}\n]*/g,'/*x*/');
-      h=h.replace(/top\.location\.href\s*=[^;}\n]*/g,'/*x*/');
-      h=h.replace(/top\.location\.replace\([^)]*\)/g,'/*x*/');
-      h=h.replace(/top\.location\.assign\([^)]*\)/g,'/*x*/');
-      h=h.replace(/window\.top\.location\s*=[^;}\n]*/g,'/*x*/');
-      h=h.replace(/window\.top\.location\.href\s*=[^;}\n]*/g,'/*x*/');
-      h=h.replace(/window\.top\.location\.replace\([^)]*\)/g,'/*x*/');
-      h=h.replace(/parent\.location\s*=[^;}\n]*/g,'/*x*/');
-      h=h.replace(/<meta[^>]*content-security-policy[^>]*>/gi,'');
-      return h;
-    }
-    Promise.all([
-      fetch(DRILL).then(function(r){return r.text();}),
-      fetch('/games/praxis-qtest/embed-bridge.js').then(function(r){return r.text();}).catch(function(){return '';}),
-      fetch('/games/praxis-qtest/embed-overrides.css').then(function(r){return r.text();}).catch(function(){return '';})
-    ]).then(function(res){
-      var h=stripBust(res[0]), bridge=res[1], ov=res[2];
-      if(ov && h.indexOf('</head>')!==-1) h=h.replace('</head>','<style>'+ov+'</style></head>');
-      if(bridge){ bridge=bridge.replace(/<\/script/gi,'<\\/script'); var inj='<scr'+'ipt>window.__PRAXIS_COOP=true;</scr'+'ipt><scr'+'ipt>'+bridge+'</scr'+'ipt>'; h=(h.indexOf('</body>')!==-1)?h.replace('</body>',inj+'</body>'):h+inj; }
-      f.srcdoc=h;
-    }).catch(function(e){ console.error('[praxis-coop] load failed',e); });
   })();
   </script>
 
@@ -189,140 +153,69 @@
   (function(){
     var $=function(s){return document.querySelector(s);}, $$=function(s){return Array.prototype.slice.call(document.querySelectorAll(s));};
     var frame=$('#drill-frame');
-    var settings={masterOff:false,metroSound:true,cursor:true,cue:true,loop:false};
-    var tempo=88, numBars=8, splitMode='2s', playing=false;
-    var barsData=[], ownerArr=[], cells=[], lastBarsKey='';
-    var lastOwner=null;
+    var settings={master:false,metroSound:true,cursor:true,ab:true,cue:true,loop:false};
+    var tempo=88, numBars=8, splitMode='2s', playing=false, muted=false;
+    var ownerArr=[], lastSeq=-1, lastOwner=null;
 
-    /* ---- drawing state ---- */
-    var stage=document.querySelector('.stage'), canvas=$('#draw-canvas'), ctx=canvas.getContext('2d');
-    var drawBtn=$('#draw-toggle'), swatchWrap=$('#swatches');
-    var drawMode=false, drawColor='#ef4444', drawEraser=false;
-    var strokes=[], currentStroke=null, drawing=false, cssW=1, cssH=1;
-    var PEN_SIZE=3, ERASER_SIZE=18;
+    /* ---- canvas drawing ---- */
+    var stage=$('.stage'), canvas=$('#draw-canvas'), ctx=canvas.getContext('2d'), palette=$('#draw-palette');
+    var strokes=[], current=null, drawing=false, drawColor='#ef4444', eraser=false, cssW=1, cssH=1;
+    var PEN=3, ERA=18;
+    function sizeCanvas(){ var r=stage.getBoundingClientRect(); var dpr=window.devicePixelRatio||1; cssW=Math.max(1,r.width); cssH=Math.max(1,r.height); canvas.width=Math.round(cssW*dpr); canvas.height=Math.round(cssH*dpr); canvas.style.width=cssW+'px'; canvas.style.height=cssH+'px'; redraw(); }
+    function redraw(){ var dpr=window.devicePixelRatio||1; ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,cssW,cssH); ctx.lineCap='round'; ctx.lineJoin='round';
+      for(var s=0;s<strokes.length;s++){ var st=strokes[s]; ctx.globalCompositeOperation=st.eraser?'destination-out':'source-over'; ctx.strokeStyle=st.color; ctx.lineWidth=st.size; ctx.beginPath(); var p0=st.points[0]; ctx.moveTo(p0.x*cssW,p0.y*cssH); for(var i=1;i<st.points.length;i++){ ctx.lineTo(st.points[i].x*cssW,st.points[i].y*cssH); } if(st.points.length===1)ctx.lineTo(p0.x*cssW+0.1,p0.y*cssH+0.1); ctx.stroke(); } ctx.globalCompositeOperation='source-over'; }
+    function segDraw(st,a,b){ var dpr=window.devicePixelRatio||1; ctx.setTransform(dpr,0,0,dpr,0,0); ctx.globalCompositeOperation=st.eraser?'destination-out':'source-over'; ctx.strokeStyle=st.color; ctx.lineWidth=st.size; ctx.lineCap='round'; ctx.lineJoin='round'; ctx.beginPath(); ctx.moveTo(a.x*cssW,a.y*cssH); ctx.lineTo(b.x*cssW,b.y*cssH); ctx.stroke(); ctx.globalCompositeOperation='source-over'; }
+    function clearDrawing(){ strokes=[]; current=null; drawing=false; redraw(); }
+    function pt(e){ var r=canvas.getBoundingClientRect(); return {x:(e.clientX-r.left)/cssW, y:(e.clientY-r.top)/cssH}; }
+    canvas.addEventListener('pointerdown',function(e){ if(!drawing)return; e.preventDefault(); try{canvas.setPointerCapture(e.pointerId);}catch(er){} var p=pt(e); current={color:drawColor,size:eraser?ERA:PEN,eraser:eraser,points:[p]}; strokes.push(current); });
+    canvas.addEventListener('pointermove',function(e){ if(!current)return; e.preventDefault(); var p=pt(e), prev=current.points[current.points.length-1]; current.points.push(p); segDraw(current,prev,p); });
+    function endStroke(){ if(!current)return; if(current.points.length===1)segDraw(current,current.points[0],current.points[0]); current=null; }
+    canvas.addEventListener('pointerup',endStroke); canvas.addEventListener('pointercancel',endStroke); canvas.addEventListener('pointerleave',endStroke);
+    function setDrawing(on){ drawing=on; canvas.style.pointerEvents=on?'auto':'none'; canvas.style.cursor=on?'crosshair':'default'; palette.classList.toggle('show',on); $$('.js-draw-toggle').forEach(function(b){ b.classList.toggle('draw-on',on); b.textContent=on?'Drawing':'Draw'; }); }
+    var rzT=null; window.addEventListener('resize',function(){ clearTimeout(rzT); rzT=setTimeout(sizeCanvas,120); });
+    try{ new ResizeObserver(function(){ sizeCanvas(); }).observe(stage); }catch(e){} window.addEventListener('load',sizeCanvas);
 
-    var __actx=null;
-    function actx(){ try{ var AC=window.AudioContext||window.webkitAudioContext; if(!AC)return null; if(!__actx)__actx=new AC(); if(__actx.state==='suspended')__actx.resume(); return __actx; }catch(e){return null;} }
-    function blip(freq,vol,dur,type){ var c=actx(); if(!c)return; try{ var o=c.createOscillator(),g=c.createGain(),t=c.currentTime; o.type=type||'sine'; o.frequency.value=freq; g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(vol,t+.005); g.gain.exponentialRampToValueAtTime(.0001,t+(dur||.09)); o.connect(g).connect(c.destination); o.start(t); o.stop(t+(dur||.09)+.02);}catch(e){} }
-    document.addEventListener('pointerdown',function(){actx();},true);
-    document.addEventListener('keydown',function(){actx();},true);
+    /* ---- audio ---- */
+    var __actx=null; function actx(){ try{ var AC=window.AudioContext||window.webkitAudioContext; if(!AC)return null; if(!__actx)__actx=new AC(); if(__actx.state==='suspended')__actx.resume(); return __actx; }catch(e){return null;} }
+    function blip(freq,vol,dur,type){ if(muted)return; var c=actx(); if(!c)return; try{ var o=c.createOscillator(),g=c.createGain(),t=c.currentTime; o.type=type||'sine'; o.frequency.value=freq; g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(vol,t+.005); g.gain.exponentialRampToValueAtTime(.0001,t+(dur||.09)); o.connect(g).connect(c.destination); o.start(t); o.stop(t+(dur||.09)+.02);}catch(e){} }
+    document.addEventListener('pointerdown',function(){actx();},true); document.addEventListener('keydown',function(){actx();},true);
 
+    /* ---- comms ---- */
     function post(m){ if(frame&&frame.contentWindow)frame.contentWindow.postMessage(m,'*'); }
     function postMetro(){ post({type:'praxis-metro',playing:playing,tempo:tempo}); }
     function sendSettings(){ post({type:'praxis-settings',settings:settings}); }
-    function sendSplit(){ post({type:'praxis-split',split:splitMode}); }
-    function sendBars(){ post({type:'praxis-bars',bars:numBars}); }
-    function sendAid(m){ post({type:'praxis-aid',mode:m}); }
     function setToggle(){ $$('[data-metro-toggle]').forEach(function(b){b.textContent=playing?'Stop':'Play';b.classList.toggle('active',playing);b.setAttribute('aria-pressed',String(playing));}); }
     function setBpm(){ $$('[data-metro-bpm-input]').forEach(function(i){i.value=tempo;}); }
     function setSliders(){ $$('[data-metro-tempo]').forEach(function(i){i.value=tempo;}); }
-    function syncSplitSelects(){ $$('[data-coop-split]').forEach(function(s){ s.value=splitMode; var o4=s.querySelector('[value="4s"]'); if(o4)o4.disabled=(numBars<=4); }); }
-
+    function syncSplit(){ $$('[data-coop-split]').forEach(function(s){ s.value=splitMode; var o4=s.querySelector('[value="4s"]'); if(o4)o4.disabled=(numBars<=4); }); }
     function ranges(who){ var r=[],i,s=null; for(i=0;i<ownerArr.length;i++){ if(ownerArr[i]===who){ if(s===null)s=i; } else { if(s!==null){ var e=i-1; r.push(s===e?String(s+1):(s+1)+'–'+(e+1)); s=null; } } } if(s!==null){ var e2=ownerArr.length-1; r.push(s===e2?String(s+1):(s+1)+'–'+(e2+1)); } return r.join(', '); }
-    function renderMap(){
-      var fm=$('#form-map'); fm.innerHTML=''; cells=[];
-      for(var i=0;i<barsData.length;i++){ (function(i){
-        var ow=(ownerArr[i]||'A');
-        var d=document.createElement('div'); d.className='bar-cell owner-'+ow.toLowerCase();
-        d.innerHTML='<div class="bc-top"><span class="bc-no">'+(i+1)+'</span><span class="bc-who '+ow.toLowerCase()+'">'+ow+'</span></div>';
-        fm.appendChild(d); cells.push(d);
-      })(i); }
-      $('#coop-a-bars').textContent=ranges('A'); $('#coop-b-bars').textContent=ranges('B');
-      console.log('[coop] renderMap cells='+cells.length);
-    }
-    function setActive(bar){ cells.forEach(function(c,i){ c.classList.toggle('active', i===bar); }); }
     function setDots(qb){ $$('#coop-dots i').forEach(function(d,i){ d.classList.toggle('on', i===qb); }); }
     function setBanner(ow,bar){ var b=$('#turn-banner'); if(ow){ b.textContent=(ow==='A'?'Student A':'Student B')+' — bar '+(bar+1); b.className='turn-banner owner-'+ow.toLowerCase(); } }
     function summaryBanner(){ var b=$('#turn-banner'); b.className='turn-banner'; b.textContent='Trade '+(splitMode==='4s'?'4s':'2s')+' · A: '+(ranges('A')||'—')+' · B: '+(ranges('B')||'—'); }
-    function idleVisuals(){ setActive(-1); setDots(-1); if(settings.masterOff){ $('#turn-banner').className='turn-banner'; $('#turn-banner').textContent='Self-count — you are the pulse'; } else { summaryBanner(); } }
-    function applyMasterUI(){ var dis=settings.masterOff; ['set-sound','set-cue','set-cursor'].forEach(function(id){ var el=$('#'+id); if(el){ el.disabled=dis; el.closest('label').style.opacity=dis?'.45':'1'; } }); }
-    function flashCard(which){ var el=which==='a'?$('#card-a'):which==='b'?$('#card-b'):null; if(!el)return; el.classList.add('flash'); setTimeout(function(){el.classList.remove('flash');},140); }
+    function idleVisuals(){ setDots(-1); if(settings.master){ $('#turn-banner').className='turn-banner'; $('#turn-banner').textContent='Self-count — you are the pulse'; } else summaryBanner(); }
+    function flashCard(w){ var el=w==='a'?$('#card-a'):w==='b'?$('#card-b'):null; if(!el)return; el.classList.add('flash'); setTimeout(function(){el.classList.remove('flash');},140); }
 
-    /* ---- canvas drawing ---- */
-    function sizeCanvas(){
-      var r=stage.getBoundingClientRect();
-      var dpr=window.devicePixelRatio||1;
-      cssW=Math.max(1,r.width); cssH=Math.max(1,r.height);
-      canvas.width=Math.round(cssW*dpr); canvas.height=Math.round(cssH*dpr);
-      canvas.style.width=cssW+'px'; canvas.style.height=cssH+'px';
-      redraw();
-    }
-    function redraw(){
-      var dpr=window.devicePixelRatio||1;
-      ctx.setTransform(dpr,0,0,dpr,0,0);
-      ctx.clearRect(0,0,cssW,cssH);
-      ctx.lineCap='round'; ctx.lineJoin='round';
-      for(var s=0;s<strokes.length;s++){
-        var st=strokes[s];
-        ctx.globalCompositeOperation=st.eraser?'destination-out':'source-over';
-        ctx.strokeStyle=st.color; ctx.lineWidth=st.size;
-        ctx.beginPath();
-        var px=st.points[0].x*cssW, py=st.points[0].y*cssH;
-        ctx.moveTo(px,py);
-        for(var i=1;i<st.points.length;i++){ px=st.points[i].x*cssW; py=st.points[i].y*cssH; ctx.lineTo(px,py); }
-        if(st.points.length===1){ ctx.lineTo(px+0.1,py+0.1); }
-        ctx.stroke();
-      }
-      ctx.globalCompositeOperation='source-over';
-    }
-    function drawSegment(st,p0,p1){
-      var dpr=window.devicePixelRatio||1;
-      ctx.setTransform(dpr,0,0,dpr,0,0);
-      ctx.globalCompositeOperation=st.eraser?'destination-out':'source-over';
-      ctx.strokeStyle=st.color; ctx.lineWidth=st.size; ctx.lineCap='round'; ctx.lineJoin='round';
-      ctx.beginPath(); ctx.moveTo(p0.x*cssW,p0.y*cssH); ctx.lineTo(p1.x*cssW,p1.y*cssH); ctx.stroke();
-      ctx.globalCompositeOperation='source-over';
-    }
-    function clearDrawing(){ strokes=[]; currentStroke=null; drawing=false; redraw(); }
-    function setDrawMode(on){
-      drawMode=on;
-      canvas.style.pointerEvents=on?'auto':'none';
-      canvas.style.cursor=on?'crosshair':'default';
-      drawBtn.classList.toggle('active',on);
-      drawBtn.textContent=on?'Drawing… (click to stop)':'Draw on score';
-      swatchWrap.style.opacity=on?'1':'.4';
-      swatchWrap.style.pointerEvents=on?'auto':'none';
-    }
-    function pt(e){ var r=canvas.getBoundingClientRect(); return {x:(e.clientX-r.left)/cssW, y:(e.clientY-r.top)/cssH}; }
-    canvas.addEventListener('pointerdown',function(e){
-      if(!drawMode)return; e.preventDefault();
-      try{canvas.setPointerCapture(e.pointerId);}catch(er){}
-      var p=pt(e);
-      currentStroke={color:drawColor, size:drawEraser?ERASER_SIZE:PEN_SIZE, eraser:drawEraser, points:[p]};
-      strokes.push(currentStroke); drawing=true;
-    });
-    canvas.addEventListener('pointermove',function(e){
-      if(!drawing||!currentStroke)return; e.preventDefault();
-      var p=pt(e), prev=currentStroke.points[currentStroke.points.length-1];
-      currentStroke.points.push(p); drawSegment(currentStroke,prev,p);
-    });
-    function endStroke(){
-      if(!drawing)return; drawing=false;
-      if(currentStroke&&currentStroke.points.length===1){ drawSegment(currentStroke,currentStroke.points[0],currentStroke.points[0]); }
-      currentStroke=null;
-    }
-    canvas.addEventListener('pointerup',endStroke);
-    canvas.addEventListener('pointercancel',endStroke);
-    canvas.addEventListener('pointerleave',endStroke);
-    var rzT=null;
-    window.addEventListener('resize',function(){ clearTimeout(rzT); rzT=setTimeout(sizeCanvas,120); });
-    if(window.ResizeObserver){ try{ new ResizeObserver(function(){ sizeCanvas(); }).observe(stage); }catch(e){} }
+    var ciTimer=null;
+    function parentCountIn(){ if(settings.master||muted)return; clearInterval(ciTimer); var i=0, step=60000/tempo; function tick(){ blip(i===0?1046:784, i===0?.16:.10, .07); i++; if(i>=4)clearInterval(ciTimer); } tick(); ciTimer=setInterval(tick,step); }
+    function doToggle(){ playing=!playing; setToggle(); postMetro(); if(playing){ if(drawing)setDrawing(false); parentCountIn(); } else { clearInterval(ciTimer); idleVisuals(); } }
 
-    function doToggle(){ playing=!playing; setToggle(); postMetro(); if(playing){ if(drawMode)setDrawMode(false); } else { idleVisuals(); } }
+    /* ---- nav draw/aid visibility (gated by settings) ---- */
+    function applyShowToggles(){ $$('.js-draw-toggle').forEach(function(b){ b.style.display=settings.showDraw?'':'none'; }); $$('.js-aid-wrap').forEach(function(w){ w.style.display=settings.showAid?'':'none'; }); }
 
+    /* ---- events ---- */
     document.addEventListener('click',function(e){
-      var b=e.target&&e.target.closest?e.target.closest('[data-metro-toggle]'):null;
+      var b=e.target&&e.target.closest?e.target.closest('[data-metro-toggle]:not([data-draw-toggle])'):null;
       if(b){ e.stopImmediatePropagation(); e.preventDefault(); doToggle(); return; }
+      var dt=e.target&&e.target.closest?e.target.closest('[data-draw-toggle]'):null;
+      if(dt){ e.preventDefault(); setDrawing(!drawing); return; }
+      var sw=e.target&&e.target.closest?e.target.closest('.sw'):null;
+      if(sw){ e.preventDefault(); $$('.sw').forEach(function(x){x.classList.remove('on');}); sw.classList.add('on'); if(sw.hasAttribute('data-eraser'))eraser=true; else { eraser=false; drawColor=sw.getAttribute('data-color')||drawColor; } return; }
+      var un=e.target&&e.target.closest?e.target.closest('[data-undo]'):null; if(un){ e.preventDefault(); strokes.pop(); redraw(); return; }
+      var cl=e.target&&e.target.closest?e.target.closest('[data-clear]'):null; if(cl){ e.preventDefault(); clearDrawing(); return; }
+      var aid=e.target&&e.target.closest?e.target.closest('[data-aid]'):null;
+      if(aid){ var m=aid.getAttribute('data-aid'); $$('[data-aid-seg]').forEach(function(seg){ seg.querySelectorAll('button').forEach(function(x){x.classList.toggle('on',x===aid);}); }); post({type:'praxis-aid',mode:m}); return; }
       var g=e.target&&e.target.closest?e.target.closest('[data-metro-gear]'):null;
       if(g){ e.preventDefault(); var p=$('#gear-pop'); p.hidden=!p.hidden; return; }
-      var aid=e.target&&e.target.closest?e.target.closest('#aid-seg button'):null;
-      if(aid){ var m=aid.getAttribute('data-aid'); $$('#aid-seg button').forEach(function(x){x.classList.toggle('on',x===aid);}); sendAid(m); return; }
-      var dt=e.target&&e.target.closest?e.target.closest('#draw-toggle'):null;
-      if(dt){ e.preventDefault(); setDrawMode(!drawMode); return; }
-      var sw=e.target&&e.target.closest?e.target.closest('.sw'):null;
-      if(sw){ e.preventDefault(); $$('.sw').forEach(function(x){x.classList.remove('on');}); sw.classList.add('on'); if(sw.id==='eraser-btn'){ drawEraser=true; } else { drawEraser=false; drawColor=sw.getAttribute('data-color')||drawColor; } return; }
-      var dc=e.target&&e.target.closest?e.target.closest('#draw-clear'):null;
-      if(dc){ e.preventDefault(); clearDrawing(); return; }
       if(!$('#gear-pop').hidden && !e.target.closest('#gear-pop')) $('#gear-pop').hidden=true;
     },true);
     document.addEventListener('input',function(e){
@@ -330,13 +223,15 @@
       if(e.target.matches&&e.target.matches('[data-metro-bpm-input]')){ var v=parseInt(e.target.value,10); if(v>=40&&v<=208){ tempo=v; setBpm(); setSliders(); postMetro(); } }
     },true);
     document.addEventListener('change',function(e){
-      if(e.target.matches&&e.target.matches('[data-metro-bars]')){ numBars=+e.target.value||8; if(numBars<=4)splitMode='2s'; syncSplitSelects(); sendBars(); }
-      else if(e.target.matches&&e.target.matches('[data-coop-split]')){ splitMode=e.target.value||'2s'; syncSplitSelects(); sendSplit(); }
+      if(e.target.matches&&e.target.matches('[data-metro-bars]')){ numBars=+e.target.value||8; if(numBars<=4)splitMode='2s'; syncSplit(); post({type:'praxis-bars',bars:numBars}); }
+      else if(e.target.matches&&e.target.matches('[data-coop-split]')){ splitMode=e.target.value||'2s'; syncSplit(); post({type:'praxis-split',split:splitMode}); }
       else if(e.target.matches&&e.target.matches('[data-metro-bpm-input]')){ var v=parseInt(e.target.value,10); if(v>=40&&v<=208)tempo=v; else e.target.value=tempo; setBpm(); setSliders(); postMetro(); }
-      else if(e.target.id==='set-master'){ settings.masterOff=e.target.checked; applyMasterUI(); idleVisuals(); sendSettings(); }
+      else if(e.target.id==='set-showdraw'){ settings.showDraw=e.target.checked; applyShowToggles(); if(!settings.showDraw)setDrawing(false); }
+      else if(e.target.id==='set-showaid'){ settings.showAid=e.target.checked; applyShowToggles(); }
+      else if(e.target.id==='set-master'){ settings.master=e.target.checked; if(settings.master){ $('#coop-dots').style.display='none'; } else if(settings.cursor){ $('#coop-dots').style.display=''; } idleVisuals(); sendSettings(); }
       else if(e.target.id==='set-sound'){ settings.metroSound=e.target.checked; sendSettings(); }
-      else if(e.target.id==='set-cursor'){ settings.cursor=e.target.checked; if(!settings.cursor||settings.masterOff)setActive(-1); sendSettings(); }
-      else if(e.target.id==='set-cue'){ settings.cue=e.target.checked; sendSettings(); }
+      else if(e.target.id==='set-cursor'){ settings.cursor=e.target.checked; $('#coop-dots').style.display=(settings.cursor&&!settings.master)?'':'none'; sendSettings(); }
+      else if(e.target.id==='set-ab'){ settings.ab=e.target.checked; settings.cue=e.target.checked; sendSettings(); }
       else if(e.target.id==='set-loop'){ settings.loop=e.target.checked; sendSettings(); }
     },true);
     document.addEventListener('keydown',function(e){
@@ -346,30 +241,27 @@
       if(k==='a'||k==='A'){ e.preventDefault(); post({type:'praxis-tap'}); flashCard('a'); return; }
       if(k==='l'||k==='L'){ e.preventDefault(); post({type:'praxis-tap'}); flashCard('b'); return; }
     });
+    $('#mute-btn').addEventListener('click',function(){ muted=!muted; this.classList.toggle('muted',muted); this.textContent=muted?'🔇':'🔊'; this.setAttribute('aria-pressed',String(muted)); post({type:'praxis-mute',muted:muted}); });
 
     window.addEventListener('message',function(ev){
       var d=ev.data; if(!d)return;
-      if(d.type==='drill-state'){ playing=!!d.playing; setToggle(); if(playing){ summaryBanner(); } else { idleVisuals(); } }
-      else if(d.type==='drill-ready'){ console.log('[coop] ready'); sendBars(); sendSplit(); postMetro(); sendSettings(); var on=$('#aid-seg button.on'); sendAid(on?on.getAttribute('data-aid'):'none'); sizeCanvas(); }
-      else if(d.type==='coop-split'){
-        console.log('[coop] split bars='+(d.bars?d.bars.length:0));
-        var key=JSON.stringify(d.bars||[]);
-        if(key!==lastBarsKey){ lastBarsKey=key; clearDrawing(); }   /* new rhythm -> wipe marks; loop (same rhythm) keeps them */
-        barsData=d.bars||[]; ownerArr=d.owner||[]; numBars=d.numBars||numBars; renderMap(); idleVisuals();
-      }
+      if(d.type==='drill-state'){ playing=!!d.playing; setToggle(); if(playing)summaryBanner(); else { clearInterval(ciTimer); idleVisuals(); } }
+      else if(d.type==='drill-ready'){ post({type:'praxis-bars',bars:numBars}); post({type:'praxis-split',split:splitMode}); postMetro(); sendSettings(); post({type:'praxis-aid',mode:(($('[data-aid-seg] .on')||{}).getAttribute?$('.data-aid-seg .on'):'none')||'none'}); post({type:'praxis-mute',muted:muted}); sizeCanvas(); }
+      else if(d.type==='coop-split'){ if(d.seq!==lastSeq){ lastSeq=d.seq; clearDrawing(); } ownerArr=d.owner||[]; numBars=d.numBars||numBars; $('#coop-a-bars').textContent=ranges('A'); $('#coop-b-bars').textContent=ranges('B'); idleVisuals(); }
       else if(d.type==='coop-beat'){
-        if(settings.masterOff)return;
-        lastOwner=d.owner;
-        setDots(Math.floor(d.eighthInBar/2));
-        if(settings.cursor){ setActive(d.bar); setBanner(d.owner,d.bar); }
-        if(d.eighthInBar===0){ if(settings.cue) blip(d.owner==='A'?659.25:392.0, .15, .12, d.owner==='A'?'sine':'triangle'); else if(settings.metroSound) blip(784,.09,.05); }
+        if(settings.master)return; lastOwner=d.owner;
+        if(settings.cursor)setDots(Math.floor(d.eighthInBar/2));
+        if(settings.cursor)setBanner(d.owner,d.bar);
+        if(d.eighthInBar===0){ if(settings.cue)blip(d.owner==='A'?659.25:392.0, .15, .12, d.owner==='A'?'sine':'triangle'); else if(settings.metroSound)blip(784,.09,.05); }
         else if(settings.metroSound && d.eighthInBar%2===0){ blip(520,.06,.04); }
       }
     });
 
     /* init */
-    applyMasterUI(); setToggle(); setBpm(); setSliders(); syncSplitSelects(); setDrawMode(false);
-    sizeCanvas(); window.addEventListener('load',sizeCanvas);
+    settings.showDraw=false; settings.showAid=false;
+    applyShowToggles(); setToggle(); setBpm(); setSliders(); syncSplit(); setDrawing(false);
+    $('#coop-dots').style.display=settings.cursor?'':'none';
+    sizeCanvas();
   })();
   </script>
 </body>
