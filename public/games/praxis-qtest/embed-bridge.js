@@ -56,6 +56,7 @@
     var numBars=8, splitMode='2s', lastData=null, owner=[], seq=0;
     var settings={loop:false,ab:true,cue:true,metroSound:true,master:false};
     var clockTimer=null, clockEighth=0, runId=0, completedId=-1, aidMode='none';
+    document.addEventListener('keydown',function(e){ if(e.key===' '||e.code==='Space'){ e.preventDefault(); e.stopImmediatePropagation(); } },true);/*sp-coop*/
 
     function P(){return window.MusicRhythmPlayer||null;}
     (function(){
@@ -120,7 +121,7 @@
       var rhythm=new MusicRhythm(data); rhythmImage.setRhythm(rhythm); renderedRhythm=rhythmImage.getRhythm(); p.setRhythm(renderedRhythm);
       applyTempo(); if(!settings.metroSound||settings.master){try{p.removeMetronome();}catch(e){}}
       rhythmImage.showInfoBox(true); p.showButton(); p.setMarkNotesDuringTapping(false);
-      owner=computeSplit(numBars,splitMode); seq++; flowState='showing'; setInfo('Press Play','','1'); postSplit();
+      owner=computeSplit(numBars,splitMode); seq++; flowState='showing'; setInfo('Press Play','','1'); postSplit(); post({type:'praxis-new-exercise'});/*nx-coop*/
       renderAB(); renderAids(); setTimeout(function(){renderAB();renderAids();},160); watchOverlays(refreshOverlays);
     }
     function nextExercise(){ exerciseCount++; showExercise(randRhythm()); post({type:'drill-state',playing:false,exercise:exerciseCount}); }
@@ -189,7 +190,7 @@
       var rhythm=new MusicRhythm(data); rhythmImage.setRhythm(rhythm); renderedRhythm=rhythmImage.getRhythm(); p.setRhythm(renderedRhythm);
       applyTempo(); if(!fsettings.metroSound||fsettings.master){try{p.removeMetronome();}catch(e){}}
       rhythmImage.showInfoBox(true); p.showButton(); p.setMarkNotesDuringTapping(false);
-      flowState='showing'; setInfo('Click to start','','1'); renderAids(); setTimeout(renderAids,160); watchOverlays(refreshOverlays); }
+      flowState='showing'; setInfo('Click to start','','1'); post({type:'praxis-new-exercise'});/*nx-fp*/ renderAids(); setTimeout(renderAids,160); watchOverlays(refreshOverlays); }
     function nextExercise(){ exerciseCount++; showExercise(randRhythm()); post({type:'drill-state',playing:false,exercise:exerciseCount}); }
     function unlockAudio(){ try{ if(window.Howler&&window.Howler.ctx&&window.Howler.ctx.state==='suspended')window.Howler.ctx.resume(); }catch(e){} if(audioUnlocked)return;
       try{ if(window.Howler){ window.Howler.mute(false); if(typeof window.Howler.volume==='function')window.Howler.volume(1); } var AC=window.AudioContext||window.webkitAudioContext; if(AC){var c=new AC(); if(c.state==='suspended')c.resume(); c.close&&c.close();} audioUnlocked=true; }catch(e){} }
