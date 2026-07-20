@@ -446,6 +446,7 @@ label.metro-field:has([data-metro-beats]){display:none !important}
       >
         Play
       </button>
+      <button type="button" class="metro-toggle" data-listen style="background:var(--praxis-gold,#e8a83e);color:#241a06">Listen</button>
 
       <label class="metro-field">
         Tempo
@@ -548,6 +549,7 @@ label.metro-field:has([data-metro-beats]){display:none !important}
       >
         Play
       </button>
+      <button type="button" class="metro-toggle" data-listen style="background:var(--praxis-gold,#e8a83e);color:#241a06">Listen</button>
 
       <div class="dock__tempo">
         <input
@@ -841,6 +843,8 @@ label.metro-field:has([data-metro-beats]){display:none !important}
   <label><span>Show “Draw” in bar</span><input type="checkbox" id="fp-set-showdraw"></label>
   <label><span>Show “Counting aid” in bar</span><input type="checkbox" id="fp-set-showaid"></label>
   <label><span>Master: self-count (silent)</span><input type="checkbox" id="fp-set-master"></label>
+  <label><span>Line cursor</span><input type="checkbox" id="fp-set-cursor2" checked></label>
+  <label><span>Show ✓ / ✗ marks</span><input type="checkbox" id="fp-set-marks" checked></label>
   <label><span>Metronome click</span><input type="checkbox" id="fp-set-sound" checked></label>
   <label><span>Beat cursor (dots)</span><input type="checkbox" id="fp-set-cursor" checked></label>
   <div class="hint">Metronome &amp; master apply on the next exercise. Draw / aid appear in the bar once enabled.</div>
@@ -937,6 +941,20 @@ label.metro-field:has([data-metro-beats]){display:none !important}
   });
   injectNavControls();
   $$('[data-metro-lights]').forEach(function(d){ d.style.display=settings.cursor?'':'none'; });
+  
+  /* Listen = play the rhythm through with the cursor, no tapping (uses engine includePlaying pass) */
+  $$('[data-listen]').forEach(function(b){ b.addEventListener('click',function(e){ e.preventDefault(); e.stopPropagation(); post({type:'praxis-metro',playing:true,tempo:tempo}); }); });
+  /* Line cursor + marks settings */
+  (function(){
+    var cur=document.getElementById('fp-set-cursor2'), mk=document.getElementById('fp-set-marks');
+    function sync(){ settings.cursor = cur ? cur.checked : true; settings.marks = mk ? mk.checked : true;
+      if(settings.marks===false){ settings.cursor=true; if(cur){cur.checked=true; cur.disabled=true;} } else { if(cur){cur.disabled=false;} }
+      post({type:'praxis-settings',settings:settings}); }
+    if(cur)cur.addEventListener('change',sync);
+    if(mk)mk.addEventListener('change',sync);
+    sync();
+  })();
+
   sizeCanvas();
 })();
 </script>
