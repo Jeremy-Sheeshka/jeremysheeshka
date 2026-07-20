@@ -237,15 +237,13 @@
 
         <div class="status-strip">
           <div class="status-item"><span>Current collection</span><strong id="status-dataset">Afro-Cuban Claves</strong></div>
-          <div class="status-item"><span>Studio setup</span><strong id="status-setup">Open studio · ready</strong></div>
-          <div class="status-item"><span>Recent session</span><strong>Trade Fours · 8 bars explored</strong></div>
           <div class="status-item"><span>Session state</span><strong>Ready to begin</strong></div>
         </div>
 
         <div class="dashboard-grid">
           <div>
             <article class="card dataset-card" id="feature-resist">
-              <div class="card-label"><strong>Cultural Datasets</strong><button class="feature-link" data-annotation="resist">Linked to RESIST</button></div>
+              <div class="card-label"><strong>Cultural Datasets</strong><button class="feature-link" id="weekly-doing-link">Weekly Doing</button></div>
               <label class="dropzone"><input class="sr-only" id="file-input" type="file" accept=".pdf,.png,.jpg,.jpeg"><span class="upload-icon">↑</span><strong>Upload sheet music</strong><small>PDF or image · staged locally in this prototype</small></label>
               <div class="presets">
                 <button class="preset selected" aria-pressed="true" data-name="Afro-Cuban Claves">Afro-Cuban Claves<span>Community rhythm set · 12 patterns</span></button>
@@ -264,15 +262,6 @@
               <div class="ensemble-preview hidden" id="ensemble-preview">
                 <div class="ensemble-dots"><i></i><i></i><i></i><i></i></div>
                 <strong id="ensemble-count">Ready</strong>
-              </div>
-            </article>
-            <article class="card action-card">
-              <span class="line-icon">↗</span>
-              <h3>Choose a pathway</h3>
-              <p>The same material can support exploration or reciprocal learning.</p>
-              <div class="launch-grid">
-                <a class="btn accent" href="./free-play.html">Free Play</a>
-                <a class="btn primary" href="./co-op.html">Co-Op</a>
               </div>
             </article>
           </div>
@@ -306,7 +295,7 @@
             </article>
           </div>
           <div class="action-stack">
-            <article class="card action-card">
+            <article class="card action-card" id="doing-prompt-card">
               <span class="line-icon">✎</span>
               <h3>A doing prompt for the cohort</h3>
               <p>Take a piece of music you're listening to right now and pull out a two-bar rhythm. Use the Cultural Datasets card to choose where it would live — Afro-Cuban, Congolese, or your own Local Family Database — then sketch, in a sentence or two, the developmental sequence you'd build from it.</p>
@@ -399,6 +388,15 @@
         toast(state.dataset+" selected");
       }));
       $("#file-input").addEventListener("change",e=>{ if(e.target.files[0]) toast(e.target.files[0].name+" staged for this session"); });
+
+      // Weekly Doing -> open the Gallery and highlight the doing prompt
+      $("#weekly-doing-link").addEventListener("click",()=>{
+        showScreen("screen-gallery");
+        setTimeout(()=>{
+          const card=document.getElementById("doing-prompt-card");
+          if(card){ card.scrollIntoView({behavior:"smooth",block:"center"}); card.classList.add("highlight"); setTimeout(()=>card.classList.remove("highlight"),2700); }
+        },120);
+      });
 
       // Ensemble pulse preview
       let audioCtx;
