@@ -66,7 +66,7 @@
     function stop(){ if(raf){cancelAnimationFrame(raf);raf=null;} if(line&&line.parentNode)line.parentNode.removeChild(line); line=null; }
     function play(tempo,onDone){
       stop(); var g=ensure(); if(!g){ if(onDone)onDone(); return; }
-      var dur=Math.max(300,(60000/(tempo||88))/144)*(getRendered().bars.length*576);
+      var dur=Math.max(300,getRendered().bars.length*576*(60000/(tempo||88)/144));
       var t0=performance.now(), span=(g.maxX-g.minX)||1;
       function fr(now){ var pr=(now-t0)/dur; if(pr>=1)pr=1;
         if(line){ line.setAttribute('x',g.minX+pr*span); line.setAttribute('opacity','0.9'); }
