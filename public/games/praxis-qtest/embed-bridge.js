@@ -87,7 +87,7 @@
     var settings={loop:false,ab:true,cue:true,metroSound:true,master:false,marks:true,cursor:true};
     var aidMode='none',runId=0,completedId=-1,clockTimer=null,clockEighth=0;
     console.log('[coop-bridge] co-op branch active');
-    document.addEventListener('keydown',function(e){ if(e.key===' '||e.code==='Space'){e.preventDefault();e.stopImmediatePropagation();} },true);
+    document.addEventListener('keydown',function(e){ if(e.key===' '||e.code==='Space'){e.preventDefault();e.stopImmediatePropagation();} if(e.key==='a'||e.key==='A'||e.key==='l'||e.key==='L'){ e.preventDefault(); tap(); } },true);
     function P(){return window.MusicRhythmPlayer||null;}
     var cursor=makeCursor(function(){return renderedRhythm;});
     (function(){ var p=P(); if(!p)return; var origInit=p.initialisation;
@@ -160,11 +160,12 @@
     function tickClock(){ var bar=Math.floor(clockEighth/8); if(bar>=numBars)bar=numBars-1; var eib=clockEighth%8, ow=owner[bar]||'A'; post({type:'coop-beat',bar:bar,eighthInBar:eib,owner:ow}); clockEighth++; }
     function startClock(){ stopClock(); clockEighth=0; tickClock(); clockTimer=setInterval(tickClock,30000/currentTempo); }
     function stopClock(){ if(clockTimer){clearInterval(clockTimer);clockTimer=null;} }
+    function tap(){ var p=P(); if(p&&typeof p.tap==='function'){try{p.tap();}catch(e){try{p.tap(performance.now());}catch(e2){}}} }
     window.addEventListener('message',function(ev){ var d=ev.data; if(!d)return;
       if(d.type==='praxis-metro'){ if(d.tempo!=null)setTempo(d.tempo);
         if(d.playing){ if(flowState==='showing'||flowState==='done'||flowState==='init'){ if(flowState!=='showing'){exerciseCount++;showExercise(randRhythm());} beginPlay(); } else if(!playing){beginPlay();} }
         else { hardStop(); flowState='done'; post({type:'drill-state',playing:false}); } }
-      else if(d.type==='praxis-tap'){ /* per-key handled by parent */ }
+      else if(d.type==='praxis-tap'){ tap(); }
       else if(d.type==='praxis-bars'){ var nb=d.bars||8; if(nb===numBars)return; numBars=nb; hardStop(); exerciseCount++; showExercise(randRhythm()); if(playing)beginPlay(); }
       else if(d.type==='praxis-split'){ splitMode=d.split||'2s'; owner=computeSplit(numBars,splitMode); postSplit(); renderAB(); renderAids(); }
       else if(d.type==='praxis-aid'){ aidMode=d.mode||'none'; renderAids(); }
