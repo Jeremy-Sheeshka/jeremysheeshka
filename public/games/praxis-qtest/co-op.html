@@ -780,12 +780,24 @@
           <!--
             If you later create a dedicated co-op exercise URL, replace this src.
           -->
-          <iframe id="drill-frame" 
-            title="Co-Op rhythm exercise"
-            src="http://localhost:4735/games/rhythm-app/exercise/720/"
-            loading="lazy"
-            allow="autoplay; fullscreen"
-          ></iframe>
+                  <iframe id="drill-frame"
+      title="Free Play rhythm exercise"
+      src="about:blank"
+      allow="autoplay; fullscreen"
+      sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-modals"
+    ></iframe>
+    <script>
+      (function(){
+        var f=document.getElementById('drill-frame');
+        if(f){f.src=(location.hostname==='localhost'||location.hostname==='127.0.0.1')?'http://localhost:4735/games/rhythm-app/exercise/720/':'/games/rhythm-app/exercise/720/';}
+      })();
+    </script>
+    <script>
+      (function(){
+        var f=document.getElementById('drill-frame');
+        if(f){f.src=(location.hostname==='localhost'||location.hostname==='127.0.0.1')?'http://localhost:4735/games/rhythm-app/exercise/720/':'/games/rhythm-app/exercise/720/';}
+      })();
+    </script>
         </div>
       </section>
     </div>
