@@ -88,6 +88,14 @@
   </style>
 </head>
 <body>
+  <div id="enable-sound" style="position:fixed;inset:0;z-index:999999;display:flex;align-items:center;justify-content:center;background:rgba(8,12,20,.86);backdrop-filter:blur(4px);cursor:pointer;text-align:center;font-family:'Open Sans','Segoe UI',system-ui,sans-serif">
+    <div style="max-width:340px;padding:28px;color:#e8edf4">
+      <div style="font-size:40px;line-height:1;margin-bottom:14px">🥁</div>
+      <div style="font-size:20px;font-weight:800;margin-bottom:8px">Tap to enable sound</div>
+      <div style="font-size:13px;color:#9aa6b5;line-height:1.5">Browsers block audio until you interact once. This tap also counts as your first beat.</div>
+    </div>
+  </div>
+
   <header class="topbar">
     <a class="brand" href="./index.html">
       <span class="brand__badge">PR</span>
@@ -208,6 +216,32 @@
   (function(){
     var $=function(s){return document.querySelector(s);}, $$=function(s){return Array.prototype.slice.call(document.querySelectorAll(s));};
     var frame=$('#drill-frame');
+    /* === sound unlock + reliable transport === */
+    var __audioCtx=null;
+    function __unlock(){ try{ var AC=window.AudioContext||window.webkitAudioContext; if(!AC)return; __audioCtx=__audioCtx||new AC(); if(__audioCtx.state==='suspended')__audioCtx.resume(); }catch(e){} }
+    function __blip(freq,vol){ try{ var AC=window.AudioContext||window.webkitAudioContext; if(!AC)return; __audioCtx=__audioCtx||new AC(); if(__audioCtx.state==='suspended')__audioCtx.resume(); var o=__audioCtx.createOscillator(),g=__audioCtx.createGain(),t=__audioCtx.currentTime; o.type='sine'; o.frequency.value=freq; g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(vol||0.12,t+0.005); g.gain.exponentialRampToValueAtTime(0.0001,t+0.11); o.connect(g).connect(__audioCtx.destination); o.start(t); o.stop(t+0.13); }catch(e){} }
+    (function(){
+      var gate=document.getElementById('enable-sound'); if(!gate)return;
+      function dismiss(){ __unlock(); __blip(880,0.14); gate.style.display='none'; window.removeEventListener('pointerdown',dismiss,true); window.removeEventListener('keydown',dismiss,true); }
+      window.addEventListener('pointerdown',dismiss,true);
+      window.addEventListener('keydown',dismiss,true);
+      /* auto-dismiss (soundless) once the drill has already been unlocked by a click inside it */
+      setTimeout(function(){ try{ var AC=window.AudioContext||window.webkitAudioContext; if(AC){ var probe=new AC(); if(probe.state==='running'){ gate.style.display='none'; } probe.close&&probe.close(); } }catch(e){} },1500);
+    })();
+    /* audible beat on every pulse of the form-map dots (gated by the A/B-cue toggle) */
+    var __lastDot=-1;
+    var __origSetDots=setDots;
+    setDots=function(qb){ __origSetDots(qb); if(qb!==__lastDot){ __lastDot=qb; if(settings.cue&&!settings.masterOff){ __blip(qb===0?1046:784, qb===0?0.16:0.10); } } };
+    /* make the navbar Play/Stop buttons reliably drive the engine */
+    document.addEventListener('click',function(e){
+      var b=e.target&&e.target.closest?e.target.closest('[data-metro-toggle]'):null;
+      if(!b)return;
+      __unlock();
+      var wantPlay = b.textContent.trim()==='Play';
+      if(wantPlay){ post({type:'praxis-metro',playing:true,tempo:tempo}); }
+      else { post({type:'praxis-metro',playing:false}); }
+    },true);
+
     var settings={masterOff:false,metroSound:true,cursor:true,cue:true,loop:false};
     var tempo=88, numBars=8, splitMode='2s', playing=false;
     var barsData=[], ownerArr=[], seq=-1, notes=[], aidMode='none', cells=[];
