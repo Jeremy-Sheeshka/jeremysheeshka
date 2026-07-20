@@ -21,6 +21,13 @@
   }
 
 
+  function findSvg(){
+    var c=document.getElementById('spoergsmaal');
+    if(!c)return null;
+    if(c.tagName&&c.tagName.toLowerCase()==='svg')return c;
+    return c.querySelector('svg');
+  }
+
   /* shared aid renderer (used by both branches) */
   function makeRenderAids(getSvg, getRendered, getOwner, getMode){
     return function(){
@@ -89,12 +96,12 @@
     function applyTempo(){ if(rhythmObj&&rhythmObj.metricalStructure)rhythmObj.metricalStructure.tempo=currentTempo; }
     function postSplit(){ post({type:'coop-split', seq:seq, numBars:numBars, splitMode:splitMode, owner:owner, bars:lastData?lastData.bars:[]}); }
 
-    var renderAids=makeRenderAids(function(){return document.querySelector('#spoergsmaal svg');},function(){return renderedRhythm;},function(){return owner;},function(){return aidMode;});
+    var renderAids=makeRenderAids(function(){return findSvg();},function(){return renderedRhythm;},function(){return owner;},function(){return aidMode;});
     function refreshOverlays(){ withPausedWatch(function(){ renderAB(); renderAids(); }); }
 
     function renderAB(){
       try{
-        var svg=document.querySelector('#spoergsmaal svg'); if(!svg)return;
+        var svg=findSvg(); if(!svg)return;
         var old=svg.querySelectorAll('.praxis-ab,.praxis-ab-lbl'),k; for(k=0;k<old.length;k++){if(old[k].parentNode)old[k].parentNode.removeChild(old[k]);}
         if(!settings.ab||!renderedRhythm||!renderedRhythm.bars)return; var ns='http://www.w3.org/2000/svg';
         for(var b=0;b<renderedRhythm.bars.length;b++){
@@ -183,7 +190,7 @@
     function randRhythm(){ var bars=[],i; for(i=0;i<numBars;i++)bars.push(randBar()); return {metricalStructure:"4/4",bars:bars}; }
     function setInfo(text,state,img){ if(!rhythmImage)return; try{ rhythmImage.setInfoBoxText(text); rhythmImage.setInfoBoxState(state||''); if(img!==undefined)rhythmImage.setInfoBoxImage(img); }catch(e){} }
     function applyTempo(){ if(rhythmObj&&rhythmObj.metricalStructure)rhythmObj.metricalStructure.tempo=currentTempo; }
-    var renderAids=makeRenderAids(function(){return document.querySelector('#spoergsmaal svg');},function(){return renderedRhythm;},null,function(){return aidMode;});
+    var renderAids=makeRenderAids(function(){return findSvg();},function(){return renderedRhythm;},null,function(){return aidMode;});
     function refreshOverlays(){ withPausedWatch(function(){ renderAids(); }); }
 
     function showExercise(data){ var p=P(); if(!p||!rhythmImage)return; try{p.stop();}catch(e){}
