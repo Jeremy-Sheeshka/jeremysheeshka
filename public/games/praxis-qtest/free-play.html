@@ -489,13 +489,52 @@ label.metro-field:has([data-metro-beats]){display:none !important}
     </section>
   </header>
 
-    <main class="stage">
+      <main class="stage">
     <iframe id="drill-frame"
       title="Free Play rhythm exercise"
       src="about:blank"
       allow="autoplay; fullscreen"
     ></iframe>
-    <script src="/games/praxis-qtest/drill-loader.js"></script>
+    <script>
+      (function(){
+        var f=document.getElementById('drill-frame');
+        if(!f)return;
+        var SO='<'+'script>';
+        var SC='<'+'/'+'script>';
+        var host=location.hostname;
+        if(host==='localhost'||host==='127.0.0.1'){f.src='http://localhost:4735/games/rhythm-app/exercise/720/';return;}
+        var DRILL='/games/rhythm-app/exercise/720/';
+        Promise.all([
+          fetch(DRILL).then(function(r){return r.text();}),
+          fetch('/games/praxis-qtest/embed-bridge.js').then(function(r){return r.text();}).catch(function(){return '';}),
+          fetch('/games/praxis-qtest/embed-overrides.css').then(function(r){return r.text();}).catch(function(){return '';})
+        ]).then(function(res){
+          var h=res[0],bridge=res[1],ov=res[2];
+          h=h.replace(/if\s*\(\s*top\s*==\s*self\s*\)/g,'if(true)');
+          h=h.replace(/if\s*\(\s*self\s*==\s*top\s*\)/g,'if(true)');
+          h=h.replace(/if\s*\(\s*top\s*!=\s*self\s*\)/g,'if(false)');
+          h=h.replace(/if\s*\(\s*self\s*!=\s*top\s*\)/g,'if(false)');
+          h=h.replace(/if\s*\(\s*window\.top\s*===?\s*window\.self\s*\)/g,'if(true)');
+          h=h.replace(/if\s*\(\s*window\.top\s*!==?\s*window\.self\s*\)/g,'if(false)');
+          h=h.replace(/top\.location\s*=\s*self\.location[^;}\n]*/g,'/*x*/');
+          h=h.replace(/self\.location\s*=\s*top\.location[^;}\n]*/g,'/*x*/');
+          h=h.replace(/top\.location\.href\s*=[^;}\n]*/g,'/*x*/');
+          h=h.replace(/top\.location\.replace\([^)]*\)/g,'/*x*/');
+          h=h.replace(/top\.location\.assign\([^)]*\)/g,'/*x*/');
+          h=h.replace(/window\.top\.location\s*=[^;}\n]*/g,'/*x*/');
+          h=h.replace(/window\.top\.location\.href\s*=[^;}\n]*/g,'/*x*/');
+          h=h.replace(/window\.top\.location\.replace\([^)]*\)/g,'/*x*/');
+          h=h.replace(/parent\.location\s*=[^;}\n]*/g,'/*x*/');
+          h=h.replace(/<meta[^>]*content-security-policy[^>]*>/gi,'');
+          if(ov){h=h.replace('</head>','<style>'+ov+'</style></head>');}
+          if(bridge){var inj=SO+bridge+SC;h=(h.indexOf('</body>')!==-1)?h.replace('</body>',inj+'</body>'):h+inj;}
+          f.srcdoc=h;
+        }).catch(function(e){
+          console.error('[praxis] drill load failed',e);
+          f.srcdoc='<html><body style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:system-ui;color:#666"><p>Exercise failed to load.</p></body></html>';
+        });
+      })();
+    </script>
   </main>
 
   <footer class="dock" aria-label="Metronome dock">
