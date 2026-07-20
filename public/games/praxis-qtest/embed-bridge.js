@@ -28,6 +28,20 @@
     return c.querySelector('svg');
   }
 
+  /* shared beat clock: one pulse per quarter note, posted to parent so audio+visual share a clock */
+  var _beatTimer=null,_beatCount=0;
+  function stopBeatClock(){ if(_beatTimer){clearInterval(_beatTimer);_beatTimer=null;} }
+  function startBeatClock(tempo){
+    stopBeatClock(); _beatCount=0;
+    var ms=Math.max(120,60000/(tempo||88));
+    function tick(){
+      try{ if(window.parent&&window.parent!==window)window.parent.postMessage({type:'metro-beat',beat:_beatCount,accent:(_beatCount%4===0)},'*'); }catch(e){}
+      _beatCount++;
+    }
+    tick();
+    _beatTimer=setInterval(tick,ms);
+  }
+
   /* shared aid renderer (used by both branches) */
   function makeRenderAids(getSvg, getRendered, getOwner, getMode){
     return function(){
@@ -75,8 +89,9 @@
         cfg.afterStoppingCallback=function(){ completeExercise(); };
         var origStatus=cfg.changeStatusCallback;
         cfg.changeStatusCallback=function(s){
-          if(s==='play'||s==='tap'){ flowState='playing'; startClock(); }
-          if(s==='stop'||s==='countout'){ stopClock(); if(flowState==='playing'){ flowState='stopping'; completeExercise(); } }
+          if(s==='countin'){ startBeatClock(currentTempo); }
+          if(s==='play'||s==='tap'){ flowState='playing'; startClock(); startBeatClock(currentTempo); }
+          if(s==='stop'||s==='countout'){ stopClock(); stopBeatClock(); if(flowState==='playing'){ flowState='stopping'; completeExercise(); } }
           if(origStatus)origStatus(s);
         };
         return origInit.call(this,cfg);
@@ -127,6 +142,8 @@
     function showExercise(data){
       var p=P(); if(!p||!rhythmImage)return; try{p.stop();}catch(e){} stopClock(); lastData=data;
       var rhythm=new MusicRhythm(data); rhythmImage.setRhythm(rhythm); renderedRhythm=rhythmImage.getRhythm(); p.setRhythm(renderedRhythm);
+      try{p.removeMetronome();}catch(e){}
+      try{p.removeMetronome();}catch(e){}
       applyTempo(); if(!settings.metroSound||settings.master){try{p.removeMetronome();}catch(e){}}
       rhythmImage.showInfoBox(true); p.showButton(); p.setMarkNotesDuringTapping(false);
       owner=computeSplit(numBars,splitMode); seq++; flowState='showing'; setInfo('Press Play','','1'); postSplit(); post({type:'praxis-new-exercise'});/*nx-coop*/
@@ -182,7 +199,7 @@
     (function(){ var p=P(); if(!p)return; var origInit=p.initialisation;
       p.initialisation=function(cfg){ if(cfg.rhythmImage) rhythmImage=cfg.rhythmImage; cfg.unitsPerStep=72;
         cfg.finishedTappingCallback=function(){ onExerciseComplete(); };
-        var origStatus=cfg.changeStatusCallback; cfg.changeStatusCallback=function(s){ if(s==='tap')flowState='tapping'; if(origStatus)origStatus(s); };
+        var origStatus=cfg.changeStatusCallback; cfg.changeStatusCallback=function(s){ if(s==='countin'){startBeatClock(currentTempo);} if(s==='play'){startBeatClock(currentTempo);} if(s==='tap')flowState='tapping'; if(s==='stop'||s==='countout'){stopBeatClock();} if(origStatus)origStatus(s); };
         return origInit.call(this,cfg); };
       var origSR=p.setRhythm; p.setRhythm=function(t){ rhythmObj=t; return origSR.apply(this,arguments); }; })();
 

@@ -35,6 +35,10 @@
     .seg button.on{background:var(--praxis-accent);color:var(--praxis-accent-ink)}
     .coop{padding:6px clamp(12px,3vw,28px);border-bottom:1px solid var(--praxis-line);background:var(--praxis-surface-2)}
     .coop-head{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+    .coop-line{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:nowrap}
+    .coop-line .turn-banner{margin:0;flex:0 1 auto;white-space:nowrap}
+    .coop-line .beat-dots{margin:0}
+    @media (max-width:720px){ .coop-line{flex-wrap:wrap} }
     .student-card{flex:0 0 auto;min-width:0;display:flex;align-items:center;gap:6px;padding:4px 10px;border-radius:9px;border:1px solid var(--praxis-line);background:var(--praxis-surface);font-weight:800;font-size:.82rem}
     .student-card .dot{width:9px;height:9px;border-radius:50%}
     .student-card.a .dot{background:var(--praxis-accent)}.student-card.b .dot{background:var(--praxis-gold)}
@@ -259,6 +263,10 @@
 
     window.addEventListener('message',function(ev){
       var d=ev.data; if(!d)return;
+      if(d.type==='metro-beat'){
+        if(!settings.master){ var dots=$$('#coop-dots i'); if(dots.length){ var idx=d.beat%dots.length; dots.forEach(function(dot,i){ dot.classList.toggle('on',i===idx); }); } }
+        return;
+      }
       if(d.type==='drill-state'){ playing=!!d.playing; setToggle(); if(playing)summaryBanner(); else { clearInterval(ciTimer); idleVisuals(); } }
       else if(d.type==='drill-ready'){ post({type:'praxis-bars',bars:numBars}); post({type:'praxis-split',split:splitMode}); postMetro(); sendSettings(); post({type:'praxis-aid',mode:(($('[data-aid-seg] .on')||{}).getAttribute?$('.data-aid-seg .on'):'none')||'none'}); post({type:'praxis-mute',muted:muted}); sizeCanvas(); }
       else if(d.type==='praxis-new-exercise'){ clearDrawing(); }/*nxm-coop*/

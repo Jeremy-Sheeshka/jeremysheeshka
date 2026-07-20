@@ -873,13 +873,14 @@ label.metro-field:has([data-metro-beats]){display:none !important}
   function mkDraw(){ var b=document.createElement('button'); b.type='button'; b.className='metro-toggle js-draw-toggle'; b.setAttribute('data-draw-toggle',''); b.textContent='Draw'; b.style.display='none'; return b; }
   function mkAid(){ var w=document.createElement('span'); w.className='metro-field js-aid-wrap'; w.style.display='none'; w.innerHTML='Aid <span class="seg" data-aid-seg><button type="button" data-aid="none" class="on">None</button><button type="button" data-aid="syllables">Ta/ti</button><button type="button" data-aid="numbers">1 +</button></span>'; return w; }
   function mkMute(){ var b=document.createElement('button'); b.type='button'; b.className='metro-mute'; b.setAttribute('data-mute',''); b.setAttribute('aria-pressed','false'); b.title='Mute / unmute'; b.textContent='🔊'; return b; }
+  function setMuteUI(){ $$('[data-mute],#mute-btn').forEach(function(b){ b.classList.toggle('muted',muted); b.textContent=muted?'\u{1F507}':'\u{1F50A}'; b.setAttribute('aria-pressed',String(muted)); }); }
   function injectNavControls(){
     var oldMute=document.getElementById('mute-btn'); if(oldMute) oldMute.style.display='none';
     $$('.metronome--top, .dock').forEach(function(row){
       if(row.querySelector('.js-draw-toggle'))return;
       var gear=row.querySelector('[data-metro-gear]');
       var d=mkDraw(), a=mkAid(), m=mkMute();
-      if(gear){ row.insertBefore(m,gear); row.insertBefore(a,gear); row.insertBefore(d,gear); } else { row.appendChild(d); row.appendChild(a); row.appendChild(m); }
+      var gp=gear?gear.parentNode:row; if(gp&&gear){ gp.insertBefore(d,gear); gp.insertBefore(a,gear); gp.insertBefore(m,gear); } else if(row){ row.appendChild(d); row.appendChild(a); row.appendChild(m); }
     });
     applyShowToggles(); setMuteUI();
   }
@@ -923,6 +924,17 @@ label.metro-field:has([data-metro-beats]){display:none !important}
     else if(d.type==='praxis-new-exercise'){ clearDrawing(); }/*nxm-fp*/
   });
 
+  /* sync visual beat dots to the bridge's beat pulse (audio+visual share one clock) */
+  window.addEventListener('message',function(ev){
+    var d=ev.data; if(!d||d.type!=='metro-beat')return;
+    if(settings.master)return;
+    var lights=$$('[data-metro-lights]');
+    lights.forEach(function(c){
+      var dots=c.children; if(!dots.length)return;
+      var idx=d.beat%dots.length;
+      Array.prototype.forEach.call(dots,function(dot,i){ dot.classList.toggle('on',i===idx); });
+    });
+  });
   injectNavControls();
   $$('[data-metro-lights]').forEach(function(d){ d.style.display=settings.cursor?'':'none'; });
   sizeCanvas();
