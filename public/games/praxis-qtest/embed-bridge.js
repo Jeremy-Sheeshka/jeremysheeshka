@@ -1,6 +1,26 @@
 (function(){
   var IS_COOP = (window.__PRAXIS_COOP===true) || /[?&]praxis=coop\b/.test(location.search);
 
+  var _ov=null,_ovT=null,_ovBusy=false;
+  function watchOverlays(fn){
+    function attach(){
+      var el=document.getElementById('spoergsmaal');
+      if(!el){setTimeout(attach,250);return;}
+      if(_ovT===el)return;
+      if(_ov){try{_ov.disconnect();}catch(e){}}
+      _ovT=el;
+      _ov=new MutationObserver(function(){ if(_ovBusy)return; _ovBusy=true; setTimeout(function(){_ovBusy=false; fn();},90); });
+      _ov.observe(el,{childList:true,subtree:true});
+    }
+    attach();
+  }
+  function withPausedWatch(fn){
+    if(_ov){try{_ov.disconnect();}catch(e){}}
+    fn();
+    requestAnimationFrame(function(){ if(_ov&&_ovT){try{_ov.observe(_ovT,{childList:true,subtree:true});}catch(e){}} });
+  }
+
+
   /* shared aid renderer (used by both branches) */
   function makeRenderAids(getSvg, getRendered, getOwner, getMode){
     return function(){
@@ -69,6 +89,7 @@
     function postSplit(){ post({type:'coop-split', seq:seq, numBars:numBars, splitMode:splitMode, owner:owner, bars:lastData?lastData.bars:[]}); }
 
     var renderAids=makeRenderAids(function(){return document.querySelector('#spoergsmaal svg');},function(){return renderedRhythm;},function(){return owner;},function(){return aidMode;});
+    function refreshOverlays(){ withPausedWatch(function(){ renderAB(); renderAids(); }); }
 
     function renderAB(){
       try{
@@ -100,7 +121,7 @@
       applyTempo(); if(!settings.metroSound||settings.master){try{p.removeMetronome();}catch(e){}}
       rhythmImage.showInfoBox(true); p.showButton(); p.setMarkNotesDuringTapping(false);
       owner=computeSplit(numBars,splitMode); seq++; flowState='showing'; setInfo('Press Play','','1'); postSplit();
-      renderAB(); renderAids(); setTimeout(function(){renderAB();renderAids();},160);
+      renderAB(); renderAids(); setTimeout(function(){renderAB();renderAids();},160); watchOverlays(refreshOverlays);
     }
     function nextExercise(){ exerciseCount++; showExercise(randRhythm()); post({type:'drill-state',playing:false,exercise:exerciseCount}); }
     function beginPlay(){
@@ -162,12 +183,13 @@
     function setInfo(text,state,img){ if(!rhythmImage)return; try{ rhythmImage.setInfoBoxText(text); rhythmImage.setInfoBoxState(state||''); if(img!==undefined)rhythmImage.setInfoBoxImage(img); }catch(e){} }
     function applyTempo(){ if(rhythmObj&&rhythmObj.metricalStructure)rhythmObj.metricalStructure.tempo=currentTempo; }
     var renderAids=makeRenderAids(function(){return document.querySelector('#spoergsmaal svg');},function(){return renderedRhythm;},null,function(){return aidMode;});
+    function refreshOverlays(){ withPausedWatch(function(){ renderAids(); }); }
 
     function showExercise(data){ var p=P(); if(!p||!rhythmImage)return; try{p.stop();}catch(e){}
       var rhythm=new MusicRhythm(data); rhythmImage.setRhythm(rhythm); renderedRhythm=rhythmImage.getRhythm(); p.setRhythm(renderedRhythm);
       applyTempo(); if(!fsettings.metroSound||fsettings.master){try{p.removeMetronome();}catch(e){}}
       rhythmImage.showInfoBox(true); p.showButton(); p.setMarkNotesDuringTapping(false);
-      flowState='showing'; setInfo('Click to start','','1'); renderAids(); setTimeout(renderAids,160); }
+      flowState='showing'; setInfo('Click to start','','1'); renderAids(); setTimeout(renderAids,160); watchOverlays(refreshOverlays); }
     function nextExercise(){ exerciseCount++; showExercise(randRhythm()); post({type:'drill-state',playing:false,exercise:exerciseCount}); }
     function unlockAudio(){ try{ if(window.Howler&&window.Howler.ctx&&window.Howler.ctx.state==='suspended')window.Howler.ctx.resume(); }catch(e){} if(audioUnlocked)return;
       try{ if(window.Howler){ window.Howler.mute(false); if(typeof window.Howler.volume==='function')window.Howler.volume(1); } var AC=window.AudioContext||window.webkitAudioContext; if(AC){var c=new AC(); if(c.state==='suspended')c.resume(); c.close&&c.close();} audioUnlocked=true; }catch(e){} }
