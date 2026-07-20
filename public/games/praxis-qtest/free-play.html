@@ -497,18 +497,17 @@ label.metro-field:has([data-metro-beats]){display:none !important}
       If not, use the full URL:
       https://jeremysheeshka.ca/games/rhythm-app/exercise/720/
     -->
-                        <iframe id="drill-frame"
+                            <iframe id="drill-frame"
       title="Free Play rhythm exercise"
       src="about:blank"
       allow="autoplay; fullscreen"
-      sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-modals"
     ></iframe>
     <script>
       (function(){
         var f=document.getElementById('drill-frame');
         if(!f)return;
         var isLocal=(location.hostname==='localhost'||location.hostname==='127.0.0.1');
-        if(isLocal){f.removeAttribute('sandbox');f.src='http://localhost:4735/games/rhythm-app/exercise/720/';return;}
+        if(isLocal){f.src='http://localhost:4735/games/rhythm-app/exercise/720/';return;}
         var DRILL='/games/rhythm-app/exercise/720/';
         Promise.all([
           fetch(DRILL).then(function(r){return r.text();}),
@@ -517,17 +516,19 @@ label.metro-field:has([data-metro-beats]){display:none !important}
         ]).then(function(res){
           var html=res[0],bridge=res[1],overrides=res[2];
           html=html.replace(/if\s*\(\s*top\s*==\s*self\s*\)/g,'if (true)');
-          html=html.replace(/if\s*\(\s*self\s*!=\s*top\s*\)/g,'if (false)');
-          html=html.replace(/if\s*\(\s*window\.top\s*!==?\s*window\.self\s*\)/g,'if (false)');
-          html=html.replace(/top\.location\s*=\s*self\.location\s*;?/g,'/* removed */');
-          html=html.replace(/window\.top\.location[^;]*;/g,'/* removed */');
-          html=html.replace(/top\.location\.href[^;]*;/g,'/* removed */');
-          html=html.replace(/top\.location\.replace[^;]*;/g,'/* removed */');
-          html=html.replace(/<meta[^>]*http-equiv\s*=\s*["']?content-security-policy["']?[^>]*>/gi,'');
-          if(overrides){html=html.replace(/<\/head>/i,'<style>'+overrides+'</style></head>');}
+          html=html.replace(/top\.location\s*=\s*self\.location\s*;?/g,'');
+          html=html.replace(/<meta[^>]*content-security-policy[^>]*>/gi,'');
+          if(overrides){html=html.replace('<\/head>','<style>'+overrides+'<\/style><\/head>');}
           if(bridge){
-            bridge=bridge.replace(/<\/script/gi,'<\\/script');
-            if(/<\/body>/i.test(html)){html=html.replace(/<\/body>/i,'<script>'+bridge+'</script></body>');}
+            if(html.indexOf('<\/body>')!==-1){html=html.replace('<\/body>','<script>'+bridge+'<\/script><\/body>');}
+            else{html+='<script>'+bridge+'<\/script>';}
+          }
+          f.srcdoc=html;
+        }).catch(function(e){
+          console.error('[praxis] drill load failed',e);
+        });
+      })();
+    <\/script></body>');}
             else{html+='<script>'+bridge+'</script>';}
           }
           f.srcdoc=html;
