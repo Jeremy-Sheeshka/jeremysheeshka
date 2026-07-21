@@ -87,13 +87,13 @@
     <div class="ov" id="ready">
       <div class="card">
         <div class="big">RHYTHM&nbsp;RUNNER</div>
-        <div class="sub">RR v10 · press play · or hit space</div>
+        <div class="sub">RR v11 · press play · or hit space</div>
       </div>
     </div>
   </div>
 
 <script>
-var BUILD = 'RR v10';
+var BUILD = 'RR v11';
 var settings = { aid:'none' };
 var SHOW_DINO=true, METRO=true, PULSE=true, MARKS=true;
 var LEAD = 4, bpm = 92;
@@ -538,7 +538,7 @@ function draw(now, dt, cb){
   }
 
   ctx.fillStyle='#c4bfb6'; ctx.font='700 11px ui-monospace,monospace'; ctx.textAlign='center'; ctx.textBaseline='top';
-  ctx.fillText('v10', W/2, 8);
+  ctx.fillText('v11', W/2, 8);
   ctx.fillStyle='#b8b2a8'; ctx.font='11px ui-monospace,monospace'; ctx.textAlign='left'; ctx.textBaseline='top';
   ctx.fillText('run:'+(playing?1:0)+' jmp:'+(jumping?1:0)+' y:'+Math.round(yOff)+' st:'+streak+' taps:'+tapCount+' jumps:'+jumpCount+' in:'+lastInput+' '+(lastResult||'-')+(lastErr?(' ERR:'+lastErr):''), 10, 24);
 }
@@ -551,7 +551,7 @@ function frame(now){
       var bi=Math.floor(cb+1e-6);
       if(bi!==lastBeatInt){ lastBeatInt=bi; pulseT=now; }
       if(jumping){
-        var D=clamp(0.6*secPerBeat + 0.34, 0.55, 0.85);
+        var D=clamp(0.6*secPerBeat + 0.34, 0.55, 0.85)*1000;
         var p=(now-jumpStart)/D;
         if(p>=1){ jumping=false; yOff=0; sqX=1.06; sqY=0.94; }
         else { yOff = -M.jumpJ*Math.sin(Math.PI*p); if(p<0.10){ sqX=0.96; sqY=1.05; } }
