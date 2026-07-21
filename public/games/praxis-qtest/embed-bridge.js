@@ -11,15 +11,102 @@
 
   /* Cursor locked to the note the engine is sounding (.playing class), mapped via getScreenCTM so it stays on the correct row */
   function makeCursor(){
-    var line=null,raf=null,hold=false,dbg=0;
-    function ensure(){var svg=findSvg();if(!svg)return null;if(!line){line=document.createElementNS('http://www.w3.org/2000/svg','rect');line.setAttribute('class','praxis-cursor');line.setAttribute('width','3');line.setAttribute('rx','1.5');line.setAttribute('fill','#e11d48');line.setAttribute('opacity','0');line.setAttribute('pointer-events','none');svg.appendChild(line);}else if(line.ownerSVGElement!==svg){try{line.parentNode.removeChild(line);}catch(e){}line=document.createElementNS('http://www.w3.org/2000/svg','rect');line.setAttribute('class','praxis-cursor');line.setAttribute('width','3');line.setAttribute('rx','1.5');line.setAttribute('fill','#e11d48');line.setAttribute('opacity','0');line.setAttribute('pointer-events','none');svg.appendChild(line);}return svg;}
-    function hide(){if(line)line.setAttribute('opacity','0');hold=false;}
-    function frame(){var svg=ensure();if(!svg){raf=requestAnimationFrame(frame);return;}var el=svg.querySelector('.playing');if(!el){el=svg.querySelector('[class~="playing"]');}if(el){var r=null;try{r=el.getBoundingClientRect();}catch(e){}var ctm=svg.getScreenCTM();if(r&&r.width>0&&ctm){try{var inv=ctm.inverse();var pt=svg.createSVGPoint();pt.x=r.left+r.width/2;pt.y=r.top;var pT=pt.matrixTransform(inv);pt.y=r.bottom;var pB=pt.matrixTransform(inv);pt.y=r.top+r.height/2;var pC=pt.matrixTransform(inv);var pad=16;line.setAttribute('x',pC.x-1.5);line.setAttribute('y',pT.y-pad);line.setAttribute('height',(pB.y-pT.y)+pad*2);line.setAttribute('opacity','0.95');hold=true;if(dbg<2){console.log('[cursor] on-note x='+pC.x.toFixed(0)+' rowY='+pT.y.toFixed(0)+' h='+(pB.y-pT.y).toFixed(0));dbg++;}}catch(e){hide();}}else if(!hold){hide();}}else if(!hold){hide();}raf=requestAnimationFrame(frame);}
-    function play(){stop();dbg=0;ensure();raf=requestAnimationFrame(frame);}
-    function stop(){if(raf){cancelAnimationFrame(raf);raf=null;}hide();}
-    function isActive(){return raf!==null;}
-    return {play:play,stop:stop,isActive:isActive};
+  var line=null,raf=null,playStart=null,rr=null,tempo=88,rows=null,dbg=0;
+  function mkRect(svg){var r=document.createElementNS('http://www.w3.org/2000/svg','rect');r.setAttribute('class','praxis-cursor');r.setAttribute('width','3');r.setAttribute('rx','1.5');r.setAttribute('fill','#e11d48');r.setAttribute('opacity','0');r.setAttribute('pointer-events','none');svg.appendChild(r);return r;}
+  function ensure(){var svg=findSvg();if(!svg){return null;}if(!line){line=mkRect(svg);}else if(line.ownerSVGElement!==svg){try{line.parentNode.removeChild(line);}catch(e){}line=mkRect(svg);}return svg;}
+  function hide(){if(line){line.setAttribute('opacity','0');}}
+  function buildRows(){
+    rows=null;
+    if(!rr||!rr.bars){return;}
+    var pts=[],b,c;
+    for(b=0;b<rr.bars.length;b++){
+      var comps=rr.bars[b].components||[];
+      for(c=0;c<comps.length;c++){
+        var co=comps[c];
+        if(!co||co.rest){continue;}
+        var x=co.x,y=co.y;
+        if(!(isFinite(x)&&isFinite(y))){continue;}
+        pts.push({x:x,y:y,pos:b*576+(co.position||0)});
+      }
+    }
+    if(!pts.length){return;}
+    pts.sort(function(a,b){return (a.y-b.y)||(a.pos-b.pos);});
+    var clusters=[],cur=[pts[0]],cy=pts[0].y,TH=20,i;
+    for(i=1;i<pts.length;i++){
+      if(Math.abs(pts[i].y-cy)<=TH){cur.push(pts[i]);}
+      else{clusters.push(cur);cur=[pts[i]];cy=pts[i].y;}
+    }
+    clusters.push(cur);
+    var R=[],k;
+    for(k=0;k<clusters.length;k++){
+      var cl=clusters[k];
+      cl.sort(function(a,b){return a.pos-b.pos;});
+      var ys=0,minY=1e9,maxY=-1e9;
+      for(i=0;i<cl.length;i++){ys+=cl[i].y;if(cl[i].y<minY){minY=cl[i].y;}if(cl[i].y>maxY){maxY=cl[i].y;}}
+      R.push({y:ys/cl.length,minY:minY,maxY:maxY,firstPos:cl[0].pos,lastPos:cl[cl.length-1].pos,pts:cl});
+    }
+    R.sort(function(a,b){return a.firstPos-b.firstPos;});
+    for(k=0;k<R.length;k++){
+      var gap=(k+1<R.length)?(R[k+1].y-R[k].y):((k>0)?(R[k].y-R[k-1].y):120);
+      var spread=R[k].maxY-R[k].minY;
+      R[k].h=Math.max(60,Math.min(spread+70,gap>8?gap-8:200));
+    }
+    rows=R;
+    if(dbg<2){console.log('[cursor] rows='+R.length+' ys='+R.map(function(r){return Math.round(r.y);}).join(',')+' h='+R.map(function(r){return Math.round(r.h);}).join(','));}
   }
+  function rowForPos(pos){
+    if(!rows){return null;}
+    var k;
+    for(k=0;k<rows.length;k++){
+      var nx=(k+1<rows.length)?rows[k+1].firstPos:1e18;
+      if(pos<rows[k].firstPos){return k>0?rows[k-1]:rows[k];}
+      if(pos<nx){return rows[k];}
+    }
+    return rows[rows.length-1];
+  }
+  function xForPos(row,pos){
+    var p=row.pts,i;
+    for(i=0;i<p.length-1;i++){
+      if(pos>=p[i].pos&&pos<=p[i+1].pos){
+        var span=(p[i+1].pos-p[i].pos)||1;
+        var t=(pos-p[i].pos)/span;
+        return p[i].x+(p[i+1].x-p[i].x)*t;
+      }
+    }
+    if(pos<=p[0].pos){return p[0].x;}
+    return p[p.length-1].x;
+  }
+  function frame(){
+    var svg=ensure();
+    if(!svg){raf=requestAnimationFrame(frame);return;}
+    if(playStart===null||!rr){hide();raf=requestAnimationFrame(frame);return;}
+    if(!rows){buildRows();}
+    if(!rows){hide();raf=requestAnimationFrame(frame);return;}
+    var elapsed=performance.now()-playStart;
+    var msPerUnit=(60000/(tempo||88))/144;
+    var cur=elapsed/msPerUnit;
+    var total=rr.bars.length*576;
+    if(cur>=total){hide();raf=requestAnimationFrame(frame);return;}
+    var row=rowForPos(cur);
+    if(!row){hide();raf=requestAnimationFrame(frame);return;}
+    var x=xForPos(row,cur);
+    line.setAttribute('x',x-1.5);
+    line.setAttribute('y',row.y-row.h/2);
+    line.setAttribute('height',row.h);
+    line.setAttribute('opacity','0.95');
+    if(dbg<3){console.log('[cursor] t='+Math.round(elapsed)+' cur='+cur.toFixed(1)+' x='+x.toFixed(1)+' rowY='+Math.round(row.y));dbg++;}
+    raf=requestAnimationFrame(frame);
+  }
+  function play(a,b){
+    stop();
+    if(typeof a==='number'){tempo=a;}
+    else{if(a){rr=a;}if(typeof b==='number'){tempo=b;}}
+    rows=null;playStart=performance.now();dbg=0;ensure();raf=requestAnimationFrame(frame);
+  }
+  function stop(){if(raf){cancelAnimationFrame(raf);raf=null;}playStart=null;hide();}
+  function isActive(){return raf!==null;}
+  return {play:play,stop:stop,isActive:isActive};
+}
 
   /* ===== CO-OP BRANCH ===== */
   if(IS_COOP){
