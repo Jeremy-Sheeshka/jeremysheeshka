@@ -29,33 +29,23 @@
   .ctl input[type=range]{width:148px;accent-color:var(--ink)}
   .bpm{font-variant-numeric:tabular-nums;min-width:64px;text-align:right;font-weight:800;color:var(--ink)}
   .gearwrap{margin-left:auto;position:relative}
-  .hint{font-size:12px;color:var(--mut);padding:6px 18px;background:#fff;border-bottom:1px solid var(--line)}
-  .hint b{color:var(--ink)}
-  .panel{position:absolute;right:0;top:42px;width:272px;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 14px 34px rgba(0,0,0,.14);padding:6px 4px;z-index:40;display:none}
+  .panel{position:absolute;right:0;top:42px;width:240px;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 14px 34px rgba(0,0,0,.14);padding:6px 4px;z-index:40;display:none}
   .panel.open{display:block}
   .panel h4{margin:7px 12px 4px;font-size:10px;letter-spacing:1.4px;color:#a8a29e}
   .row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 12px;font-size:13px}
   .row:hover{background:#fafaf9}
   .row select{font:inherit;border:1px solid var(--line2);border-radius:6px;padding:3px 6px;background:#fff}
-  .sw{position:relative;width:38px;height:22px;flex:0 0 auto}
-  .sw input{position:absolute;opacity:0;width:100%;height:100%;margin:0;cursor:pointer}
-  .sw .track{position:absolute;inset:0;background:#d8d2c6;border-radius:999px;transition:.2s}
-  .sw .knob{position:absolute;top:2px;left:2px;width:18px;height:18px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 2px rgba(0,0,0,.3)}
-  .sw input:checked + .track{background:var(--ink)}
-  .sw input:checked + .track + .knob{transform:translateX(16px)}
-  .stage{position:relative;width:100%;height:calc(100vh - 150px);min-height:360px;overflow:hidden;background:#fff}
+  .stage{position:relative;width:100%;height:calc(100vh - 110px);min-height:360px;overflow:hidden;background:#fff}
   #track{position:absolute;inset:0;width:100%;height:100%;display:block}
   .ov{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:8;padding:18px}
   #ready{background:rgba(255,255,255,.55)}
   .card{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 18px 50px rgba(0,0,0,.16);padding:22px 26px;max-width:420px;width:100%;text-align:center}
   .card .big{font-family:"Courier New",ui-monospace,monospace;font-weight:800;letter-spacing:3px;font-size:26px;color:var(--grey)}
   .card .sub{font-size:12px;letter-spacing:1.5px;color:#a8a29e;margin-top:8px;text-transform:uppercase}
-  .howto{font-size:11px;color:var(--mut);margin-top:12px;line-height:1.5}
   @media (max-width:680px){
     .topbar nav{gap:14px;font-size:12px}
     .brand .eyebrow{display:none}
     .brand .sep{display:none}
-    .hint{font-size:11px}
   }
 </style>
 </head>
@@ -81,32 +71,12 @@
       <button id="gearBtn" class="btn">⚙ Settings</button>
       <div id="panel" class="panel">
         <h4>RHYTHM RUNNER</h4>
-        <label class="row">Show dino (fall in / out)
-          <span class="sw"><input id="optRunner" type="checkbox" checked><span class="track"></span><span class="knob"></span></span>
-        </label>
-        <label class="row">Metronome click
-          <span class="sw"><input id="optMetro" type="checkbox" checked><span class="track"></span><span class="knob"></span></span>
-        </label>
-        <label class="row">Visual pulse on beat
-          <span class="sw"><input id="optPulse" type="checkbox" checked><span class="track"></span><span class="knob"></span></span>
-        </label>
-        <label class="row">Show ✓ / ✗ marks
-          <span class="sw"><input id="optMarks" type="checkbox" checked><span class="track"></span><span class="knob"></span></span>
-        </label>
-        <label class="row">Rests (gaps to run through)
-          <span class="sw"><input id="optRests" type="checkbox" checked><span class="track"></span><span class="knob"></span></span>
-        </label>
         <div class="row">Counting aid
-          <select id="optAid"><option value="none">none</option><option value="syllables">ta / ti</option><option value="numbers">1 +</option></select>
-        </div>
-        <div class="row">Density
-          <select id="optDensity"><option value="easy">easy</option><option value="normal" selected>normal</option><option value="hard">hard</option></select>
+          <select id="optAid"><option value="none">none</option><option value="syllables">ta / ti</option></select>
         </div>
       </div>
     </div>
   </div>
-
-  <div class="hint"><b>How to play:</b> press <b>Play</b>, watch the <b>4‑3‑2‑1</b>, then tap <b>SPACE</b> / <b>↑</b> / <b>click</b> to hop each note <b>as it reaches the dino</b> (jump by sight — the click lands as you clear it). Two beamed eighths = two hops. Land on a note and the dino <b>flashes</b> and your streak resets — but the run keeps going. Stop with the Play button. Your best streak saves in the corner as HI.</div>
 
   <div class="stage" id="stage">
     <canvas id="track"></canvas>
@@ -114,21 +84,18 @@
       <div class="card">
         <div class="big">RHYTHM&nbsp;RUNNER</div>
         <div class="sub">press play · or hit space</div>
-        <div class="howto">Jump the T‑Rex over the notation. Each note you clear adds to your streak; land on one and the dino flashes and the streak resets, but the run never stops. Your best streak is kept as the HI score in the corner.</div>
       </div>
     </div>
   </div>
 
 <script>
-var settings = { showRunner:true, metro:true, pulse:true, marks:true, rests:true, aid:'none', density:'normal' };
-var DENSITY = {
-  easy:   { eighth:0.12, half:0.18, whole:0.05 },
-  normal: { eighth:0.30, half:0.32, whole:0.10 },
-  hard:   { eighth:0.52, half:0.14, whole:0.04 }
-};
+var settings = { aid:'none' };
+var SHOW_DINO=true, METRO=true, PULSE=true, MARKS=true;
 var LEAD = 4, bpm = 92;
 var HI_KEY = 'rr_hi_v1';
 var INK = '#1a1a1a', BODY = '#535353', EYE = '#ffffff', HURT_RED = '#dc2626';
+var TAP_EARLY = 0.20, TAP_LATE = 0.18, DEADLINE = 0.22;
+var MAX_LEVEL = 5;
 
 var stage=document.getElementById('stage'), canvas=document.getElementById('track'), ctx=canvas.getContext('2d');
 var playBtn=document.getElementById('playBtn'), tempoEl=document.getElementById('tempo'), bpmEl=document.getElementById('bpm');
@@ -137,6 +104,7 @@ var readyEl=document.getElementById('ready');
 
 var W=0,H=0,dpr=1, M={};
 function clamp(v,a,b){return v<a?a:(v>b?b:v);}
+function lerp(a,b,t){return a+(b-a)*t;}
 function resize(){
   var r=stage.getBoundingClientRect();
   W=Math.max(320,r.width); H=Math.max(320,r.height);
@@ -153,10 +121,8 @@ function resize(){
   var dinoH=23*ps;
   var stemH=48*s;
   var headR=9*s;
-  var jumpJ=Math.min(200*s, groundY - dinoH - 12);
-  var floorJ=Math.max(96*s, stemH+36*s);
-  if(jumpJ<floorJ) jumpJ=floorJ;
-  if(jumpJ>groundY-dinoH-12) jumpJ=Math.max(64, groundY-dinoH-12);
+  var jumpJ=stemH + headR + 22*s;
+  if(jumpJ > groundY - dinoH - 10) jumpJ=Math.max(48, groundY - dinoH - 10);
   M={ scale:s, ps:ps, headR:headR, stemH:stemH, beamTh:6*s, pxPerBeat:124*s, groundY:groundY, centerX:Math.round(W/2), dinoW:22*ps, dinoH:dinoH, jumpJ:jumpJ };
 }
 window.addEventListener('resize', resize);
@@ -239,30 +205,32 @@ function drawMatrix(m, left, top, psx, psy, color, eye){
   }
 }
 
+function diffParams(){
+  var t=clamp(Math.floor(streak/6)/MAX_LEVEL,0,1);
+  return { eighth:lerp(0.00,0.55,t), half:lerp(0.45,0.12,t), whole:lerp(0.18,0.03,t), restP:lerp(0.50,0.12,t) };
+}
+
 var notes=[], genBeat=LEAD;
 function randBar(){
-  var d=DENSITY[settings.density]||DENSITY.normal, beats=[],i;
-  for(i=0;i<4;i++){ if(Math.random()<d.eighth) beats.push([{length:72,rest:false},{length:72,rest:false}]); else beats.push([{length:144,rest:false}]); }
+  var dp=diffParams(), beats=[],i;
+  for(i=0;i<4;i++){ if(Math.random()<dp.eighth) beats.push([{length:72,rest:false},{length:72,rest:false}]); else beats.push([{length:144,rest:false}]); }
   var comps=[],idx=0;
   while(idx<4){
     var rem=4-idx, r=Math.random(), g=1;
-    if(rem>=4 && r<d.whole) g=4; else if(rem>=2 && r<d.half) g=2;
+    if(rem>=4 && r<dp.whole) g=4; else if(rem>=2 && r<dp.half) g=2;
     if(g===4) comps.push({length:576,rest:false});
     else if(g===2) comps.push({length:288,rest:false});
     else comps=comps.concat(beats[idx]);
     idx+=g;
   }
-  if(settings.rests && Math.random()<0.22){
-    var qs=[]; for(var c=0;c<comps.length;c++){ if(comps[c].length===144 && !comps[c].rest) qs.push(c); }
-    if(qs.length) comps[qs[(Math.random()*qs.length)|0]].rest=true;
-  }
+  for(var c=0;c<comps.length;c++){ if(comps[c].length===144 && !comps[c].rest && Math.random()<dp.restP) comps[c].rest=true; }
   return comps;
 }
 function buildBars(count){
   for(var b=0;b<count;b++){
     var comps=randBar(), barStart=genBeat, slice=[];
     for(var c=0;c<comps.length;c++){
-      var co=comps[c], n={beat:genBeat, len:co.length, rest:co.rest, beatInBar:genBeat-barStart, beam:null, judged:null, resolved:false, _x:0};
+      var co=comps[c], n={beat:genBeat, len:co.length, rest:co.rest, beatInBar:genBeat-barStart, beam:null, judged:null, resolved:false, air:false, _x:0};
       notes.push(n); slice.push(n); genBeat += co.length/144;
     }
     var k=0;
@@ -276,12 +244,24 @@ function buildBars(count){
     }
   }
 }
+function pruneRegen(cb){
+  var horizon=cb+2, kept=[], maxEnd=horizon;
+  for(var i=0;i<notes.length;i++){
+    var n=notes[i];
+    if(n.beat<=horizon && n.beat>cb-8){
+      kept.push(n);
+      var e=n.beat + n.len/144;
+      if(e>maxEnd) maxEnd=e;
+    }
+  }
+  notes=kept; genBeat=maxEnd; buildBars(4);
+}
 
 var actx=null, masterGain=null, t0=0, secPerBeat=60/bpm, nextClickBeat=0, schedId=null;
 function ensureAudio(){
   if(!actx){ actx=new (window.AudioContext||window.webkitAudioContext)(); masterGain=actx.createGain(); masterGain.connect(actx.destination); }
   if(actx.state==='suspended') actx.resume();
-  masterGain.gain.value = settings.metro?1:0;
+  masterGain.gain.value = METRO?1:0;
 }
 function blip(time, accent){
   var o=actx.createOscillator(), g=actx.createGain();
@@ -301,7 +281,7 @@ function sfx(kind){
 }
 function schedule(){
   if(!playing) return;
-  masterGain.gain.value = settings.metro?1:0;
+  masterGain.gain.value = METRO?1:0;
   var ahead=0.12;
   while(t0 + nextClickBeat*secPerBeat < actx.currentTime + ahead){
     var tt=t0 + nextClickBeat*secPerBeat;
@@ -315,7 +295,7 @@ var playing=false, pausedBeat=LEAD+0.5, lastBeatInt=-1, pulseT=0;
 var streak=0, milestoneT=-1;
 var hiScore=(function(){try{var v=parseInt(localStorage.getItem(HI_KEY),10); return isFinite(v)?v:0;}catch(e){return 0;}})();
 function bumpHi(v){ if(v>hiScore){ hiScore=v; try{localStorage.setItem(HI_KEY,String(hiScore));}catch(e){} } }
-var jumping=false, jumpStart=0, yOff=0, runFrame=0, runDist=0;
+var jumping=false, jumpStart=0, yOff=0, runFrame=0, lastLegPhase=-1;
 var sqX=1, sqY=1;
 var dropY=-260, hurtUntil=-1;
 var clouds=[], lastT=performance.now();
@@ -335,7 +315,7 @@ function start(){
   secPerBeat=60/bpm; t0=actx.currentTime; nextClickBeat=0; pausedBeat=0;
   notes.length=0; genBeat=LEAD; buildBars(8);
   playing=true; lastBeatInt=-1; pulseT=performance.now();
-  streak=0; milestoneT=-1; jumping=false; yOff=0; hurtUntil=-1;
+  streak=0; milestoneT=-1; jumping=false; yOff=0; hurtUntil=-1; lastLegPhase=-1;
   readyEl.style.display='none';
   updatePlayBtn();
   if(!schedId) schedId=setInterval(schedule,25);
@@ -348,35 +328,51 @@ function stop(){
   readyEl.style.display='flex';
   updatePlayBtn();
 }
-function doHit(n, now){
+function registerMiss(n, now, cb){
   n.resolved=true; n.judged='miss';
   hurtUntil=now+380;
   sfx('hit');
   var ended=streak; streak=0; bumpHi(ended);
+  pruneRegen(cb);
+}
+function registerClear(n, now){
+  n.resolved=true; n.judged='hit'; streak++; bumpHi(streak);
+  if(streak%10===0){ milestoneT=now; sfx('ding'); }
+}
+function judgeTap(){
+  var cb=curBeatNow(), best=null, bestD=1e9;
+  for(var i=0;i<notes.length;i++){
+    var n=notes[i]; if(n.resolved||n.rest) continue;
+    var d=cb - n.beat;
+    if(d>=-TAP_EARLY && d<=TAP_LATE){ var ad=Math.abs(d); if(ad<bestD){ bestD=ad; best=n; } }
+  }
+  if(best) registerClear(best, performance.now());
 }
 function doJump(){
-  if(!playing||jumping||!settings.showRunner) return;
+  if(!playing||jumping) return;
   jumping=true; jumpStart=performance.now();
-  sqX=0.85; sqY=1.18;
+  sqX=0.96; sqY=1.05;
   sfx('jump');
 }
 function actionPrimary(){
-  if(!playing) start();
-  else doJump();
+  if(!playing){ start(); return; }
+  judgeTap();
+  doJump();
 }
 
-function runCollisions(cb, now){
-  if(!settings.showRunner || cb<LEAD) return;
-  var feet=M.groundY + yOff, ps=M.ps, cx=M.centerX, left=cx-11*ps, hitL=left+10*ps, hitR=left+16*ps, grace=5*M.scale, hr=M.headR, sc=M.scale;
+function updateNotes(cb, now){
+  var cx=M.centerX, ps=M.ps, bodyL=cx-2*ps, bodyR=cx+7*ps, hr=M.headR, sc=M.scale, grace=hr*0.8;
   for(var i=0;i<notes.length;i++){
     var n=notes[i]; if(n.resolved||n.rest) continue;
-    var nx=n._x, noteL=nx-hr, noteR=nx+hr*0.8+4*sc;
-    var obsH = (n.len>=576) ? (hr*1.6) : M.stemH;
-    if(noteR < hitL){
-      n.resolved=true; n.judged='hit'; streak++; bumpHi(streak);
-      if(streak%10===0){ milestoneT=now; sfx('ding'); }
-    } else if(noteL<=hitR && noteR>=hitL){
-      if(feet > (M.groundY - obsH) + grace){ doHit(n, now); return; }
+    var nx=cx + (n.beat-cb)*M.pxPerBeat;
+    var noteL=nx-hr, noteR=nx+hr*0.8+4*sc;
+    var obsH=(n.len>=576)?(hr*1.6):M.stemH;
+    if(noteL<=bodyR && noteR>=bodyL){
+      if((M.groundY+yOff) <= (M.groundY - obsH + grace)) n.air=true;
+    }
+    if(cb >= n.beat + DEADLINE){
+      if(n.air) registerClear(n, now);
+      else registerMiss(n, now, cb);
     }
   }
 }
@@ -402,7 +398,7 @@ function drawNote(x,n){
   if(open){ ctx.lineWidth=Math.max(1.8,2.2*s); ctx.strokeStyle=INK; ctx.fillStyle='#fff'; ctx.fill(); ctx.stroke(); }
   else { ctx.fillStyle=INK; ctx.fill(); }
   ctx.restore();
-  if(settings.marks && n.judged){
+  if(MARKS && n.judged){
     var my=M.groundY+19*s; ctx.lineWidth=2.4*s; ctx.lineCap='round';
     ctx.strokeStyle = (n.judged==='hit') ? INK : HURT_RED;
     if(n.judged==='hit'){ ctx.beginPath(); ctx.moveTo(x-5*s,my); ctx.lineTo(x-1*s,my+5*s); ctx.lineTo(x+6*s,my-5*s); ctx.stroke(); }
@@ -410,7 +406,7 @@ function drawNote(x,n){
   }
   if(settings.aid!=='none' && !n.rest){
     var bib=((n.beatInBar%4)+4)%4, num=Math.floor(bib)+1, plus=(bib%1)>=0.5;
-    var lab = settings.aid==='syllables' ? (n.len>=144?'ta':'ti') : (plus?'+':String(num));
+    var lab = plus ? 'ti' : 'ta';
     ctx.fillStyle='#9a948b'; ctx.font='700 '+Math.round(11*s)+'px system-ui,sans-serif'; ctx.textAlign='center';
     ctx.fillText(lab, x, M.groundY+35*s);
   }
@@ -458,14 +454,10 @@ function draw(now, dt, cb){
     if(n.rest) drawRest(x); else drawNote(x,n);
   }
 
-  dropY += ((settings.showRunner?0:(H+260)) - dropY)*0.12;
-  var onView = settings.showRunner && dropY > -SH*M.ps && dropY < H;
+  dropY += ((SHOW_DINO?0:(H+260)) - dropY)*0.12;
+  var onView = SHOW_DINO && dropY > -SH*M.ps && dropY < H;
   var hurtActive = onView && now < hurtUntil;
   var running = playing && cb>=LEAD && !jumping;
-  if(running){ runDist += speed*dt; var thr=26*M.ps; if(runDist>=thr){ runDist-=thr; runFrame=runFrame?0:1; } }
-  else if(!running){ runFrame=0; }
-  var pose = jumping ? STAND : (hurtActive ? HURT : (running ? (runFrame?RUNB:RUNA) : STAND));
-  sqX += (1-sqX)*0.2; sqY += (1-sqY)*0.2;
   if(onView){
     var psx=M.ps*sqX, psy=M.ps*sqY, dinoH=SH*psy;
     var left=cx-11*psx, top=gY+yOff+dropY-dinoH;
@@ -474,11 +466,12 @@ function draw(now, dt, cb){
       ctx.fillStyle='rgba(0,0,0,'+(0.13*(1-air*0.7))+')';
       ctx.beginPath(); ctx.ellipse(cx, gY+5, (M.dinoW*0.42)*(1-air*0.4), 5*(1-air*0.4), 0,0,7); ctx.fill();
     }
+    var pose = jumping ? STAND : (hurtActive ? HURT : (running ? (runFrame?RUNB:RUNA) : STAND));
     var dinoColor = hurtActive ? ((Math.floor(now/80)%2===0) ? HURT_RED : BODY) : BODY;
     drawMatrix(pose, left, top, psx, psy, dinoColor, EYE);
   }
 
-  if(settings.pulse && playing){
+  if(PULSE && playing){
     var pp=clamp(1-(now-pulseT)/240,0,1);
     if(pp>0){ ctx.strokeStyle='rgba(83,83,83,'+(0.25*pp)+')'; ctx.lineWidth=2;
       ctx.beginPath(); ctx.ellipse(cx, gY+5, 18+22*(1-pp), 6+5*(1-pp), 0,0,7); ctx.stroke(); }
@@ -521,14 +514,20 @@ function frame(now){
     var bi=Math.floor(cb+1e-6);
     if(bi!==lastBeatInt){ lastBeatInt=bi; pulseT=now; }
     if(jumping){
-      var D=clamp(0.55*secPerBeat,0.30,0.62);
+      var D=clamp(0.45*secPerBeat + 0.32, 0.46, 0.70);
       var p=(now-jumpStart)/D;
-      if(p>=1){ jumping=false; yOff=0; sqX=1.16; sqY=0.84; }
-      else { yOff = -M.jumpJ*Math.sin(Math.PI*p); if(p<0.12){ sqX=0.86; sqY=1.16; } }
+      if(p>=1){ jumping=false; yOff=0; sqX=1.06; sqY=0.94; }
+      else { yOff = -M.jumpJ*Math.sin(Math.PI*p); if(p<0.10){ sqX=0.96; sqY=1.05; } }
     }
-    runCollisions(cb, now);
+    var runningNow = cb>=LEAD && !jumping;
+    if(runningNow){
+      var legPhase=Math.floor(cb*2);
+      if(legPhase!==lastLegPhase){ lastLegPhase=legPhase; runFrame=runFrame?0:1; }
+    } else {
+      lastLegPhase=Math.floor(cb*2);
+    }
+    updateNotes(cb, now);
     if(genBeat < cb + 24) buildBars(4);
-    if(notes.length>500 && notes[0].beat < cb-16){ var cut=0; while(cut<notes.length && notes[cut].beat<cb-16) cut++; notes.splice(0,cut); }
   }
   draw(now, dt, cb);
   requestAnimationFrame(frame);
@@ -547,14 +546,7 @@ window.addEventListener('keydown', function(e){
   else if(e.key==='Escape'){ panel.classList.remove('open'); }
 }, true);
 
-function bindSwitch(id,key,after){ var el=document.getElementById(id); el.addEventListener('change',function(){ settings[key]=el.checked; if(after)after(el.checked); }); }
-bindSwitch('optRunner','showRunner',function(on){ if(on) dropY=-260; });
-bindSwitch('optMetro','metro',function(){ if(masterGain) masterGain.gain.value=settings.metro?1:0; });
-bindSwitch('optPulse','pulse');
-bindSwitch('optMarks','marks');
-bindSwitch('optRests','rests');
-document.getElementById('optAid').addEventListener('change',function(){ settings.aid=this.value; });
-document.getElementById('optDensity').addEventListener('change',function(){ settings.density=this.value; });
+document.getElementById('optAid').addEventListener('change', function(){ settings.aid=this.value; });
 
 resize(); initClouds(); buildBars(8); updatePlayBtn();
 requestAnimationFrame(frame);
