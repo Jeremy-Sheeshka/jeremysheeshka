@@ -57,8 +57,8 @@
       if(svg!==findSvg()){ line=null; }
       svg=findSvg();
       if(!line){ line=document.createElementNS('http://www.w3.org/2000/svg','rect');
-        line.setAttribute('class','praxis-cursor'); line.setAttribute('width','3'); line.setAttribute('rx','1.5');
-        line.setAttribute('fill','#dc2626'); line.setAttribute('opacity','0.9'); line.setAttribute('pointer-events','none');
+        line.setAttribute('class','praxis-cursor'); line.setAttribute('width','5'); line.setAttribute('rx','1.5');
+        line.setAttribute('fill','#e11d48'); line.setAttribute('opacity','1'); line.setAttribute('pointer-events','none');
         svg.appendChild(line); }
       line.setAttribute('x',g.minX); line.setAttribute('y',g.top); line.setAttribute('height',Math.max(20,g.bot-g.top));
       return g;
@@ -69,14 +69,14 @@
       function _go(g){ var dur=Math.max(300,getRendered().bars.length*576*(60000/(tempo||88)/144));
         var t0=performance.now(), span=(g.maxX-g.minX)||1;
         function fr(now){ var pr=(now-t0)/dur; if(pr>=1)pr=1;
-          if(line){ line.setAttribute('x',g.minX+pr*span); line.setAttribute('opacity','0.9'); }
+          if(line){ line.setAttribute('x',g.minX+pr*span); line.setAttribute('opacity','1'); }
           if(pr<1){ raf=requestAnimationFrame(fr); } else { if(onDone)onDone(); } }
         raf=requestAnimationFrame(fr); }
       if(!g){ (function rt(){ _r++; if(_r>10){ if(onDone)onDone(); return; } g=ensure(); if(!g){ setTimeout(rt,150); } else _go(g); })(); } else _go(g);
     } else { if(onDone)onDone(); } }
       raf=requestAnimationFrame(fr);
     }
-    return {play:play,stop:stop};
+    return {play:play,stop:stop,isActive:function(){return raf!==null;}};
   }
 
   /* ===================== CO-OP BRANCH ===================== */
@@ -123,7 +123,7 @@
     function applyTempo(){ if(rhythmObj&&rhythmObj.metricalStructure)rhythmObj.metricalStructure.tempo=currentTempo; }
     function postSplit(){ post({type:'coop-split',seq:seq,numBars:numBars,splitMode:splitMode,owner:owner,bars:lastData?lastData.bars:[]}); }
     var renderAids=makeRenderAids(function(){return renderedRhythm;},function(){return owner;},function(){return aidMode;});
-    function refreshOverlays(){ withPausedWatch(function(){ renderAB(); renderAids(); }); }
+    function refreshOverlays(){ withPausedWatch(function(){ renderAB(); renderAids(); if(cursor.isActive())cursor.play(currentTempo); }); }
     function renderAB(){
       try{ var svg=findSvg(); if(!svg)return;
         var old=svg.querySelectorAll('.praxis-ab,.praxis-ab-lbl'),k; for(k=0;k<old.length;k++){if(old[k].parentNode)old[k].parentNode.removeChild(old[k]);}
@@ -134,7 +134,7 @@
           var top=minY-30,h=(maxY-minY)+54, ow=owner[b]||'A';
           var rect=document.createElementNS(ns,'rect'); rect.setAttribute('class','praxis-ab');
           rect.setAttribute('x',left);rect.setAttribute('y',top);rect.setAttribute('width',right-left);rect.setAttribute('height',h);
-          rect.setAttribute('rx','6');rect.setAttribute('fill',ow==='B'?'#e8a83e':'#1d4ed8');rect.setAttribute('opacity','0.13');rect.setAttribute('pointer-events','none');
+          rect.setAttribute('rx','6');rect.setAttribute('fill',ow==='B'?'#e8a83e':'#1d4ed8');rect.setAttribute('opacity','0.25');rect.setAttribute('pointer-events','none');
           if(svg.firstChild)svg.insertBefore(rect,svg.firstChild); else svg.appendChild(rect);
           var lbl=document.createElementNS(ns,'text'); lbl.setAttribute('class','praxis-ab-lbl');
           lbl.setAttribute('x',(left+right)/2);lbl.setAttribute('y',top+12);lbl.setAttribute('text-anchor','middle');
@@ -175,7 +175,7 @@
         if(d.playing){ if(flowState==='showing'||flowState==='done'||flowState==='init'){ if(flowState!=='showing'){exerciseCount++;showExercise(randRhythm());} beginPlay(); } else if(!playing){beginPlay();} }
         else { hardStop(); flowState='done'; post({type:'drill-state',playing:false}); } }
       else if(d.type==='praxis-tap'){ tap(); }
-      else if(d.type==='praxis-bars'){ var nb=d.bars||8; if(nb===numBars)return; numBars=nb; hardStop(); exerciseCount++; showExercise(randRhythm()); if(playing)beginPlay(); }
+      else if(d.type==='praxis-bars'){ var nb=d.bars||8; console.log('[coop-bridge] bars req='+nb+' cur='+numBars); if(nb===numBars)return; numBars=nb; hardStop(); exerciseCount++; showExercise(randRhythm()); if(playing)beginPlay(); }
       else if(d.type==='praxis-split'){ splitMode=d.split||'2s'; owner=computeSplit(numBars,splitMode); postSplit(); renderAB(); renderAids(); }
       else if(d.type==='praxis-aid'){ aidMode=d.mode||'none'; renderAids(); }
       else if(d.type==='praxis-listen'){unlockAudio();if(listenMode&&playing){listenMode=false;hardStop();flowState='done';post({type:'drill-state',playing:false,mode:'listen'});}else{listenMode=true;if(flowState==='showing'){beginPlay();}else{exerciseCount++;showExercise(randRhythm());beginPlay();}}}
@@ -223,7 +223,7 @@
     function setInfo(text,state,img){ if(!rhythmImage)return; try{ rhythmImage.setInfoBoxText(text); rhythmImage.setInfoBoxState(state||''); if(img!==undefined)rhythmImage.setInfoBoxImage(img); }catch(e){} }
     function applyTempo(){ if(rhythmObj&&rhythmObj.metricalStructure)rhythmObj.metricalStructure.tempo=currentTempo; }
     var renderAids=makeRenderAids(function(){return renderedRhythm;},null,function(){return aidMode;});
-    function refreshOverlays(){ withPausedWatch(function(){ renderAids(); }); }
+    function refreshOverlays(){ withPausedWatch(function(){ renderAids(); if(cursor.isActive())cursor.play(currentTempo); }); }
     function showExercise(data){ var p=P(); if(!p||!rhythmImage)return; try{p.stop();}catch(e){} cursor.stop();
       var rhythm=new MusicRhythm(data); rhythmImage.setRhythm(rhythm); renderedRhythm=rhythmImage.getRhythm(); p.setRhythm(renderedRhythm);
       applyTempo(); if(!fsettings.metroSound||fsettings.master){try{p.removeMetronome();}catch(e){}}

@@ -255,7 +255,7 @@
       if(e.target.matches&&e.target.matches('[data-metro-bpm-input]')){ var v=parseInt(e.target.value,10); if(v>=40&&v<=208){ tempo=v; setBpm(); setSliders(); postMetro(); } }
     },true);
     document.addEventListener('change',function(e){
-      if(e.target.matches&&e.target.matches('[data-metro-bars]')){ numBars=+e.target.value||8; if(numBars<=4)splitMode='2s'; syncSplit(); post({type:'praxis-bars',bars:numBars}); }
+      if(e.target.matches&&e.target.matches('[data-metro-bars]')){ numBars=+e.target.value||8; console.log('[co-op] bars changed to '+numBars); if(numBars<=4)splitMode='2s'; syncSplit(); post({type:'praxis-bars',bars:numBars}); }
       else if(e.target.matches&&e.target.matches('[data-coop-split]')){ splitMode=e.target.value||'2s'; syncSplit(); post({type:'praxis-split',split:splitMode}); }
       else if(e.target.matches&&e.target.matches('[data-metro-bpm-input]')){ var v=parseInt(e.target.value,10); if(v>=40&&v<=208)tempo=v; else e.target.value=tempo; setBpm(); setSliders(); postMetro(); }
       else if(e.target.id==='set-showdraw'){ settings.showDraw=e.target.checked; applyShowToggles(); if(!settings.showDraw)setDrawing(false); }
