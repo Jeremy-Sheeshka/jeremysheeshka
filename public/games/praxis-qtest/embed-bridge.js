@@ -65,12 +65,15 @@
     }
     function stop(){ if(raf){cancelAnimationFrame(raf);raf=null;} if(line&&line.parentNode)line.parentNode.removeChild(line); line=null; }
     function play(tempo,onDone){
-      stop(); var g=ensure(); if(!g){ if(onDone)onDone(); return; }
-      var dur=Math.max(300,getRendered().bars.length*576*(60000/(tempo||88)/144));
-      var t0=performance.now(), span=(g.maxX-g.minX)||1;
-      function fr(now){ var pr=(now-t0)/dur; if(pr>=1)pr=1;
-        if(line){ line.setAttribute('x',g.minX+pr*span); line.setAttribute('opacity','0.9'); }
-        if(pr<1){ raf=requestAnimationFrame(fr); } else { if(onDone)onDone(); } }
+      stop(); var g=ensure(); var _r=0;
+      function _go(g){ var dur=Math.max(300,getRendered().bars.length*576*(60000/(tempo||88)/144));
+        var t0=performance.now(), span=(g.maxX-g.minX)||1;
+        function fr(now){ var pr=(now-t0)/dur; if(pr>=1)pr=1;
+          if(line){ line.setAttribute('x',g.minX+pr*span); line.setAttribute('opacity','0.9'); }
+          if(pr<1){ raf=requestAnimationFrame(fr); } else { if(onDone)onDone(); } }
+        raf=requestAnimationFrame(fr); }
+      if(!g){ (function rt(){ _r++; if(_r>10){ if(onDone)onDone(); return; } g=ensure(); if(!g){ setTimeout(rt,150); } else _go(g); })(); } else _go(g);
+    } else { if(onDone)onDone(); } }
       raf=requestAnimationFrame(fr);
     }
     return {play:play,stop:stop};
@@ -171,7 +174,7 @@
       else if(d.type==='praxis-split'){ splitMode=d.split||'2s'; owner=computeSplit(numBars,splitMode); postSplit(); renderAB(); renderAids(); }
       else if(d.type==='praxis-aid'){ aidMode=d.mode||'none'; renderAids(); }
       else if(d.type==='praxis-mute'){ try{if(window.Howler)window.Howler.mute(!!d.muted);}catch(e){} }
-      else if(d.type==='praxis-settings'){ if(d.settings){ for(var k in d.settings){ if(k in settings)settings[k]=d.settings[k]; } } try{P().setMarkNotesDuringTapping(!!settings.marks);}catch(e){} renderAB(); }
+      else if(d.type==='praxis-settings'){ if(d.settings){ for(var k in d.settings){ if(k in settings)settings[k]=d.settings[k]; } if('lineCursor' in d.settings)settings.cursor=d.settings.lineCursor; } try{P().setMarkNotesDuringTapping(!!settings.marks);if(!settings.marks&&rhythmImage)rhythmImage.removeAllLabels();}catch(e){} renderAB(); }
     });
     (function(){ var hidden=false; function tryHide(){ if(hidden)return; var els=document.querySelectorAll('*'),i; for(i=0;i<els.length;i++){ var el=els[i]; if(el.children.length<=6&&/TEMPO/i.test(el.textContent)&&el.textContent.length<40){ var pEl=el,j; for(j=0;j<4&&pEl.parentElement;j++)pEl=pEl.parentElement; pEl.style.setProperty('display','none','important'); hidden=true; return; } } } try{var obs=new MutationObserver(function(){tryHide();});obs.observe(document.documentElement,{childList:true,subtree:true});}catch(e){} setTimeout(tryHide,1500);setTimeout(tryHide,4000);setTimeout(tryHide,9000); })();
     window.addEventListener('load',function(){ setTimeout(function(){
@@ -233,7 +236,7 @@
     document.addEventListener('pointerdown',function(e){ var t=e.target; if(t&&t.closest&&(t.closest('input')||t.closest('button')||t.closest('select')||t.closest('a')))return; e.preventDefault(); handleActivate(); },true);
     document.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();},true);
     document.addEventListener('keydown',function(e){ if(e.repeat)return; if(e.key===' '||e.code==='Space'||e.key==='v'||e.key==='V'||e.key==='b'||e.key==='B'){e.preventDefault();handleActivate();} },true);
-    function transportPlay(){ if(playing)return; if(flowState==='showing'){ beginPlay(); } else { exerciseCount++; showExercise(randRhythm()); beginPlay(); } }
+    function transportPlay(){ if(playing)return; if(flowState==='showing'){ beginPlay(); } else { exerciseCount++; showExercise(randRhythm()); post({type:'drill-state',playing:false,mode:'ready'}); } }
     function transportStop(){ if(!playing&&flowState!=='playing'&&flowState!=='tapping')return; hardStop(); flowState='done'; setInfo('Click for next','',''); post({type:'drill-state',playing:false}); }
     window.addEventListener('message',function(ev){ var d=ev.data; if(!d)return;
       if(d.type==='praxis-metro'){ if(d.tempo!=null)setTempo(d.tempo); if(d.playing)transportPlay(); else transportStop(); }

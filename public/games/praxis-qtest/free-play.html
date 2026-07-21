@@ -418,6 +418,7 @@ label.metro-field:has([data-metro-beats]){display:none !important}
 </style>
 </head>
 <body>
+<script>Object.defineProperty(window,"tempo",{get:function(){var e=document.querySelector("[data-metro-bpm-input]")||document.querySelector("[data-metro-tempo]");return e?parseInt(e.value)||88:88;},configurable:true});</script>
   <header class="topbar">
     <a class="brand" href="./index.html">
       <span class="brand__badge">PR</span>
@@ -853,6 +854,7 @@ label.metro-field:has([data-metro-beats]){display:none !important}
 (function(){
   var $=function(s){return document.querySelector(s);}, $$=function(s){return Array.prototype.slice.call(document.querySelectorAll(s));};
   var frame=$('#drill-frame'), stage=$('.stage')||($('main')||document.body);
+  var _sd=true; // dots default
   var settings={showDraw:false,showAid:false,master:false,metroSound:true,cursor:true};
   var muted=false, lastEx=-1;
 
