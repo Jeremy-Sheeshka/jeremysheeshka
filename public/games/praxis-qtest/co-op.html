@@ -271,7 +271,7 @@
     document.addEventListener('keydown',function(e){
       if(e.repeat)return; var t=e.target, tag=t&&(t.tagName||'').toLowerCase(); if(tag==='input'||tag==='textarea'||tag==='select')return;
       var k=e.key;
-      if(k===' '||e.code==='Space'){ e.preventDefault(); return; }
+      if(k===' '||e.code==='Space'){ e.preventDefault(); post({type:'praxis-tap'}); return; }
       if(k==='a'||k==='A'){ e.preventDefault(); post({type:'praxis-tap'}); flashCard('a'); return; }
       if(k==='l'||k==='L'){ e.preventDefault(); post({type:'praxis-tap'}); flashCard('b'); return; }
     });
