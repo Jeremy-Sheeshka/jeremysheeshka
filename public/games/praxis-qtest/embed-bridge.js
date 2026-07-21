@@ -104,6 +104,7 @@
     ["RhythmPlayer","Rhythm","RhythmComponent","RhythmImage","Afspilning","Toneafspilning","Nodebillede","Opgave"].forEach(function(n){try{if(!window["Music"+n]&&window["Musikipedia"+n])window["Music"+n]=window["Musikipedia"+n];}catch(e){}});
     var playing=false,audioUnlocked=false,rhythmObj=null,rhythmImage=null,renderedRhythm=null;
     var flowState="init",exerciseCount=0,numBars=4,currentTempo=88;
+    var runId=0,completedId=-1;
     var fsettings={metroSound:true,master:false,marks:true,cursor:true};
     var aidMode="none",runId=0,completedId=-1,listenMode=false,baseCfg=null;
     function P(){return window.MusicRhythmPlayer||null;}

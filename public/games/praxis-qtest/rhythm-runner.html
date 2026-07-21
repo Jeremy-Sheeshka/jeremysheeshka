@@ -40,7 +40,7 @@
   .jumpbtn{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);z-index:7;font:inherit;font-weight:800;font-size:13px;letter-spacing:1px;color:#fff;background:rgba(28,25,23,.82);border:none;border-radius:999px;padding:12px 30px;cursor:pointer;user-select:none;-webkit-user-select:none;touch-action:manipulation;box-shadow:0 6px 18px rgba(0,0,0,.18);opacity:.92}
   .jumpbtn:active{transform:translateX(-50%) scale(.95);background:rgba(28,25,23,.95)}
   .ov{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:8;padding:18px}
-  #ready{background:rgba(255,255,255,.55)}
+  #ready{background:rgba(255,255,255,.55);align-items:flex-start;padding-top:clamp(18px,7vh,64px)}
   .card{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 18px 50px rgba(0,0,0,.16);padding:22px 26px;max-width:420px;width:100%;text-align:center}
   .card .big{font-family:"Courier New",ui-monospace,monospace;font-weight:800;letter-spacing:3px;font-size:26px;color:var(--grey)}
   .card .sub{font-size:12px;letter-spacing:1.5px;color:#a8a29e;margin-top:8px;text-transform:uppercase}
@@ -477,8 +477,12 @@ function draw(now, dt, cb){
 
   if(playing && cb<LEAD){
     var cn=Math.ceil(LEAD-cb), frac=1-(cb-Math.floor(cb));
+    var dTop=gY - M.dinoH;
+    var dotsY=dTop - 16*s;
+    var numY=dotsY - 18*s - 62*s;
+    var readyY=numY - 62*s - 16*s;
     ctx.save();
-    ctx.translate(cx, gY-M.stemH-72*s);
+    ctx.translate(cx, numY);
     var pop=1+0.28*frac; ctx.scale(pop,pop);
     ctx.fillStyle='rgba(83,83,83,'+(0.35+0.55*frac)+')';
     ctx.font='900 '+Math.round(124*s)+'px "Courier New",ui-monospace,monospace';
@@ -486,15 +490,15 @@ function draw(now, dt, cb){
     ctx.fillText(String(cn>0?cn:1), 0, 0);
     ctx.restore();
     ctx.fillStyle='#a8a29e'; ctx.font='700 '+Math.round(12*s)+'px system-ui,sans-serif'; ctx.textAlign='center';
-    ctx.fillText('GET  READY', cx, gY-M.stemH-156*s);
+    ctx.fillText('GET  READY', cx, readyY);
     for(var di=0;di<4;di++){
       var done = cb >= (LEAD-4+di);
       ctx.fillStyle = done ? BODY : '#e2e2e2';
-      ctx.beginPath(); ctx.arc(cx + (di-1.5)*16*s, gY-M.stemH-18*s, 4*s, 0, 7); ctx.fill();
+      ctx.beginPath(); ctx.arc(cx + (di-1.5)*16*s, dotsY, 4*s, 0, 7); ctx.fill();
     }
   }
 
-  if(playing){
+  if(playing && cb>=LEAD){
     var flashOn = !(milestoneT>0 && (now-milestoneT)<260 && Math.floor((now-milestoneT)/45)%2===0);
     if(flashOn){
       var fs=Math.round(15*clamp(s,0.8,1.4));
