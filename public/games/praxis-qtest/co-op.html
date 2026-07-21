@@ -306,13 +306,6 @@
   </script>
 <script>
 (function(){
-  var head=document.querySelector('.coop-head');
-  var dots=document.getElementById('coop-dots');
-  if(head&&dots&&dots.parentNode!==head){ head.appendChild(dots); }
-})();
-</script>
-<script>
-(function(){
   var listening=false,frame=document.getElementById('drill-frame');
   function post(m){if(frame&&frame.contentWindow)frame.contentWindow.postMessage(m,'*');}
   document.addEventListener('click',function(e){
@@ -327,6 +320,13 @@
       b.textContent=listening?'Stop':'Listen'; b.classList.toggle('active',listening);
     });
   });
+})();
+</script>
+<script>
+(function(){
+  var head=document.querySelector('.coop-head');
+  var dots=document.getElementById('coop-dots');
+  if(head&&dots&&dots.parentNode!==head){ head.appendChild(dots); }
 })();
 </script>
 </body>
