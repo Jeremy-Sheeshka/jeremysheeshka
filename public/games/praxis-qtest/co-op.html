@@ -137,7 +137,7 @@
     <label><span>Line cursor</span><input type="checkbox" id="set-cursor2" checked></label>
   <label><span>Show ✓ / ✗ marks</span><input type="checkbox" id="set-marks" checked></label>
   <label><span>Metronome click</span><input type="checkbox" id="set-sound" checked></label>
-    <label><span>Beat cursor (dots)</span><input type="checkbox" id="set-cursor" checked></label>
+    <label><span>Visual Pulse</span><input type="checkbox" id="set-cursor" checked></label>
     <label><span>A / B turn cue + overlay</span><input type="checkbox" id="set-ab" checked></label>
     <label><span>Loop pattern</span><input type="checkbox" id="set-loop"></label>
     <div class="hint">Metronome &amp; master apply on the next exercise. Draw / aid appear in the bar once enabled. A = higher cue + blue tint, B = lower cue + gold tint.</div>
@@ -202,6 +202,9 @@
     function post(m){ if(frame&&frame.contentWindow)frame.contentWindow.postMessage(m,'*'); }
     function postMetro(){ post({type:'praxis-metro',playing:playing,tempo:tempo}); }
     function sendSettings(){ post({type:'praxis-settings',settings:settings}); }
+    if(settings.cursor!==undefined){settings.dots=settings.cursor;delete settings.cursor;}
+    if(settings.lineCursor===undefined)settings.lineCursor=true;
+    if(settings.marks===undefined)settings.marks=true;
     function setToggle(){ $$('[data-metro-toggle]').forEach(function(b){b.textContent=playing?'Stop':'Play';b.classList.toggle('active',playing);b.setAttribute('aria-pressed',String(playing));}); }
     function setBpm(){ $$('[data-metro-bpm-input]').forEach(function(i){i.value=tempo;}); }
     function setSliders(){ $$('[data-metro-tempo]').forEach(function(i){i.value=tempo;}); }
@@ -248,9 +251,11 @@
       else if(e.target.matches&&e.target.matches('[data-metro-bpm-input]')){ var v=parseInt(e.target.value,10); if(v>=40&&v<=208)tempo=v; else e.target.value=tempo; setBpm(); setSliders(); postMetro(); }
       else if(e.target.id==='set-showdraw'){ settings.showDraw=e.target.checked; applyShowToggles(); if(!settings.showDraw)setDrawing(false); }
       else if(e.target.id==='set-showaid'){ settings.showAid=e.target.checked; applyShowToggles(); }
-      else if(e.target.id==='set-master'){ settings.master=e.target.checked; if(settings.master){ $('#coop-dots').style.display='none'; } else if(settings.cursor){ $('#coop-dots').style.display=''; } idleVisuals(); sendSettings(); }
+      else if(e.target.id==='set-master'){ settings.master=e.target.checked; if(settings.master){ $('#coop-dots').style.display='none'; } else if(settings.dots){ $('#coop-dots').style.display=''; } idleVisuals(); sendSettings(); }
       else if(e.target.id==='set-sound'){ settings.metroSound=e.target.checked; sendSettings(); }
-      else if(e.target.id==='set-cursor'){ settings.cursor=e.target.checked; $('#coop-dots').style.display=(settings.cursor&&!settings.master)?'':'none'; sendSettings(); }
+      else if(e.target.id==='set-cursor'){ settings.dots=e.target.checked; $('#coop-dots').style.display=(settings.dots&&!settings.master)?'':'none'; }
+      else if(e.target.id==='set-cursor2'){ settings.lineCursor=e.target.checked; if(!settings.marks){settings.lineCursor=true;e.target.checked=true;} sendSettings(); }
+      else if(e.target.id==='set-marks'){ settings.marks=e.target.checked; if(!settings.marks){settings.lineCursor=true;var _c2=document.getElementById('set-cursor2');if(_c2){_c2.checked=true;}} sendSettings(); }
       else if(e.target.id==='set-ab'){ settings.ab=e.target.checked; settings.cue=e.target.checked; sendSettings(); }
       else if(e.target.id==='set-loop'){ settings.loop=e.target.checked; sendSettings(); }
     },true);
@@ -275,8 +280,8 @@
       else if(d.type==='coop-split'){ if(d.seq!==lastSeq){ lastSeq=d.seq; clearDrawing(); } ownerArr=d.owner||[]; numBars=d.numBars||numBars; $('#coop-a-bars').textContent=ranges('A'); $('#coop-b-bars').textContent=ranges('B'); idleVisuals(); }
       else if(d.type==='coop-beat'){
         if(settings.master)return; lastOwner=d.owner;
-        if(settings.cursor)setDots(Math.floor(d.eighthInBar/2));
-        if(settings.cursor)setBanner(d.owner,d.bar);
+        if(settings.dots)setDots(Math.floor(d.eighthInBar/2));
+        if(settings.dots)setBanner(d.owner,d.bar);
         if(d.eighthInBar===0){ if(settings.cue)blip(d.owner==='A'?659.25:392.0, .15, .12, d.owner==='A'?'sine':'triangle'); else if(settings.metroSound)blip(784,.09,.05); }
         else if(settings.metroSound && d.eighthInBar%2===0){ blip(520,.06,.04); }
       }
@@ -285,7 +290,7 @@
     /* init */
     settings.showDraw=false; settings.showAid=false;
     applyShowToggles(); setToggle(); setBpm(); setSliders(); syncSplit(); setDrawing(false);
-    $('#coop-dots').style.display=settings.cursor?'':'none';
+    $('#coop-dots').style.display=settings.dots?'':'none';
     sizeCanvas();
   })();
   </script>

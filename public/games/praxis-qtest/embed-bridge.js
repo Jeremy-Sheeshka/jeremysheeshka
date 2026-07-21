@@ -84,7 +84,7 @@
     var playing=false,rhythmObj=null,rhythmImage=null,renderedRhythm=null;
     var flowState='init',exerciseCount=0,currentTempo=88;
     var numBars=8,splitMode='2s',lastData=null,owner=[],seq=0;
-    var settings={loop:false,ab:true,cue:true,metroSound:true,master:false,marks:true,cursor:true};
+    var settings={loop:false,ab:true,cue:true,metroSound:true,master:false,marks:true,lineCursor:true};
     var aidMode='none',runId=0,completedId=-1,clockTimer=null,clockEighth=0;
     console.log('[coop-bridge] co-op branch active');
     document.addEventListener('keydown',function(e){ if(e.key===' '||e.code==='Space'){e.preventDefault();e.stopImmediatePropagation();} if(e.key==='a'||e.key==='A'||e.key==='l'||e.key==='L'){ e.preventDefault(); tap(); } },true);
@@ -93,6 +93,7 @@
     (function(){ var p=P(); if(!p)return; var origInit=p.initialisation;
       p.initialisation=function(cfg){
         if(cfg.rhythmImage)rhythmImage=cfg.rhythmImage; cfg.unitsPerStep=72;
+        if(rhythmImage&&!rhythmImage.__pw){var _sl=rhythmImage.showLabelOnComponent,_su=rhythmImage.showLabelForUnknownTab;rhythmImage.showLabelOnComponent=function(c,l){if(!settings.marks)return;return _sl.apply(this,arguments);};rhythmImage.showLabelForUnknownTab=function(){if(!settings.marks)return;return _su.apply(this,arguments);};rhythmImage.__pw=true;}
         cfg.includeCountIn=true; cfg.includePlaying=true; cfg.includeTapping=true; cfg.includeCountOut=false;
         cfg.markNotesDuringTapping=!!settings.marks;
         cfg.finishedTappingCallback=function(){ completeExercise(); };
@@ -100,8 +101,8 @@
         var origStatus=cfg.changeStatusCallback;
         cfg.changeStatusCallback=function(s){
           if(s==='countin'){ startBeatClock(currentTempo); }
-          if(s==='play'){ flowState='playing'; if(settings.cursor)cursor.play(currentTempo); }
-          if(s==='tap'){ flowState='playing'; startClock(); startBeatClock(currentTempo); if(settings.cursor)cursor.play(currentTempo); }
+          if(s==='play'){ flowState='playing'; if(settings.lineCursor)cursor.play(currentTempo); }
+          if(s==='tap'){ flowState='playing'; startClock(); startBeatClock(currentTempo); if(settings.lineCursor)cursor.play(currentTempo); }
           if(s==='stop'||s==='countout'){ stopClock(); stopBeatClock(); cursor.stop(); if(flowState==='playing'){flowState='stopping';completeExercise();} }
           if(origStatus)origStatus(s);
         };
@@ -186,19 +187,20 @@
       try{ if(!window['Music'+n]&&window['Musikipedia'+n])window['Music'+n]=window['Musikipedia'+n]; }catch(e){} });
     var playing=false,audioUnlocked=false,rhythmObj=null,rhythmImage=null,renderedRhythm=null;
     var flowState='init',exerciseCount=0,numBars=2,currentTempo=88;
-    var fsettings={metroSound:true,master:false,marks:true,cursor:true}, aidMode='none';
+    var fsettings={metroSound:true,master:false,marks:true,lineCursor:true}, aidMode='none';
     function P(){return window.MusicRhythmPlayer||null;}
     var cursor=makeCursor(function(){return renderedRhythm;});
     (function(){ var p=P(); if(!p)return; var origInit=p.initialisation;
       p.initialisation=function(cfg){ if(cfg.rhythmImage)rhythmImage=cfg.rhythmImage; cfg.unitsPerStep=72;
+        if(rhythmImage&&!rhythmImage.__pw){var _sl=rhythmImage.showLabelOnComponent,_su=rhythmImage.showLabelForUnknownTab;rhythmImage.showLabelOnComponent=function(c,l){if(!fsettings.marks)return;return _sl.apply(this,arguments);};rhythmImage.showLabelForUnknownTab=function(){if(!fsettings.marks)return;return _su.apply(this,arguments);};rhythmImage.__pw=true;}
         cfg.includeCountIn=true; cfg.includePlaying=true; cfg.includeTapping=true; cfg.includeCountOut=false;
         cfg.markNotesDuringTapping=!!fsettings.marks;
         cfg.finishedTappingCallback=function(){ onExerciseComplete(); };
         var origStatus=cfg.changeStatusCallback;
         cfg.changeStatusCallback=function(s){
           if(s==='countin'){startBeatClock(currentTempo);}
-          if(s==='play'){ if(fsettings.cursor)cursor.play(currentTempo); }
-          if(s==='tap'){ flowState='tapping'; startBeatClock(currentTempo); if(fsettings.cursor)cursor.play(currentTempo); }
+          if(s==='play'){ if(fsettings.lineCursor)cursor.play(currentTempo); }
+          if(s==='tap'){ flowState='tapping'; startBeatClock(currentTempo); if(fsettings.lineCursor)cursor.play(currentTempo); }
           if(s==='stop'||s==='countout'){ stopBeatClock(); cursor.stop(); }
           if(origStatus)origStatus(s);
         };
@@ -239,7 +241,7 @@
       else if(d.type==='praxis-bars'){ var nb=d.bars||2; if(nb===numBars)return; numBars=nb; if(playing){ hardStop(); exerciseCount++; showExercise(randRhythm()); beginPlay(); } else { nextExercise(); } }
       else if(d.type==='praxis-aid'){ aidMode=d.mode||'none'; renderAids(); }
       else if(d.type==='praxis-mute'){ try{if(window.Howler)window.Howler.mute(!!d.muted);}catch(e){} }
-      else if(d.type==='praxis-settings'){ if(d.settings){ if('metroSound' in d.settings)fsettings.metroSound=d.settings.metroSound; if('master' in d.settings)fsettings.master=d.settings.master; if('marks' in d.settings)fsettings.marks=d.settings.marks; if('cursor' in d.settings)fsettings.cursor=d.settings.cursor; } try{P().setMarkNotesDuringTapping(!!fsettings.marks);}catch(e){} }
+      else if(d.type==='praxis-settings'){ if(d.settings){ if('metroSound' in d.settings)fsettings.metroSound=d.settings.metroSound; if('master' in d.settings)fsettings.master=d.settings.master; if('marks' in d.settings)fsettings.marks=d.settings.marks; if('lineCursor' in d.settings)fsettings.lineCursor=d.settings.lineCursor; } try{P().setMarkNotesDuringTapping(!!fsettings.marks);}catch(e){} }
     });
     (function(){ var hidden=false; function tryHide(){ if(hidden)return; var els=document.querySelectorAll('*'),i; for(i=0;i<els.length;i++){ var el=els[i]; if(el.children.length<=6&&/TEMPO/i.test(el.textContent)&&el.textContent.length<40){ var pEl=el,j; for(j=0;j<4&&pEl.parentElement;j++)pEl=pEl.parentElement; pEl.style.setProperty('display','none','important'); hidden=true; return; } } } try{var obs=new MutationObserver(function(){tryHide();});obs.observe(document.documentElement,{childList:true,subtree:true});}catch(e){} setTimeout(tryHide,1500);setTimeout(tryHide,4000);setTimeout(tryHide,9000); })();
     window.addEventListener('load',function(){ setTimeout(function(){

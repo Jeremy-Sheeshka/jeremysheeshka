@@ -846,7 +846,7 @@ label.metro-field:has([data-metro-beats]){display:none !important}
   <label><span>Line cursor</span><input type="checkbox" id="fp-set-cursor2" checked></label>
   <label><span>Show ✓ / ✗ marks</span><input type="checkbox" id="fp-set-marks" checked></label>
   <label><span>Metronome click</span><input type="checkbox" id="fp-set-sound" checked></label>
-  <label><span>Beat cursor (dots)</span><input type="checkbox" id="fp-set-cursor" checked></label>
+  <label><span>Visual Pulse</span><input type="checkbox" id="fp-set-cursor" checked></label>
   <div class="hint">Metronome &amp; master apply on the next exercise. Draw / aid appear in the bar once enabled.</div>
 </div>
 <script>
@@ -915,9 +915,9 @@ label.metro-field:has([data-metro-beats]){display:none !important}
   document.addEventListener('change',function(e){
     if(e.target.id==='fp-set-showdraw'){ settings.showDraw=e.target.checked; applyShowToggles(); if(!settings.showDraw)setDrawing(false); }
     else if(e.target.id==='fp-set-showaid'){ settings.showAid=e.target.checked; applyShowToggles(); }
-    else if(e.target.id==='fp-set-master'){ settings.master=e.target.checked; if(settings.master){ $$('[data-metro-lights]').forEach(function(d){d.style.display='none';}); } else if(settings.cursor){ $$('[data-metro-lights]').forEach(function(d){d.style.display='';}); } post({type:'praxis-settings',settings:settings}); }
+    else if(e.target.id==='fp-set-master'){ settings.master=e.target.checked; if(settings.master){ $$('[data-metro-lights]').forEach(function(d){d.style.display='none';}); } else if(settings.dots){ $$('[data-metro-lights]').forEach(function(d){d.style.display='';}); } post({type:'praxis-settings',settings:settings}); }
     else if(e.target.id==='fp-set-sound'){ settings.metroSound=e.target.checked; post({type:'praxis-settings',settings:settings}); }
-    else if(e.target.id==='fp-set-cursor'){ settings.cursor=e.target.checked; $$('[data-metro-lights]').forEach(function(d){ d.style.display=(settings.cursor&&!settings.master)?'':'none'; }); }
+    else if(e.target.id==='fp-set-cursor'){ settings.dots=e.target.checked; $$('[data-metro-lights]').forEach(function(d){ d.style.display=(settings.dots&&!settings.master)?'':'none'; }); }
   },true);
   $('#mute-btn').addEventListener('click',function(){ muted=!muted; this.classList.toggle('muted',muted); this.textContent=muted?'🔇':'🔊'; this.setAttribute('aria-pressed',String(muted)); post({type:'praxis-mute',muted:muted}); });
 
@@ -940,15 +940,18 @@ label.metro-field:has([data-metro-beats]){display:none !important}
     });
   });
   injectNavControls();
-  $$('[data-metro-lights]').forEach(function(d){ d.style.display=settings.cursor?'':'none'; });
+  $$('[data-metro-lights]').forEach(function(d){ d.style.display=settings.dots?'':'none'; });
   
   /* Listen = play the rhythm through with the cursor, no tapping (uses engine includePlaying pass) */
   $$('[data-listen]').forEach(function(b){ b.addEventListener('click',function(e){ e.preventDefault(); e.stopPropagation(); post({type:'praxis-metro',playing:true,tempo:tempo}); }); });
   /* Line cursor + marks settings */
+  if(settings.cursor!==undefined){settings.dots=settings.cursor;delete settings.cursor;}
+  if(settings.lineCursor===undefined)settings.lineCursor=true;
+  if(settings.marks===undefined)settings.marks=true;
   (function(){
     var cur=document.getElementById('fp-set-cursor2'), mk=document.getElementById('fp-set-marks');
-    function sync(){ settings.cursor = cur ? cur.checked : true; settings.marks = mk ? mk.checked : true;
-      if(settings.marks===false){ settings.cursor=true; if(cur){cur.checked=true; cur.disabled=true;} } else { if(cur){cur.disabled=false;} }
+    function sync(){ settings.lineCursor = cur ? cur.checked : true; settings.marks = mk ? mk.checked : true;
+      if(settings.marks===false){ settings.lineCursor=true; if(cur){cur.checked=true; cur.disabled=true;} } else { if(cur){cur.disabled=false;} }
       post({type:'praxis-settings',settings:settings}); }
     if(cur)cur.addEventListener('change',sync);
     if(mk)mk.addEventListener('change',sync);
