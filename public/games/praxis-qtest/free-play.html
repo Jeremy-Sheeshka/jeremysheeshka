@@ -509,8 +509,8 @@ label.metro-field:has([data-metro-beats]){display:none !important}
         var DRILL='/games/rhythm-app/exercise/720/';
         Promise.all([
           fetch(DRILL).then(function(r){return r.text();}),
-          fetch('/games/praxis-qtest/embed-bridge.js?v=20260722a').then(function(r){return r.text();}).catch(function(){return '';}),
-          fetch('/games/praxis-qtest/embed-overrides.css?v=20260722a').then(function(r){return r.text();}).catch(function(){return '';})
+          fetch('/games/praxis-qtest/embed-bridge.js?v=20260722e').then(function(r){return r.text();}).catch(function(){return '';}),
+          fetch('/games/praxis-qtest/embed-overrides.css?v=20260722e').then(function(r){return r.text();}).catch(function(){return '';})
         ]).then(function(res){
           var h=res[0],bridge=res[1],ov=res[2];
           h=h.replace(/if\s*\(\s*top\s*==\s*self\s*\)/g,'if(true)');
@@ -767,20 +767,14 @@ label.metro-field:has([data-metro-beats]){display:none !important}
   sizeCanvas();
 })();
 </script>
+
 <script>
 (function(){
   var listening=false,frame=document.getElementById('drill-frame');
-  function post(mm){if(frame&&frame.contentWindow)frame.contentWindow.postMessage(mm,'*');}
+  function post(m){if(frame&&frame.contentWindow)frame.contentWindow.postMessage(m,'*');}
   function setBtn(){document.querySelectorAll('[data-listen]').forEach(function(b){b.textContent=listening?'Stop':'Listen';b.classList.toggle('active',listening);});}
-  document.addEventListener('click',function(e){
-    var btn=e.target.closest?e.target.closest('[data-listen]'):null;
-    if(!btn)return; e.stopImmediatePropagation(); e.preventDefault();
-    listening=!listening; setBtn(); post({type:'praxis-listen'});
-  },true);
-  window.addEventListener('message',function(ev){
-    var d=ev.data; if(!d||d.type!=='drill-state')return;
-    if(d.mode==='listen' && !d.playing){ listening=false; setBtn(); }
-  });
+  document.addEventListener('click',function(e){var btn=e.target.closest?e.target.closest('[data-listen]'):null;if(!btn)return;e.stopImmediatePropagation();e.preventDefault();listening=!listening;setBtn();post({type:'praxis-listen'});},true);
+  window.addEventListener('message',function(ev){var d=ev.data;if(!d||d.type!=='drill-state')return;if(!d.playing&&listening){listening=false;setBtn();}});
 })();
 </script>
 </body>
