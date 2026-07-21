@@ -87,18 +87,20 @@
     <div class="ov" id="ready">
       <div class="card">
         <div class="big">RHYTHM&nbsp;RUNNER</div>
-        <div class="sub">press play · or hit space</div>
+        <div class="sub">RR v10 · press play · or hit space</div>
       </div>
     </div>
   </div>
 
 <script>
+var BUILD = 'RR v10';
 var settings = { aid:'none' };
 var SHOW_DINO=true, METRO=true, PULSE=true, MARKS=true;
 var LEAD = 4, bpm = 92;
 var HI_KEY = 'rr_hi_v1';
 var INK = '#1a1a1a', BODY = '#535353', EYE = '#ffffff', HURT_RED = '#dc2626';
 var MAX_LEVEL = 5;
+var TAP_EARLY = 0.32, TAP_LATE = 0.14, MISS_AT = 0.22;
 
 var stage=document.getElementById('stage'), canvas=document.getElementById('track'), ctx=canvas.getContext('2d');
 var playBtn=document.getElementById('playBtn'), tempoEl=document.getElementById('tempo'), bpmEl=document.getElementById('bpm');
@@ -124,8 +126,8 @@ function resize(){
   var dinoH=23*ps;
   var stemH=48*s;
   var headR=9*s;
-  var jumpJ=stemH + headR + 26*s;
-  if(jumpJ > groundY - dinoH - 10) jumpJ=Math.max(48, groundY - dinoH - 10);
+  var jumpJ=stemH + headR + 40*s;
+  if(jumpJ > groundY - dinoH - 8) jumpJ=Math.max(60, groundY - dinoH - 8);
   M={ scale:s, ps:ps, headR:headR, stemH:stemH, beamTh:6*s, pxPerBeat:124*s, groundY:groundY, centerX:Math.round(W/2), dinoW:22*ps, dinoH:dinoH, jumpJ:jumpJ };
 }
 window.addEventListener('resize', resize);
@@ -262,35 +264,43 @@ function pruneRegen(cb){
 
 var actx=null, masterGain=null, t0=0, secPerBeat=60/bpm, nextClickBeat=0, schedId=null;
 function ensureAudio(){
-  if(!actx){ actx=new (window.AudioContext||window.webkitAudioContext)(); masterGain=actx.createGain(); masterGain.connect(actx.destination); }
-  if(actx.state==='suspended') actx.resume();
-  masterGain.gain.value = METRO?1:0;
+  try{
+    if(!actx){ actx=new (window.AudioContext||window.webkitAudioContext)(); masterGain=actx.createGain(); masterGain.connect(actx.destination); }
+    if(actx.state==='suspended') actx.resume();
+    masterGain.gain.value = METRO?1:0;
+  }catch(e){ lastErr='audio:'+(e&&e.message||e); }
 }
 function blip(time, accent){
-  var o=actx.createOscillator(), g=actx.createGain();
-  o.type='triangle'; o.frequency.value = accent?1500:1000;
-  g.gain.setValueAtTime(0.0001,time);
-  g.gain.exponentialRampToValueAtTime(accent?0.5:0.32, time+0.001);
-  g.gain.exponentialRampToValueAtTime(0.0001, time+0.09);
-  o.connect(g); g.connect(masterGain); o.start(time); o.stop(time+0.1);
+  try{
+    var o=actx.createOscillator(), g=actx.createGain();
+    o.type='triangle'; o.frequency.value = accent?1500:1000;
+    g.gain.setValueAtTime(0.0001,time);
+    g.gain.exponentialRampToValueAtTime(accent?0.5:0.32, time+0.001);
+    g.gain.exponentialRampToValueAtTime(0.0001, time+0.09);
+    o.connect(g); g.connect(masterGain); o.start(time); o.stop(time+0.1);
+  }catch(e){}
 }
 function sfx(kind){
   if(!actx) return;
-  var t=actx.currentTime, o=actx.createOscillator(), g=actx.createGain();
-  o.connect(g); g.connect(actx.destination);
-  if(kind==='jump'){ o.type='square'; o.frequency.setValueAtTime(520,t); o.frequency.exponentialRampToValueAtTime(760,t+0.05); g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(0.10,t+0.004); g.gain.exponentialRampToValueAtTime(0.0001,t+0.07); o.start(t); o.stop(t+0.08); }
-  else if(kind==='hit'){ o.type='sawtooth'; o.frequency.setValueAtTime(180,t); o.frequency.exponentialRampToValueAtTime(70,t+0.18); g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(0.30,t+0.004); g.gain.exponentialRampToValueAtTime(0.0001,t+0.22); o.start(t); o.stop(t+0.24); }
-  else if(kind==='ding'){ o.type='triangle'; o.frequency.setValueAtTime(1200,t); g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(0.22,t+0.004); g.gain.exponentialRampToValueAtTime(0.0001,t+0.16); o.start(t); o.stop(t+0.18); }
+  try{
+    var t=actx.currentTime, o=actx.createOscillator(), g=actx.createGain();
+    o.connect(g); g.connect(actx.destination);
+    if(kind==='jump'){ o.type='square'; o.frequency.setValueAtTime(520,t); o.frequency.exponentialRampToValueAtTime(760,t+0.05); g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(0.10,t+0.004); g.gain.exponentialRampToValueAtTime(0.0001,t+0.07); o.start(t); o.stop(t+0.08); }
+    else if(kind==='hit'){ o.type='sawtooth'; o.frequency.setValueAtTime(180,t); o.frequency.exponentialRampToValueAtTime(70,t+0.18); g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(0.30,t+0.004); g.gain.exponentialRampToValueAtTime(0.0001,t+0.22); o.start(t); o.stop(t+0.24); }
+    else if(kind==='ding'){ o.type='triangle'; o.frequency.setValueAtTime(1200,t); g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(0.22,t+0.004); g.gain.exponentialRampToValueAtTime(0.0001,t+0.16); o.start(t); o.stop(t+0.18); }
+  }catch(e){}
 }
 function schedule(){
-  if(!playing) return;
-  masterGain.gain.value = METRO?1:0;
-  var ahead=0.12;
-  while(t0 + nextClickBeat*secPerBeat < actx.currentTime + ahead){
-    var tt=t0 + nextClickBeat*secPerBeat;
-    if(tt >= actx.currentTime - 0.02) blip(tt, nextClickBeat%4===0);
-    nextClickBeat++;
-  }
+  try{
+    if(!playing) return;
+    masterGain.gain.value = METRO?1:0;
+    var ahead=0.12;
+    while(t0 + nextClickBeat*secPerBeat < actx.currentTime + ahead){
+      var tt=t0 + nextClickBeat*secPerBeat;
+      if(tt >= actx.currentTime - 0.02) blip(tt, nextClickBeat%4===0);
+      nextClickBeat++;
+    }
+  }catch(e){}
 }
 function curBeatNow(){ return playing ? (actx.currentTime - t0)/secPerBeat : pausedBeat; }
 
@@ -300,8 +310,10 @@ var hiScore=(function(){try{var v=parseInt(localStorage.getItem(HI_KEY),10); ret
 function bumpHi(v){ if(v>hiScore){ hiScore=v; try{localStorage.setItem(HI_KEY,String(hiScore));}catch(e){} } }
 var jumping=false, jumpStart=0, yOff=0, runFrame=0, lastLegPhase=-1;
 var sqX=1, sqY=1;
-var dropY=-260, hurtUntil=-1;
+var dropY=-260, hurtUntil=-1, jumpFlashT=-1;
 var clouds=[], lastT=performance.now();
+var lastErr='', lastResult='', needPrune=false;
+var tapCount=0, jumpCount=0, lastInput='';
 
 function initClouds(){ clouds=[]; for(var i=0;i<4;i++) clouds.push({ x:Math.random()*W, y:30+Math.random()*(H*0.32), s:0.7+Math.random()*0.7 }); }
 
@@ -319,6 +331,7 @@ function start(){
   notes.length=0; genBeat=LEAD; buildBars(8);
   playing=true; lastBeatInt=-1; pulseT=performance.now();
   streak=0; milestoneT=-1; jumping=false; yOff=0; hurtUntil=-1; lastLegPhase=-1;
+  lastResult=''; needPrune=false; tapCount=0; jumpCount=0;
   readyEl.style.display='none';
   updatePlayBtn();
   if(!schedId) schedId=setInterval(schedule,25);
@@ -336,7 +349,7 @@ function registerMiss(n, now, cb){
   hurtUntil=now+380;
   sfx('hit');
   var ended=streak; streak=0; bumpHi(ended);
-  pruneRegen(cb);
+  needPrune=true;
 }
 function registerClear(n, now){
   n.resolved=true; n.judged='hit'; streak++; bumpHi(streak);
@@ -344,33 +357,44 @@ function registerClear(n, now){
 }
 function doJump(){
   if(!playing||jumping) return;
-  jumping=true; jumpStart=performance.now();
+  jumping=true; jumpStart=performance.now(); jumpFlashT=performance.now(); jumpCount++;
   sqX=0.96; sqY=1.05;
   sfx('jump');
 }
-function actionPrimary(){
-  if(!playing) start();
+function judgeTap(){
+  if(!playing) return;
+  var cb=curBeatNow(), best=null, bestD=1e9;
+  for(var i=0;i<notes.length;i++){
+    var n=notes[i]; if(n.resolved||n.rest) continue;
+    var d=cb - n.beat;
+    if(d>=-TAP_EARLY && d<=TAP_LATE){ var ad=Math.abs(d); if(ad<bestD){ bestD=ad; best=n; } }
+  }
+  if(best){ registerClear(best, performance.now()); lastResult='tap ok'; }
+  else { lastResult='tap -'; }
+}
+function actionPrimary(src){
+  tapCount++; lastInput=src||'?';
+  if(!playing){ try{ start(); }catch(e){ lastErr='start:'+(e&&e.message||e); } }
+  judgeTap();
   doJump();
 }
 
 function updateNotes(cb, now){
   if(cb < LEAD) return;
   var cx=M.centerX, ps=M.ps;
-  var bodyL = cx + 2*ps, bodyR = cx + 9*ps;
-  var feet = M.groundY + yOff;
-  var grace = M.headR*0.5;
+  var bodyL=cx-1*ps, bodyR=cx+10*ps;
+  var feet=M.groundY + yOff;
   for(var i=0;i<notes.length;i++){
     var n=notes[i]; if(n.resolved||n.rest) continue;
-    var nx = cx + (n.beat - cb)*M.pxPerBeat;
-    var noteL = nx - M.headR;
-    var noteR = nx + M.headR*0.8 + 4*M.scale;
-    var obsH = (n.len>=576) ? (M.headR*1.6) : M.stemH;
-    if(noteL <= bodyR && noteR >= bodyL){
-      if(feet <= (M.groundY - obsH + grace)) n.air = true;
+    var nx=cx + (n.beat-cb)*M.pxPerBeat;
+    var noteL=nx-M.headR, noteR=nx+M.headR*0.8+4*M.scale;
+    var obsH=(n.len>=576)?(M.headR*1.6):M.stemH;
+    if(noteL<=bodyR && noteR>=bodyL){
+      if(feet <= M.groundY - obsH*0.30) n.air=true;
     }
-    if(noteR < bodyL){
-      if(n.air) registerClear(n, now);
-      else registerMiss(n, now, cb);
+    if(cb >= n.beat + MISS_AT){
+      if(n.air){ registerClear(n, now); lastResult='air ok'; }
+      else { registerMiss(n, now, cb); lastResult='miss'; }
     }
   }
 }
@@ -467,6 +491,11 @@ function draw(now, dt, cb){
     var pose = jumping ? STAND : (hurtActive ? HURT : (running ? (runFrame?RUNB:RUNA) : STAND));
     var dinoColor = hurtActive ? ((Math.floor(now/80)%2===0) ? HURT_RED : BODY) : BODY;
     drawMatrix(pose, left, top, psx, psy, dinoColor, EYE);
+    if(jumpFlashT>0 && now-jumpFlashT<220){
+      ctx.fillStyle='rgba(22,163,74,'+(0.85*(1-(now-jumpFlashT)/220))+')';
+      ctx.font='800 '+Math.round(15*s)+'px system-ui,sans-serif'; ctx.textAlign='center'; ctx.textBaseline='bottom';
+      ctx.fillText('JUMP', cx, top-4);
+    }
   }
 
   if(PULSE && playing){
@@ -507,31 +536,42 @@ function draw(now, dt, cb){
       ctx.fillText('HI '+pad(hiScore)+' '+pad(streak), W-18, 16);
     }
   }
+
+  ctx.fillStyle='#c4bfb6'; ctx.font='700 11px ui-monospace,monospace'; ctx.textAlign='center'; ctx.textBaseline='top';
+  ctx.fillText('v10', W/2, 8);
+  ctx.fillStyle='#b8b2a8'; ctx.font='11px ui-monospace,monospace'; ctx.textAlign='left'; ctx.textBaseline='top';
+  ctx.fillText('run:'+(playing?1:0)+' jmp:'+(jumping?1:0)+' y:'+Math.round(yOff)+' st:'+streak+' taps:'+tapCount+' jumps:'+jumpCount+' in:'+lastInput+' '+(lastResult||'-')+(lastErr?(' ERR:'+lastErr):''), 10, 24);
 }
 
 function frame(now){
-  var dt=Math.min(0.05,(now-lastT)/1000); lastT=now;
-  var cb=curBeatNow();
-  if(playing){
-    var bi=Math.floor(cb+1e-6);
-    if(bi!==lastBeatInt){ lastBeatInt=bi; pulseT=now; }
-    if(jumping){
-      var D=clamp(0.55*secPerBeat + 0.28, 0.46, 0.70);
-      var p=(now-jumpStart)/D;
-      if(p>=1){ jumping=false; yOff=0; sqX=1.06; sqY=0.94; }
-      else { yOff = -M.jumpJ*Math.sin(Math.PI*Math.pow(p,0.85)); if(p<0.10){ sqX=0.96; sqY=1.05; } }
+  try{
+    var dt=Math.min(0.05,(now-lastT)/1000); lastT=now;
+    var cb=curBeatNow();
+    if(playing){
+      var bi=Math.floor(cb+1e-6);
+      if(bi!==lastBeatInt){ lastBeatInt=bi; pulseT=now; }
+      if(jumping){
+        var D=clamp(0.6*secPerBeat + 0.34, 0.55, 0.85);
+        var p=(now-jumpStart)/D;
+        if(p>=1){ jumping=false; yOff=0; sqX=1.06; sqY=0.94; }
+        else { yOff = -M.jumpJ*Math.sin(Math.PI*p); if(p<0.10){ sqX=0.96; sqY=1.05; } }
+      }
+      var runningNow = cb>=LEAD && !jumping;
+      if(runningNow){
+        var legPhase=Math.floor(cb*2);
+        if(legPhase!==lastLegPhase){ lastLegPhase=legPhase; runFrame=runFrame?0:1; }
+      } else {
+        lastLegPhase=Math.floor(cb*2);
+      }
+      updateNotes(cb, now);
+      if(needPrune){ pruneRegen(cb); needPrune=false; }
+      if(genBeat < cb + 24) buildBars(4);
     }
-    var runningNow = cb>=LEAD && !jumping;
-    if(runningNow){
-      var legPhase=Math.floor(cb*2);
-      if(legPhase!==lastLegPhase){ lastLegPhase=legPhase; runFrame=runFrame?0:1; }
-    } else {
-      lastLegPhase=Math.floor(cb*2);
-    }
-    updateNotes(cb, now);
-    if(genBeat < cb + 24) buildBars(4);
+    draw(now, dt, cb);
+  }catch(err){
+    lastErr=(err&&err.message)?err.message:String(err);
+    try{ ctx.fillStyle='#dc2626'; ctx.font='12px ui-monospace,monospace'; ctx.textAlign='left'; ctx.textBaseline='top'; ctx.fillText('ERR '+lastErr, 10, 40); }catch(e2){}
   }
-  draw(now, dt, cb);
   requestAnimationFrame(frame);
 }
 
@@ -540,12 +580,12 @@ tempoEl.addEventListener('input', function(){ setBpm(parseInt(tempoEl.value,10))
 gearBtn.addEventListener('click', function(e){ e.stopPropagation(); panel.classList.toggle('open'); });
 document.addEventListener('pointerdown', function(e){ if(!panel.contains(e.target) && e.target!==gearBtn) panel.classList.remove('open'); });
 
-stage.addEventListener('pointerdown', function(e){ e.preventDefault(); actionPrimary(); });
-jumpBtn.addEventListener('pointerdown', function(e){ e.preventDefault(); e.stopPropagation(); actionPrimary(); jumpBtn.blur(); });
+stage.addEventListener('pointerdown', function(e){ e.preventDefault(); actionPrimary('click'); });
+jumpBtn.addEventListener('pointerdown', function(e){ e.preventDefault(); e.stopPropagation(); actionPrimary('btn'); jumpBtn.blur(); });
 
 window.addEventListener('keydown', function(e){
   if(e.repeat) return;
-  if(e.code==='Space'||e.key==='ArrowUp'||e.key==='w'||e.key==='W'){ e.preventDefault(); actionPrimary(); }
+  if(e.code==='Space'||e.key==='ArrowUp'||e.key==='w'||e.key==='W'){ e.preventDefault(); actionPrimary('key'); }
   else if(e.key==='Escape'){ panel.classList.remove('open'); }
 }, true);
 
