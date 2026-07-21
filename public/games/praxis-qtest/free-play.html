@@ -647,26 +647,7 @@ label.metro-field:has([data-metro-beats]){display:none !important}
         return state.audioCtx;
       }
 
-      function scheduleClick(time, isAccent) {
-        const ctx = state.audioCtx;
-        if (!ctx) return;
-
-        const oscillator = ctx.createOscillator();
-        const gain = ctx.createGain();
-
-        oscillator.type = "sine";
-        oscillator.frequency.value = isAccent ? 1250 : 820;
-
-        gain.gain.setValueAtTime(0.0001, time);
-        gain.gain.exponentialRampToValueAtTime(isAccent ? 0.46 : 0.24, time + 0.002);
-        gain.gain.exponentialRampToValueAtTime(0.0001, time + 0.062);
-
-        oscillator.connect(gain);
-        gain.connect(ctx.destination);
-
-        oscillator.start(time);
-        oscillator.stop(time + 0.075);
-      }
+      function scheduleClick(time, isAccent) { /* metronome sound handled by engine */ }
 
       function rebuildLights() {
         lightContainers.forEach((container) => {

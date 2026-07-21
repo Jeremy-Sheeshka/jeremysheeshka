@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ETEC 531 — Rhythm Runner</title>
+<style>
+  :root{--paper:#f4f1ea;--ink:#1c1917;--accent:#1d4ed8;--danger:#dc2626;--good:#16a34a;--line:#cfc8ba;}
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--paper);color:var(--ink)}
+  /* top bar */
+  .topbar{display:flex;align-items:center;gap:14px;background:var(--ink);color:var(--paper);padding:10px 18px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.5px}
+  .brand .mark{width:26px;height:26px;border:2px solid var(--paper);border-radius:6px;display:grid;place-items:center;font-size:12px}
+  .topbar nav{margin-left:auto;display:flex;gap:14px;font-size:13px}
+  .topbar nav a{color:#d6d0c4;text-decoration:none}
+  .topbar nav a:hover{color:#fff}
+  /* toolbar */
+  .toolbar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:#fff;border-bottom:1px solid var(--line);padding:10px 18px;position:relative}
+  button.btn{font:inherit;font-weight:700;border:1px solid var(--ink);background:#fff;color:var(--ink);border-radius:8px;padding:8px 16px;cursor:pointer}
+  button.btn:hover{background:#f0ede6}
+  button.btn.on{background:var(--ink);color:#fff}
+  #playBtn{min-width:96px}
+  .ctl{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600}
+  .ctl input[type=range]{width:150px}
+  .bpm{font-variant-numeric:tabular-nums;min-width:62px;text-align:right;font-weight:800}
+  .gearwrap{margin-left:auto;position:relative}
+  .hint{font-size:12px;color:#6b6256;padding:6px 18px;background:#fff;border-bottom:1px solid var(--line)}
+  .hint b{color:var(--ink)}
+  /* settings panel */
+  .panel{position:absolute;right:0;top:42px;width:268px;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 30px rgba(0,0,0,.18);padding:8px 4px;z-index:30;display:none}
+  .panel.open{display:block}
+  .panel h4{margin:6px 12px;font-size:11px;letter-spacing:1px;color:#8a8174}
+  .row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 12px;font-size:13px}
+  .row:hover{background:#f6f3ec}
+  .row select{font:inherit;border:1px solid var(--line);border-radius:6px;padding:3px 6px;background:#fff}
+  .sw{position:relative;width:38px;height:22px;flex:0 0 auto}
+  .sw input{position:absolute;opacity:0;width:100%;height:100%;margin:0;cursor:pointer}
+  .sw .track{position:absolute;inset:0;background:#d8d2c6;border-radius:999px;transition:.2s}
+  .sw .knob{position:absolute;top:2px;left:2px;width:18px;height:18px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 2px rgba(0,0,0,.3)}
+  .sw input:checked + .track{background:var(--accent)}
+  .sw input:checked + .track + .knob{transform:translateX(16px)}
+  /* stage */
+  .stage{position:relative;width:100%;height:calc(100vh - 152px);min-height:360px;overflow:hidden;background:
+     radial-gradient(120% 90% at 50% 0%, #fffdf8 0%, #f7f3ea 60%, #efe9dc 100%);}
+  .stage.hurt{box-shadow:inset 0 0 0 6px rgba(220,38,38,.55)}
+  #track{position:absolute;inset:0;width:100%;height:100%;display:block}
+  /* runner overlay */
+  #runnerWrap{position:absolute;left:50%;transform:translate(-50%,-100%);pointer-events:none;z-index:5}
+  #runnerFall,#runnerJump{display:block;line-height:0}
+  .pose{display:none;filter:drop-shadow(0 4px 3px rgba(0,0,0,.18))}
+  /* hud */
+  .hud{position:absolute;left:14px;top:12px;z-index:6;display:flex;gap:10px;font-size:13px;font-weight:700}
+  .chip{background:rgba(255,255,255,.82);border:1px solid var(--line);border-radius:999px;padding:5px 12px;backdrop-filter:blur(2px)}
+  .chip b{color:var(--accent)}
+  .chip.miss b{color:var(--danger)}
+  #judge{position:absolute;left:50%;top:30%;transform:translate(-50%,-50%) scale(.8);z-index:7;font-weight:900;font-size:26px;letter-spacing:1px;opacity:0;transition:opacity .12s, transform .12s;pointer-events:none;text-shadow:0 2px 6px rgba(255,255,255,.7)}
+  #judge.show{opacity:1;transform:translate(-50%,-65%) scale(1)}
+  #judge.perfect{color:var(--good)} #judge.good{color:var(--accent)} #judge.ok{color:#b45309} #judge.miss{color:var(--danger)}
+  .ready{position:absolute;left:50%;top:14px;transform:translateX(-50%);z-index:6;font-size:12px;font-weight:700;color:#8a8174;letter-spacing:1px}
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="brand"><span class="mark">PR</span><span>Rhythm Runner</span></div>
+    <nav>
+      <a href="./index.html">Dashboard</a>
+      <a href="./free-play.html">Free Play</a>
+      <a href="./co-op.html">Co-Op</a>
+    </nav>
+  </div>
+
+  <div class="toolbar">
+    <button id="playBtn" class="btn">▶ Play</button>
+    <div class="ctl">Tempo <input id="tempo" type="range" min="40" max="200" step="1" value="92"><span id="bpm" class="bpm">92 BPM</span></div>
+    <div class="gearwrap">
+      <button id="gearBtn" class="btn">⚙ Settings</button>
+      <div id="panel" class="panel">
+        <h4>RHYTHM RUNNER</h4>
+        <label class="row">Show runner (fall in / out)
+          <span class="sw"><input id="optRunner" type="checkbox" checked><span class="track"></span><span class="knob"></span></span>
+        </label>
+        <label class="row">Metronome click
+          <span class="sw"><input id="optMetro" type="checkbox" checked><span class="track"></span><span class="knob"></span></span>
+        </label>
+        <label class="row">Visual pulse on beat
+          <span class="sw"><input id="optPulse" type="checkbox" checked><span class="track"></span><span class="knob"></span></span>
+        </label>
+        <label class="row">Rests (gaps to run through)
+          <span class="sw"><input id="optRests" type="checkbox" checked><span class="track"></span><span class="knob"></span></span>
+        </label>
+        <div class="row">Counting aid
+          <select id="optAid"><option value="none">none</option><option value="syllables">ta / ti</option><option value="numbers">1 +</option></select>
+        </div>
+        <div class="row">Density
+          <select id="optDensity"><option value="easy">easy</option><option value="normal" selected>normal</option><option value="hard">hard</option></select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hint"><b>How to play:</b> press <b>Play</b>, hear the 4‑click count‑in, then tap <b>SPACE</b> / <b>click the track</b> / <b>↑</b> to jump each note as it crosses the centre line. Miss the timing and the runner stumbles — but the run never stops. Stop with the Play button.</div>
+
+  <div class="stage" id="stage">
+    <canvas id="track"></canvas>
+    <div class="hud">
+      <span class="chip">Streak <b id="streak">0</b></span>
+      <span class="chip">Best <b id="best">0</b></span>
+      <span class="chip miss">✗ <b id="misses">0</b></span>
+    </div>
+    <div class="ready" id="ready">PRESS PLAY</div>
+    <div id="judge"></div>
+    <div id="runnerWrap">
+      <div id="runnerFall"><div id="runnerJump"></div></div>
+    </div>
+  </div>
+
+<script>
+/* =========================================================================
+   RHYTHM RUNNER — infinite rhythm scroller (test build, local only)
+   Reuses the studio's rhythm SYSTEM: same data model (quarter=144, eighth=72,
+   half=288, whole=576, 4/4), same random-bar algorithm as embed-bridge.js,
+   same metronome/quarter-pulse concept, same settings vocabulary. The infinite
+   single-line scroll is drawn on a canvas locked to the Web-Audio clock, because
+   the iframe drill engine only lays out a static multi-row SVG and cannot scroll.
+   ========================================================================= */
+
+/* ---------- settings ---------- */
+var settings = { showRunner:true, metro:true, pulse:true, rests:true, aid:'none', density:'normal' };
+var DENSITY = {
+  easy:   { eighth:0.12, half:0.18, whole:0.05 },
+  normal: { eighth:0.30, half:0.32, whole:0.10 },
+  hard:   { eighth:0.52, half:0.14, whole:0.04 }
+};
+var LEAD = 4;            // count-in beats before first note reaches centre
+var bpm = 92;
+
+/* ---------- DOM ---------- */
+var stage   = document.getElementById('stage');
+var canvas  = document.getElementById('track');
+var ctx     = canvas.getContext('2d');
+var playBtn = document.getElementById('playBtn');
+var tempoEl = document.getElementById('tempo');
+var bpmEl   = document.getElementById('bpm');
+var gearBtn = document.getElementById('gearBtn');
+var panel   = document.getElementById('panel');
+var streakEl= document.getElementById('streak');
+var bestEl  = document.getElementById('best');
+var missEl  = document.getElementById('misses');
+var judgeEl = document.getElementById('judge');
+var readyEl = document.getElementById('ready');
+var runnerWrap = document.getElementById('runnerWrap');
+var runnerFall = document.getElementById('runnerFall');
+var runnerJump = document.getElementById('runnerJump');
+
+/* ---------- layout ---------- */
+var W=0,H=0,dpr=1, centerX=0, staffY=0, pxPerBeat=120;
+function resize(){
+  var r = stage.getBoundingClientRect();
+  W = Math.max(320, r.width); H = Math.max(320, r.height);
+  dpr = window.devicePixelRatio || 1;
+  canvas.width = Math.round(W*dpr); canvas.height = Math.round(H*dpr);
+  canvas.style.width = W+'px'; canvas.style.height = H+'px';
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  centerX = Math.round(W/2);
+  staffY  = Math.round(H*0.62);
+  pxPerBeat = Math.max(72, Math.min(150, Math.round(W/8)));
+  runnerWrap.style.top = (staffY+8)+'px';
+}
+window.addEventListener('resize', resize);
+
+/* =========================================================================
+   STICK-FIGURE POSES  (re-drawn from the 4 reference PNGs as inline SVG)
+   0=jump  1=hurt  2=stand  3=run  (+ runB for the cycle)
+   ========================================================================= */
+var POSES = {
+  stand:{name:'stand',head:'normal',torso:[[70,64],[70,116]],
+    arms:[[[70,72],[58,96],[56,116]],[[70,72],[86,94],[92,114]]],
+    legs:[[[70,116],[64,148],[60,172]],[[70,116],[82,148],[86,172]]],fr0:0,fr1:0},
+  runA:{name:'runA',head:'normal',torso:[[72,62],[66,112]],
+    arms:[[[72,70],[96,86],[110,76]],[[72,70],[50,80],[46,100]]],
+    legs:[[[66,112],[98,120],[104,150]],[[66,112],[40,128],[22,118]]],fr0:18,fr1:-28},
+  runB:{name:'runB',head:'normal',torso:[[72,62],[66,112]],
+    arms:[[[72,70],[50,86],[36,76]],[[72,70],[94,80],[98,100]]],
+    legs:[[[66,112],[40,120],[34,150]],[[66,112],[96,128],[114,118]]],fr0:-28,fr1:18},
+  jump:{name:'jump',head:'normal',torso:[[70,62],[70,112]],
+    arms:[[[70,72],[46,58],[34,40]],[[70,72],[94,58],[106,40]]],
+    legs:[[[70,112],[56,134],[72,150]],[[70,112],[84,134],[70,150]]],fr0:8,fr1:-8},
+  hurt:{name:'hurt',head:'hurt',torso:[[66,62],[72,112]],
+    arms:[[[66,72],[92,80],[104,72]],[[66,72],[88,92],[100,96]]],
+    legs:[[[72,112],[94,124],[86,156]],[[72,112],[66,138],[48,164]]],fr0:12,fr1:22}
+};
+function _limb(pts){return '<polyline points="'+pts.map(function(p){return p[0]+','+p[1];}).join(' ')+'" fill="none" stroke="#111" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>';}
+function _joint(x,y){return '<circle cx="'+x+'" cy="'+y+'" r="5" fill="#111"/>';}
+function _foot(x,y,rot){return '<g transform="rotate('+rot+' '+x+' '+y+')"><rect x="'+(x-3)+'" y="'+(y-4)+'" width="26" height="9" rx="4.5" fill="#111"/></g>';}
+function _head(cx,cy,type){
+  var s='<circle cx="'+cx+'" cy="'+cy+'" r="26" fill="#fff" stroke="#111" stroke-width="7"/>';
+  if(type==='hurt'){
+    s+='<polyline points="'+(cx-13)+','+(cy-5)+' '+(cx-6)+','+(cy-1)+' '+(cx-13)+','+(cy+3)+'" fill="none" stroke="#111" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>';
+    s+='<polyline points="'+(cx+13)+','+(cy-5)+' '+(cx+6)+','+(cy-1)+' '+(cx+13)+','+(cy+3)+'" fill="none" stroke="#111" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>';
+    s+='<path d="M '+(cx-7)+' '+(cy+9)+' Q '+cx+' '+(cy+20)+' '+(cx+9)+' '+(cy+7)+'" fill="none" stroke="#111" stroke-width="4" stroke-linecap="round"/>';
+  } else {
+    s+='<ellipse cx="'+(cx+9)+'" cy="'+(cy-3)+'" rx="3" ry="6" fill="#111"/>';
+    s+='<path d="M '+(cx+2)+' '+(cy+7)+' Q '+(cx+10)+' '+(cy+15)+' '+(cx+17)+' '+(cy+5)+'" fill="none" stroke="#111" stroke-width="4" stroke-linecap="round"/>';
+  }
+  return s;
+}
+function buildPoseSVG(p){
+  var cx=p.torso[0][0], cy=p.torso[0][1]-26;
+  var o=['<svg class="pose pose-'+p.name+'" viewBox="0 0 140 180" width="120" height="154">'];
+  o.push(_limb(p.torso));
+  p.arms.forEach(function(a){o.push(_limb(a));});
+  p.legs.forEach(function(l){o.push(_limb(l));});
+  var f0=p.legs[0][p.legs[0].length-1], f1=p.legs[1][p.legs[1].length-1];
+  o.push(_foot(f0[0],f0[1],p.fr0||0));
+  o.push(_foot(f1[0],f1[1],p.fr1||0));
+  var seen={};
+  function jpt(q){var k=q[0]+'_'+q[1];if(seen[k])return;seen[k]=1;o.push(_joint(q[0],q[1]));}
+  jpt(p.torso[0]); jpt(p.torso[1]);
+  p.arms.forEach(function(a){a.forEach(jpt);});
+  p.legs.forEach(function(l){l.forEach(jpt);});
+  o.push(_head(cx,cy,p.head));
+  o.push('</svg>');
+  return o.join('');
+}
+runnerJump.innerHTML = Object.keys(POSES).map(function(k){return buildPoseSVG(POSES[k]);}).join('');
+
+var currentPose='stand', transientUntil=0, runnerVisible=true;
+function setPose(name){
+  currentPose=name;
+  var svgs=runnerJump.querySelectorAll('.pose');
+  for(var i=0;i<svgs.length;i++) svgs[i].style.display='none';
+  var el=runnerJump.querySelector('.pose-'+name);
+  if(el) el.style.display='block';
+}
+function triggerJump(){
+  if(!runnerVisible) return;
+  setPose('jump'); transientUntil=performance.now()+240;
+  runnerJump.style.transition='transform .13s cubic-bezier(.3,1.4,.5,1)';
+  runnerJump.style.transform='translateY(-46px)';
+  setTimeout(function(){ runnerJump.style.transition='transform .16s ease-in'; runnerJump.style.transform='translateY(0)'; },140);
+}
+function triggerHurt(){
+  if(runnerVisible){ setPose('hurt'); transientUntil=performance.now()+360; }
+  stage.classList.add('hurt'); setTimeout(function(){stage.classList.remove('hurt');},360);
+  missFlashT=performance.now();
+}
+function toggleRunner(on){
+  settings.showRunner=on; runnerVisible=on;
+  if(on){
+    runnerFall.style.transition='none';
+    runnerFall.style.transform='translateY(-260px)'; runnerFall.style.opacity='0';
+    void runnerFall.offsetHeight; // reflow
+    runnerFall.style.transition='transform .5s cubic-bezier(.2,.8,.2,1), opacity .35s';
+    runnerFall.style.transform='translateY(0)'; runnerFall.style.opacity='1';
+    setPose(playing?'runA':'stand');
+  } else {
+    runnerFall.style.transition='transform .45s cubic-bezier(.55,0,.7,1), opacity .3s';
+    runnerFall.style.transform='translateY(260px)'; runnerFall.style.opacity='0';
+  }
+}
+setInterval(function(){ // run cycle
+  if(playing && runnerVisible && performance.now()>=transientUntil){
+    setPose(currentPose==='runA'?'runB':'runA');
+  }
+},150);
+
+/* =========================================================================
+   RHYTHM GENERATION  (same model + algorithm family as embed-bridge.js)
+   ========================================================================= */
+var notes=[], genBeat=LEAD;
+function randBar(){
+  var d=DENSITY[settings.density]||DENSITY.normal;
+  var beats=[],i;
+  for(i=0;i<4;i++){
+    if(Math.random()<d.eighth) beats.push([{length:72,rest:false},{length:72,rest:false}]);
+    else beats.push([{length:144,rest:false}]);
+  }
+  var comps=[],idx=0;
+  while(idx<4){
+    var rem=4-idx, r=Math.random(), g=1;
+    if(rem>=4 && r<d.whole) g=4;
+    else if(rem>=2 && r<d.half) g=2;
+    if(g===4) comps.push({length:576,rest:false});
+    else if(g===2) comps.push({length:288,rest:false});
+    else comps=comps.concat(beats[idx]);
+    idx+=g;
+  }
+  // optional rest gap (only swaps a quarter beat -> quarter rest, keeps the bar = 4 beats)
+  if(settings.rests && Math.random()<0.22){
+    var qs=[]; for(var c=0;c<comps.length;c++){ if(comps[c].length===144 && !comps[c].rest) qs.push(c); }
+    if(qs.length) comps[qs[(Math.random()*qs.length)|0]].rest=true;
+  }
+  return comps;
+}
+function buildBars(count){
+  for(var b=0;b<count;b++){
+    var comps=randBar(), barStart=genBeat, slice=[];
+    for(var c=0;c<comps.length;c++){
+      var co=comps[c], onset=genBeat;
+      var n={beat:onset, len:co.length, rest:co.rest, beatInBar:onset-barStart, beam:null, judged:null, jt:0, _x:null};
+      notes.push(n); slice.push(n);
+      genBeat += co.length/144;
+    }
+    // beam grouping for consecutive eighths within this bar
+    var k=0;
+    while(k<slice.length){
+      if(slice[k].len===72 && !slice[k].rest){
+        var run=[slice[k]], j=k+1;
+        while(j<slice.length && slice[j].len===72 && !slice[j].rest){ run.push(slice[j]); j++; }
+        if(run.length>=2){ for(var m=0;m<run.length;m++) run[m].beam='beam'; }
+        else { run[0].beam='flag'; }
+        k=j;
+      } else { k++; }
+    }
+  }
+}
+
+/* =========================================================================
+   AUDIO  (Web-Audio metronome = the clock everything syncs to)
+   ========================================================================= */
+var actx=null, masterGain=null, t0=0, secPerBeat=60/bpm, nextClickBeat=0, schedId=null;
+function ensureAudio(){
+  if(!actx){
+    actx=new (window.AudioContext||window.webkitAudioContext)();
+    masterGain=actx.createGain(); masterGain.connect(actx.destination);
+  }
+  if(actx.state==='suspended') actx.resume();
+  masterGain.gain.value = settings.metro?1:0;
+}
+function blip(time, accent){
+  var o=actx.createOscillator(), g=actx.createGain();
+  o.type='triangle'; o.frequency.value = accent?1500:1000;
+  g.gain.setValueAtTime(0.0001,time);
+  g.gain.exponentialRampToValueAtTime(accent?0.5:0.32, time+0.001);
+  g.gain.exponentialRampToValueAtTime(0.0001, time+0.09);
+  o.connect(g); g.connect(masterGain);
+  o.start(time); o.stop(time+0.1);
+}
+function schedule(){
+  if(!playing) return;
+  masterGain.gain.value = settings.metro?1:0;
+  var ahead=0.12;
+  while(t0 + nextClickBeat*secPerBeat < actx.currentTime + ahead){
+    var tt=t0 + nextClickBeat*secPerBeat;
+    if(tt >= actx.currentTime - 0.02) blip(tt, nextClickBeat%4===0);
+    nextClickBeat++;
+  }
+}
+function curBeatNow(){ return playing ? (actx.currentTime - t0)/secPerBeat : pausedBeat; }
+
+/* =========================================================================
+   GAME STATE
+   ========================================================================= */
+var playing=false, pausedBeat=2.5, lastBeatInt=-1, pulseT=0, hitFlashT=0, missFlashT=0;
+var streak=0, best=0, misses=0, judgeTO=null;
+
+function showJudge(text, cls){
+  judgeEl.textContent=text; judgeEl.className='show '+(cls||'');
+  if(judgeTO) clearTimeout(judgeTO);
+  judgeTO=setTimeout(function(){ judgeEl.className=cls||''; },620);
+}
+function setBpm(v){
+  bpm=v; bpmEl.textContent=v+' BPM';
+  if(playing){ var cb=curBeatNow(); secPerBeat=60/bpm; t0=actx.currentTime - cb*secPerBeat; } // rebase, keep position
+}
+function start(){
+  ensureAudio();
+  secPerBeat=60/bpm; t0=actx.currentTime; nextClickBeat=0;
+  notes.length=0; genBeat=LEAD; buildBars(8);
+  playing=true; pausedBeat=0; lastBeatInt=-1; pulseT=performance.now();
+  streak=0; misses=0; streakEl.textContent='0'; missEl.textContent='0';
+  playBtn.textContent='■ Stop'; playBtn.classList.add('on');
+  readyEl.style.display='none';
+  if(runnerVisible) setPose('runA');
+  if(!schedId) schedId=setInterval(schedule,25);
+}
+function stop(){
+  playing=false; pausedBeat=curBeatNow();
+  playBtn.textContent='▶ Play'; playBtn.classList.remove('on');
+  if(schedId){ clearInterval(schedId); schedId=null; }
+  if(runnerVisible) setPose('stand');
+  readyEl.textContent='PRESS PLAY'; readyEl.style.display='block';
+}
+function togglePlay(){ if(playing) stop(); else start(); }
+
+/* tap = jump. Always hop; only judge rhythm if a note is in the window. */
+function doTap(){
+  if(!playing){ start(); return; }
+  ensureAudio();
+  if(runnerVisible) triggerJump();
+  var cb=curBeatNow(), tol=0.14/secPerBeat, bestN=null, bestD=1e9;
+  for(var i=0;i<notes.length;i++){
+    var n=notes[i];
+    if(n.rest || n.judged) continue;
+    var d=Math.abs(n.beat-cb);
+    if(d<=tol && d<bestD){ bestD=d; bestN=n; }
+  }
+  if(bestN){
+    var ms=bestD*secPerBeat*1000, q, cls;
+    if(ms<70){q='PERFECT';cls='perfect';} else if(ms<130){q='GOOD';cls='good';} else {q='OK';cls='ok';}
+    bestN.judged='hit'; bestN.jt=performance.now();
+    hitFlashT=performance.now();
+    streak++; if(streak>best){best=streak;bestEl.textContent=best;}
+    streakEl.textContent=streak;
+    showJudge(q,cls);
+  }
+}
+
+/* =========================================================================
+   DRAW
+   ========================================================================= */
+function drawRest(x,len){
+  ctx.strokeStyle='#94a3b8'; ctx.fillStyle='#94a3b8'; ctx.lineWidth=3; ctx.lineCap='round';
+  if(len>=576){ ctx.fillRect(x-7,staffY+1,14,5); }              // whole rest (hangs)
+  else if(len>=288){ ctx.fillRect(x-7,staffY-6,14,5); }         // half rest (sits)
+  else if(len>=144){                                            // quarter rest squiggle
+    ctx.beginPath();
+    ctx.moveTo(x-4,staffY-15); ctx.lineTo(x+4,staffY-8); ctx.lineTo(x-4,staffY-1);
+    ctx.lineTo(x+4,staffY+6); ctx.lineTo(x-2,staffY+12); ctx.stroke();
+  } else {                                                      // eighth rest
+    ctx.beginPath(); ctx.arc(x+2,staffY-7,3,0,7); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(x+2,staffY-7); ctx.lineTo(x-3,staffY+9); ctx.stroke();
+  }
+}
+function drawNoteHead(x,color,open,wide){
+  ctx.save(); ctx.translate(x,staffY); ctx.rotate(-0.32);
+  ctx.beginPath(); ctx.ellipse(0,0,wide?9:7,wide?6:5,0,0,7);
+  if(open){ ctx.lineWidth=3; ctx.strokeStyle=color; ctx.fillStyle='#fff'; ctx.fill(); ctx.stroke(); }
+  else { ctx.fillStyle=color; ctx.fill(); }
+  ctx.restore();
+}
+function draw(){
+  var cb=curBeatNow(), now=performance.now();
+  ctx.clearRect(0,0,W,H);
+
+  // scrolling beat ticks (motion cue)
+  ctx.strokeStyle='rgba(120,110,95,.25)'; ctx.lineWidth=1;
+  var firstHalf=Math.floor((cb - centerX/pxPerBeat)*2)-1;
+  var lastHalf =Math.ceil((cb + (W-centerX)/pxPerBeat)*2)+1;
+  for(var h=firstHalf; h<=lastHalf; h++){
+    var bx=centerX + (h*0.5 - cb)*pxPerBeat;
+    if(bx<-2||bx>W+2) continue;
+    var major=(h%2===0);
+    ctx.beginPath(); ctx.moveTo(bx,staffY+(major?5:3)); ctx.lineTo(bx,staffY-(major?5:3)); ctx.stroke();
+  }
+
+  // staff / ground line
+  ctx.strokeStyle='#b8ad99'; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.moveTo(0,staffY); ctx.lineTo(W,staffY); ctx.stroke();
+
+  // barlines
+  ctx.strokeStyle='rgba(60,52,40,.55)'; ctx.lineWidth=2;
+  var firstBar=Math.floor((cb - centerX/pxPerBeat)/4)-1;
+  var lastBar =Math.ceil((cb + (W-centerX)/pxPerBeat)/4)+1;
+  for(var bb=firstBar; bb<=lastBar; bb++){
+    if(bb<0) continue;
+    var lx=centerX + (bb*4 - cb)*pxPerBeat;
+    if(lx<-2||lx>W+2) continue;
+    ctx.beginPath(); ctx.moveTo(lx,staffY-50); ctx.lineTo(lx,staffY+10); ctx.stroke();
+  }
+
+  // compute screen x for every note (no cull here, beams need neighbours)
+  for(var i=0;i<notes.length;i++){ notes[i]._x = centerX + (notes[i].beat - cb)*pxPerBeat; }
+
+  // note heads + stems + flags + aids
+  for(var n2=0;n2<notes.length;n2++){
+    var n=notes[n2], x=n._x;
+    if(x<-70||x>W+70) continue;
+    if(n.rest){ drawRest(x,n.len); continue; }
+    var color = n.judged==='hit' ? '#16a34a' : (n.judged==='miss' ? '#dc2626' : '#111');
+    var open = n.len>=288;
+    // stem
+    if(n.len<576){ ctx.strokeStyle=color; ctx.lineWidth=3; ctx.beginPath(); ctx.moveTo(x+6,staffY-1); ctx.lineTo(x+6,staffY-42); ctx.stroke(); }
+    // flag for isolated eighth
+    if(n.len===72 && n.beam==='flag'){ ctx.strokeStyle=color; ctx.lineWidth=3; ctx.beginPath(); ctx.moveTo(x+6,staffY-42); ctx.quadraticCurveTo(x+18,staffY-34,x+12,staffY-22); ctx.stroke(); }
+    drawNoteHead(x,color,open,n.len>=576);
+    // counting aid
+    if(settings.aid!=='none'){
+      var bib=((n.beatInBar%4)+4)%4, num=Math.floor(bib)+1, plus=(bib%1)>=0.5;
+      var lab = settings.aid==='syllables' ? (n.len>=144?'ta':'ti') : (plus?'+':String(num));
+      ctx.fillStyle = n.judged==='miss'?'#dc2626':'#1d4ed8';
+      ctx.font='700 12px system-ui,sans-serif'; ctx.textAlign='center';
+      ctx.fillText(lab, x, staffY+24);
+    }
+  }
+
+  // beams (on-the-fly, consecutive eighths)
+  var run=[];
+  function flush(){
+    if(run.length>=2){
+      var xs=[]; for(var a=0;a<run.length;a++){ var xx=run[a]._x; if(xx>=-120&&xx<=W+120) xs.push(xx); }
+      if(xs.length>=2){
+        var allHit=true, anyMiss=false;
+        for(var b2=0;b2<run.length;b2++){ if(run[b2].judged!=='hit') allHit=false; if(run[b2].judged==='miss') anyMiss=true; }
+        ctx.strokeStyle = anyMiss?'#dc2626':(allHit?'#16a34a':'#111');
+        ctx.lineWidth=6; ctx.lineCap='round';
+        ctx.beginPath(); ctx.moveTo(Math.min.apply(null,xs),staffY-42); ctx.lineTo(Math.max.apply(null,xs),staffY-42); ctx.stroke();
+      }
+    }
+    run=[];
+  }
+  for(var e=0;e<notes.length;e++){
+    var ne=notes[e];
+    if(!ne.rest && ne.len===72 && ne.beam==='beam' && ne._x>=-120 && ne._x<=W+120){ run.push(ne); }
+    else { flush(); }
+  }
+  flush();
+
+  // runner ground shadow
+  if(runnerVisible){
+    ctx.fillStyle='rgba(0,0,0,.12)';
+    ctx.beginPath(); ctx.ellipse(centerX, staffY+6, 26, 6, 0, 0, 7); ctx.fill();
+  }
+
+  // hit-line / focal marker with beat pulse + hit/miss flash
+  var pulse = settings.pulse ? Math.max(0, 1-(now-pulseT)/260) : 0;
+  var hf = Math.max(0, 1-(now-hitFlashT)/220);
+  var mf = Math.max(0, 1-(now-missFlashT)/300);
+  var hlColor = mf>0.05 ? 'rgba(220,38,38,'+(0.5+0.5*mf)+')' : (hf>0.05 ? 'rgba(22,163,74,'+(0.5+0.5*hf)+')' : 'rgba(29,78,216,'+(0.35+0.5*pulse)+')');
+  ctx.strokeStyle=hlColor; ctx.lineWidth=2+3*pulse;
+  ctx.beginPath(); ctx.moveTo(centerX,staffY-72); ctx.lineTo(centerX,staffY+24); ctx.stroke();
+  // focal bracket at top
+  ctx.fillStyle=hlColor;
+  ctx.beginPath(); ctx.moveTo(centerX-7,staffY-72); ctx.lineTo(centerX+7,staffY-72); ctx.lineTo(centerX,staffY-62); ctx.closePath(); ctx.fill();
+
+  // count-in number
+  if(playing && cb<LEAD){
+    var cn=Math.ceil(LEAD-cb);
+    ctx.fillStyle='rgba(28,25,23,.18)'; ctx.font='900 90px system-ui,sans-serif'; ctx.textAlign='center';
+    ctx.fillText(String(cn>0?cn:1), centerX, staffY-90);
+  }
+}
+
+/* =========================================================================
+   MAIN LOOP
+   ========================================================================= */
+function frame(){
+  var cb=curBeatNow();
+  if(playing){
+    var bi=Math.floor(cb+1e-6);
+    if(bi!==lastBeatInt){ lastBeatInt=bi; pulseT=performance.now(); }
+    // misses: a note whose window fully passed with no matching tap
+    var tol=0.14/secPerBeat;
+    for(var i=0;i<notes.length;i++){
+      var n=notes[i];
+      if(!n.rest && !n.judged && n.beat < cb - tol){
+        n.judged='miss'; n.jt=performance.now();
+        triggerHurt(); streak=0; streakEl.textContent='0'; misses++; missEl.textContent=misses;
+        showJudge('MISS','miss');
+      }
+    }
+    if(genBeat < cb + 24) buildBars(4);                 // keep the stream infinite
+    if(notes.length>500 && notes[0].beat < cb-16){      // free memory on long runs
+      var cut=0; while(cut<notes.length && notes[cut].beat < cb-16) cut++;
+      notes.splice(0,cut);
+    }
+  }
+  draw();
+  requestAnimationFrame(frame);
+}
+
+/* =========================================================================
+   INPUT
+   ========================================================================= */
+playBtn.addEventListener('click', function(){ togglePlay(); playBtn.blur(); });
+tempoEl.addEventListener('input', function(){ setBpm(parseInt(tempoEl.value,10)); });
+gearBtn.addEventListener('click', function(e){ e.stopPropagation(); panel.classList.toggle('open'); });
+document.addEventListener('pointerdown', function(e){ if(!panel.contains(e.target) && e.target!==gearBtn) panel.classList.remove('open'); });
+
+stage.addEventListener('pointerdown', function(e){ e.preventDefault(); doTap(); });
+window.addEventListener('keydown', function(e){
+  if(e.repeat) return;
+  if(e.code==='Space'||e.key==='ArrowUp'||e.key==='w'||e.key==='W'){
+    e.preventDefault(); doTap();
+  } else if(e.key==='Escape'){ panel.classList.remove('open'); }
+}, true);
+
+/* settings wiring */
+function bindSwitch(id,key,after){ var el=document.getElementById(id); el.addEventListener('change',function(){ settings[key]=el.checked; if(after)after(el.checked); }); }
+bindSwitch('optRunner','showRunner',function(on){ toggleRunner(on); });
+bindSwitch('optMetro','metro',function(){ if(masterGain) masterGain.gain.value=settings.metro?1:0; });
+bindSwitch('optPulse','pulse');
+bindSwitch('optRests','rests');
+document.getElementById('optAid').addEventListener('change',function(){ settings.aid=this.value; });
+document.getElementById('optDensity').addEventListener('change',function(){ settings.density=this.value; });
+
+/* boot */
+resize();
+buildBars(8);          // frozen preview of incoming notation
+setPose('stand');
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
