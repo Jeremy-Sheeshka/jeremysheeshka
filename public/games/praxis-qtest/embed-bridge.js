@@ -145,7 +145,11 @@
     }
     function showExercise(data){
       var p=P(); if(!p||!rhythmImage)return; try{p.stop();}catch(e){} stopClock(); cursor.stop(); lastData=data;
-      var rhythm=new MusicRhythm(data); rhythmImage.setRhythm(rhythm); renderedRhythm=rhythmImage.getRhythm(); p.setRhythm(renderedRhythm);
+      var rhythm=new MusicRhythm(data);
+      var _oz=rhythmImage.getZoom();
+      rhythmImage.setZoom(0.35); rhythmImage.setRhythm(rhythm);
+      rhythmImage.setZoom(_oz); rhythm=new MusicRhythm(data); rhythmImage.setRhythm(rhythm);
+      renderedRhythm=rhythmImage.getRhythm(); p.setRhythm(renderedRhythm);
       applyTempo(); if(!settings.metroSound||settings.master){try{p.removeMetronome();}catch(e){}}
       try{p.setMarkNotesDuringTapping(!!settings.marks);}catch(e){}
       rhythmImage.showInfoBox(true); p.showButton();
