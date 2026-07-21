@@ -944,8 +944,7 @@ label.metro-field:has([data-metro-beats]){display:none !important}
   injectNavControls();
   $$('[data-metro-lights]').forEach(function(d){ d.style.display=settings.dots?'':'none'; });
   
-  /* Listen = play the rhythm through with the cursor, no tapping (uses engine includePlaying pass) */
-  $$('[data-listen]').forEach(function(b){ b.addEventListener('click',function(e){ e.preventDefault(); e.stopPropagation(); post({type:'praxis-metro',playing:true,tempo:tempo}); }); });
+  /* Listen handled by separate capture-phase script below */
   /* Line cursor + marks settings */
   if(settings.cursor!==undefined){settings.dots=settings.cursor;delete settings.cursor;}
   if(settings.lineCursor===undefined)settings.lineCursor=true;

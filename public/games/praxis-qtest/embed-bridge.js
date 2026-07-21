@@ -178,7 +178,7 @@
       else if(d.type==='praxis-bars'){ var nb=d.bars||8; if(nb===numBars)return; numBars=nb; hardStop(); exerciseCount++; showExercise(randRhythm()); if(playing)beginPlay(); }
       else if(d.type==='praxis-split'){ splitMode=d.split||'2s'; owner=computeSplit(numBars,splitMode); postSplit(); renderAB(); renderAids(); }
       else if(d.type==='praxis-aid'){ aidMode=d.mode||'none'; renderAids(); }
-      else if(d.type==='praxis-listen'){if(listenMode&&playing){listenMode=false;hardStop();flowState='done';post({type:'drill-state',playing:false,mode:'listen'});}else{listenMode=true;if(flowState==='showing'){beginPlay();}else{exerciseCount++;showExercise(randRhythm());beginPlay();}}}
+      else if(d.type==='praxis-listen'){unlockAudio();if(listenMode&&playing){listenMode=false;hardStop();flowState='done';post({type:'drill-state',playing:false,mode:'listen'});}else{listenMode=true;if(flowState==='showing'){beginPlay();}else{exerciseCount++;showExercise(randRhythm());beginPlay();}}}
       else if(d.type==='praxis-mute'){ try{if(window.Howler)window.Howler.mute(!!d.muted);}catch(e){} }
       else if(d.type==='praxis-settings'){ if(d.settings){ for(var k in d.settings){ if(k in settings)settings[k]=d.settings[k]; } if('lineCursor' in d.settings)settings.cursor=d.settings.lineCursor; } try{P().setMarkNotesDuringTapping(!!settings.marks);if(!settings.marks&&rhythmImage)rhythmImage.removeAllLabels();}catch(e){} renderAB(); }
     });
@@ -228,7 +228,7 @@
       var rhythm=new MusicRhythm(data); rhythmImage.setRhythm(rhythm); renderedRhythm=rhythmImage.getRhythm(); p.setRhythm(renderedRhythm);
       applyTempo(); if(!fsettings.metroSound||fsettings.master){try{p.removeMetronome();}catch(e){}}
       try{p.setMarkNotesDuringTapping(!!fsettings.marks);}catch(e){}
-      rhythmImage.showInfoBox(true); p.showButton();
+      rhythmImage.showInfoBox(true); p.hideButton();
       flowState='showing'; setInfo('Click to start','','1'); post({type:'praxis-new-exercise'}); renderAids(); setTimeout(renderAids,160); watchOverlays(refreshOverlays); }
     function nextExercise(){ exerciseCount++; showExercise(randRhythm()); post({type:'drill-state',playing:false,exercise:exerciseCount}); }
     function unlockAudio(){ try{ if(window.Howler&&window.Howler.ctx&&window.Howler.ctx.state==='suspended')window.Howler.ctx.resume(); }catch(e){} if(audioUnlocked)return;
@@ -252,7 +252,7 @@
       else if(d.type==='praxis-aid'){ aidMode=d.mode||'none'; renderAids(); }
       else if(d.type==='praxis-listen'){if(listenMode&&playing){listenMode=false;hardStop();flowState='done';post({type:'drill-state',playing:false,mode:'listen'});}else{listenMode=true;if(flowState==='showing'){beginPlay();}else{exerciseCount++;showExercise(randRhythm());beginPlay();}}}
       else if(d.type==='praxis-mute'){ try{if(window.Howler)window.Howler.mute(!!d.muted);}catch(e){} }
-      else if(d.type==='praxis-settings'){ if(d.settings){ if('metroSound' in d.settings)fsettings.metroSound=d.settings.metroSound; if('master' in d.settings)fsettings.master=d.settings.master; if('marks' in d.settings)fsettings.marks=d.settings.marks; if('lineCursor' in d.settings)fsettings.lineCursor=d.settings.lineCursor; } try{P().setMarkNotesDuringTapping(!!fsettings.marks);}catch(e){} }
+      else if(d.type==='praxis-settings'){ if(d.settings){ if('metroSound' in d.settings)fsettings.metroSound=d.settings.metroSound; if('master' in d.settings)fsettings.master=d.settings.master; if('marks' in d.settings)fsettings.marks=d.settings.marks; if('lineCursor' in d.settings){fsettings.lineCursor=d.settings.lineCursor;fsettings.cursor=d.settings.lineCursor;} } try{P().setMarkNotesDuringTapping(!!fsettings.marks);}catch(e){} }
     });
     (function(){ var hidden=false; function tryHide(){ if(hidden)return; var els=document.querySelectorAll('*'),i; for(i=0;i<els.length;i++){ var el=els[i]; if(el.children.length<=6&&/TEMPO/i.test(el.textContent)&&el.textContent.length<40){ var pEl=el,j; for(j=0;j<4&&pEl.parentElement;j++)pEl=pEl.parentElement; pEl.style.setProperty('display','none','important'); hidden=true; return; } } } try{var obs=new MutationObserver(function(){tryHide();});obs.observe(document.documentElement,{childList:true,subtree:true});}catch(e){} setTimeout(tryHide,1500);setTimeout(tryHide,4000);setTimeout(tryHide,9000); })();
     window.addEventListener('load',function(){ setTimeout(function(){

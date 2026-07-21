@@ -227,7 +227,7 @@
 
     var ciTimer=null;
     function parentCountIn(){ if(settings.master||muted)return; clearInterval(ciTimer); var i=0, step=60000/tempo; function tick(){ blip(i===0?1046:784, i===0?.16:.10, .07); i++; if(i>=4)clearInterval(ciTimer); } tick(); ciTimer=setInterval(tick,step); }
-    function doToggle(){ playing=!playing; setToggle(); postMetro(); if(playing){ if(drawing)setDrawing(false); parentCountIn(); } else { clearInterval(ciTimer); idleVisuals(); } }
+    function doToggle(){ playing=!playing; setToggle(); postMetro(); if(playing){ if(drawing)setDrawing(false); } else { clearInterval(ciTimer); idleVisuals(); } }
 
     /* ---- nav draw/aid visibility (gated by settings) ---- */
     function applyShowToggles(){ $$('.js-draw-toggle').forEach(function(b){ b.style.display=settings.showDraw?'':'none'; }); $$('.js-aid-wrap').forEach(function(w){ w.style.display=settings.showAid?'':'none'; }); if(canvas) canvas.style.display=settings.showDraw?'':'none'; }
