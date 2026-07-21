@@ -37,6 +37,8 @@
   .row select{font:inherit;border:1px solid var(--line2);border-radius:6px;padding:3px 6px;background:#fff}
   .stage{position:relative;width:100%;height:calc(100vh - 110px);min-height:360px;overflow:hidden;background:#fff}
   #track{position:absolute;inset:0;width:100%;height:100%;display:block}
+  .jumpbtn{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);z-index:7;font:inherit;font-weight:800;font-size:13px;letter-spacing:1px;color:#fff;background:rgba(28,25,23,.82);border:none;border-radius:999px;padding:12px 30px;cursor:pointer;user-select:none;-webkit-user-select:none;touch-action:manipulation;box-shadow:0 6px 18px rgba(0,0,0,.18);opacity:.92}
+  .jumpbtn:active{transform:translateX(-50%) scale(.95);background:rgba(28,25,23,.95)}
   .ov{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:8;padding:18px}
   #ready{background:rgba(255,255,255,.55)}
   .card{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 18px 50px rgba(0,0,0,.16);padding:22px 26px;max-width:420px;width:100%;text-align:center}
@@ -46,6 +48,7 @@
     .topbar nav{gap:14px;font-size:12px}
     .brand .eyebrow{display:none}
     .brand .sep{display:none}
+    .jumpbtn{padding:14px 38px;font-size:14px;bottom:14px}
   }
 </style>
 </head>
@@ -80,6 +83,7 @@
 
   <div class="stage" id="stage">
     <canvas id="track"></canvas>
+    <button id="jumpBtn" class="jumpbtn" aria-label="jump">▲ JUMP</button>
     <div class="ov" id="ready">
       <div class="card">
         <div class="big">RHYTHM&nbsp;RUNNER</div>
@@ -94,13 +98,12 @@ var SHOW_DINO=true, METRO=true, PULSE=true, MARKS=true;
 var LEAD = 4, bpm = 92;
 var HI_KEY = 'rr_hi_v1';
 var INK = '#1a1a1a', BODY = '#535353', EYE = '#ffffff', HURT_RED = '#dc2626';
-var TAP_EARLY = 0.20, TAP_LATE = 0.18, DEADLINE = 0.22;
 var MAX_LEVEL = 5;
 
 var stage=document.getElementById('stage'), canvas=document.getElementById('track'), ctx=canvas.getContext('2d');
 var playBtn=document.getElementById('playBtn'), tempoEl=document.getElementById('tempo'), bpmEl=document.getElementById('bpm');
 var gearBtn=document.getElementById('gearBtn'), panel=document.getElementById('panel');
-var readyEl=document.getElementById('ready');
+var readyEl=document.getElementById('ready'), jumpBtn=document.getElementById('jumpBtn');
 
 var W=0,H=0,dpr=1, M={};
 function clamp(v,a,b){return v<a?a:(v>b?b:v);}
@@ -121,7 +124,7 @@ function resize(){
   var dinoH=23*ps;
   var stemH=48*s;
   var headR=9*s;
-  var jumpJ=stemH + headR + 22*s;
+  var jumpJ=stemH + headR + 26*s;
   if(jumpJ > groundY - dinoH - 10) jumpJ=Math.max(48, groundY - dinoH - 10);
   M={ scale:s, ps:ps, headR:headR, stemH:stemH, beamTh:6*s, pxPerBeat:124*s, groundY:groundY, centerX:Math.round(W/2), dinoW:22*ps, dinoH:dinoH, jumpJ:jumpJ };
 }
@@ -339,15 +342,6 @@ function registerClear(n, now){
   n.resolved=true; n.judged='hit'; streak++; bumpHi(streak);
   if(streak%10===0){ milestoneT=now; sfx('ding'); }
 }
-function judgeTap(){
-  var cb=curBeatNow(), best=null, bestD=1e9;
-  for(var i=0;i<notes.length;i++){
-    var n=notes[i]; if(n.resolved||n.rest) continue;
-    var d=cb - n.beat;
-    if(d>=-TAP_EARLY && d<=TAP_LATE){ var ad=Math.abs(d); if(ad<bestD){ bestD=ad; best=n; } }
-  }
-  if(best) registerClear(best, performance.now());
-}
 function doJump(){
   if(!playing||jumping) return;
   jumping=true; jumpStart=performance.now();
@@ -355,22 +349,26 @@ function doJump(){
   sfx('jump');
 }
 function actionPrimary(){
-  if(!playing){ start(); return; }
-  judgeTap();
+  if(!playing) start();
   doJump();
 }
 
 function updateNotes(cb, now){
-  var cx=M.centerX, ps=M.ps, bodyL=cx-2*ps, bodyR=cx+7*ps, hr=M.headR, sc=M.scale, grace=hr*0.8;
+  if(cb < LEAD) return;
+  var cx=M.centerX, ps=M.ps;
+  var bodyL = cx + 2*ps, bodyR = cx + 9*ps;
+  var feet = M.groundY + yOff;
+  var grace = M.headR*0.5;
   for(var i=0;i<notes.length;i++){
     var n=notes[i]; if(n.resolved||n.rest) continue;
-    var nx=cx + (n.beat-cb)*M.pxPerBeat;
-    var noteL=nx-hr, noteR=nx+hr*0.8+4*sc;
-    var obsH=(n.len>=576)?(hr*1.6):M.stemH;
-    if(noteL<=bodyR && noteR>=bodyL){
-      if((M.groundY+yOff) <= (M.groundY - obsH + grace)) n.air=true;
+    var nx = cx + (n.beat - cb)*M.pxPerBeat;
+    var noteL = nx - M.headR;
+    var noteR = nx + M.headR*0.8 + 4*M.scale;
+    var obsH = (n.len>=576) ? (M.headR*1.6) : M.stemH;
+    if(noteL <= bodyR && noteR >= bodyL){
+      if(feet <= (M.groundY - obsH + grace)) n.air = true;
     }
-    if(cb >= n.beat + DEADLINE){
+    if(noteR < bodyL){
       if(n.air) registerClear(n, now);
       else registerMiss(n, now, cb);
     }
@@ -405,7 +403,7 @@ function drawNote(x,n){
     else { ctx.beginPath(); ctx.moveTo(x-4*s,my-4*s); ctx.lineTo(x+4*s,my+4*s); ctx.moveTo(x+4*s,my-4*s); ctx.lineTo(x-4*s,my+4*s); ctx.stroke(); }
   }
   if(settings.aid!=='none' && !n.rest){
-    var bib=((n.beatInBar%4)+4)%4, num=Math.floor(bib)+1, plus=(bib%1)>=0.5;
+    var bib=((n.beatInBar%4)+4)%4, plus=(bib%1)>=0.5;
     var lab = plus ? 'ti' : 'ta';
     ctx.fillStyle='#9a948b'; ctx.font='700 '+Math.round(11*s)+'px system-ui,sans-serif'; ctx.textAlign='center';
     ctx.fillText(lab, x, M.groundY+35*s);
@@ -514,10 +512,10 @@ function frame(now){
     var bi=Math.floor(cb+1e-6);
     if(bi!==lastBeatInt){ lastBeatInt=bi; pulseT=now; }
     if(jumping){
-      var D=clamp(0.45*secPerBeat + 0.32, 0.46, 0.70);
+      var D=clamp(0.55*secPerBeat + 0.28, 0.46, 0.70);
       var p=(now-jumpStart)/D;
       if(p>=1){ jumping=false; yOff=0; sqX=1.06; sqY=0.94; }
-      else { yOff = -M.jumpJ*Math.sin(Math.PI*p); if(p<0.10){ sqX=0.96; sqY=1.05; } }
+      else { yOff = -M.jumpJ*Math.sin(Math.PI*Math.pow(p,0.85)); if(p<0.10){ sqX=0.96; sqY=1.05; } }
     }
     var runningNow = cb>=LEAD && !jumping;
     if(runningNow){
@@ -539,6 +537,7 @@ gearBtn.addEventListener('click', function(e){ e.stopPropagation(); panel.classL
 document.addEventListener('pointerdown', function(e){ if(!panel.contains(e.target) && e.target!==gearBtn) panel.classList.remove('open'); });
 
 stage.addEventListener('pointerdown', function(e){ e.preventDefault(); actionPrimary(); });
+jumpBtn.addEventListener('pointerdown', function(e){ e.preventDefault(); e.stopPropagation(); actionPrimary(); jumpBtn.blur(); });
 
 window.addEventListener('keydown', function(e){
   if(e.repeat) return;

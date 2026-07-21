@@ -509,8 +509,8 @@ label.metro-field:has([data-metro-beats]){display:none !important}
         var DRILL='/games/rhythm-app/exercise/720/';
         Promise.all([
           fetch(DRILL).then(function(r){return r.text();}),
-          fetch('/games/praxis-qtest/embed-bridge.js?v=20260722e').then(function(r){return r.text();}).catch(function(){return '';}),
-          fetch('/games/praxis-qtest/embed-overrides.css?v=20260722e').then(function(r){return r.text();}).catch(function(){return '';})
+          fetch('/games/praxis-qtest/embed-bridge.js?v=20260722v4').then(function(r){return r.text();}).catch(function(){return '';}),
+          fetch('/games/praxis-qtest/embed-overrides.css?v=20260722v4').then(function(r){return r.text();}).catch(function(){return '';})
         ]).then(function(res){
           var h=res[0],bridge=res[1],ov=res[2];
           h=h.replace(/if\s*\(\s*top\s*==\s*self\s*\)/g,'if(true)');
