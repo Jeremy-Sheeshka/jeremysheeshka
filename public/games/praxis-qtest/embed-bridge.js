@@ -105,7 +105,7 @@
     var playing=false,audioUnlocked=false,rhythmObj=null,rhythmImage=null,renderedRhythm=null;
     var flowState="init",exerciseCount=0,numBars=4,currentTempo=88;
     var fsettings={metroSound:true,master:false,marks:true,cursor:true};
-    var aidMode="none",listenMode=false,baseCfg=null;
+    var aidMode="none",runId=0,completedId=-1,listenMode=false,baseCfg=null;
     function P(){return window.MusicRhythmPlayer||null;}
     var cursor=makeCursor(function(){return fsettings.cursor;});
     (function(){var p=P();if(!p)return;var origInit=p.initialisation;
