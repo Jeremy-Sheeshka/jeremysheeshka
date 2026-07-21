@@ -16,7 +16,7 @@
     function hide(){if(line)line.setAttribute("opacity","0");}
     function buildRows(){rows=null;if(!rr||!rr.bars)return;var pts=[],b,c;for(b=0;b<rr.bars.length;b++){var comps=rr.bars[b].components||[];for(c=0;c<comps.length;c++){var co=comps[c];if(!co||co.rest)continue;var x=co.x,y=co.y;if(!(isFinite(x)&&isFinite(y)))continue;pts.push({x:x,y:y,pos:b*576+(co.position||0)});}}if(!pts.length)return;pts.sort(function(a,b){return (a.y-b.y)||(a.pos-b.pos);});var clusters=[],cur=[pts[0]],cy=pts[0].y,TH=20,i;for(i=1;i<pts.length;i++){if(Math.abs(pts[i].y-cy)<=TH){cur.push(pts[i]);}else{clusters.push(cur);cur=[pts[i]];cy=pts[i].y;}}clusters.push(cur);var R=[],k;for(k=0;k<clusters.length;k++){var cl=clusters[k];cl.sort(function(a,b){return a.pos-b.pos;});var ys=0,minY=1e9,maxY=-1e9;for(i=0;i<cl.length;i++){ys+=cl[i].y;if(cl[i].y<minY)minY=cl[i].y;if(cl[i].y>maxY)maxY=cl[i].y;}R.push({y:ys/cl.length,minY:minY,maxY:maxY,firstPos:cl[0].pos,lastPos:cl[cl.length-1].pos,pts:cl});}R.sort(function(a,b){return a.firstPos-b.firstPos;});for(k=0;k<R.length;k++){var gap=(k+1<R.length)?(R[k+1].y-R[k].y):((k>0)?(R[k].y-R[k-1].y):120);var spread=R[k].maxY-R[k].minY;R[k].h=Math.max(60,Math.min(spread+70,gap>8?gap-8:200));}rows=R;if(dbg<2){console.log("[cursor] rows="+R.length+" ys="+R.map(function(r){return Math.round(r.y);}).join(","));}}
     function rowForPos(pos){if(!rows)return null;var k;for(k=0;k<rows.length;k++){var nx=(k+1<rows.length)?rows[k+1].firstPos:1e18;if(pos<rows[k].firstPos){return k>0?rows[k-1]:rows[k];}if(pos<nx)return rows[k];}return rows[rows.length-1];}
-    function xForPos(row,pos){var p=row.pts,i;for(i=0;i<p.length-1;i++){if(pos>=p[i].pos&&pos<=p[i+1].pos){var span=(p[i+1].pos-p[i].pos)||1;var t=(pos-p[i].pos)/span;return p[i].x+(p[i+1].x-p[i].x)*t;}}if(pos<=p[0].pos)return p[0].x;return p[p.length-1].x;}
+    function xForPos(row,pos){var p=row.pts,i;if(!p.length)return 0;if(p.length===1)return p[0].x;for(i=0;i<p.length-1;i++){if(pos>=p[i].pos&&pos<=p[i+1].pos){var span=(p[i+1].pos-p[i].pos)||1;var t=(pos-p[i].pos)/span;return p[i].x+(p[i+1].x-p[i].x)*t;}}if(pos<=p[0].pos)return p[0].x;var lastSpan=(p[p.length-1].pos-p[p.length-2].pos)||1;var extraT=(pos-p[p.length-1].pos)/lastSpan;return p[p.length-1].x+(p[p.length-1].x-p[p.length-2].x)*Math.min(extraT,2);}
     function frame(){if(getEnabled&&!getEnabled()){hide();raf=requestAnimationFrame(frame);return;}var svg=ensure();if(!svg){raf=requestAnimationFrame(frame);return;}if(playStart===null||!rr){hide();raf=requestAnimationFrame(frame);return;}if(!rows)buildRows();if(!rows){hide();raf=requestAnimationFrame(frame);return;}var elapsed=performance.now()-playStart;var msPerUnit=(60000/(tempo||88))/144;var cur=elapsed/msPerUnit;var total=rr.bars.length*576;if(cur>=total){hide();raf=requestAnimationFrame(frame);return;}var row=rowForPos(cur);if(!row){hide();raf=requestAnimationFrame(frame);return;}var x=xForPos(row,cur);line.setAttribute("x",x-1.5);line.setAttribute("y",row.y-row.h/2);line.setAttribute("height",row.h);line.setAttribute("opacity","0.95");if(dbg<3){console.log("[cursor] t="+Math.round(elapsed)+" cur="+cur.toFixed(1)+" x="+x.toFixed(1)+" rowY="+Math.round(row.y));dbg++;}raf=requestAnimationFrame(frame);}
     function play(rhythm,t){if(getEnabled&&!getEnabled()){return;}stop();if(rhythm)rr=rhythm;if(typeof t==="number")tempo=t;rows=null;playStart=performance.now();dbg=0;ensure();raf=requestAnimationFrame(frame);}
     function stop(){if(raf){cancelAnimationFrame(raf);raf=null;}playStart=null;hide();}
@@ -49,6 +49,7 @@
   })();
   var PLAY_FLAGS={includeCountIn:true,includePlaying:false,includeTapping:true,includeCountOut:false};
   var LISTEN_FLAGS={includeCountIn:true,includePlaying:true,includeTapping:false,includeCountOut:false};
+  var currentFlags=PLAY_FLAGS;
 
   if(IS_COOP){
   (function(){
@@ -67,7 +68,7 @@
         var src=baseCfg||cfg;if(!baseCfg)baseCfg=cfg;var useCfg={};for(var k in src){if(Object.prototype.hasOwnProperty.call(src,k))useCfg[k]=src[k];}
         if(cfg&&cfg.rhythmImage)rhythmImage=cfg.rhythmImage;
         useCfg.elementWithButton=null;useCfg.unitsPerStep=72;
-        useCfg.includeCountIn=PLAY_FLAGS.includeCountIn;useCfg.includePlaying=PLAY_FLAGS.includePlaying;useCfg.includeTapping=PLAY_FLAGS.includeTapping;useCfg.includeCountOut=PLAY_FLAGS.includeCountOut;
+        useCfg.includeCountIn=currentFlags.includeCountIn;useCfg.includePlaying=currentFlags.includePlaying;useCfg.includeTapping=currentFlags.includeTapping;useCfg.includeCountOut=currentFlags.includeCountOut;
         useCfg.markNotesDuringTapping=!!settings.marks;
         useCfg.finishedTappingCallback=function(){completeExercise();};
         useCfg.afterStoppingCallback=function(){completeExercise();};
@@ -83,7 +84,7 @@
       };
       var origSR=p.setRhythm;p.setRhythm=function(t){rhythmObj=t;return origSR.apply(this,arguments);};
     })();
-    function reinit(flags){PLAY_FLAGS=flags;try{P().initialisation(baseCfg||{});}catch(e){console.log("[bridge] reinit err",e&&e.message);}}
+    function reinit(flags){currentFlags=flags;try{P().initialisation(baseCfg||{});}catch(e){console.log("[bridge] reinit err",e&&e.message);}}
     function applyRhythm(){var p=P();if(!p||!renderedRhythm)return;p.setRhythm(renderedRhythm);if(!settings.metroSound||settings.master){try{p.removeMetronome();}catch(e){}}try{p.setMarkNotesDuringTapping(!!settings.marks);}catch(e){}}
     function randBar(){var beats=[],i;for(i=0;i<4;i++){if(Math.random()<0.30)beats.push([{length:72,rest:false},{length:72,rest:false}]);else beats.push([{length:144,rest:false}]);}var comps=[],idx=0;while(idx<4){var rem=4-idx,r=Math.random(),g=1;if(rem>=4&&r<0.10)g=4;else if(rem>=2&&r<0.32)g=2;if(g===4)comps.push({length:576,rest:false});else if(g===2)comps.push({length:288,rest:false});else comps=comps.concat(beats[idx]);idx+=g;}return {components:comps};}
     function randRhythm(){var bars=[],i;for(i=0;i<numBars;i++)bars.push(randBar());return {metricalStructure:"4/4",bars:bars};}
@@ -138,7 +139,7 @@
         var src=baseCfg||cfg;if(!baseCfg)baseCfg=cfg;var useCfg={};for(var k in src){if(Object.prototype.hasOwnProperty.call(src,k))useCfg[k]=src[k];}
         if(cfg&&cfg.rhythmImage)rhythmImage=cfg.rhythmImage;
         useCfg.elementWithButton=null;useCfg.unitsPerStep=72;
-        useCfg.includeCountIn=PLAY_FLAGS.includeCountIn;useCfg.includePlaying=PLAY_FLAGS.includePlaying;useCfg.includeTapping=PLAY_FLAGS.includeTapping;useCfg.includeCountOut=PLAY_FLAGS.includeCountOut;
+        useCfg.includeCountIn=currentFlags.includeCountIn;useCfg.includePlaying=currentFlags.includePlaying;useCfg.includeTapping=currentFlags.includeTapping;useCfg.includeCountOut=currentFlags.includeCountOut;
         useCfg.markNotesDuringTapping=!!fsettings.marks;
         useCfg.finishedTappingCallback=function(){completeExercise();};
         useCfg.afterStoppingCallback=function(){completeExercise();};
@@ -154,7 +155,7 @@
       };
       var origSR=p.setRhythm;p.setRhythm=function(t){rhythmObj=t;return origSR.apply(this,arguments);};
     })();
-    function reinit(flags){PLAY_FLAGS=flags;try{P().initialisation(baseCfg||{});}catch(e){console.log("[bridge] reinit err",e&&e.message);}}
+    function reinit(flags){currentFlags=flags;try{P().initialisation(baseCfg||{});}catch(e){console.log("[bridge] reinit err",e&&e.message);}}
     function applyRhythm(){var p=P();if(!p||!renderedRhythm)return;p.setRhythm(renderedRhythm);if(!fsettings.metroSound||fsettings.master){try{p.removeMetronome();}catch(e){}}try{p.setMarkNotesDuringTapping(!!fsettings.marks);}catch(e){}}
     function randBar(){var beats=[],i;for(i=0;i<4;i++){if(Math.random()<0.30)beats.push([{length:72,rest:false},{length:72,rest:false}]);else beats.push([{length:144,rest:false}]);}var comps=[],idx=0;while(idx<4){var rem=4-idx,r=Math.random(),g=1;if(rem>=4&&r<0.10)g=4;else if(rem>=2&&r<0.32)g=2;if(g===4)comps.push({length:576,rest:false});else if(g===2)comps.push({length:288,rest:false});else comps=comps.concat(beats[idx]);idx+=g;}return {components:comps};}
     function randRhythm(){var bars=[],i;for(i=0;i<numBars;i++)bars.push(randBar());return {metricalStructure:"4/4",bars:bars};}

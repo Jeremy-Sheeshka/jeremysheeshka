@@ -95,14 +95,14 @@
   </div>
 
 <script>
-var BUILD = 'RR v15';
+var BUILD = 'RR v17';
 var settings = { aid:'none' };
 var SHOW_DINO=true, METRO=true, PULSE=true, MARKS=true;
 var LEAD = 4, bpm = 92;
 var HI_KEY = 'rr_hi_v1';
 var INK = '#1a1a1a', BODY = '#535353', EYE = '#ffffff', HURT_RED = '#dc2626';
 var MAX_LEVEL = 5;
-var TAP_EARLY = 0.38, TAP_LATE = 0.10, MISS_AT = 0.12;
+var TAP_EARLY = 0.22, TAP_LATE = 0.22, MISS_AT = 0.30;
 
 var stage=document.getElementById('stage'), canvas=document.getElementById('track'), ctx=canvas.getContext('2d');
 var playBtn=document.getElementById('playBtn'), tempoEl=document.getElementById('tempo'), bpmEl=document.getElementById('bpm');
@@ -391,7 +391,7 @@ function actionPrimary(src){
 function updateNotes(cb, now){
   if(cb < LEAD) return;
   var cx=M.centerX, ps=M.ps;
-  var bodyL=cx-1*ps, bodyR=cx+10*ps;
+  var bodyL=cx-1*ps, bodyR=cx+8*ps;
   var feet=M.groundY + yOff;
   for(var i=0;i<notes.length;i++){
     var n=notes[i]; if(n.resolved||n.rest) continue;
@@ -402,7 +402,7 @@ function updateNotes(cb, now){
       if(feet <= M.groundY - obsH*0.30) n.air=true;
     }
     if(cb >= n.beat + MISS_AT){
-      if(n.tapped || n.air) registerClear(n, now);
+      if(n.tapped || (n.air && n.len !== 72)) registerClear(n, now);
       else registerMiss(n, now, cb);
     }
   }
@@ -554,7 +554,8 @@ function frame(now){
         if(p>=1){
           jumping=false; bouncing=false; yOff=0; sqX=1.06; sqY=0.94;
         } else {
-          yOff = jumpFromY*(1-p) - jumpH*Math.sin(Math.PI*p);
+          var pe=Math.pow(p,0.62);
+          yOff = jumpFromY*(1-p) - jumpH*Math.sin(Math.PI*pe);
           if(p<0.10){ sqX=0.97; sqY=1.04; }
         }
       }
