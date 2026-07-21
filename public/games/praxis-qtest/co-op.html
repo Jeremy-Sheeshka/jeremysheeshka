@@ -162,8 +162,7 @@
     .then(function(res){
       var h=res[0], bridge=res[1], ov=res[2];
       console.log('[praxis-coop] loaded drill='+(h?h.length:0)+' bridge='+(bridge?bridge.length:0)+' css='+(ov?ov.length:0));
-      if(!h){ f.srcdoc='<html><body style="font-family:system-ui;padding:2rem;color:#666"><p>Could not load the exercise (drill fetch failed).</p>
-</body></html>'; return; }
+      if(!h){ f.srcdoc='<html><body style="font-family:system-ui;padding:2rem;color:#666"><p>Could not load the exercise (drill fetch failed).</p></body></html>'; return; }
       h=stripBust(h);
       if(ov && h.indexOf('</head>')!==-1) h=h.replace('</head>','<style>'+ov+'</style></head>');
       if(bridge){ bridge=bridge.replace(/<\/script/gi,'<\\/script'); var inj='<scr'+'ipt>window.__PRAXIS_COOP=true;console.log("[coop-bridge] injected ok");</scr'+'ipt><scr'+'ipt>'+bridge+'</scr'+'ipt>'; h=(h.indexOf('</body>')!==-1)?h.replace('</body>',inj+'</body>'):h+inj; }
