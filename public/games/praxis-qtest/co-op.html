@@ -307,17 +307,15 @@
 (function(){
   var listening=false,frame=document.getElementById('drill-frame');
   function post(m){if(frame&&frame.contentWindow)frame.contentWindow.postMessage(m,'*');}
+  function setBtn(){document.querySelectorAll('[data-listen]').forEach(function(b){b.textContent=listening?'Stop':'Listen';b.classList.toggle('active',listening);});}
   document.addEventListener('click',function(e){
     var btn=e.target.closest?e.target.closest('[data-listen]'):null;
     if(!btn)return; e.stopImmediatePropagation(); e.preventDefault();
-    post({type:'praxis-listen'});
+    listening=!listening; setBtn(); post({type:'praxis-listen'});
   },true);
   window.addEventListener('message',function(ev){
     var d=ev.data; if(!d||d.type!=='drill-state')return;
-    listening=!!d.playing;
-    document.querySelectorAll('[data-listen]').forEach(function(b){
-      b.textContent=listening?'Stop':'Listen'; b.classList.toggle('active',listening);
-    });
+    if(!d.playing && listening){ listening=false; setBtn(); }
   });
 })();
 </script>
