@@ -509,8 +509,8 @@ label.metro-field:has([data-metro-beats]){display:none !important}
         var DRILL='/games/rhythm-app/exercise/720/';
         Promise.all([
           fetch(DRILL).then(function(r){return r.text();}),
-          fetch('/games/praxis-qtest/embed-bridge.js').then(function(r){return r.text();}).catch(function(){return '';}),
-          fetch('/games/praxis-qtest/embed-overrides.css').then(function(r){return r.text();}).catch(function(){return '';})
+          fetch('/games/praxis-qtest/embed-bridge.js?v=20260722a').then(function(r){return r.text();}).catch(function(){return '';}),
+          fetch('/games/praxis-qtest/embed-overrides.css?v=20260722a').then(function(r){return r.text();}).catch(function(){return '';})
         ]).then(function(res){
           var h=res[0],bridge=res[1],ov=res[2];
           h=h.replace(/if\s*\(\s*top\s*==\s*self\s*\)/g,'if(true)');
@@ -607,183 +607,7 @@ label.metro-field:has([data-metro-beats]){display:none !important}
     </div>
   </footer>
 
-  <script>
-    (function () {
-      const params = new URLSearchParams(window.location.search);
-
-      const state = {
-        tempo: clamp(parseInt(params.get("tempo"), 10) || 88, 40, 208),
-        beats: clamp(parseInt(params.get("beats"), 10) || 4, 2, 7),
-        playing: false,
-        currentBeat: 0,
-        nextNoteTime: 0,
-        timerId: null,
-        audioCtx: null,
-        session: 0
-      };
-
-      const toggleButtons = Array.from(document.querySelectorAll("[data-metro-toggle]"));
-      const tempoInputs = Array.from(document.querySelectorAll("[data-metro-tempo]"));
-      const bpmOutputs = Array.from(document.querySelectorAll("[data-metro-bpm]"));
-      const beatsSelects = Array.from(document.querySelectorAll("[data-metro-beats]"));
-      const lightContainers = Array.from(document.querySelectorAll("[data-metro-lights]"));
-
-      function clamp(value, min, max) {
-        if (Number.isNaN(value)) return min;
-        return Math.min(max, Math.max(min, value));
-      }
-
-      function ensureAudioContext() {
-        if (!state.audioCtx) {
-          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-          if (!AudioContextClass) return null;
-          state.audioCtx = new AudioContextClass();
-        }
-
-        if (state.audioCtx.state === "suspended") {
-          state.audioCtx.resume();
-        }
-
-        return state.audioCtx;
-      }
-
-      function scheduleClick(time, isAccent) { /* metronome sound handled by engine */ }
-
-      function rebuildLights() {
-        lightContainers.forEach((container) => {
-          container.innerHTML = "";
-
-          for (let i = 0; i < state.beats; i += 1) {
-            const dot = document.createElement("i");
-            if (i === 0) dot.classList.add("accent");
-            container.appendChild(dot);
-          }
-        });
-      }
-
-      function updateLights(activeBeat) {
-        lightContainers.forEach((container) => {
-          Array.from(container.children).forEach((dot, index) => {
-            dot.classList.toggle("on", index === activeBeat);
-          });
-        });
-      }
-
-      function updateControls() {
-        toggleButtons.forEach((button) => {
-          button.textContent = state.playing ? "Stop" : "Play";
-          button.classList.toggle("active", state.playing);
-          button.setAttribute("aria-pressed", String(state.playing));
-        });
-
-        tempoInputs.forEach((input) => {
-          input.value = String(state.tempo);
-        });
-
-        bpmOutputs.forEach((output) => {
-          output.textContent = `${state.tempo} BPM`;
-        });
-
-        beatsSelects.forEach((select) => {
-          select.value = String(state.beats);
-        });
-      }
-
-      function advanceNote() {
-        const secondsPerBeat = 60.0 / state.tempo;
-        state.nextNoteTime += secondsPerBeat;
-        state.currentBeat = (state.currentBeat + 1) % state.beats;
-      }
-
-      function scheduler() {
-        const ctx = state.audioCtx;
-        if (!ctx) return;
-
-        const session = state.session;
-        const scheduleAheadTime = 0.12;
-        const lookahead = 25;
-
-        while (state.nextNoteTime < ctx.currentTime + scheduleAheadTime) {
-          const beatToDraw = state.currentBeat;
-          const timeToDraw = state.nextNoteTime;
-
-          scheduleClick(state.nextNoteTime, state.currentBeat === 0);
-
-          const delay = Math.max(0, (timeToDraw - ctx.currentTime) * 1000);
-          window.setTimeout(() => {
-            if (state.session === session && state.playing) {
-              updateLights(beatToDraw);
-            }
-          }, delay);
-
-          advanceNote();
-        }
-
-        state.timerId = window.setTimeout(scheduler, lookahead);
-      }
-
-      function start() {
-        const ctx = ensureAudioContext();
-        if (!ctx) return;
-
-        state.session += 1;
-        state.playing = true;
-        state.currentBeat = 0;
-        state.nextNoteTime = ctx.currentTime + 0.08;
-
-        updateControls();
-        scheduler();
-      }
-
-      function stop() {
-        state.session += 1;
-        state.playing = false;
-
-        if (state.timerId) {
-          window.clearTimeout(state.timerId);
-          state.timerId = null;
-        }
-
-        updateLights(-1);
-        updateControls();
-      }
-
-      toggleButtons.forEach((button) => {
-        button.addEventListener("click", () => {
-          if (state.playing) {
-            stop();
-          } else {
-            start();
-          }
-        });
-      });
-
-      tempoInputs.forEach((input) => {
-        input.addEventListener("input", (event) => {
-          state.tempo = clamp(parseInt(event.target.value, 10), 40, 208);
-          updateControls();
-        });
-      });
-
-      beatsSelects.forEach((select) => {
-        select.addEventListener("change", (event) => {
-          state.beats = clamp(parseInt(event.target.value, 10), 2, 7);
-          state.currentBeat = 0;
-          rebuildLights();
-
-          if (!state.playing) {
-            updateLights(-1);
-          }
-
-          updateControls();
-        });
-      });
-
-      rebuildLights();
-      updateControls();
-      updateLights(-1);
-    })();
-  </script>
+  <!-- standalone metronome removed: engine metronome is the single source -->
 <script src="/games/praxis-qtest/metro-sender.js"></script>
 
 <!-- PRAXIS_FREEPLAY_EXTRAS_V1 -->
@@ -946,7 +770,7 @@ label.metro-field:has([data-metro-beats]){display:none !important}
 <script>
 (function(){
   var listening=false,frame=document.getElementById('drill-frame');
-  function post(m){if(frame&&frame.contentWindow)frame.contentWindow.postMessage(m,'*');}
+  function post(mm){if(frame&&frame.contentWindow)frame.contentWindow.postMessage(mm,'*');}
   function setBtn(){document.querySelectorAll('[data-listen]').forEach(function(b){b.textContent=listening?'Stop':'Listen';b.classList.toggle('active',listening);});}
   document.addEventListener('click',function(e){
     var btn=e.target.closest?e.target.closest('[data-listen]'):null;
@@ -955,7 +779,7 @@ label.metro-field:has([data-metro-beats]){display:none !important}
   },true);
   window.addEventListener('message',function(ev){
     var d=ev.data; if(!d||d.type!=='drill-state')return;
-    if(!d.playing && listening){ listening=false; setBtn(); }
+    if(d.mode==='listen' && !d.playing){ listening=false; setBtn(); }
   });
 })();
 </script>

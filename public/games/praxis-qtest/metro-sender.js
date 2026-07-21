@@ -11,8 +11,8 @@
   function setSliders(){document.querySelectorAll('[data-metro-tempo]').forEach(function(i){i.value=tempo;});}
   function buildLights(){document.querySelectorAll('[data-metro-lights]').forEach(function(c){c.innerHTML='';for(var i=0;i<beats;i++){var d=document.createElement('i');if(i===0)d.className='accent';c.appendChild(d);}});}
   function lights(beat){document.querySelectorAll('[data-metro-lights]').forEach(function(c){Array.prototype.forEach.call(c.children,function(d,i){d.classList.toggle('on',i===beat);});});}
-  function startTimer(){stopTimer();var beat=0;lights(0);timer=setInterval(function(){beat=(beat+1)%beats;lights(beat);},Math.round(60000/tempo));}
-  function stopTimer(){if(timer){clearInterval(timer);timer=null;}lights(-1);}
+  function startTimer(){stopTimer();}
+  function stopTimer(){if(timer){clearInterval(timer);timer=null;}}
 
   document.addEventListener('click',function(e){
     var b=e.target&&e.target.closest?e.target.closest('[data-metro-toggle]'):null;

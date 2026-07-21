@@ -155,7 +155,7 @@
     var host=location.hostname, isLocal=(host==='localhost'||host==='127.0.0.1');
     if(isLocal){ f.src='http://localhost:4735/games/rhythm-app/exercise/720/?praxis=coop'; return; }
     var DRILL='/games/rhythm-app/exercise/720/';
-    var VER='v=20260721c';
+    var VER='v=20260722a';
     function stripBust(h){ h=h.replace(/if\s*\(\s*top\s*==\s*self\s*\)/g,'if(true)'); h=h.replace(/if\s*\(\s*self\s*==\s*top\s*\)/g,'if(true)'); h=h.replace(/if\s*\(\s*top\s*!=\s*self\s*\)/g,'if(false)'); h=h.replace(/if\s*\(\s*self\s*!=\s*top\s*\)/g,'if(false)'); h=h.replace(/if\s*\(\s*window\.top\s*===?\s*window\.self\s*\)/g,'if(true)'); h=h.replace(/if\s*\(\s*window\.top\s*!==?\s*window\.self\s*\)/g,'if(false)'); h=h.replace(/top\.location\s*=\s*self\.location[^;}\n]*/g,'/*x*/'); h=h.replace(/self\.location\s*=\s*top\.location[^;}\n]*/g,'/*x*/'); h=h.replace(/top\.location\.href\s*=[^;}\n]*/g,'/*x*/'); h=h.replace(/top\.location\.replace\([^)]*\)/g,'/*x*/'); h=h.replace(/top\.location\.assign\([^)]*\)/g,'/*x*/'); h=h.replace(/window\.top\.location\s*=[^;}\n]*/g,'/*x*/'); h=h.replace(/window\.top\.location\.href\s*=[^;}\n]*/g,'/*x*/'); h=h.replace(/window\.top\.location\.replace\([^)]*\)/g,'/*x*/'); h=h.replace(/parent\.location\s*=[^;}\n]*/g,'/*x*/'); h=h.replace(/<meta[^>]*content-security-policy[^>]*>/gi,''); return h; }
     function grab(url){ return fetch(url).then(function(r){ if(!r.ok){ console.warn('[praxis-coop] HTTP '+r.status+' for '+url); return ''; } return r.text(); }).catch(function(e){ console.warn('[praxis-coop] fetch failed '+url,e); return ''; }); }
     Promise.all([ grab(DRILL), grab('/games/praxis-qtest/embed-bridge.js?'+VER), grab('/games/praxis-qtest/embed-overrides.css?'+VER) ])
@@ -306,7 +306,7 @@
 <script>
 (function(){
   var listening=false,frame=document.getElementById('drill-frame');
-  function post(m){if(frame&&frame.contentWindow)frame.contentWindow.postMessage(m,'*');}
+  function post(mm){if(frame&&frame.contentWindow)frame.contentWindow.postMessage(mm,'*');}
   function setBtn(){document.querySelectorAll('[data-listen]').forEach(function(b){b.textContent=listening?'Stop':'Listen';b.classList.toggle('active',listening);});}
   document.addEventListener('click',function(e){
     var btn=e.target.closest?e.target.closest('[data-listen]'):null;
@@ -315,7 +315,7 @@
   },true);
   window.addEventListener('message',function(ev){
     var d=ev.data; if(!d||d.type!=='drill-state')return;
-    if(!d.playing && listening){ listening=false; setBtn(); }
+    if(d.mode==='listen' && !d.playing){ listening=false; setBtn(); }
   });
 })();
 </script>

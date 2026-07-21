@@ -5,65 +5,59 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ETEC 531 — Rhythm Runner</title>
 <style>
-  :root{--paper:#f4f1ea;--ink:#1c1917;--accent:#1d4ed8;--danger:#dc2626;--good:#16a34a;--line:#cfc8ba;}
+  :root{--ink:#1c1917;--line:#e7e5e4;--line2:#d6d3d1;--mut:#78716c;--grey:#535353;}
   *{box-sizing:border-box}
   html,body{margin:0;height:100%}
-  body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--paper);color:var(--ink)}
-  /* top bar */
-  .topbar{display:flex;align-items:center;gap:14px;background:var(--ink);color:var(--paper);padding:10px 18px}
-  .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.5px}
-  .brand .mark{width:26px;height:26px;border:2px solid var(--paper);border-radius:6px;display:grid;place-items:center;font-size:12px}
-  .topbar nav{margin-left:auto;display:flex;gap:14px;font-size:13px}
-  .topbar nav a{color:#d6d0c4;text-decoration:none}
-  .topbar nav a:hover{color:#fff}
-  /* toolbar */
-  .toolbar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:#fff;border-bottom:1px solid var(--line);padding:10px 18px;position:relative}
-  button.btn{font:inherit;font-weight:700;border:1px solid var(--ink);background:#fff;color:var(--ink);border-radius:8px;padding:8px 16px;cursor:pointer}
-  button.btn:hover{background:#f0ede6}
-  button.btn.on{background:var(--ink);color:#fff}
-  #playBtn{min-width:96px}
-  .ctl{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600}
-  .ctl input[type=range]{width:150px}
-  .bpm{font-variant-numeric:tabular-nums;min-width:62px;text-align:right;font-weight:800}
+  body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#fff;color:var(--ink)}
+  /* ---- top bar (site theme: white) ---- */
+  .topbar{display:flex;align-items:center;gap:12px;background:#fff;border-bottom:1px solid var(--line);padding:9px 18px}
+  .brand{display:flex;align-items:center;gap:10px}
+  .brand .mark{width:30px;height:30px;background:var(--ink);color:#fff;border-radius:7px;display:grid;place-items:center;font-weight:900;font-size:12px;letter-spacing:.5px}
+  .brand .ttl{display:flex;flex-direction:column;line-height:1.05}
+  .brand .ttl b{font-size:14px;font-weight:800}
+  .brand .ttl span{font-size:11px;color:var(--mut)}
+  .topbar nav{margin-left:auto;display:flex;gap:18px;font-size:13px;font-weight:600}
+  .topbar nav a{color:var(--mut);text-decoration:none}
+  .topbar nav a:hover,.topbar nav a.cur{color:var(--ink)}
+  /* ---- toolbar ---- */
+  .toolbar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:#fff;border-bottom:1px solid var(--line);padding:9px 18px;position:relative}
+  button.btn{font:inherit;font-weight:700;font-size:13px;border:1px solid var(--line2);background:#fff;color:var(--ink);border-radius:8px;padding:8px 15px;cursor:pointer}
+  button.btn:hover{background:#f5f5f4}
+  button.btn.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+  #playBtn{min-width:104px}
+  .ctl{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:#44403c}
+  .ctl input[type=range]{width:150px;accent-color:var(--ink)}
+  .bpm{font-variant-numeric:tabular-nums;min-width:64px;text-align:right;font-weight:800;color:var(--ink)}
   .gearwrap{margin-left:auto;position:relative}
-  .hint{font-size:12px;color:#6b6256;padding:6px 18px;background:#fff;border-bottom:1px solid var(--line)}
+  .hint{font-size:12px;color:var(--mut);padding:6px 18px;background:#fff;border-bottom:1px solid var(--line)}
   .hint b{color:var(--ink)}
-  /* settings panel */
-  .panel{position:absolute;right:0;top:42px;width:268px;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 30px rgba(0,0,0,.18);padding:8px 4px;z-index:30;display:none}
+  /* ---- settings panel ---- */
+  .panel{position:absolute;right:0;top:42px;width:272px;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 14px 34px rgba(0,0,0,.14);padding:6px 4px;z-index:30;display:none}
   .panel.open{display:block}
-  .panel h4{margin:6px 12px;font-size:11px;letter-spacing:1px;color:#8a8174}
+  .panel h4{margin:7px 12px 4px;font-size:10px;letter-spacing:1.4px;color:#a8a29e}
   .row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 12px;font-size:13px}
-  .row:hover{background:#f6f3ec}
-  .row select{font:inherit;border:1px solid var(--line);border-radius:6px;padding:3px 6px;background:#fff}
+  .row:hover{background:#fafaf9}
+  .row select{font:inherit;border:1px solid var(--line2);border-radius:6px;padding:3px 6px;background:#fff}
   .sw{position:relative;width:38px;height:22px;flex:0 0 auto}
   .sw input{position:absolute;opacity:0;width:100%;height:100%;margin:0;cursor:pointer}
   .sw .track{position:absolute;inset:0;background:#d8d2c6;border-radius:999px;transition:.2s}
   .sw .knob{position:absolute;top:2px;left:2px;width:18px;height:18px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 2px rgba(0,0,0,.3)}
-  .sw input:checked + .track{background:var(--accent)}
+  .sw input:checked + .track{background:var(--ink)}
   .sw input:checked + .track + .knob{transform:translateX(16px)}
-  /* stage */
-  .stage{position:relative;width:100%;height:calc(100vh - 152px);min-height:360px;overflow:hidden;background:
-     radial-gradient(120% 90% at 50% 0%, #fffdf8 0%, #f7f3ea 60%, #efe9dc 100%);}
-  .stage.hurt{box-shadow:inset 0 0 0 6px rgba(220,38,38,.55)}
+  /* ---- stage ---- */
+  .stage{position:relative;width:100%;height:calc(100vh - 150px);min-height:360px;overflow:hidden;background:#fff}
   #track{position:absolute;inset:0;width:100%;height:100%;display:block}
-  /* runner overlay */
-  #runnerWrap{position:absolute;left:50%;transform:translate(-50%,-100%);pointer-events:none;z-index:5}
-  #runnerFall,#runnerJump{display:block;line-height:0}
-  .pose{display:none;filter:drop-shadow(0 4px 3px rgba(0,0,0,.18))}
-  /* hud */
-  .hud{position:absolute;left:14px;top:12px;z-index:6;display:flex;gap:10px;font-size:13px;font-weight:700}
-  .chip{background:rgba(255,255,255,.82);border:1px solid var(--line);border-radius:999px;padding:5px 12px;backdrop-filter:blur(2px)}
-  .chip b{color:var(--accent)}
-  .chip.miss b{color:var(--danger)}
-  #judge{position:absolute;left:50%;top:30%;transform:translate(-50%,-50%) scale(.8);z-index:7;font-weight:900;font-size:26px;letter-spacing:1px;opacity:0;transition:opacity .12s, transform .12s;pointer-events:none;text-shadow:0 2px 6px rgba(255,255,255,.7)}
-  #judge.show{opacity:1;transform:translate(-50%,-65%) scale(1)}
-  #judge.perfect{color:var(--good)} #judge.good{color:var(--accent)} #judge.ok{color:#b45309} #judge.miss{color:var(--danger)}
-  .ready{position:absolute;left:50%;top:14px;transform:translateX(-50%);z-index:6;font-size:12px;font-weight:700;color:#8a8174;letter-spacing:1px}
+  #ready{position:absolute;left:50%;top:16%;transform:translateX(-50%);z-index:6;text-align:center;color:var(--grey);font-family:"Courier New",ui-monospace,monospace;pointer-events:none}
+  #ready .big{font-size:15px;font-weight:700;letter-spacing:3px}
+  #ready .sub{font-size:11px;letter-spacing:2px;color:#a8a29e;margin-top:6px}
 </style>
 </head>
 <body>
   <div class="topbar">
-    <div class="brand"><span class="mark">PR</span><span>Rhythm Runner</span></div>
+    <div class="brand">
+      <span class="mark">PR</span>
+      <span class="ttl"><b>Rhythm Studio</b><span>ETEC 531 · Rhythm Runner</span></span>
+    </div>
     <nav>
       <a href="./index.html">Dashboard</a>
       <a href="./free-play.html">Free Play</a>
@@ -78,7 +72,7 @@
       <button id="gearBtn" class="btn">⚙ Settings</button>
       <div id="panel" class="panel">
         <h4>RHYTHM RUNNER</h4>
-        <label class="row">Show runner (fall in / out)
+        <label class="row">Show dino (fall in / out)
           <span class="sw"><input id="optRunner" type="checkbox" checked><span class="track"></span><span class="knob"></span></span>
         </label>
         <label class="row">Metronome click
@@ -86,6 +80,9 @@
         </label>
         <label class="row">Visual pulse on beat
           <span class="sw"><input id="optPulse" type="checkbox" checked><span class="track"></span><span class="knob"></span></span>
+        </label>
+        <label class="row">Show ✓ / ✗ marks
+          <span class="sw"><input id="optMarks" type="checkbox" checked><span class="track"></span><span class="knob"></span></span>
         </label>
         <label class="row">Rests (gaps to run through)
           <span class="sw"><input id="optRests" type="checkbox" checked><span class="track"></span><span class="knob"></span></span>
@@ -100,194 +97,153 @@
     </div>
   </div>
 
-  <div class="hint"><b>How to play:</b> press <b>Play</b>, hear the 4‑click count‑in, then tap <b>SPACE</b> / <b>click the track</b> / <b>↑</b> to jump each note as it crosses the centre line. Miss the timing and the runner stumbles — but the run never stops. Stop with the Play button.</div>
+  <div class="hint"><b>How to play:</b> press <b>Play</b>, watch the <b>4‑3‑2‑1</b> count‑in, then tap <b>SPACE</b> / <b>↑</b> / <b>click</b> to hop each note as it reaches the dino. Two beamed eighths = two hops. Miss the timing and he stumbles — but the run never stops. End it with the Play button.</div>
 
   <div class="stage" id="stage">
     <canvas id="track"></canvas>
-    <div class="hud">
-      <span class="chip">Streak <b id="streak">0</b></span>
-      <span class="chip">Best <b id="best">0</b></span>
-      <span class="chip miss">✗ <b id="misses">0</b></span>
-    </div>
-    <div class="ready" id="ready">PRESS PLAY</div>
-    <div id="judge"></div>
-    <div id="runnerWrap">
-      <div id="runnerFall"><div id="runnerJump"></div></div>
-    </div>
+    <div id="ready"><div class="big">PRESS&nbsp;&nbsp;PLAY</div><div class="sub">or hit SPACE to run</div></div>
   </div>
 
 <script>
 /* =========================================================================
-   RHYTHM RUNNER — infinite rhythm scroller (test build, local only)
-   Reuses the studio's rhythm SYSTEM: same data model (quarter=144, eighth=72,
-   half=288, whole=576, 4/4), same random-bar algorithm as embed-bridge.js,
-   same metronome/quarter-pulse concept, same settings vocabulary. The infinite
-   single-line scroll is drawn on a canvas locked to the Web-Audio clock, because
-   the iframe drill engine only lays out a static multi-row SVG and cannot scroll.
+   RHYTHM RUNNER — infinite rhythm scroller, Chrome-dino reimagining (test build)
+   Reuses the studio's rhythm SYSTEM (quarter=144, eighth=72, half=288, whole=576,
+   4/4; same random-bar family as embed-bridge.js; same metronome clock + settings
+   vocabulary). The infinite single-line scroll + the pixel T-Rex are drawn on a
+   canvas locked to the Web-Audio clock. The T-Rex is a hand-built pixel sprite
+   (run-A / run-B / stand / X-eye hurt) modelled on the reference crops, so the
+   file stays asset-free. Local test only — do not deploy.
    ========================================================================= */
 
 /* ---------- settings ---------- */
-var settings = { showRunner:true, metro:true, pulse:true, rests:true, aid:'none', density:'normal' };
+var settings = { showRunner:true, metro:true, pulse:true, marks:true, rests:true, aid:'none', density:'normal' };
 var DENSITY = {
   easy:   { eighth:0.12, half:0.18, whole:0.05 },
   normal: { eighth:0.30, half:0.32, whole:0.10 },
   hard:   { eighth:0.52, half:0.14, whole:0.04 }
 };
-var LEAD = 4;            // count-in beats before first note reaches centre
-var bpm = 92;
+var LEAD = 4, bpm = 92;
 
 /* ---------- DOM ---------- */
-var stage   = document.getElementById('stage');
-var canvas  = document.getElementById('track');
-var ctx     = canvas.getContext('2d');
-var playBtn = document.getElementById('playBtn');
-var tempoEl = document.getElementById('tempo');
-var bpmEl   = document.getElementById('bpm');
-var gearBtn = document.getElementById('gearBtn');
-var panel   = document.getElementById('panel');
-var streakEl= document.getElementById('streak');
-var bestEl  = document.getElementById('best');
-var missEl  = document.getElementById('misses');
-var judgeEl = document.getElementById('judge');
-var readyEl = document.getElementById('ready');
-var runnerWrap = document.getElementById('runnerWrap');
-var runnerFall = document.getElementById('runnerFall');
-var runnerJump = document.getElementById('runnerJump');
+var stage=document.getElementById('stage'), canvas=document.getElementById('track'), ctx=canvas.getContext('2d');
+var playBtn=document.getElementById('playBtn'), tempoEl=document.getElementById('tempo'), bpmEl=document.getElementById('bpm');
+var gearBtn=document.getElementById('gearBtn'), panel=document.getElementById('panel'), readyEl=document.getElementById('ready');
 
-/* ---------- layout ---------- */
-var W=0,H=0,dpr=1, centerX=0, staffY=0, pxPerBeat=120;
+/* ---------- layout / metrics ---------- */
+var W=0,H=0,dpr=1, M={};
+function clamp(v,a,b){return v<a?a:(v>b?b:v);}
 function resize(){
-  var r = stage.getBoundingClientRect();
-  W = Math.max(320, r.width); H = Math.max(320, r.height);
-  dpr = window.devicePixelRatio || 1;
-  canvas.width = Math.round(W*dpr); canvas.height = Math.round(H*dpr);
-  canvas.style.width = W+'px'; canvas.style.height = H+'px';
+  var r=stage.getBoundingClientRect();
+  W=Math.max(320,r.width); H=Math.max(320,r.height);
+  dpr=window.devicePixelRatio||1;
+  canvas.width=Math.round(W*dpr); canvas.height=Math.round(H*dpr);
+  canvas.style.width=W+'px'; canvas.style.height=H+'px';
   ctx.setTransform(dpr,0,0,dpr,0,0);
-  centerX = Math.round(W/2);
-  staffY  = Math.round(H*0.62);
-  pxPerBeat = Math.max(72, Math.min(150, Math.round(W/8)));
-  runnerWrap.style.top = (staffY+8)+'px';
+  var s=clamp(Math.min(W/980, H/540), 0.7, 1.6);
+  M={ scale:s, ps:Math.max(2,Math.round(3*s)), headR:7*s, stemH:34*s,
+      pxPerBeat:120*s, groundY:Math.round(H*0.72), jumpJ:122*s, centerX:Math.round(W/2) };
 }
 window.addEventListener('resize', resize);
 
 /* =========================================================================
-   STICK-FIGURE POSES  (re-drawn from the 4 reference PNGs as inline SVG)
-   0=jump  1=hurt  2=stand  3=run  (+ runB for the cycle)
+   PIXEL T-REX  (22 wide x 23 tall). 'X'=body  'O'=eye  '.'=empty
    ========================================================================= */
-var POSES = {
-  stand:{name:'stand',head:'normal',torso:[[70,64],[70,116]],
-    arms:[[[70,72],[58,96],[56,116]],[[70,72],[86,94],[92,114]]],
-    legs:[[[70,116],[64,148],[60,172]],[[70,116],[82,148],[86,172]]],fr0:0,fr1:0},
-  runA:{name:'runA',head:'normal',torso:[[72,62],[66,112]],
-    arms:[[[72,70],[96,86],[110,76]],[[72,70],[50,80],[46,100]]],
-    legs:[[[66,112],[98,120],[104,150]],[[66,112],[40,128],[22,118]]],fr0:18,fr1:-28},
-  runB:{name:'runB',head:'normal',torso:[[72,62],[66,112]],
-    arms:[[[72,70],[50,86],[36,76]],[[72,70],[94,80],[98,100]]],
-    legs:[[[66,112],[40,120],[34,150]],[[66,112],[96,128],[114,118]]],fr0:-28,fr1:18},
-  jump:{name:'jump',head:'normal',torso:[[70,62],[70,112]],
-    arms:[[[70,72],[46,58],[34,40]],[[70,72],[94,58],[106,40]]],
-    legs:[[[70,112],[56,134],[72,150]],[[70,112],[84,134],[70,150]]],fr0:8,fr1:-8},
-  hurt:{name:'hurt',head:'hurt',torso:[[66,62],[72,112]],
-    arms:[[[66,72],[92,80],[104,72]],[[66,72],[88,92],[100,96]]],
-    legs:[[[72,112],[94,124],[86,156]],[[72,112],[66,138],[48,164]]],fr0:12,fr1:22}
-};
-function _limb(pts){return '<polyline points="'+pts.map(function(p){return p[0]+','+p[1];}).join(' ')+'" fill="none" stroke="#111" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>';}
-function _joint(x,y){return '<circle cx="'+x+'" cy="'+y+'" r="5" fill="#111"/>';}
-function _foot(x,y,rot){return '<g transform="rotate('+rot+' '+x+' '+y+')"><rect x="'+(x-3)+'" y="'+(y-4)+'" width="26" height="9" rx="4.5" fill="#111"/></g>';}
-function _head(cx,cy,type){
-  var s='<circle cx="'+cx+'" cy="'+cy+'" r="26" fill="#fff" stroke="#111" stroke-width="7"/>';
-  if(type==='hurt'){
-    s+='<polyline points="'+(cx-13)+','+(cy-5)+' '+(cx-6)+','+(cy-1)+' '+(cx-13)+','+(cy+3)+'" fill="none" stroke="#111" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>';
-    s+='<polyline points="'+(cx+13)+','+(cy-5)+' '+(cx+6)+','+(cy-1)+' '+(cx+13)+','+(cy+3)+'" fill="none" stroke="#111" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>';
-    s+='<path d="M '+(cx-7)+' '+(cy+9)+' Q '+cx+' '+(cy+20)+' '+(cx+9)+' '+(cy+7)+'" fill="none" stroke="#111" stroke-width="4" stroke-linecap="round"/>';
-  } else {
-    s+='<ellipse cx="'+(cx+9)+'" cy="'+(cy-3)+'" rx="3" ry="6" fill="#111"/>';
-    s+='<path d="M '+(cx+2)+' '+(cy+7)+' Q '+(cx+10)+' '+(cy+15)+' '+(cx+17)+' '+(cy+5)+'" fill="none" stroke="#111" stroke-width="4" stroke-linecap="round"/>';
-  }
-  return s;
+var STAND=[
+"............XXXXXXXXXX",
+"............XXXOXXXXXX",
+"............XXXXXXXXXX",
+"............XXXXXXXXXX",
+"............XXXXXX....",
+"............XXXXXX....",
+"............XXXXXXXX..",
+"........XXXXXXXXX.....",
+"...XXXXXXXXXXXXXX.....",
+"..XXXXXXXXXXXXXXX.....",
+".XXXXXXXXXXXXXXXXXX...",
+"XXXXXXXXXXXXXXXXXXX...",
+"XXXXXXXXXXXXXXXXX.....",
+"XXXXXX..XXXXXXXXX.....",
+"........XXXXXXXXX.....",
+"........XXXXXXXXX.....",
+"........XX....XX......",
+"........XX....XX......",
+"........XX....XX......",
+"........XX....XX......",
+"........XX....XX......",
+"........XX....XX......",
+"........XXXX.XXXX....."
+];
+var RUNA=STAND.slice(0,16).concat([
+"........XX....XX......",
+"........XX....XX......",
+"........XXXX.XX.......",
+".............XX.......",
+".............XX.......",
+".............XX.......",
+".............XXXX....."
+]);
+var RUNB=STAND.slice(0,16).concat([
+"........XX....XX......",
+"........XX....XX......",
+"........XX...XXXX.....",
+"........XX............",
+"........XX............",
+"........XX............",
+"........XXXX.........."
+]);
+function makeHurt(rows){
+  return rows.map(function(row,r){
+    if(r<1||r>3) return row;
+    var a=row.split('');
+    if(r===1){a[14]='.';a[15]='X';a[16]='.';}
+    if(r===2){a[15]='.';}
+    if(r===3){a[14]='.';a[16]='.';}
+    return a.join('');
+  });
 }
-function buildPoseSVG(p){
-  var cx=p.torso[0][0], cy=p.torso[0][1]-26;
-  var o=['<svg class="pose pose-'+p.name+'" viewBox="0 0 140 180" width="120" height="154">'];
-  o.push(_limb(p.torso));
-  p.arms.forEach(function(a){o.push(_limb(a));});
-  p.legs.forEach(function(l){o.push(_limb(l));});
-  var f0=p.legs[0][p.legs[0].length-1], f1=p.legs[1][p.legs[1].length-1];
-  o.push(_foot(f0[0],f0[1],p.fr0||0));
-  o.push(_foot(f1[0],f1[1],p.fr1||0));
-  var seen={};
-  function jpt(q){var k=q[0]+'_'+q[1];if(seen[k])return;seen[k]=1;o.push(_joint(q[0],q[1]));}
-  jpt(p.torso[0]); jpt(p.torso[1]);
-  p.arms.forEach(function(a){a.forEach(jpt);});
-  p.legs.forEach(function(l){l.forEach(jpt);});
-  o.push(_head(cx,cy,p.head));
-  o.push('</svg>');
-  return o.join('');
-}
-runnerJump.innerHTML = Object.keys(POSES).map(function(k){return buildPoseSVG(POSES[k]);}).join('');
+var HURT=makeHurt(STAND);
+var SW=22, SH=23, BODY='#535353', EYE='#ffffff';
 
-var currentPose='stand', transientUntil=0, runnerVisible=true;
-function setPose(name){
-  currentPose=name;
-  var svgs=runnerJump.querySelectorAll('.pose');
-  for(var i=0;i<svgs.length;i++) svgs[i].style.display='none';
-  var el=runnerJump.querySelector('.pose-'+name);
-  if(el) el.style.display='block';
-}
-function triggerJump(){
-  if(!runnerVisible) return;
-  setPose('jump'); transientUntil=performance.now()+240;
-  runnerJump.style.transition='transform .13s cubic-bezier(.3,1.4,.5,1)';
-  runnerJump.style.transform='translateY(-46px)';
-  setTimeout(function(){ runnerJump.style.transition='transform .16s ease-in'; runnerJump.style.transform='translateY(0)'; },140);
-}
-function triggerHurt(){
-  if(runnerVisible){ setPose('hurt'); transientUntil=performance.now()+360; }
-  stage.classList.add('hurt'); setTimeout(function(){stage.classList.remove('hurt');},360);
-  missFlashT=performance.now();
-}
-function toggleRunner(on){
-  settings.showRunner=on; runnerVisible=on;
-  if(on){
-    runnerFall.style.transition='none';
-    runnerFall.style.transform='translateY(-260px)'; runnerFall.style.opacity='0';
-    void runnerFall.offsetHeight; // reflow
-    runnerFall.style.transition='transform .5s cubic-bezier(.2,.8,.2,1), opacity .35s';
-    runnerFall.style.transform='translateY(0)'; runnerFall.style.opacity='1';
-    setPose(playing?'runA':'stand');
-  } else {
-    runnerFall.style.transition='transform .45s cubic-bezier(.55,0,.7,1), opacity .3s';
-    runnerFall.style.transform='translateY(260px)'; runnerFall.style.opacity='0';
+/* pixel cloud (light grey outline) */
+var CLOUD=[
+"..........XXX..........",
+"........XX...XX........",
+"......XX.......XX......",
+"...XXX...........XXX...",
+"..X...............X....",
+".X.................X...",
+"X...................X..",
+".XXXXXXXXXXXXXXXXXXXXX."
+];
+var CW=23, CH=8;
+
+function drawMatrix(m, left, top, psx, psy, color, eye){
+  for(var r=0;r<m.length;r++){
+    var row=m[r];
+    for(var c=0;c<row.length;c++){
+      var ch=row[c]; if(ch==='.') continue;
+      ctx.fillStyle = (ch==='O') ? eye : color;
+      ctx.fillRect(Math.round(left+c*psx), Math.round(top+r*psy), Math.ceil(psx)+1, Math.ceil(psy)+1);
+    }
   }
 }
-setInterval(function(){ // run cycle
-  if(playing && runnerVisible && performance.now()>=transientUntil){
-    setPose(currentPose==='runA'?'runB':'runA');
-  }
-},150);
 
 /* =========================================================================
-   RHYTHM GENERATION  (same model + algorithm family as embed-bridge.js)
+   RHYTHM GENERATION
    ========================================================================= */
 var notes=[], genBeat=LEAD;
 function randBar(){
-  var d=DENSITY[settings.density]||DENSITY.normal;
-  var beats=[],i;
-  for(i=0;i<4;i++){
-    if(Math.random()<d.eighth) beats.push([{length:72,rest:false},{length:72,rest:false}]);
-    else beats.push([{length:144,rest:false}]);
-  }
+  var d=DENSITY[settings.density]||DENSITY.normal, beats=[],i;
+  for(i=0;i<4;i++){ if(Math.random()<d.eighth) beats.push([{length:72,rest:false},{length:72,rest:false}]); else beats.push([{length:144,rest:false}]); }
   var comps=[],idx=0;
   while(idx<4){
     var rem=4-idx, r=Math.random(), g=1;
-    if(rem>=4 && r<d.whole) g=4;
-    else if(rem>=2 && r<d.half) g=2;
+    if(rem>=4 && r<d.whole) g=4; else if(rem>=2 && r<d.half) g=2;
     if(g===4) comps.push({length:576,rest:false});
     else if(g===2) comps.push({length:288,rest:false});
     else comps=comps.concat(beats[idx]);
     idx+=g;
   }
-  // optional rest gap (only swaps a quarter beat -> quarter rest, keeps the bar = 4 beats)
   if(settings.rests && Math.random()<0.22){
     var qs=[]; for(var c=0;c<comps.length;c++){ if(comps[c].length===144 && !comps[c].rest) qs.push(c); }
     if(qs.length) comps[qs[(Math.random()*qs.length)|0]].rest=true;
@@ -298,34 +254,27 @@ function buildBars(count){
   for(var b=0;b<count;b++){
     var comps=randBar(), barStart=genBeat, slice=[];
     for(var c=0;c<comps.length;c++){
-      var co=comps[c], onset=genBeat;
-      var n={beat:onset, len:co.length, rest:co.rest, beatInBar:onset-barStart, beam:null, judged:null, jt:0, _x:null};
-      notes.push(n); slice.push(n);
-      genBeat += co.length/144;
+      var co=comps[c], n={beat:genBeat, len:co.length, rest:co.rest, beatInBar:genBeat-barStart, beam:null, judged:null, _x:0};
+      notes.push(n); slice.push(n); genBeat += co.length/144;
     }
-    // beam grouping for consecutive eighths within this bar
     var k=0;
     while(k<slice.length){
       if(slice[k].len===72 && !slice[k].rest){
         var run=[slice[k]], j=k+1;
         while(j<slice.length && slice[j].len===72 && !slice[j].rest){ run.push(slice[j]); j++; }
-        if(run.length>=2){ for(var m=0;m<run.length;m++) run[m].beam='beam'; }
-        else { run[0].beam='flag'; }
+        for(var m=0;m<run.length;m++) run[m].beam = run.length>=2 ? 'beam' : 'flag';
         k=j;
-      } else { k++; }
+      } else k++;
     }
   }
 }
 
 /* =========================================================================
-   AUDIO  (Web-Audio metronome = the clock everything syncs to)
+   AUDIO  (Web-Audio metronome = master clock)
    ========================================================================= */
 var actx=null, masterGain=null, t0=0, secPerBeat=60/bpm, nextClickBeat=0, schedId=null;
 function ensureAudio(){
-  if(!actx){
-    actx=new (window.AudioContext||window.webkitAudioContext)();
-    masterGain=actx.createGain(); masterGain.connect(actx.destination);
-  }
+  if(!actx){ actx=new (window.AudioContext||window.webkitAudioContext)(); masterGain=actx.createGain(); masterGain.connect(actx.destination); }
   if(actx.state==='suspended') actx.resume();
   masterGain.gain.value = settings.metro?1:0;
 }
@@ -335,8 +284,7 @@ function blip(time, accent){
   g.gain.setValueAtTime(0.0001,time);
   g.gain.exponentialRampToValueAtTime(accent?0.5:0.32, time+0.001);
   g.gain.exponentialRampToValueAtTime(0.0001, time+0.09);
-  o.connect(g); g.connect(masterGain);
-  o.start(time); o.stop(time+0.1);
+  o.connect(g); g.connect(masterGain); o.start(time); o.stop(time+0.1);
 }
 function schedule(){
   if(!playing) return;
@@ -353,211 +301,277 @@ function curBeatNow(){ return playing ? (actx.currentTime - t0)/secPerBeat : pau
 /* =========================================================================
    GAME STATE
    ========================================================================= */
-var playing=false, pausedBeat=2.5, lastBeatInt=-1, pulseT=0, hitFlashT=0, missFlashT=0;
-var streak=0, best=0, misses=0, judgeTO=null;
+var playing=false, pausedBeat=LEAD+0.5, lastBeatInt=-1, pulseT=0;
+var score=0, best=0, misses=0, milestoneT=-1;
+var jumping=false, jumpStart=0, yOff=0, runFrame=0, runDist=0;
+var sqX=1, sqY=1, landT=-1;
+var hurtUntil=0, redFlashT=-1, dropY=-220;
+var clouds=[], lastT=performance.now();
 
-function showJudge(text, cls){
-  judgeEl.textContent=text; judgeEl.className='show '+(cls||'');
-  if(judgeTO) clearTimeout(judgeTO);
-  judgeTO=setTimeout(function(){ judgeEl.className=cls||''; },620);
+function initClouds(){
+  clouds=[];
+  for(var i=0;i<4;i++) clouds.push({ x:Math.random()*W, y:30+Math.random()*(H*0.32), s:0.7+Math.random()*0.7 });
 }
 function setBpm(v){
   bpm=v; bpmEl.textContent=v+' BPM';
-  if(playing){ var cb=curBeatNow(); secPerBeat=60/bpm; t0=actx.currentTime - cb*secPerBeat; } // rebase, keep position
+  if(playing){ var cb=curBeatNow(); secPerBeat=60/bpm; t0=actx.currentTime - cb*secPerBeat; }
 }
 function start(){
   ensureAudio();
   secPerBeat=60/bpm; t0=actx.currentTime; nextClickBeat=0;
   notes.length=0; genBeat=LEAD; buildBars(8);
   playing=true; pausedBeat=0; lastBeatInt=-1; pulseT=performance.now();
-  streak=0; misses=0; streakEl.textContent='0'; missEl.textContent='0';
+  score=0; misses=0; milestoneT=-1;
   playBtn.textContent='■ Stop'; playBtn.classList.add('on');
   readyEl.style.display='none';
-  if(runnerVisible) setPose('runA');
   if(!schedId) schedId=setInterval(schedule,25);
 }
 function stop(){
   playing=false; pausedBeat=curBeatNow();
   playBtn.textContent='▶ Play'; playBtn.classList.remove('on');
   if(schedId){ clearInterval(schedId); schedId=null; }
-  if(runnerVisible) setPose('stand');
-  readyEl.textContent='PRESS PLAY'; readyEl.style.display='block';
+  jumping=false; yOff=0;
+  readyEl.querySelector('.big').textContent='PRESS  PLAY';
+  readyEl.querySelector('.sub').textContent='or hit SPACE to run again';
+  readyEl.style.display='block';
 }
 function togglePlay(){ if(playing) stop(); else start(); }
 
-/* tap = jump. Always hop; only judge rhythm if a note is in the window. */
+function triggerJump(){
+  if(!settings.showRunner || jumping) return;
+  jumping=true; jumpStart=performance.now();
+  sqX=0.85; sqY=1.18;            // take-off stretch
+}
+function triggerHurt(){
+  hurtUntil=performance.now()+380; redFlashT=performance.now();
+}
+
+/* tap = jump + rhythm judge */
 function doTap(){
   if(!playing){ start(); return; }
   ensureAudio();
-  if(runnerVisible) triggerJump();
-  var cb=curBeatNow(), tol=0.14/secPerBeat, bestN=null, bestD=1e9;
+  triggerJump();
+  var cb=curBeatNow(), tol=0.16, bestN=null, bestD=1e9;
   for(var i=0;i<notes.length;i++){
-    var n=notes[i];
-    if(n.rest || n.judged) continue;
+    var n=notes[i]; if(n.rest || n.judged) continue;
     var d=Math.abs(n.beat-cb);
     if(d<=tol && d<bestD){ bestD=d; bestN=n; }
   }
   if(bestN){
-    var ms=bestD*secPerBeat*1000, q, cls;
-    if(ms<70){q='PERFECT';cls='perfect';} else if(ms<130){q='GOOD';cls='good';} else {q='OK';cls='ok';}
-    bestN.judged='hit'; bestN.jt=performance.now();
-    hitFlashT=performance.now();
-    streak++; if(streak>best){best=streak;bestEl.textContent=best;}
-    streakEl.textContent=streak;
-    showJudge(q,cls);
+    bestN.judged='hit';
+    score++; if(score>best) best=score;
+    if(Math.floor(score/10)>Math.floor((score-1)/10)) milestoneT=performance.now();
   }
 }
 
 /* =========================================================================
-   DRAW
+   DRAW HELPERS
    ========================================================================= */
-function drawRest(x,len){
-  ctx.strokeStyle='#94a3b8'; ctx.fillStyle='#94a3b8'; ctx.lineWidth=3; ctx.lineCap='round';
-  if(len>=576){ ctx.fillRect(x-7,staffY+1,14,5); }              // whole rest (hangs)
-  else if(len>=288){ ctx.fillRect(x-7,staffY-6,14,5); }         // half rest (sits)
-  else if(len>=144){                                            // quarter rest squiggle
-    ctx.beginPath();
-    ctx.moveTo(x-4,staffY-15); ctx.lineTo(x+4,staffY-8); ctx.lineTo(x-4,staffY-1);
-    ctx.lineTo(x+4,staffY+6); ctx.lineTo(x-2,staffY+12); ctx.stroke();
-  } else {                                                      // eighth rest
-    ctx.beginPath(); ctx.arc(x+2,staffY-7,3,0,7); ctx.fill();
-    ctx.beginPath(); ctx.moveTo(x+2,staffY-7); ctx.lineTo(x-3,staffY+9); ctx.stroke();
-  }
+function hash(n){ n=(n|0); n=(n<<13)^n; return ((n*(n*n*15731+789221)+1376312589)&0x7fffffff); }
+
+function drawRest(x){
+  var s=M.scale, cy=M.groundY-12*s;
+  ctx.strokeStyle='#bdbdbd'; ctx.fillStyle='#bdbdbd'; ctx.lineWidth=2.4*s; ctx.lineCap='round';
+  ctx.beginPath();
+  ctx.moveTo(x-4*s,cy-9*s); ctx.lineTo(x+4*s,cy-3*s); ctx.lineTo(x-4*s,cy+3*s);
+  ctx.lineTo(x+4*s,cy+9*s); ctx.lineTo(x-2*s,cy+13*s); ctx.stroke();
 }
-function drawNoteHead(x,color,open,wide){
-  ctx.save(); ctx.translate(x,staffY); ctx.rotate(-0.32);
-  ctx.beginPath(); ctx.ellipse(0,0,wide?9:7,wide?6:5,0,0,7);
-  if(open){ ctx.lineWidth=3; ctx.strokeStyle=color; ctx.fillStyle='#fff'; ctx.fill(); ctx.stroke(); }
+function drawNote(x,n){
+  var s=M.scale, hr=M.headR, cy=M.groundY-hr-1*s, color=BODY, open=n.len>=288;
+  // head
+  ctx.save(); ctx.translate(x,cy); ctx.rotate(-0.35);
+  ctx.beginPath(); ctx.ellipse(0,0,hr,hr*0.72,0,0,7);
+  if(open){ ctx.lineWidth=2.4*s; ctx.strokeStyle=color; ctx.fillStyle='#fff'; ctx.fill(); ctx.stroke(); }
   else { ctx.fillStyle=color; ctx.fill(); }
   ctx.restore();
+  // stem + flag
+  if(n.len<576){
+    var sx=x+hr*0.78, top=M.groundY-M.stemH;
+    ctx.strokeStyle=color; ctx.lineWidth=2.6*s; ctx.lineCap='round';
+    ctx.beginPath(); ctx.moveTo(sx,cy-2*s); ctx.lineTo(sx,top); ctx.stroke();
+    if(n.beam==='flag'){ ctx.beginPath(); ctx.moveTo(sx,top); ctx.quadraticCurveTo(sx+10*s,top+8*s,sx+6*s,top+18*s); ctx.stroke(); }
+  }
+  // mark
+  if(settings.marks && n.judged){
+    var my=M.groundY-M.stemH-12*s; ctx.strokeStyle=color; ctx.lineWidth=2.4*s; ctx.lineCap='round';
+    if(n.judged==='hit'){ ctx.beginPath(); ctx.moveTo(x-5*s,my); ctx.lineTo(x-1*s,my+5*s); ctx.lineTo(x+6*s,my-5*s); ctx.stroke(); }
+    else { ctx.beginPath(); ctx.moveTo(x-4*s,my-4*s); ctx.lineTo(x+4*s,my+4*s); ctx.moveTo(x+4*s,my-4*s); ctx.lineTo(x-4*s,my+4*s); ctx.stroke(); }
+  }
+  // counting aid
+  if(settings.aid!=='none' && !n.rest){
+    var bib=((n.beatInBar%4)+4)%4, num=Math.floor(bib)+1, plus=(bib%1)>=0.5;
+    var lab = settings.aid==='syllables' ? (n.len>=144?'ta':'ti') : (plus?'+':String(num));
+    ctx.fillStyle='#9a948b'; ctx.font='700 '+Math.round(11*s)+'px system-ui,sans-serif'; ctx.textAlign='center';
+    ctx.fillText(lab, x, M.groundY+22*s);
+  }
 }
-function draw(){
-  var cb=curBeatNow(), now=performance.now();
+
+/* =========================================================================
+   MAIN DRAW
+   ========================================================================= */
+function draw(now, dt){
+  var cb=curBeatNow(), s=M.scale, gY=M.groundY, cx=M.centerX, ppb=M.pxPerBeat;
+  var speed = ppb/secPerBeat;                 // px per second
   ctx.clearRect(0,0,W,H);
 
-  // scrolling beat ticks (motion cue)
-  ctx.strokeStyle='rgba(120,110,95,.25)'; ctx.lineWidth=1;
-  var firstHalf=Math.floor((cb - centerX/pxPerBeat)*2)-1;
-  var lastHalf =Math.ceil((cb + (W-centerX)/pxPerBeat)*2)+1;
-  for(var h=firstHalf; h<=lastHalf; h++){
-    var bx=centerX + (h*0.5 - cb)*pxPerBeat;
-    if(bx<-2||bx>W+2) continue;
-    var major=(h%2===0);
-    ctx.beginPath(); ctx.moveTo(bx,staffY+(major?5:3)); ctx.lineTo(bx,staffY-(major?5:3)); ctx.stroke();
+  /* clouds (parallax) */
+  var cps=Math.max(2,Math.round(2*s));
+  for(var ci=0;ci<clouds.length;ci++){
+    var cl=clouds[ci];
+    if(playing) cl.x -= speed*0.12*cl.s*dt;
+    if(cl.x < -CW*cps-10){ cl.x = W + Math.random()*120; cl.y = 24+Math.random()*(H*0.3); cl.s=0.7+Math.random()*0.7; }
+    drawMatrix(CLOUD, cl.x, cl.y, cps*cl.s, cps*cl.s, '#e3e3e3', '#e3e3e3');
   }
 
-  // staff / ground line
-  ctx.strokeStyle='#b8ad99'; ctx.lineWidth=2;
-  ctx.beginPath(); ctx.moveTo(0,staffY); ctx.lineTo(W,staffY); ctx.stroke();
+  /* faint barlines (so bars read as connected) */
+  ctx.strokeStyle='#efefef'; ctx.lineWidth=1;
+  var fb=Math.floor((cb - cx/ppb)/4)-1, lb=Math.ceil((cb + (W-cx)/ppb)/4)+1;
+  for(var bb=fb; bb<=lb; bb++){ if(bb<0) continue; var lx=cx+(bb*4-cb)*ppb; if(lx<-2||lx>W+2) continue;
+    ctx.beginPath(); ctx.moveTo(lx,gY-M.stemH-14*s); ctx.lineTo(lx,gY); ctx.stroke(); }
 
-  // barlines
-  ctx.strokeStyle='rgba(60,52,40,.55)'; ctx.lineWidth=2;
-  var firstBar=Math.floor((cb - centerX/pxPerBeat)/4)-1;
-  var lastBar =Math.ceil((cb + (W-centerX)/pxPerBeat)/4)+1;
-  for(var bb=firstBar; bb<=lastBar; bb++){
-    if(bb<0) continue;
-    var lx=centerX + (bb*4 - cb)*pxPerBeat;
-    if(lx<-2||lx>W+2) continue;
-    ctx.beginPath(); ctx.moveTo(lx,staffY-50); ctx.lineTo(lx,staffY+10); ctx.stroke();
+  /* ground line */
+  ctx.strokeStyle=BODY; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(0,gY); ctx.lineTo(W,gY); ctx.stroke();
+  /* scrolling pebble texture under the line */
+  ctx.fillStyle='#cfcfcf';
+  var hh=Math.floor((cb - cx/ppb)*2)-1, hh2=Math.ceil((cb + (W-cx)/ppb)*2)+1;
+  for(var h=hh; h<=hh2; h++){
+    var px=cx+(h*0.5-cb)*ppb; if(px<-4||px>W+4) continue;
+    var hv=hash(h);
+    if(hv%3===0) ctx.fillRect(Math.round(px+(hv%9)), gY+4+ (hv%3), 2, 2);
+    if(hv%5===0) ctx.fillRect(Math.round(px+((hv>>3)%11)), gY+8+ (hv%2), 3, 2);
   }
 
-  // compute screen x for every note (no cull here, beams need neighbours)
-  for(var i=0;i<notes.length;i++){ notes[i]._x = centerX + (notes[i].beat - cb)*pxPerBeat; }
+  /* note x positions */
+  for(var i=0;i<notes.length;i++) notes[i]._x = cx + (notes[i].beat - cb)*ppb;
 
-  // note heads + stems + flags + aids
-  for(var n2=0;n2<notes.length;n2++){
-    var n=notes[n2], x=n._x;
-    if(x<-70||x>W+70) continue;
-    if(n.rest){ drawRest(x,n.len); continue; }
-    var color = n.judged==='hit' ? '#16a34a' : (n.judged==='miss' ? '#dc2626' : '#111');
-    var open = n.len>=288;
-    // stem
-    if(n.len<576){ ctx.strokeStyle=color; ctx.lineWidth=3; ctx.beginPath(); ctx.moveTo(x+6,staffY-1); ctx.lineTo(x+6,staffY-42); ctx.stroke(); }
-    // flag for isolated eighth
-    if(n.len===72 && n.beam==='flag'){ ctx.strokeStyle=color; ctx.lineWidth=3; ctx.beginPath(); ctx.moveTo(x+6,staffY-42); ctx.quadraticCurveTo(x+18,staffY-34,x+12,staffY-22); ctx.stroke(); }
-    drawNoteHead(x,color,open,n.len>=576);
-    // counting aid
-    if(settings.aid!=='none'){
-      var bib=((n.beatInBar%4)+4)%4, num=Math.floor(bib)+1, plus=(bib%1)>=0.5;
-      var lab = settings.aid==='syllables' ? (n.len>=144?'ta':'ti') : (plus?'+':String(num));
-      ctx.fillStyle = n.judged==='miss'?'#dc2626':'#1d4ed8';
-      ctx.font='700 12px system-ui,sans-serif'; ctx.textAlign='center';
-      ctx.fillText(lab, x, staffY+24);
-    }
-  }
-
-  // beams (on-the-fly, consecutive eighths)
+  /* beams first (behind stems/heads) */
   var run=[];
-  function flush(){
+  function flushBeam(){
     if(run.length>=2){
       var xs=[]; for(var a=0;a<run.length;a++){ var xx=run[a]._x; if(xx>=-120&&xx<=W+120) xs.push(xx); }
       if(xs.length>=2){
-        var allHit=true, anyMiss=false;
-        for(var b2=0;b2<run.length;b2++){ if(run[b2].judged!=='hit') allHit=false; if(run[b2].judged==='miss') anyMiss=true; }
-        ctx.strokeStyle = anyMiss?'#dc2626':(allHit?'#16a34a':'#111');
-        ctx.lineWidth=6; ctx.lineCap='round';
-        ctx.beginPath(); ctx.moveTo(Math.min.apply(null,xs),staffY-42); ctx.lineTo(Math.max.apply(null,xs),staffY-42); ctx.stroke();
+        ctx.strokeStyle=BODY; ctx.lineWidth=5*s; ctx.lineCap='round';
+        ctx.beginPath(); ctx.moveTo(Math.min.apply(null,xs)+1, gY-M.stemH); ctx.lineTo(Math.max.apply(null,xs)+1, gY-M.stemH); ctx.stroke();
       }
     }
     run=[];
   }
   for(var e=0;e<notes.length;e++){
     var ne=notes[e];
-    if(!ne.rest && ne.len===72 && ne.beam==='beam' && ne._x>=-120 && ne._x<=W+120){ run.push(ne); }
-    else { flush(); }
+    if(!ne.rest && ne.len===72 && ne.beam==='beam' && ne._x>=-120 && ne._x<=W+120) run.push(ne); else flushBeam();
   }
-  flush();
+  flushBeam();
 
-  // runner ground shadow
-  if(runnerVisible){
-    ctx.fillStyle='rgba(0,0,0,.12)';
-    ctx.beginPath(); ctx.ellipse(centerX, staffY+6, 26, 6, 0, 0, 7); ctx.fill();
+  /* notes / rests */
+  for(var n2=0;n2<notes.length;n2++){
+    var n=notes[n2], x=n._x; if(x<-70||x>W+70) continue;
+    if(n.rest) drawRest(x); else drawNote(x,n);
   }
 
-  // hit-line / focal marker with beat pulse + hit/miss flash
-  var pulse = settings.pulse ? Math.max(0, 1-(now-pulseT)/260) : 0;
-  var hf = Math.max(0, 1-(now-hitFlashT)/220);
-  var mf = Math.max(0, 1-(now-missFlashT)/300);
-  var hlColor = mf>0.05 ? 'rgba(220,38,38,'+(0.5+0.5*mf)+')' : (hf>0.05 ? 'rgba(22,163,74,'+(0.5+0.5*hf)+')' : 'rgba(29,78,216,'+(0.35+0.5*pulse)+')');
-  ctx.strokeStyle=hlColor; ctx.lineWidth=2+3*pulse;
-  ctx.beginPath(); ctx.moveTo(centerX,staffY-72); ctx.lineTo(centerX,staffY+24); ctx.stroke();
-  // focal bracket at top
-  ctx.fillStyle=hlColor;
-  ctx.beginPath(); ctx.moveTo(centerX-7,staffY-72); ctx.lineTo(centerX+7,staffY-72); ctx.lineTo(centerX,staffY-62); ctx.closePath(); ctx.fill();
+  /* ---- the dino ---- */
+  dropY += ((settings.showRunner?0:(H+240)) - dropY)*0.12;
+  var onView = settings.showRunner && dropY > -SH*M.ps && dropY < H;
+  var hurtActive = onView && now < hurtUntil;
+  var running = playing && cb>=LEAD && !jumping && !hurtActive;
+  // leg cycle tied to distance
+  if(running){ runDist += speed*dt; var thr=30*s; if(runDist>=thr){ runDist-=thr; runFrame=runFrame?0:1; } }
+  else if(!playing || cb<LEAD){ runFrame=0; }
+  var pose = hurtActive ? HURT : (jumping ? STAND : (running ? (runFrame?RUNB:RUNA) : STAND));
+  // squash easing
+  sqX += (1-sqX)*0.22; sqY += (1-sqY)*0.22;
+  if(onView){
+    var psx=M.ps*sqX, psy=M.ps*sqY;
+    var dinoH=SH*psy, dinoW=SW*psx;
+    var shake = hurtActive ? (Math.random()-0.5)*6*( (hurtUntil-now)/380 ) : 0;
+    var left = cx - 11*psx + shake;
+    var top  = gY + yOff + dropY - dinoH;
+    // ground shadow (shrinks when airborne / dropped)
+    var air = clamp((-yOff)/M.jumpJ,0,1);
+    if(dropY<40){
+      ctx.fillStyle='rgba(0,0,0,'+(0.13*(1-air*0.7))+')';
+      ctx.beginPath(); ctx.ellipse(cx+shake, gY+5, (dinoW*0.42)*(1-air*0.4), 5*(1-air*0.4), 0,0,7); ctx.fill();
+    }
+    // blink while hurt
+    var blink = hurtActive ? (Math.floor(now/70)%2===0) : false;
+    if(!blink) drawMatrix(pose, left, top, psx, psy, BODY, EYE);
+  }
 
-  // count-in number
+  /* visual pulse ring under dino on beat */
+  if(settings.pulse && playing){
+    var pp=clamp(1-(now-pulseT)/240,0,1);
+    if(pp>0){ ctx.strokeStyle='rgba(83,83,83,'+(0.25*pp)+')'; ctx.lineWidth=2;
+      ctx.beginPath(); ctx.ellipse(cx, gY+5, 18+22*(1-pp), 6+5*(1-pp), 0,0,7); ctx.stroke(); }
+  }
+
+  /* ---- count-in (big & visible) ---- */
   if(playing && cb<LEAD){
-    var cn=Math.ceil(LEAD-cb);
-    ctx.fillStyle='rgba(28,25,23,.18)'; ctx.font='900 90px system-ui,sans-serif'; ctx.textAlign='center';
-    ctx.fillText(String(cn>0?cn:1), centerX, staffY-90);
+    var cn=Math.ceil(LEAD-cb), frac=1-(cb-Math.floor(cb));   // pops on each integer
+    ctx.save();
+    ctx.translate(cx, gY-M.stemH-70*s);
+    var pop=1+0.28*frac; ctx.scale(pop,pop);
+    ctx.fillStyle='rgba(83,83,83,'+(0.35+0.55*frac)+')';
+    ctx.font='900 '+Math.round(120*s)+'px "Courier New",ui-monospace,monospace';
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText(String(cn>0?cn:1), 0, 0);
+    ctx.restore();
+    ctx.fillStyle='#a8a29e'; ctx.font='700 '+Math.round(12*s)+'px system-ui,sans-serif'; ctx.textAlign='center';
+    ctx.fillText('GET  READY', cx, gY-M.stemH-150*s);
+    // 4 beat dots
+    for(var di=0;di<4;di++){
+      var done = cb >= (LEAD-4+di);
+      ctx.fillStyle = done ? BODY : '#e2e2e2';
+      ctx.beginPath(); ctx.arc(cx + (di-1.5)*16*s, gY-M.stemH-18*s, 4*s, 0, 7); ctx.fill();
+    }
+  }
+
+  /* ---- score HUD (dino style) ---- */
+  var flashOn = !(milestoneT>0 && (now-milestoneT)<260 && Math.floor((now-milestoneT)/45)%2===0);
+  if(flashOn){
+    ctx.fillStyle=BODY; ctx.font='700 '+Math.round(15*s)+'px "Courier New",ui-monospace,monospace';
+    ctx.textAlign='right'; ctx.textBaseline='top';
+    ctx.fillText('HI '+pad(best)+' '+pad(score), W-18, 16);
+  }
+  // misses, small, left
+  ctx.fillStyle='#b8b2a8'; ctx.font='700 '+Math.round(12*s)+'px "Courier New",ui-monospace,monospace';
+  ctx.textAlign='left'; ctx.textBaseline='top';
+  ctx.fillText('x '+pad(misses,3), 18, 18);
+
+  /* ---- red flash on hurt ---- */
+  if(redFlashT>0){
+    var rf=clamp(1-(now-redFlashT)/300,0,1);
+    if(rf>0){ ctx.fillStyle='rgba(220,38,38,'+(0.16*rf)+')'; ctx.fillRect(0,0,W,H); }
   }
 }
+function pad(n,w){ w=w||5; n=String(n|0); while(n.length<w) n='0'+n; return n; }
 
 /* =========================================================================
-   MAIN LOOP
+   LOOP
    ========================================================================= */
-function frame(){
+function frame(now){
+  var dt=Math.min(0.05,(now-lastT)/1000); lastT=now;
   var cb=curBeatNow();
   if(playing){
     var bi=Math.floor(cb+1e-6);
-    if(bi!==lastBeatInt){ lastBeatInt=bi; pulseT=performance.now(); }
-    // misses: a note whose window fully passed with no matching tap
-    var tol=0.14/secPerBeat;
+    if(bi!==lastBeatInt){ lastBeatInt=bi; pulseT=now; }
+    // jump physics (airtime ~ 0.45 beat so beamed eighths need two hops)
+    if(jumping){
+      var D=clamp(0.45*secPerBeat, 0.22, 0.5);
+      var p=(now-jumpStart)/D;
+      if(p>=1){ jumping=false; yOff=0; landT=now; sqX=1.18; sqY=0.82; }   // land squash
+      else { yOff = -M.jumpJ*Math.sin(Math.PI*p); }
+    }
+    // misses: a note whose window fully passed with no tap
+    var tol=0.16;
     for(var i=0;i<notes.length;i++){
       var n=notes[i];
       if(!n.rest && !n.judged && n.beat < cb - tol){
-        n.judged='miss'; n.jt=performance.now();
-        triggerHurt(); streak=0; streakEl.textContent='0'; misses++; missEl.textContent=misses;
-        showJudge('MISS','miss');
+        n.judged='miss'; triggerHurt(); misses++;
       }
     }
-    if(genBeat < cb + 24) buildBars(4);                 // keep the stream infinite
-    if(notes.length>500 && notes[0].beat < cb-16){      // free memory on long runs
-      var cut=0; while(cut<notes.length && notes[cut].beat < cb-16) cut++;
-      notes.splice(0,cut);
-    }
+    if(genBeat < cb + 24) buildBars(4);
+    if(notes.length>500 && notes[0].beat < cb-16){ var cut=0; while(cut<notes.length && notes[cut].beat<cb-16) cut++; notes.splice(0,cut); }
   }
-  draw();
+  draw(now, dt);
   requestAnimationFrame(frame);
 }
 
@@ -568,28 +582,24 @@ playBtn.addEventListener('click', function(){ togglePlay(); playBtn.blur(); });
 tempoEl.addEventListener('input', function(){ setBpm(parseInt(tempoEl.value,10)); });
 gearBtn.addEventListener('click', function(e){ e.stopPropagation(); panel.classList.toggle('open'); });
 document.addEventListener('pointerdown', function(e){ if(!panel.contains(e.target) && e.target!==gearBtn) panel.classList.remove('open'); });
-
 stage.addEventListener('pointerdown', function(e){ e.preventDefault(); doTap(); });
 window.addEventListener('keydown', function(e){
   if(e.repeat) return;
-  if(e.code==='Space'||e.key==='ArrowUp'||e.key==='w'||e.key==='W'){
-    e.preventDefault(); doTap();
-  } else if(e.key==='Escape'){ panel.classList.remove('open'); }
+  if(e.code==='Space'||e.key==='ArrowUp'||e.key==='w'||e.key==='W'){ e.preventDefault(); doTap(); }
+  else if(e.key==='Escape'){ panel.classList.remove('open'); }
 }, true);
 
-/* settings wiring */
 function bindSwitch(id,key,after){ var el=document.getElementById(id); el.addEventListener('change',function(){ settings[key]=el.checked; if(after)after(el.checked); }); }
-bindSwitch('optRunner','showRunner',function(on){ toggleRunner(on); });
+bindSwitch('optRunner','showRunner',function(on){ if(on) dropY=-220; });   // fall in from top
 bindSwitch('optMetro','metro',function(){ if(masterGain) masterGain.gain.value=settings.metro?1:0; });
 bindSwitch('optPulse','pulse');
+bindSwitch('optMarks','marks');
 bindSwitch('optRests','rests');
 document.getElementById('optAid').addEventListener('change',function(){ settings.aid=this.value; });
 document.getElementById('optDensity').addEventListener('change',function(){ settings.density=this.value; });
 
 /* boot */
-resize();
-buildBars(8);          // frozen preview of incoming notation
-setPose('stand');
+resize(); initClouds(); buildBars(8);
 requestAnimationFrame(frame);
 </script>
 </body>
