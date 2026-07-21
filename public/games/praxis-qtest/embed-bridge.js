@@ -88,7 +88,7 @@
     var flowState='init',exerciseCount=0,currentTempo=88;
     var numBars=8,splitMode='2s',lastData=null,owner=[],seq=0;
     var settings={loop:false,ab:true,cue:true,metroSound:true,master:false,marks:true,lineCursor:true};
-    var aidMode='none',runId=0,completedId=-1,clockTimer=null,clockEighth=0;
+    var aidMode='none',runId=0,completedId=-1,clockTimer=null,clockEighth=0,listenMode=false;
     console.log('[coop-bridge] co-op branch active');
     document.addEventListener('keydown',function(e){ if(e.key===' '||e.code==='Space'){e.preventDefault();e.stopImmediatePropagation();} if(e.key==='a'||e.key==='A'||e.key==='l'||e.key==='L'){ e.preventDefault(); tap(); } },true);
     function P(){return window.MusicRhythmPlayer||null;}
@@ -103,6 +103,7 @@
         cfg.afterStoppingCallback=function(){ completeExercise(); };
         var origStatus=cfg.changeStatusCallback;
         cfg.changeStatusCallback=function(s){
+          if(s==='tap'&&listenMode){listenMode=false;completedId=runId;hardStop();flowState='done';post({type:'drill-state',playing:false,mode:'listen'});if(origStatus)origStatus(s);return;}
           if(s==='countin'){ startBeatClock(currentTempo); }
           if(s==='play'){ flowState='playing'; if(settings.lineCursor)cursor.play(currentTempo); }
           if(s==='tap'){ flowState='playing'; startClock(); startBeatClock(currentTempo); if(settings.lineCursor)cursor.play(currentTempo); }
@@ -173,6 +174,7 @@
       else if(d.type==='praxis-bars'){ var nb=d.bars||8; if(nb===numBars)return; numBars=nb; hardStop(); exerciseCount++; showExercise(randRhythm()); if(playing)beginPlay(); }
       else if(d.type==='praxis-split'){ splitMode=d.split||'2s'; owner=computeSplit(numBars,splitMode); postSplit(); renderAB(); renderAids(); }
       else if(d.type==='praxis-aid'){ aidMode=d.mode||'none'; renderAids(); }
+      else if(d.type==='praxis-listen'){if(listenMode&&playing){listenMode=false;hardStop();flowState='done';post({type:'drill-state',playing:false,mode:'listen'});}else{listenMode=true;if(flowState==='showing'){beginPlay();}else{exerciseCount++;showExercise(randRhythm());beginPlay();}}}
       else if(d.type==='praxis-mute'){ try{if(window.Howler)window.Howler.mute(!!d.muted);}catch(e){} }
       else if(d.type==='praxis-settings'){ if(d.settings){ for(var k in d.settings){ if(k in settings)settings[k]=d.settings[k]; } if('lineCursor' in d.settings)settings.cursor=d.settings.lineCursor; } try{P().setMarkNotesDuringTapping(!!settings.marks);if(!settings.marks&&rhythmImage)rhythmImage.removeAllLabels();}catch(e){} renderAB(); }
     });
@@ -201,6 +203,7 @@
         cfg.finishedTappingCallback=function(){ onExerciseComplete(); };
         var origStatus=cfg.changeStatusCallback;
         cfg.changeStatusCallback=function(s){
+          if(s==='tap'&&listenMode){listenMode=false;hardStop();flowState='done';post({type:'drill-state',playing:false,mode:'listen'});if(origStatus)origStatus(s);return;}
           if(s==='countin'){startBeatClock(currentTempo);}
           if(s==='play'){ if(fsettings.lineCursor)cursor.play(currentTempo); }
           if(s==='tap'){ flowState='tapping'; startBeatClock(currentTempo); if(fsettings.lineCursor)cursor.play(currentTempo); }
@@ -243,6 +246,7 @@
       else if(d.type==='praxis-tap'){ if(flowState==='playing'||flowState==='tapping')tap(); else handleActivate(); }
       else if(d.type==='praxis-bars'){ var nb=d.bars||2; if(nb===numBars)return; numBars=nb; if(playing){ hardStop(); exerciseCount++; showExercise(randRhythm()); beginPlay(); } else { nextExercise(); } }
       else if(d.type==='praxis-aid'){ aidMode=d.mode||'none'; renderAids(); }
+      else if(d.type==='praxis-listen'){if(listenMode&&playing){listenMode=false;hardStop();flowState='done';post({type:'drill-state',playing:false,mode:'listen'});}else{listenMode=true;if(flowState==='showing'){beginPlay();}else{exerciseCount++;showExercise(randRhythm());beginPlay();}}}
       else if(d.type==='praxis-mute'){ try{if(window.Howler)window.Howler.mute(!!d.muted);}catch(e){} }
       else if(d.type==='praxis-settings'){ if(d.settings){ if('metroSound' in d.settings)fsettings.metroSound=d.settings.metroSound; if('master' in d.settings)fsettings.master=d.settings.master; if('marks' in d.settings)fsettings.marks=d.settings.marks; if('lineCursor' in d.settings)fsettings.lineCursor=d.settings.lineCursor; } try{P().setMarkNotesDuringTapping(!!fsettings.marks);}catch(e){} }
     });

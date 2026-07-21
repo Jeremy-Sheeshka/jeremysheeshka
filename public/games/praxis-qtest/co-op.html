@@ -162,13 +162,7 @@
     .then(function(res){
       var h=res[0], bridge=res[1], ov=res[2];
       console.log('[praxis-coop] loaded drill='+(h?h.length:0)+' bridge='+(bridge?bridge.length:0)+' css='+(ov?ov.length:0));
-      if(!h){ f.srcdoc='<html><body style="font-family:system-ui;padding:2rem;color:#666"><p>Could not load the exercise (drill fetch failed).</p><script>
-(function(){
-  var head=document.querySelector('.coop-head');
-  var dots=document.getElementById('coop-dots');
-  if(head&&dots&&dots.parentNode!==head){ head.appendChild(dots); }
-})();
-</script>
+      if(!h){ f.srcdoc='<html><body style="font-family:system-ui;padding:2rem;color:#666"><p>Could not load the exercise (drill fetch failed).</p>
 </body></html>'; return; }
       h=stripBust(h);
       if(ov && h.indexOf('</head>')!==-1) h=h.replace('</head>','<style>'+ov+'</style></head>');
@@ -310,5 +304,30 @@
     sizeCanvas();
   })();
   </script>
+<script>
+(function(){
+  var head=document.querySelector('.coop-head');
+  var dots=document.getElementById('coop-dots');
+  if(head&&dots&&dots.parentNode!==head){ head.appendChild(dots); }
+})();
+</script>
+<script>
+(function(){
+  var listening=false,frame=document.getElementById('drill-frame');
+  function post(m){if(frame&&frame.contentWindow)frame.contentWindow.postMessage(m,'*');}
+  document.addEventListener('click',function(e){
+    var btn=e.target.closest?e.target.closest('[data-listen]'):null;
+    if(!btn)return; e.stopImmediatePropagation(); e.preventDefault();
+    post({type:'praxis-listen'});
+  },true);
+  window.addEventListener('message',function(ev){
+    var d=ev.data; if(!d||d.type!=='drill-state')return;
+    listening=!!d.playing;
+    document.querySelectorAll('[data-listen]').forEach(function(b){
+      b.textContent=listening?'Stop':'Listen'; b.classList.toggle('active',listening);
+    });
+  });
+})();
+</script>
 </body>
 </html>
