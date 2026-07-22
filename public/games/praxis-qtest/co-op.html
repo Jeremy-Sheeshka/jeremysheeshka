@@ -154,7 +154,7 @@
     var host=location.hostname, isLocal=(host==='localhost'||host==='127.0.0.1');
     if(isLocal){ f.src='http://localhost:4735/games/rhythm-app/exercise/720/?praxis=coop'; return; }
     var DRILL='/games/rhythm-app/exercise/720/';
-    var VER='v=20260722v7';
+    var VER='v=20260722v8';
     function stripBust(h){ h=h.replace(/if\s*\(\s*top\s*==\s*self\s*\)/g,'if(true)'); h=h.replace(/if\s*\(\s*self\s*==\s*top\s*\)/g,'if(true)'); h=h.replace(/if\s*\(\s*top\s*!=\s*self\s*\)/g,'if(false)'); h=h.replace(/if\s*\(\s*self\s*!=\s*top\s*\)/g,'if(false)'); h=h.replace(/if\s*\(\s*window\.top\s*===?\s*window\.self\s*\)/g,'if(true)'); h=h.replace(/if\s*\(\s*window\.top\s*!==?\s*window\.self\s*\)/g,'if(false)'); h=h.replace(/top\.location\s*=\s*self\.location[^;}\n]*/g,'/*x*/'); h=h.replace(/self\.location\s*=\s*top\.location[^;}\n]*/g,'/*x*/'); h=h.replace(/top\.location\.href\s*=[^;}\n]*/g,'/*x*/'); h=h.replace(/top\.location\.replace\([^)]*\)/g,'/*x*/'); h=h.replace(/top\.location\.assign\([^)]*\)/g,'/*x*/'); h=h.replace(/window\.top\.location\s*=[^;}\n]*/g,'/*x*/'); h=h.replace(/window\.top\.location\.href\s*=[^;}\n]*/g,'/*x*/'); h=h.replace(/window\.top\.location\.replace\([^)]*\)/g,'/*x*/'); h=h.replace(/parent\.location\s*=[^;}\n]*/g,'/*x*/'); h=h.replace(/<meta[^>]*content-security-policy[^>]*>/gi,''); return h; }
     function grab(url){ return fetch(url).then(function(r){ if(!r.ok){ console.warn('[praxis-coop] HTTP '+r.status+' for '+url); return ''; } return r.text(); }).catch(function(e){ console.warn('[praxis-coop] fetch failed '+url,e); return ''; }); }
     Promise.all([ grab(DRILL), grab('/games/praxis-qtest/embed-bridge.js?v=20260722v7?'+VER), grab('/games/praxis-qtest/embed-overrides.css?v=20260722v7?'+VER) ])
@@ -290,8 +290,8 @@
         if(settings.master)return; lastOwner=d.owner;
         if(settings.dots)setDots(Math.floor(d.eighthInBar/2));
         if(settings.dots)setBanner(d.owner,d.bar);
-        if(d.eighthInBar===0){ if(settings.cue)blip(d.owner==='A'?659.25:392.0, .15, .12, d.owner==='A'?'sine':'triangle'); else if(settings.metroSound)blip(784,.09,.05); }
-        else if(settings.metroSound && d.eighthInBar%2===0){ blip(520,.06,.04); }
+        if(d.eighthInBar===0){ if(settings.cue)blip(d.owner==='A'?659.25:392.0, .15, .12, d.owner==='A'?'sine':'triangle');  }
+        
       }
     });
 
