@@ -184,7 +184,7 @@
 .rec-stage{border:1px solid var(--Rhythm-line);border-radius:13px;background:var(--Rhythm-bg);padding:14px;margin-bottom:12px}
 .rec-status{font-size:13px;font-weight:700;margin-bottom:10px;min-height:18px}
 .rec-staff{width:100%;height:auto;display:block;color:var(--Rhythm-ink);background:var(--Rhythm-surface);border:1px solid var(--Rhythm-line);border-radius:10px}
-.rec-pad{margin-top:10px;min-height:66px;display:grid;place-items:center;border:1.5px dashed var(--Rhythm-accent);border-radius:12px;background:var(--Rhythm-soft);color:var(--Rhythm-accent);font-weight:800;font-size:14px;cursor:pointer;user-select:none;touch-action:manipulation}
+.rec-pad{margin-top:10px;min-height:66px;display:grid;place-items:center;border:2px solid var(--Rhythm-accent);border-radius:12px;background:var(--Rhythm-soft);color:var(--Rhythm-accent);font-weight:800;font-size:14px;cursor:pointer;user-select:none;touch-action:manipulation}
 .rec-pad:active{background:var(--Rhythm-accent);color:var(--Rhythm-accent-ink)}
 .rec-controls{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 .rec-controls .btn[disabled]{opacity:.4;cursor:not-allowed}
@@ -197,7 +197,6 @@
 .bc-btns{display:flex;gap:6px}
 .bc-btns .btn{min-height:28px;padding:4px 9px;font-size:12px}
 .bank-empty{color:var(--Rhythm-muted);font-size:13px;margin:0}
-
 </style>
 </head>
 <body>
@@ -419,7 +418,7 @@
         $("#status-dataset").textContent=state.dataset;
         toast(state.dataset+" selected");
       }));
-      $("#file-input").addEventListener("change",e=>{ if(e.target.files[0]) toast(e.target.files[0].name+" staged for this session"); });
+      if($("#file-input"))$("#file-input").addEventListener("change",e=>{ if(e.target.files[0]) toast(e.target.files[0].name+" staged for this session"); });
 
       // Weekly Doing -> open the Gallery and highlight the doing prompt
       $("#weekly-doing-link").addEventListener("click",()=>{
@@ -484,13 +483,13 @@
   "use strict";
   var $=function(s){return document.querySelector(s);};
   var NS="http://www.w3.org/2000/svg";
-  var BPM=88, EIGHTH=60/BPM/2;
+  var BPM=88, EIGHTH=60/BPM/2, Q=EIGHTH*2, WIN_Q=8;
   var actx=null;
-  function ensureActx(){var AC=window.AudioContext||window.webkitAudioContext;if(!AC)return false;if(!actx)actx=new AC();if(actx.state==="suspended")actx.resume();return true;}
+  function ensureActx(){var AC=window.AudioContext||window.webkitAudioContext;if(!AC)return null;if(!actx)actx=new AC();return actx;}
   function emptyGrid(){var g=[],i;for(i=0;i<16;i++)g.push(0);return g;}
   function gridFromSet(set){var g=emptyGrid();set.forEach(function(s){g[s]=1;});return g;}
   function decompose(L){var D=[8,6,4,3,2,1],out=[],i;while(L>0){for(i=0;i<D.length;i++){if(D[i]<=L){out.push(D[i]);L-=D[i];break;}}}return out;}
-  function elements(grid){var els=[],slot=0,bi,i;for(bi=0;bi<2;bi++){var b=grid.slice(bi*8,bi*8+8);i=0;while(i<8){var v=b[i],j=i;while(j<8&&b[j]===v)j++;var run=j-i,ds=decompose(run),k;for(k=0;k<ds.length;k++){els.push({type:v?"note":"rest",slot:slot,dur:ds[k]});slot+=ds[k];}i=j;}}return els;}
+  function elements(grid){var els=[],bi,i;for(bi=0;bi<2;bi++){var b=grid.slice(bi*8,bi*8+8);i=0;while(i<8){var v=b[i],j=i;while(j<8&&b[j]===v)j++;var run=j-i,ds=decompose(run),abs=bi*8+i,k;for(k=0;k<ds.length;k++){els.push({type:v?"note":"rest",slot:abs,dur:ds[k]});abs+=ds[k];}i=j;}}return els;}
   function mk(svg,t,a){var e=document.createElementNS(NS,t),k;for(k in a)e.setAttribute(k,a[k]);return e;}
   function render(svg,grid){
     svg.innerHTML="";
@@ -514,33 +513,72 @@
     svg._geom={lm:lm,sw:sw};
   }
   function clickAt(time,freq,vol){if(!actx)return;var o=actx.createOscillator(),g=actx.createGain();o.type="sine";o.frequency.value=freq;g.gain.setValueAtTime(.0001,time);g.gain.exponentialRampToValueAtTime(vol||.3,time+.004);g.gain.exponentialRampToValueAtTime(.0001,time+.09);o.connect(g).connect(actx.destination);o.start(time);o.stop(time+.11);}
-  function play(grid,svg){if(!ensureActx())return;render(svg,grid);var ph=svg.querySelector("line[stroke='#e11d48']"),g=svg._geom,t0=actx.currentTime+.08,s;for(s=0;s<16;s++){if(grid[s]){var o=actx.createOscillator(),gn=actx.createGain();o.type="triangle";o.frequency.value=(s%2===0)?1000:760;var at=t0+s*EIGHTH;gn.gain.setValueAtTime(.0001,at);gn.gain.exponentialRampToValueAtTime(.22,at+.004);gn.gain.exponentialRampToValueAtTime(.0001,at+.08);o.connect(gn).connect(actx.destination);o.start(at);o.stop(at+.1);}(function(s){var delay=(t0-actx.currentTime+s*EIGHTH)*1000;setTimeout(function(){if(ph&&g){var x=g.lm+(s+0.5)*g.sw;ph.setAttribute("x1",x);ph.setAttribute("x2",x);ph.setAttribute("opacity",".9");}},Math.max(0,delay));})(s);}var endD=(t0-actx.currentTime+16*EIGHTH)*1000;setTimeout(function(){if(ph)ph.setAttribute("opacity","0");},Math.max(0,endD));}
-  var recTimer=null,recWindow=false,recAudioStart=0,taps=null,lastGrid=null;
+  var recActive=false, recAudioStart=0, recWindowLen=WIN_Q*Q, taps=null, lastGrid=null, rafId=null;
   function setStatus(t){var el=$("#rec-status");if(el)el.textContent=t;}
   function setSubmit(on){var a=$("#rec-submit"),b=$("#rec-play");if(a)a.disabled=!on;if(b)b.disabled=!on;}
-  function startRec(){if(!ensureActx())return;if(recTimer)clearTimeout(recTimer);recWindow=false;taps=new Set();lastGrid=null;var rec=$("#rec-record"),st=$("#rec-stage");if(rec)rec.classList.add("hidden");if(st)st.classList.remove("hidden");setSubmit(false);render($("#rec-staff"),emptyGrid());setStatus("Count-in — get ready…");var q=EIGHTH*2,t0=actx.currentTime+.15,c;for(c=0;c<4;c++){(function(c){var at=t0+c*q;clickAt(at,c===0?1320:990);var d=(at-actx.currentTime)*1000;setTimeout(function(){setStatus("Count-in: "+(c+1));},Math.max(0,d));})(c);}recAudioStart=t0+4*q;var winD=(recAudioStart-actx.currentTime)*1000;setTimeout(function(){recWindow=true;setStatus("● Recording — tap the pad (2 bars)");},Math.max(0,winD));var endD=(recAudioStart+8*q-actx.currentTime)*1000;recTimer=setTimeout(finalize,Math.max(0,endD)+30);}
-  function tapNow(){if(!recWindow)return;var off=actx.currentTime-recAudioStart,slot=Math.round(off/EIGHTH);if(slot<0||slot>15)return;taps.add(slot);render($("#rec-staff"),gridFromSet(taps));clickAt(actx.currentTime+.001,1500,.18);}
-  function finalize(){recWindow=false;lastGrid=gridFromSet(taps||new Set());render($("#rec-staff"),lastGrid);var any=lastGrid.some(function(x){return x;});if(any){setStatus("Nice — play it back, submit it, or redo.");setSubmit(true);}else{setStatus("No taps captured — hit Redo to try again.");setSubmit(false);}}
-  function hasNote(g){return g&&g.some(function(x){return x;});}
+  function startRec(){
+    var ctx=ensureActx();if(!ctx){setStatus("Audio not supported in this browser.");return;}
+    if(rafId){cancelAnimationFrame(rafId);rafId=null;}
+    recActive=false;taps=new Set();lastGrid=null;setSubmit(false);
+    render($("#rec-staff"),emptyGrid());
+    var rec=$("#rec-record"),st=$("#rec-stage"),pad=$("#rec-pad");
+    if(rec)rec.classList.add("hidden");if(st)st.classList.remove("hidden");
+    if(document.activeElement&&document.activeElement.blur)document.activeElement.blur();
+    if(pad&&pad.focus)pad.focus();
+    setStatus("Starting…");
+    Promise.resolve(ctx.resume()).then(function(){
+      var t0=ctx.currentTime+0.25,c;
+      for(c=0;c<4;c++){(function(c){var at=t0+c*Q;clickAt(at,c===0?1320:990,.35);var d=(at-ctx.currentTime)*1000;setTimeout(function(){setStatus("Count-in: "+(c+1));},Math.max(0,d));})(c);}
+      recAudioStart=t0+4*Q;
+      var recD=(recAudioStart-ctx.currentTime)*1000;
+      setTimeout(function(){setStatus("● Recording — tap the pad (2 bars)");},Math.max(0,recD));
+      recActive=true;tickRec();
+    });
+  }
+  function tickRec(){if(!recActive)return;if(actx&&actx.currentTime>=recAudioStart+recWindowLen){finalize();return;}rafId=requestAnimationFrame(tickRec);}
+  function tapNow(){
+    if(!recActive||!actx)return;
+    var now=actx.currentTime;
+    if(now<recAudioStart||now>=recAudioStart+recWindowLen)return;
+    var off=now-recAudioStart,slot=Math.round(off/EIGHTH);
+    if(slot<0)slot=0;if(slot>15)slot=15;
+    taps.add(slot);render($("#rec-staff"),gridFromSet(taps));clickAt(now+0.001,1500,.18);
+  }
+  function finalize(){
+    recActive=false;if(rafId){cancelAnimationFrame(rafId);rafId=null;}
+    lastGrid=gridFromSet(taps||new Set());render($("#rec-staff"),lastGrid);
+    var any=lastGrid.some(function(x){return x;});
+    if(any){setStatus("Nice — play it back, submit it, or redo.");setSubmit(true);}
+    else{setStatus("No taps captured — hit Redo to try again.");setSubmit(false);}
+  }
+  function play(grid,svg){
+    var ctx=ensureActx();if(!ctx)return;
+    Promise.resolve(ctx.resume()).then(function(){
+      render(svg,grid);
+      var ph=svg.querySelector("line[stroke='#e11d48']"),g=svg._geom,t0=ctx.currentTime+0.08,s;
+      for(s=0;s<16;s++){if(grid[s]){var o=ctx.createOscillator(),gn=ctx.createGain();o.type="triangle";o.frequency.value=(s%2===0)?1000:760;var at=t0+s*EIGHTH;gn.gain.setValueAtTime(.0001,at);gn.gain.exponentialRampToValueAtTime(.22,at+.004);gn.gain.exponentialRampToValueAtTime(.0001,at+.08);o.connect(gn).connect(ctx.destination);o.start(at);o.stop(at+.1);}(function(s){var delay=(t0-ctx.currentTime+s*EIGHTH)*1000;setTimeout(function(){if(ph&&g){var x=g.lm+(s+0.5)*g.sw;ph.setAttribute("x1",x);ph.setAttribute("x2",x);ph.setAttribute("opacity",".9");}},Math.max(0,delay));})(s);}
+      var endD=(t0-ctx.currentTime+16*EIGHTH)*1000;setTimeout(function(){if(ph)ph.setAttribute("opacity","0");},Math.max(0,endD));
+    });
+  }
   var KEY="praxis_bank_v1";
   function loadBank(){var raw=null;try{raw=localStorage.getItem(KEY);}catch(e){}if(raw===null){var seed=[{id:1,grid:[1,0,1,0,1,1,1,0,1,0,0,0,1,0,1,0],bpm:88,seed:true,ts:Date.now()}];try{localStorage.setItem(KEY,JSON.stringify(seed));}catch(e){}return seed;}try{return JSON.parse(raw)||[];}catch(e){return [];}}
   function saveBank(a){try{localStorage.setItem(KEY,JSON.stringify(a));}catch(e){}}
+  function hasNote(g){return g&&g.some(function(x){return x;});}
   function toast(m){var t=$("#toast");if(!t)return;t.textContent=m;t.classList.remove("hidden");clearTimeout(toast._t);toast._t=setTimeout(function(){t.classList.add("hidden");},2200);}
   function renderBank(){var grid=$("#bank-grid");if(!grid)return;var a=loadBank();grid.innerHTML="";if(!a.length){grid.innerHTML='<p class="bank-empty">No rhythms yet — record the first one above.</p>';return;}a.slice().reverse().forEach(function(item){var card=document.createElement("div");card.className="bank-card";var svg=document.createElementNS(NS,"svg");svg.setAttribute("viewBox","0 0 640 120");svg.setAttribute("class","bank-staff");card.appendChild(svg);render(svg,item.grid);var meta=document.createElement("div");meta.className="bc-meta";var lbl=document.createElement("span");lbl.textContent=(item.seed?"Example":"Your rhythm")+" · "+(item.bpm||88)+" BPM";var row=document.createElement("span");row.className="bc-btns";var pb=document.createElement("button");pb.type="button";pb.className="btn small";pb.textContent="▶";pb.title="Play";var db=document.createElement("button");db.type="button";db.className="btn small";db.textContent="✕";db.title="Delete";row.appendChild(pb);row.appendChild(db);meta.appendChild(lbl);meta.appendChild(row);card.appendChild(meta);grid.appendChild(card);pb.addEventListener("click",function(ev){ev.stopPropagation();play(item.grid,svg);});db.addEventListener("click",function(ev){ev.stopPropagation();var arr=loadBank().filter(function(x){return x.id!==item.id;});saveBank(arr);renderBank();toast("Removed");});card.addEventListener("click",function(){play(item.grid,svg);});});}
   function wire(){
     var rr=$("#rec-record");if(rr)rr.addEventListener("click",startRec);
     var rd=$("#rec-redo");if(rd)rd.addEventListener("click",startRec);
-    var rc=$("#rec-cancel");if(rc)rc.addEventListener("click",function(){recWindow=false;if(recTimer)clearTimeout(recTimer);var st=$("#rec-stage"),rb=$("#rec-record");if(st)st.classList.add("hidden");if(rb)rb.classList.remove("hidden");});
+    var rc=$("#rec-cancel");if(rc)rc.addEventListener("click",function(){recActive=false;if(rafId){cancelAnimationFrame(rafId);rafId=null;}var st=$("#rec-stage"),rb=$("#rec-record");if(st)st.classList.add("hidden");if(rb)rb.classList.remove("hidden");});
     var rp=$("#rec-play");if(rp)rp.addEventListener("click",function(){if(hasNote(lastGrid))play(lastGrid,$("#rec-staff"));});
     var rs=$("#rec-submit");if(rs)rs.addEventListener("click",function(){if(!hasNote(lastGrid))return;var a=loadBank();a.push({id:Date.now(),grid:lastGrid.slice(),bpm:88,ts:Date.now()});saveBank(a);renderBank();toast("Saved to the bank ✓");var st=$("#rec-stage"),rb=$("#rec-record");if(st)st.classList.add("hidden");if(rb)rb.classList.remove("hidden");});
     var pad=$("#rec-pad");if(pad){pad.addEventListener("pointerdown",function(ev){ev.preventDefault();tapNow();});}
-    document.addEventListener("keydown",function(ev){if(!recWindow)return;if(ev.code==="Space"||ev.key===" "||ev.key==="t"||ev.key==="T"){ev.preventDefault();tapNow();}});
+    document.addEventListener("keydown",function(ev){if(!recActive)return;if(ev.code==="Space"||ev.key===" "||ev.key==="t"||ev.key==="T"){ev.preventDefault();ev.stopPropagation();tapNow();}});
     var bc=$("#bank-clear");if(bc)bc.addEventListener("click",function(){if(confirm("Clear all rhythms in your bank?")){saveBank([]);renderBank();toast("Bank cleared");}});
     renderBank();
   }
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",wire);else wire();
 })();
-
 </script>
 </body>
 </html>

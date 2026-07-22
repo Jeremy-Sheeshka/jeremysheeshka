@@ -3,21 +3,25 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ETEC 531 — Rhythm Runner (v38)</title>
+<title>ETEC 531 — Rhythm Runner (v40)</title>
 <style>
   :root{--ink:#1c1917;--line:#e7e5e4;--line2:#d6d3d1;--mut:#78716c;--grey:#535353;}
   *{box-sizing:border-box}
   html,body{margin:0;height:100%}
   body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#fff;color:var(--ink)}
-  .topbar{display:flex;align-items:center;gap:14px;background:#fff;border-bottom:1px solid var(--line);padding:8px 18px;height:54px}
+  .topbar{position:relative;display:flex;align-items:center;gap:14px;background:#15181f;border-bottom:none;padding:9px 20px;height:56px}
+  .topbar::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,#7c3aed,#c026d3)}
   .brand{display:flex;align-items:center;gap:10px;text-decoration:none}
-  .brand .mark{width:30px;height:30px;background:var(--ink);color:#fff;border-radius:7px;display:grid;place-items:center;font-weight:900;font-size:12px;letter-spacing:.5px}
-  .brand .eyebrow{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#a8a29e;font-weight:800;text-decoration:none}
-  .brand .ttl{font-size:14px;font-weight:800;color:var(--ink);text-decoration:none}
-  .brand .sep{color:#d6d3d1;font-weight:700}
-  .topbar nav{margin-left:auto;display:flex;gap:20px;font-size:13px;font-weight:600}
-  .topbar nav a{color:#57534e;text-decoration:none}
-  .topbar nav a:hover{color:var(--ink)}
+  .brand .mark{width:32px;height:32px;background:#4f9bff;color:#0b1220;border-radius:8px;display:grid;place-items:center;font-weight:900;font-size:13px;letter-spacing:.5px}
+  .brand .eyebrow{font-size:15px;letter-spacing:0;text-transform:none;color:#f4f6f9;font-weight:800;text-decoration:none}
+  .brand .eyebrow:hover{color:#dfe3ea}
+  .brand .ttl{font-size:15px;font-weight:800;color:#f4f6f9;text-decoration:none}
+  .brand .ttl:hover{color:#dfe3ea}
+  .brand .sep{color:#6b7280;font-weight:700}
+  .topbar nav{margin-left:auto;display:flex;gap:6px;font-size:14px;font-weight:600}
+  .topbar nav a{color:#9aa1ad;text-decoration:none;padding:7px 13px;border-radius:8px;transition:background .15s,color .15s}
+  .topbar nav a:hover{color:#fff;background:#232733}
+  .topbar nav a.cur{color:#5b9dff;background:#232733}
   .toolbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:#fff;border-bottom:1px solid var(--line);padding:8px 18px;position:relative}
   button.btn{font:inherit;font-weight:700;font-size:13px;border:1px solid var(--line2);background:#fff;color:var(--ink);border-radius:8px;padding:8px 14px;cursor:pointer}
   button.btn:hover{background:#f5f5f4}
@@ -44,7 +48,8 @@
   .card .sub{font-size:12px;letter-spacing:.5px;color:#a8a29e;margin-top:10px}
   .card .sub2{font-size:13px;letter-spacing:1px;color:#57534e;margin-top:8px;font-weight:600}
   @media (max-width:680px){
-    .topbar nav{gap:14px;font-size:12px}
+    .topbar nav{gap:2px;font-size:12px}
+    .topbar nav a{padding:6px 9px}
     .brand .eyebrow{display:none}
     .brand .sep{display:none}
     .jumpbtn{padding:14px 38px;font-size:14px;bottom:14px}
@@ -97,7 +102,7 @@
     </div>
   </div>
 <script>
-var BUILD = 'RR v38';
+var BUILD = 'RR v40';
 var settings = { aid: 'none' };
 var METRO = true;
 var MARKS = true;
@@ -174,7 +179,7 @@ function resize() {
   if (jJ > gy - dH - 8) {
     jJ = Math.max(stem * 0.7, gy - dH - 8);
   }
-  var ppb = clamp(Math.round(W / 16), 70, 120);
+  var ppb = clamp(Math.round(W / 14), 80, 150);
   M = {
     s: s, ps: ps, hr: hr, stem: stem,
     gy: gy, cx: Math.round(W / 2),
