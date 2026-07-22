@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ETEC 531 — Rhythm Runner (v36)</title>
+<title>ETEC 531 — Rhythm Runner (v38)</title>
 <style>
   :root{--ink:#1c1917;--line:#e7e5e4;--line2:#d6d3d1;--mut:#78716c;--grey:#535353;}
   *{box-sizing:border-box}
@@ -97,7 +97,7 @@
     </div>
   </div>
 <script>
-var BUILD = 'RR v36';
+var BUILD = 'RR v38';
 var settings = { aid: 'none' };
 var METRO = true;
 var MARKS = true;
@@ -112,6 +112,7 @@ var MAX_LEVEL = 5;
 var TAP_EARLY = 0.22;
 var TAP_LATE = 0.22;
 var MISS_AT = 0.30;
+var _gid = 0;
 function rgb(r, g, b) {
   return 'rgb(' + r + ',' + g + ',' + b + ')';
 }
@@ -250,60 +251,74 @@ function drawMatrix(m, left, top, px, py, col, eye) {
     }
   }
 }
-function diffParams() {
-  var t = clamp(Math.floor(streak / 8) / MAX_LEVEL, 0, 1);
-  return {
-    eighth: lerp(0.22, 0.50, t),
-    half: lerp(0.22, 0.12, t),
-    whole: lerp(0.10, 0.04, t),
-    restP: lerp(0.10, 0.18, t)
-  };
+function levelFromStreak() {
+  if (streak < 4) return 0;
+  if (streak < 8) return 1;
+  if (streak < 12) return 2;
+  if (streak < 16) return 3;
+  return 4;
+}
+function weightsFor(level) {
+  if (level <= 0) return { whole: 0.35, half: 0.65, quarter: 0, eighth: 0, halfRest: 0, quarterRest: 0 };
+  if (level === 1) return { whole: 0.20, half: 0.40, quarter: 0, eighth: 0, halfRest: 0.40, quarterRest: 0 };
+  if (level === 2) return { whole: 0.10, half: 0.30, quarter: 0.40, eighth: 0, halfRest: 0.20, quarterRest: 0 };
+  if (level === 3) return { whole: 0.08, half: 0.22, quarter: 0.30, eighth: 0, halfRest: 0.20, quarterRest: 0.20 };
+  return { whole: 0.05, half: 0.15, quarter: 0.25, eighth: 0.30, halfRest: 0.10, quarterRest: 0.15 };
 }
 var notes = [];
 var genBeat = MUSIC0;
-function randBar() {
-  var dp = diffParams();
+function randBar(level) {
+  var w = weightsFor(level);
   var comps = [];
-  var beat = 0;
-  var prev8 = false;
-  while (beat < 4) {
-    var rem = 4 - beat;
-    var r = Math.random();
-    var wThresh = dp.whole;
-    var hThresh = dp.whole + dp.half;
-    var eThresh = dp.whole + dp.half + dp.eighth;
-    if (rem >= 4 && r < wThresh) {
-      comps.push({ length: 576, rest: false });
-      beat += 4;
-      prev8 = false;
-    } else if (rem >= 2 && r < hThresh) {
-      comps.push({ length: 288, rest: false });
-      beat += 2;
-      prev8 = false;
-    } else if (!prev8 && r < eThresh) {
-      comps.push({ length: 72, rest: false });
-      comps.push({ length: 72, rest: false });
-      beat += 1;
-      prev8 = true;
-    } else {
-      comps.push({ length: 144, rest: false });
-      beat += 1;
-      prev8 = false;
+  var rem = 4;
+  var guard = 0;
+  while (rem > 0.001 && guard++ < 16) {
+    var cands = [];
+    var total = 0;
+    var add = function (len, wt, kind) {
+      if (len <= rem + 0.001 && wt > 0) {
+        cands.push({ len: len, wt: wt, kind: kind });
+        total += wt;
+      }
+    };
+    add(4, w.whole, 'W');
+    add(2, w.half, 'H');
+    add(2, w.halfRest, 'HR');
+    add(1, w.quarter, 'Q');
+    add(1, w.quarterRest, 'QR');
+    add(1, w.eighth, 'E');
+    if (cands.length === 0) {
+      comps.push({ length: 144, rest: false, beam: null, gid: 0 });
+      rem -= 1;
+      continue;
     }
-  }
-  for (var c = 0; c < comps.length; c++) {
-    var co = comps[c];
-    if (co.length === 144 && !co.rest) {
-      if (Math.random() < dp.restP) co.rest = true;
+    var r = Math.random() * total;
+    var acc = 0;
+    var chosen = cands[cands.length - 1];
+    for (var ci = 0; ci < cands.length; ci++) {
+      acc += cands[ci].wt;
+      if (r < acc) { chosen = cands[ci]; break; }
     }
+    if (chosen.kind === 'W') comps.push({ length: 576, rest: false, beam: null, gid: 0 });
+    else if (chosen.kind === 'H') comps.push({ length: 288, rest: false, beam: null, gid: 0 });
+    else if (chosen.kind === 'HR') comps.push({ length: 288, rest: true, beam: null, gid: 0 });
+    else if (chosen.kind === 'Q') comps.push({ length: 144, rest: false, beam: null, gid: 0 });
+    else if (chosen.kind === 'QR') comps.push({ length: 144, rest: true, beam: null, gid: 0 });
+    else if (chosen.kind === 'E') {
+      _gid++;
+      var g = _gid;
+      comps.push({ length: 72, rest: false, beam: 'beam', gid: g });
+      comps.push({ length: 72, rest: false, beam: 'beam', gid: g });
+    }
+    rem -= chosen.len;
   }
   return comps;
 }
 function buildBars(count) {
+  var lvl = levelFromStreak();
   for (var b = 0; b < count; b++) {
-    var comps = randBar();
+    var comps = randBar(lvl);
     var barStart = genBeat;
-    var slice = [];
     for (var c = 0; c < comps.length; c++) {
       var co = comps[c];
       var n = {
@@ -311,32 +326,17 @@ function buildBars(count) {
         len: co.length,
         rest: co.rest,
         bib: genBeat - barStart,
-        beam: null,
+        beam: co.beam || null,
+        gid: co.gid || 0,
         judged: null,
         resolved: false,
         air: false,
         tapped: false,
-        _x: 0
+        _x: 0,
+        _dx: 0
       };
       notes.push(n);
-      slice.push(n);
       genBeat += co.length / 144;
-    }
-    var k = 0;
-    while (k < slice.length) {
-      if (slice[k].len === 72 && !slice[k].rest) {
-        var j = k;
-        while (j < slice.length && slice[j].len === 72 && !slice[j].rest) {
-          j++;
-        }
-        var runLen = j - k;
-        for (var m = k; m < j; m++) {
-          slice[m].beam = (runLen >= 2) ? 'beam' : 'flag';
-        }
-        k = j;
-      } else {
-        k++;
-      }
     }
   }
 }
@@ -354,6 +354,19 @@ function pruneRegen(cb) {
   notes = kept;
   genBeat = cutBeat;
   buildBars(4);
+}
+function insetPx(n) {
+  var s = M.s;
+  var hr = M.hr;
+  var G = Math.max(4, Math.round(7 * s));
+  var bb = n.bib;
+  var end = bb + n.len / 144;
+  var leftExt, rightExt;
+  if (n.rest) { leftExt = 4 * s; rightExt = 5 * s; }
+  else { leftExt = hr * 0.95; rightExt = hr * 0.95; }
+  if (bb < 0.01) return leftExt + G;
+  if (Math.abs(end - 4) < 0.01) return -(rightExt + G);
+  return 0;
 }
 var actx = null;
 var masterGain = null;
@@ -496,7 +509,7 @@ function start() {
   pausedBeat = 0;
   notes.length = 0;
   genBeat = MUSIC0;
-  buildBars(8);
+  buildBars(4);
   streak = 0;
   milestoneT = -1;
   jumping = false;
@@ -567,15 +580,15 @@ function doJump() {
   }
 }
 function markBeamSiblingsTapped(n) {
-  if (n.beam !== 'beam') return;
+  if (!n.gid) return;
   var idx = notes.indexOf(n);
   if (idx < 0) return;
   var f;
-  for (f = idx + 1; f < notes.length && notes[f].beam === 'beam'; f++) {
+  for (f = idx + 1; f < notes.length && notes[f].gid === n.gid; f++) {
     if (!notes[f].resolved) notes[f].tapped = true;
   }
   var bwd;
-  for (bwd = idx - 1; bwd >= 0 && notes[bwd].beam === 'beam'; bwd--) {
+  for (bwd = idx - 1; bwd >= 0 && notes[bwd].gid === n.gid; bwd--) {
     if (!notes[bwd].resolved) notes[bwd].tapped = true;
   }
 }
@@ -624,15 +637,11 @@ function updateNotes(cb, now) {
     if (noteL <= bodyR && noteR >= bodyL) {
       if (feet <= M.gy - obsH * 0.30) {
         n.air = true;
-        if (n.beam === 'beam') {
+        if (n.gid > 0) {
           var f;
-          for (f = i + 1; f < notes.length && notes[f].beam === 'beam'; f++) {
-            notes[f].air = true;
-          }
+          for (f = i + 1; f < notes.length && notes[f].gid === n.gid; f++) notes[f].air = true;
           var bwd;
-          for (bwd = i - 1; bwd >= 0 && notes[bwd].beam === 'beam'; bwd--) {
-            notes[bwd].air = true;
-          }
+          for (bwd = i - 1; bwd >= 0 && notes[bwd].gid === n.gid; bwd--) notes[bwd].air = true;
         }
       }
     }
@@ -755,23 +764,27 @@ function drawWorld(cb) {
   var ppb = M.ppb;
   var clefX = cx + (CLEF_BEAT - cb) * ppb;
   if (clefX > -70 && clefX < W + 70) drawClef(clefX);
-  for (var i = 0; i < notes.length; i++) {
-    notes[i]._x = cx + (notes[i].beat - cb) * ppb;
+  var i;
+  for (i = 0; i < notes.length; i++) {
+    var lin = cx + (notes[i].beat - cb) * ppb;
+    notes[i]._x = lin;
+    notes[i]._dx = lin + insetPx(notes[i]);
   }
   var bth = Math.max(4, Math.round(6 * s));
   var bi = 0;
   while (bi < notes.length) {
-    if (notes[bi].beam === 'beam') {
-      var bj3 = bi;
-      while (bj3 < notes.length && notes[bj3].beam === 'beam') bj3++;
-      var x0 = notes[bi]._x + M.hr * 0.7;
-      var x1 = notes[bj3 - 1]._x + M.hr * 0.7;
+    var g = notes[bi].gid;
+    if (g > 0 && notes[bi].beam === 'beam') {
+      var bj = bi;
+      while (bj < notes.length && notes[bj].gid === g) bj++;
+      var x0 = notes[bi]._dx + M.hr * 0.7;
+      var x1 = notes[bj - 1]._dx + M.hr * 0.7;
       var bw3 = Math.ceil(x1 - x0) + Math.max(2, Math.round(2.4 * s));
       if (bw3 > 0 && x1 > -120 && x0 < W + 120) {
         ctx.fillStyle = INK;
         ctx.fillRect(Math.round(x0), Math.round(gy - M.stem), bw3, bth);
       }
-      bi = bj3;
+      bi = bj;
     } else {
       bi++;
     }
@@ -786,28 +799,16 @@ function drawWorld(cb) {
   for (var kk = kStart; kk <= kEnd; kk++) {
     if (kk < 1) continue;
     var B = MUSIC0 + 4 * kk;
-    var dLast = 4;
-    var bestBeat = -1e9;
-    var bestLen = 576;
-    for (var si = 0; si < notes.length; si++) {
-      var sn = notes[si];
-      if (sn.beat < B && sn.beat > bestBeat) {
-        bestBeat = sn.beat;
-        bestLen = sn.len;
-      }
-    }
-    if (bestBeat > -1e8) dLast = bestLen / 144;
-    var barBeat = B - dLast / 2;
-    var bx = cx + (barBeat - cb) * ppb;
+    var bx = cx + (B - cb) * ppb;
     if (bx < -4 || bx > W + 4) continue;
     ctx.fillRect(Math.round(bx - bbw / 2), gy - tickHalf, bbw, tickHalf * 2);
   }
   for (var n2 = 0; n2 < notes.length; n2++) {
     var n = notes[n2];
-    var x = n._x;
-    if (x < -70 || x > W + 70) continue;
-    if (n.rest) drawRest(x);
-    else drawNote(x, n);
+    var dx = n._dx;
+    if (dx < -70 || dx > W + 70) continue;
+    if (n.rest) drawRest(dx);
+    else drawNote(dx, n);
   }
 }
 function drawDino(now, cb) {
@@ -864,9 +865,9 @@ function drawCountdown(cb) {
       ctx.textBaseline = 'middle';
       ctx.fillText('GET  READY', cx, numY);
     } else if (cb < MUSIC0) {
-      var cn = MUSIC0 - Math.floor(cb);
-      if (cn < 1) cn = 1;
-      if (cn > 4) cn = 4;
+      var cu = Math.floor(cb - COUNT_START) + 1;
+      if (cu < 1) cu = 1;
+      if (cu > 4) cu = 4;
       var frac = 1 - (cb - Math.floor(cb));
       ctx.save();
       ctx.translate(cx, numY);
@@ -876,7 +877,7 @@ function drawCountdown(cb) {
       ctx.font = '900 ' + Math.round(124 * s) + 'px "Courier New",monospace';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText(String(cn), 0, 0);
+      ctx.fillText(String(cu), 0, 0);
       ctx.restore();
     }
   } catch (e) {}
@@ -945,7 +946,7 @@ function frame(now) {
         lastLegPhase = Math.floor(cb * 2);
       }
       updateNotes(cb, now);
-      if (genBeat < cb + 24) buildBars(4);
+      if (genBeat < cb + 16) buildBars(4);
     }
     draw(now, cb);
   } catch (e) {
@@ -992,7 +993,7 @@ document.getElementById('optAid').addEventListener('change', function () {
   settings.aid = this.value;
 });
 resize();
-buildBars(8);
+buildBars(4);
 updatePlayBtn();
 requestAnimationFrame(frame);
 </script>
