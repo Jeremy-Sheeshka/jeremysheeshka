@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ETEC 531 — Rhythm Runner (v43)</title>
+<title>ETEC 531 — Rhythm Runner (v44)</title>
 <style>
   :root{--ink:#1c1917;--line:#e7e5e4;--line2:#d6d3d1;--mut:#78716c;--grey:#535353;}
   *{box-sizing:border-box}
@@ -102,7 +102,7 @@
     </div>
   </div>
 <script>
-var BUILD = 'RR v43';
+var BUILD = 'RR v44';
 var settings = { aid: 'none' };
 var METRO = true;
 var MARKS = true;
@@ -131,6 +131,7 @@ var RED = rgb(220, 38, 38);
 var GREY = rgb(154, 148, 139);
 var WHITE = rgb(255, 255, 255);
 var CLOUDCOL = rgb(230, 230, 230);
+var SKY_CLEF = rgb(196, 200, 208);
 var stage = document.getElementById('stage');
 var canvas = document.getElementById('track');
 var ctx = canvas.getContext('2d');
@@ -255,6 +256,28 @@ var CLOUD = [
 ".XXXXXXXXXXXXXXXXXXXXX."
 ];
 var CW = 23, CH = 8;
+var TREBLE = [
+"........XX...",
+".......XXX...",
+".......X.....",
+".......X.....",
+".......XX....",
+".......X.X...",
+".......X..X..",
+".......X..X..",
+"......XX.X...",
+".....X.XX....",
+"....X..X.....",
+"...X...X.....",
+"...X...X.....",
+"....X..X.....",
+".....XXX.....",
+".......X.....",
+".......X.....",
+".....XX......",
+".....X.X.....",
+"......XX....."
+];
 function drawMatrix(m, left, top, px, py, col, eye) {
   for (var r = 0; r < m.length; r++) {
     var row = m[r];
@@ -535,6 +558,7 @@ var dropY = -260;
 var hurtUntil = -1;
 var lastT = performance.now();
 var clouds = [];
+var skyClefs = [];
 function updatePlayBtn() {
   if (playing) {
     playBtn.textContent = '■ Stop';
@@ -716,6 +740,16 @@ function initClouds() {
     });
   }
 }
+function initSky() {
+  skyClefs = [];
+  for (var i = 0; i < 2; i++) {
+    skyClefs.push({
+      x: Math.random() * W,
+      y: 24 + Math.random() * (H * 0.30),
+      s: 1.0 + Math.random() * 0.5
+    });
+  }
+}
 function drawClouds(dt) {
   var s = M.s;
   var ppb = M.ppb;
@@ -730,6 +764,32 @@ function drawClouds(dt) {
       cl.s = 0.7 + Math.random() * 0.7;
     }
     drawMatrix(CLOUD, cl.x, cl.y, cps * cl.s, cps * cl.s, CLOUDCOL, CLOUDCOL);
+  }
+}
+function drawSky(dt) {
+  var s = M.s;
+  var ppb = M.ppb;
+  var speed = ppb / secPerBeat;
+  var cpx = Math.max(2, Math.round(2 * s));
+  for (var i = 0; i < skyClefs.length; i++) {
+    var cl = skyClefs[i];
+    cl.x -= speed * 0.08 * cl.s * dt;
+    var pxs = cpx * cl.s;
+    var clefH = 20 * pxs;
+    var clefW = 13 * pxs;
+    if (cl.x < -clefW - 20) {
+      cl.x = W + Math.random() * 160 + 40;
+      cl.y = 24 + Math.random() * (H * 0.30);
+      cl.s = 1.0 + Math.random() * 0.5;
+      pxs = cpx * cl.s;
+      clefH = 20 * pxs;
+      clefW = 13 * pxs;
+    }
+    var maxTop = M.gy - 24 - clefH;
+    var drawY = cl.y;
+    if (drawY > maxTop) drawY = maxTop;
+    if (drawY < 8) drawY = 8;
+    drawMatrix(TREBLE, cl.x, drawY, pxs, pxs, SKY_CLEF, SKY_CLEF);
   }
 }
 function drawLine() {
@@ -982,6 +1042,7 @@ function pad(n, w) {
 function draw(now, dt, cb) {
   ctx.clearRect(0, 0, W, H);
   drawClouds(dt);
+  drawSky(dt);
   drawLine();
   if (playing) drawWorld(cb);
   drawDino(now, cb);
@@ -1073,6 +1134,7 @@ document.getElementById('optAid').addEventListener('change', function () {
 });
 resize();
 initClouds();
+initSky();
 buildBars(4);
 updatePlayBtn();
 requestAnimationFrame(frame);

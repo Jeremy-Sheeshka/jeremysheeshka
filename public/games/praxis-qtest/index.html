@@ -488,26 +488,26 @@
   function gridFromSet(set){var g=emptyGrid();set.forEach(function(s){g[s]=1;});return g;}
   function decompose(L){var D=[8,6,4,3,2,1],out=[],i;while(L>0){for(i=0;i<D.length;i++){if(D[i]<=L){out.push(D[i]);L-=D[i];break;}}}return out;}
   function elements(grid){var els=[],bi,i;for(bi=0;bi<2;bi++){var b=grid.slice(bi*8,bi*8+8);i=0;while(i<8){var v=b[i],j=i;while(j<8&&b[j]===v)j++;var run=j-i,ds=decompose(run),abs=bi*8+i,k;for(k=0;k<ds.length;k++){els.push({type:v?"note":"rest",slot:abs,dur:ds[k]});abs+=ds[k];}i=j;}}return els;}
-  function mk(svg,t,a){var e=document.createElementNS(NS,t);for(var k in a){if(Object.prototype.hasOwnProperty.call(a,k)){var nk=String(k).replace(/[\u2010-\u2015\u2212]/g,"-");e.setAttribute(nk,String(a[k]));}}return e;}
+  function mk(svg,t,a){var e=document.createElementNS(NS,t);Object.keys(a).forEach(function(k){e.setAttribute(k,String(a[k]));});return e;}
   function render(svg,grid){
     svg.innerHTML="";
     var W=640,sy=72,lm=78,rm=18,draw=W-lm-rm,sw=draw/16,hr=6.5,e;
-    svg.appendChild(mk("line",{x1:lm-6,y1:sy,x2:W-rm+6,y2:sy,stroke:"currentColor","stroke-width":1.4,opacity:.55}));
-    svg.appendChild(mk("rect",{x:14,y:sy-20,width:4,height:40,fill:"currentColor"}));
-    svg.appendChild(mk("rect",{x:22,y:sy-20,width:4,height:40,fill:"currentColor"}));
-    var t1=mk("text",{x:40,y:sy-3,"font-size":18,"font-weight":800,"text-anchor":"middle",fill:"currentColor"});t1.textContent="4";svg.appendChild(t1);
-    var t2=mk("text",{x:40,y:sy+17,"font-size":18,"font-weight":800,"text-anchor":"middle",fill:"currentColor"});t2.textContent="4";svg.appendChild(t2);
+    svg.appendChild(mk(svg,"line",{x1:lm-6,y1:sy,x2:W-rm+6,y2:sy,stroke:"currentColor","stroke-width":1.4,opacity:.55}));
+    svg.appendChild(mk(svg,"rect",{x:14,y:sy-20,width:4,height:40,fill:"currentColor"}));
+    svg.appendChild(mk(svg,"rect",{x:22,y:sy-20,width:4,height:40,fill:"currentColor"}));
+    var t1=mk(svg,"text",{x:40,y:sy-3,"font-size":18,"font-weight":800,"text-anchor":"middle",fill:"currentColor"});t1.textContent="4";svg.appendChild(t1);
+    var t2=mk(svg,"text",{x:40,y:sy+17,"font-size":18,"font-weight":800,"text-anchor":"middle",fill:"currentColor"});t2.textContent="4";svg.appendChild(t2);
     var els=elements(grid);
     for(e=0;e<els.length;e++){var it=els[e],cx=lm+(it.slot+it.dur/2)*sw,open=it.dur>=4;
       if(it.type==="note"){
-        svg.appendChild(mk("ellipse",{cx:cx,cy:sy,rx:hr,ry:hr*0.72,fill:open?"none":"currentColor",stroke:"currentColor","stroke-width":open?2:0,transform:"rotate(-18 "+cx+" "+sy+")"}));
-        if(it.dur<8){var sxp=cx+hr*0.85;svg.appendChild(mk("line",{x1:sxp,y1:sy-1,x2:sxp,y2:sy-34,stroke:"currentColor","stroke-width":1.8}));if(it.dur===1){svg.appendChild(mk("path",{d:"M"+sxp+" "+(sy-34)+" q 9 4 7 14",fill:"none",stroke:"currentColor","stroke-width":1.8}));}}
-        if(it.dur===3||it.dur===6){svg.appendChild(mk("circle",{cx:cx+hr+5,cy:sy-7,r:2.1,fill:"currentColor"}));}
-      }else{var rw=Math.max(7,Math.min(sw*it.dur*0.5,22));svg.appendChild(mk("rect",{x:cx-rw/2,y:sy-5,width:rw,height:10,rx:1.5,fill:"currentColor",opacity:.85}));}
+        svg.appendChild(mk(svg,"ellipse",{cx:cx,cy:sy,rx:hr,ry:hr*0.72,fill:open?"none":"currentColor",stroke:"currentColor","stroke-width":open?2:0,transform:"rotate(-18 "+cx+" "+sy+")"}));
+        if(it.dur<8){var sxp=cx+hr*0.85;svg.appendChild(mk(svg,"line",{x1:sxp,y1:sy-1,x2:sxp,y2:sy-34,stroke:"currentColor","stroke-width":1.8}));if(it.dur===1){svg.appendChild(mk(svg,"path",{d:"M"+sxp+" "+(sy-34)+" q 9 4 7 14",fill:"none",stroke:"currentColor","stroke-width":1.8}));}}
+        if(it.dur===3||it.dur===6){svg.appendChild(mk(svg,"circle",{cx:cx+hr+5,cy:sy-7,r:2.1,fill:"currentColor"}));}
+      }else{var rw=Math.max(7,Math.min(sw*it.dur*0.5,22));svg.appendChild(mk(svg,"rect",{x:cx-rw/2,y:sy-5,width:rw,height:10,rx:1.5,fill:"currentColor",opacity:.85}));}
     }
-    var bx=lm+8*sw;svg.appendChild(mk("line",{x1:bx,y1:sy-30,x2:bx,y2:sy+18,stroke:"currentColor","stroke-width":1.4}));
-    var fx=lm+16*sw;svg.appendChild(mk("line",{x1:fx-3,y1:sy-30,x2:fx-3,y2:sy+18,stroke:"currentColor","stroke-width":1.4}));svg.appendChild(mk("line",{x1:fx,y1:sy-30,x2:fx,y2:sy+18,stroke:"currentColor","stroke-width":2.4}));
-    var ph=mk("line",{x1:lm,x2:lm,y1:sy-34,y2:sy+18,stroke:"#e11d48","stroke-width":2,opacity:0});svg.appendChild(ph);
+    var bx=lm+8*sw;svg.appendChild(mk(svg,"line",{x1:bx,y1:sy-30,x2:bx,y2:sy+18,stroke:"currentColor","stroke-width":1.4}));
+    var fx=lm+16*sw;svg.appendChild(mk(svg,"line",{x1:fx-3,y1:sy-30,x2:fx-3,y2:sy+18,stroke:"currentColor","stroke-width":1.4}));svg.appendChild(mk(svg,"line",{x1:fx,y1:sy-30,x2:fx,y2:sy+18,stroke:"currentColor","stroke-width":2.4}));
+    var ph=mk(svg,"line",{x1:lm,x2:lm,y1:sy-34,y2:sy+18,stroke:"#e11d48","stroke-width":2,opacity:0});svg.appendChild(ph);
     svg._geom={lm:lm,sw:sw};
   }
   function clickAt(time,freq,vol){if(!actx)return;var o=actx.createOscillator(),g=actx.createGain();o.type="sine";o.frequency.value=freq;g.gain.setValueAtTime(.0001,time);g.gain.exponentialRampToValueAtTime(vol||.3,time+.004);g.gain.exponentialRampToValueAtTime(.0001,time+.09);o.connect(g).connect(actx.destination);o.start(time);o.stop(time+.11);}
@@ -515,7 +515,7 @@
   function setStatus(t){var el=$("#rec-status");if(el)el.textContent=t;}
   function setSubmit(on){var a=$("#rec-submit"),b=$("#rec-play");if(a)a.disabled=!on;if(b)b.disabled=!on;}
   function startRec(){
-    var ctx=ensureActx();if(!ctx){setStatus("Audio not supported in this browser.");return;}
+    var ctx=ensureActx();if(!ctx){setStatus("Audio not supported.");return;}
     if(rafId){cancelAnimationFrame(rafId);rafId=null;}
     recActive=false;taps=new Set();lastGrid=null;setSubmit(false);
     render($("#rec-staff"),emptyGrid());
@@ -523,13 +523,13 @@
     if(rec)rec.classList.add("hidden");if(st)st.classList.remove("hidden");
     if(document.activeElement&&document.activeElement.blur)document.activeElement.blur();
     if(pad&&pad.focus)pad.focus();
-    setStatus("Starting…");
+    setStatus("Starting...");
     Promise.resolve(ctx.resume()).then(function(){
       var t0=ctx.currentTime+0.25,c;
       for(c=0;c<4;c++){(function(c){var at=t0+c*Q;clickAt(at,c===0?1320:990,.35);var d=(at-ctx.currentTime)*1000;setTimeout(function(){setStatus("Count-in: "+(c+1));},Math.max(0,d));})(c);}
       recAudioStart=t0+4*Q;
       var recD=(recAudioStart-ctx.currentTime)*1000;
-      setTimeout(function(){setStatus("● Recording — tap the pad (2 bars)");},Math.max(0,recD));
+      setTimeout(function(){setStatus("Recording - tap the pad (2 bars)");},Math.max(0,recD));
       recActive=true;tickRec();
     });
   }
@@ -546,8 +546,8 @@
     recActive=false;if(rafId){cancelAnimationFrame(rafId);rafId=null;}
     lastGrid=gridFromSet(taps||new Set());render($("#rec-staff"),lastGrid);
     var any=lastGrid.some(function(x){return x;});
-    if(any){setStatus("Nice — play it back, submit it, or redo.");setSubmit(true);}
-    else{setStatus("No taps captured — hit Redo to try again.");setSubmit(false);}
+    if(any){setStatus("Nice - play it back, submit it, or redo.");setSubmit(true);}
+    else{setStatus("No taps captured - hit Redo to try again.");setSubmit(false);}
   }
   function play(grid,svg){
     var ctx=ensureActx();if(!ctx)return;
@@ -563,13 +563,13 @@
   function saveBank(a){try{localStorage.setItem(KEY,JSON.stringify(a));}catch(e){}}
   function hasNote(g){return g&&g.some(function(x){return x;});}
   function toast(m){var t=$("#toast");if(!t)return;t.textContent=m;t.classList.remove("hidden");clearTimeout(toast._t);toast._t=setTimeout(function(){t.classList.add("hidden");},2200);}
-  function renderBank(){var grid=$("#bank-grid");if(!grid)return;var a=loadBank();grid.innerHTML="";if(!a.length){grid.innerHTML='<p class="bank-empty">No rhythms yet — record the first one above.</p>';return;}a.slice().reverse().forEach(function(item){var card=document.createElement("div");card.className="bank-card";var svg=document.createElementNS(NS,"svg");svg.setAttribute("viewBox","0 0 640 120");svg.setAttribute("class","bank-staff");card.appendChild(svg);render(svg,item.grid);var meta=document.createElement("div");meta.className="bc-meta";var lbl=document.createElement("span");lbl.textContent=(item.seed?"Example":"Your rhythm")+" · "+(item.bpm||88)+" BPM";var row=document.createElement("span");row.className="bc-btns";var pb=document.createElement("button");pb.type="button";pb.className="btn small";pb.textContent="▶";pb.title="Play";var db=document.createElement("button");db.type="button";db.className="btn small";db.textContent="✕";db.title="Delete";row.appendChild(pb);row.appendChild(db);meta.appendChild(lbl);meta.appendChild(row);card.appendChild(meta);grid.appendChild(card);pb.addEventListener("click",function(ev){ev.stopPropagation();play(item.grid,svg);});db.addEventListener("click",function(ev){ev.stopPropagation();var arr=loadBank().filter(function(x){return x.id!==item.id;});saveBank(arr);renderBank();toast("Removed");});card.addEventListener("click",function(){play(item.grid,svg);});});}
+  function renderBank(){var grid=$("#bank-grid");if(!grid)return;var a=loadBank();grid.innerHTML="";if(!a.length){grid.innerHTML='<p class="bank-empty">No rhythms yet - record the first one above.</p>';return;}a.slice().reverse().forEach(function(item){var card=document.createElement("div");card.className="bank-card";var svg=document.createElementNS(NS,"svg");svg.setAttribute("viewBox","0 0 640 120");svg.setAttribute("class","bank-staff");card.appendChild(svg);render(svg,item.grid);var meta=document.createElement("div");meta.className="bc-meta";var lbl=document.createElement("span");lbl.textContent=(item.seed?"Example":"Your rhythm")+" - "+(item.bpm||88)+" BPM";var row=document.createElement("span");row.className="bc-btns";var pb=document.createElement("button");pb.type="button";pb.className="btn small";pb.textContent=">";pb.title="Play";var db=document.createElement("button");db.type="button";db.className="btn small";db.textContent="x";db.title="Delete";row.appendChild(pb);row.appendChild(db);meta.appendChild(lbl);meta.appendChild(row);card.appendChild(meta);grid.appendChild(card);pb.addEventListener("click",function(ev){ev.stopPropagation();play(item.grid,svg);});db.addEventListener("click",function(ev){ev.stopPropagation();var arr=loadBank().filter(function(x){return x.id!==item.id;});saveBank(arr);renderBank();toast("Removed");});card.addEventListener("click",function(){play(item.grid,svg);});});}
   function wire(){
     var rr=$("#rec-record");if(rr)rr.addEventListener("click",startRec);
     var rd=$("#rec-redo");if(rd)rd.addEventListener("click",startRec);
     var rc=$("#rec-cancel");if(rc)rc.addEventListener("click",function(){recActive=false;if(rafId){cancelAnimationFrame(rafId);rafId=null;}var st=$("#rec-stage"),rb=$("#rec-record");if(st)st.classList.add("hidden");if(rb)rb.classList.remove("hidden");});
     var rp=$("#rec-play");if(rp)rp.addEventListener("click",function(){if(hasNote(lastGrid))play(lastGrid,$("#rec-staff"));});
-    var rs=$("#rec-submit");if(rs)rs.addEventListener("click",function(){if(!hasNote(lastGrid))return;var a=loadBank();a.push({id:Date.now(),grid:lastGrid.slice(),bpm:88,ts:Date.now()});saveBank(a);renderBank();toast("Saved to the bank ✓");var st=$("#rec-stage"),rb=$("#rec-record");if(st)st.classList.add("hidden");if(rb)rb.classList.remove("hidden");});
+    var rs=$("#rec-submit");if(rs)rs.addEventListener("click",function(){if(!hasNote(lastGrid))return;var a=loadBank();a.push({id:Date.now(),grid:lastGrid.slice(),bpm:88,ts:Date.now()});saveBank(a);renderBank();toast("Saved to the bank");var st=$("#rec-stage"),rb=$("#rec-record");if(st)st.classList.add("hidden");if(rb)rb.classList.remove("hidden");});
     var pad=$("#rec-pad");if(pad){pad.addEventListener("pointerdown",function(ev){ev.preventDefault();tapNow();});}
     document.addEventListener("keydown",function(ev){if(!recActive)return;if(ev.code==="Space"||ev.key===" "||ev.key==="t"||ev.key==="T"){ev.preventDefault();ev.stopPropagation();tapNow();}});
     var bc=$("#bank-clear");if(bc)bc.addEventListener("click",function(){if(confirm("Clear all rhythms in your bank?")){saveBank([]);renderBank();toast("Bank cleared");}});
