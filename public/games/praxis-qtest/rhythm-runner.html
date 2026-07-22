@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ETEC 531 — Rhythm Runner (v46)</title>
+<title>ETEC 531 — Rhythm Runner (v47)</title>
 <style>
   :root{--ink:#1c1917;--line:#e7e5e4;--line2:#d6d3d1;--mut:#78716c;--grey:#535353;}
   *{box-sizing:border-box}
@@ -38,7 +38,7 @@
   .row select{font:inherit;border:1px solid var(--line2);border-radius:6px;padding:3px 6px;background:#fff}
   .stage{position:relative;width:100%;height:calc(100vh - 110px);min-height:360px;overflow:hidden;background:#fff}
   #track{position:absolute;inset:0;width:100%;height:100%;display:block}
-  #errbox{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:9999;background:#b00;color:#fff;font:16px/1.4 ui-monospace,monospace;padding:16px 22px;border-radius:10px;max-width:80vw;white-space:pre-wrap;display:none;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+  #errbox{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:9999;background:#b00;color:#fff;font:16px/1.4 ui-monospace,monospace;padding:16px 22px;border-radius:10px;max-width:80vw;white-space:pre-wrap;display:none;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.4);cursor:pointer}
   .jumpbtn{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);z-index:7;font:inherit;font-weight:800;font-size:13px;letter-spacing:1px;color:#fff;background:rgba(28,25,23,.82);border:none;border-radius:999px;padding:12px 30px;cursor:pointer;user-select:none;-webkit-user-select:none;touch-action:manipulation;box-shadow:0 6px 18px rgba(0,0,0,.18);opacity:.92}
   .jumpbtn:active{transform:translateX(-50%) scale(.95);background:rgba(28,25,23,.95)}
   .ov{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:8;padding:18px}
@@ -102,7 +102,7 @@
     </div>
   </div>
 <script>
-var BUILD = 'RR v46';
+var BUILD = 'RR v47';
 var settings = { aid: 'none' };
 var METRO = true;
 var MARKS = true;
@@ -118,6 +118,7 @@ var TAP_EARLY = 0.22;
 var TAP_LATE = 0.22;
 var MISS_AT = 0.30;
 var BAR_NUDGE = 0.20;
+var _gid = 0;
 function rgb(r, g, b) {
   return 'rgb(' + r + ',' + g + ',' + b + ')';
 }
@@ -143,11 +144,18 @@ var panel = document.getElementById('panel');
 var readyEl = document.getElementById('ready');
 var jumpBtn = document.getElementById('jumpBtn');
 var errBox = document.getElementById('errbox');
+var lastErr = '';
+var errShownAt = 0;
 function showErr(msg) {
+  lastErr = msg;
   if (errBox) {
     errBox.style.display = 'block';
-    errBox.textContent = msg;
+    errBox.textContent = msg + '\n(tap to dismiss)';
+    errShownAt = performance.now();
   }
+}
+function hideErr() {
+  if (errBox) errBox.style.display = 'none';
 }
 function clamp(v, a, b) {
   if (v < a) return a;
@@ -470,14 +478,16 @@ function ensureAudio() {
     masterGain.gain.value = METRO ? 1 : 0;
   } catch (e) {}
 }
-function blip(time, accent) {
+function blip(time, accent, loud) {
   try {
     var o = actx.createOscillator();
     var g = actx.createGain();
     o.type = 'triangle';
     o.frequency.value = accent ? 1500 : 1000;
+    var peak = (accent ? 0.5 : 0.32) * (loud ? 1.5 : 1.0);
+    if (peak > 0.95) peak = 0.95;
     g.gain.setValueAtTime(0.0001, time);
-    g.gain.exponentialRampToValueAtTime(accent ? 0.5 : 0.32, time + 0.001);
+    g.gain.exponentialRampToValueAtTime(peak, time + 0.001);
     g.gain.exponentialRampToValueAtTime(0.0001, time + 0.09);
     o.connect(g);
     g.connect(masterGain);
@@ -531,7 +541,8 @@ function scheduleClicks(now) {
     var when = actx.currentTime + (beatMs - now) / 1000;
     if (when >= actx.currentTime - 0.02) {
       var acc = (nextClick % 4 === 0);
-      blip(when, acc);
+      var inCount = (beat < MUSIC0);
+      blip(when, acc, inCount);
     }
     nextClick++;
   }
@@ -606,7 +617,7 @@ function start() {
   hurtUntil = -1;
   lastLegPhase = -1;
   runFrame = 0;
-  if (errBox) errBox.style.display = 'none';
+  hideErr();
   readyEl.style.display = 'none';
   playing = true;
   updatePlayBtn();
@@ -616,9 +627,11 @@ function stop() {
   streak = 0;
   bumpHi(ended);
   playing = false;
+  if (schedId) { clearInterval(schedId); schedId = null; }
   jumping = false;
   bouncing = false;
   yOff = 0;
+  hideErr();
   readyEl.style.display = 'flex';
   updatePlayBtn();
 }
@@ -1066,6 +1079,7 @@ function draw(now, dt, cb) {
   if (playing && cb < MUSIC0) drawCountdown(cb);
   if (playing && cb >= RUN_START) drawHUD(now);
 }
+var schedId = null;
 function frame(now) {
   try {
     var dt = Math.min(0.05, (now - lastT) / 1000);
@@ -1084,7 +1098,8 @@ function frame(now) {
             jumping = false;
             bouncing = false;
             yOff = 0;
-            sqX = 1.06; sqY = 0.94;
+            sqX = 1.06;
+            sqY = 0.94;
           } else {
             var pe = Math.pow(p, 0.62);
             yOff = jumpFromY * (1 - p) - jumpH * Math.sin(Math.PI * pe);
@@ -1108,6 +1123,9 @@ function frame(now) {
     draw(now, dt, cb);
   } catch (e) {
     showErr('GAME ERROR\n' + (e && e.message ? e.message : e));
+  }
+  if (errBox && errBox.style.display === 'block' && (now - errShownAt) > 4000) {
+    hideErr();
   }
   requestAnimationFrame(frame);
 }
@@ -1136,6 +1154,11 @@ jumpBtn.addEventListener('pointerdown', function (e) {
   e.stopPropagation();
   actionPrimary();
   jumpBtn.blur();
+});
+errBox.addEventListener('pointerdown', function (e) {
+  e.preventDefault();
+  e.stopPropagation();
+  hideErr();
 });
 window.addEventListener('keydown', function (e) {
   if (e.repeat) return;
