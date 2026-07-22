@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ETEC 531 — Rhythm Runner</title>
+<title>ETEC 531 — Rhythm Runner (v34)</title>
 <style>
   :root{--ink:#1c1917;--line:#e7e5e4;--line2:#d6d3d1;--mut:#78716c;--grey:#535353;}
   *{box-sizing:border-box}
@@ -97,7 +97,7 @@
     </div>
   </div>
 <script>
-var BUILD = 'RR v32';
+var BUILD = 'RR v34';
 var settings = { aid: 'none' };
 var METRO = true;
 var MARKS = true;
@@ -173,10 +173,11 @@ function resize() {
   if (jJ > gy - dH - 8) {
     jJ = Math.max(stem * 0.7, gy - dH - 8);
   }
+  var ppb = clamp(Math.round(W / 16), 70, 120);
   M = {
     s: s, ps: ps, hr: hr, stem: stem,
     gy: gy, cx: Math.round(W / 2),
-    ppb: 124 * s, jJ: jJ,
+    ppb: ppb, jJ: jJ,
     dW: 22 * ps, dH: dH
   };
 }
@@ -262,30 +263,33 @@ var notes = [];
 var genBeat = MUSIC0;
 function randBar() {
   var dp = diffParams();
-  var beats = [];
-  var i;
-  for (i = 0; i < 4; i++) {
-    if (Math.random() < dp.eighth) {
-      beats.push([
-        { length: 72, rest: false },
-        { length: 72, rest: false }
-      ]);
-    } else {
-      beats.push([{ length: 144, rest: false }]);
-    }
-  }
   var comps = [];
-  var idx = 0;
-  while (idx < 4) {
-    var rem = 4 - idx;
+  var beat = 0;
+  var prev8 = false;
+  while (beat < 4) {
+    var rem = 4 - beat;
     var r = Math.random();
-    var g = 1;
-    if (rem >= 4 && r < dp.whole) g = 4;
-    else if (rem >= 2 && r < dp.half) g = 2;
-    if (g === 4) comps.push({ length: 576, rest: false });
-    else if (g === 2) comps.push({ length: 288, rest: false });
-    else comps = comps.concat(beats[idx]);
-    idx += g;
+    var wThresh = dp.whole;
+    var hThresh = dp.whole + dp.half;
+    var eThresh = dp.whole + dp.half + dp.eighth;
+    if (rem >= 4 && r < wThresh) {
+      comps.push({ length: 576, rest: false });
+      beat += 4;
+      prev8 = false;
+    } else if (rem >= 2 && r < hThresh) {
+      comps.push({ length: 288, rest: false });
+      beat += 2;
+      prev8 = false;
+    } else if (!prev8 && r < eThresh) {
+      comps.push({ length: 72, rest: false });
+      comps.push({ length: 72, rest: false });
+      beat += 1;
+      prev8 = true;
+    } else {
+      comps.push({ length: 144, rest: false });
+      beat += 1;
+      prev8 = false;
+    }
   }
   for (var c = 0; c < comps.length; c++) {
     var co = comps[c];
@@ -318,9 +322,21 @@ function buildBars(count) {
       slice.push(n);
       genBeat += co.length / 144;
     }
-    for (var k = 0; k < slice.length; k++) {
-      var sk = slice[k];
-      if (sk.len === 72 && !sk.rest) sk.beam = 'flag';
+    var k = 0;
+    while (k < slice.length) {
+      if (slice[k].len === 72 && !slice[k].rest) {
+        var j = k;
+        while (j < slice.length && slice[j].len === 72 && !slice[j].rest) {
+          j++;
+        }
+        var runLen = j - k;
+        for (var m = k; m < j; m++) {
+          slice[m].beam = (runLen >= 2) ? 'beam' : 'flag';
+        }
+        k = j;
+      } else {
+        k++;
+      }
     }
   }
 }
@@ -557,6 +573,19 @@ function doJump() {
     sfx('jump');
   }
 }
+function markBeamSiblingsTapped(n) {
+  if (n.beam !== 'beam') return;
+  var idx = notes.indexOf(n);
+  if (idx < 0) return;
+  var f;
+  for (f = idx + 1; f < notes.length && notes[f].beam === 'beam'; f++) {
+    if (!notes[f].resolved) notes[f].tapped = true;
+  }
+  var bwd;
+  for (bwd = idx - 1; bwd >= 0 && notes[bwd].beam === 'beam'; bwd--) {
+    if (!notes[bwd].resolved) notes[bwd].tapped = true;
+  }
+}
 function judgeTap() {
   if (!playing) return;
   var cb = curBeat(performance.now());
@@ -572,7 +601,10 @@ function judgeTap() {
       if (ad < bestD) { bestD = ad; best = n; }
     }
   }
-  if (best) best.tapped = true;
+  if (best) {
+    best.tapped = true;
+    markBeamSiblingsTapped(best);
+  }
 }
 function actionPrimary() {
   if (!playing) {
@@ -597,10 +629,22 @@ function updateNotes(cb, now) {
     var noteR = nx + M.hr * 0.8 + 4 * M.s;
     var obsH = (n.len >= 576) ? (M.hr * 1.6) : M.stem;
     if (noteL <= bodyR && noteR >= bodyL) {
-      if (feet <= M.gy - obsH * 0.30) n.air = true;
+      if (feet <= M.gy - obsH * 0.30) {
+        n.air = true;
+        if (n.beam === 'beam') {
+          var f;
+          for (f = i + 1; f < notes.length && notes[f].beam === 'beam'; f++) {
+            notes[f].air = true;
+          }
+          var bwd;
+          for (bwd = i - 1; bwd >= 0 && notes[bwd].beam === 'beam'; bwd--) {
+            notes[bwd].air = true;
+          }
+        }
+      }
     }
     if (cb >= n.beat + MISS_AT) {
-      if (n.tapped || (n.air && n.len !== 72)) {
+      if (n.tapped || n.air) {
         registerClear(n, now);
       } else {
         registerMiss(n, now, cb);
@@ -640,8 +684,16 @@ function drawClef(gx) {
 function drawRest(x) {
   var s = M.s;
   var cy = M.gy;
-  ctx.fillStyle = GREY;
-  ctx.fillRect(Math.round(x - 2 * s), Math.round(cy - 12 * s), Math.ceil(4 * s), Math.ceil(24 * s));
+  ctx.strokeStyle = INK;
+  ctx.lineWidth = Math.max(1.6, 2 * s);
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.beginPath();
+  ctx.moveTo(x + 2 * s, cy - 13 * s);
+  ctx.quadraticCurveTo(x - 4 * s, cy - 9 * s, x + 1 * s, cy - 4 * s);
+  ctx.quadraticCurveTo(x + 5 * s, cy, x - 1 * s, cy + 5 * s);
+  ctx.quadraticCurveTo(x - 4 * s, cy + 9 * s, x + 1 * s, cy + 12 * s);
+  ctx.stroke();
 }
 function drawNote(x, n) {
   var s = M.s;
@@ -726,6 +778,24 @@ function drawWorld(cb) {
   if (clefX > -70 && clefX < W + 70) drawClef(clefX);
   for (var i = 0; i < notes.length; i++) {
     notes[i]._x = cx + (notes[i].beat - cb) * ppb;
+  }
+  var bth = Math.max(4, Math.round(6 * s));
+  var bi = 0;
+  while (bi < notes.length) {
+    if (notes[bi].beam === 'beam') {
+      var bj3 = bi;
+      while (bj3 < notes.length && notes[bj3].beam === 'beam') bj3++;
+      var x0 = notes[bi]._x + M.hr * 0.7;
+      var x1 = notes[bj3 - 1]._x + M.hr * 0.7;
+      var bw3 = Math.ceil(x1 - x0) + Math.max(2, Math.round(2.4 * s));
+      if (bw3 > 0 && x1 > -120 && x0 < W + 120) {
+        ctx.fillStyle = INK;
+        ctx.fillRect(Math.round(x0), Math.round(gy - M.stem), bw3, bth);
+      }
+      bi = bj3;
+    } else {
+      bi++;
+    }
   }
   for (var n2 = 0; n2 < notes.length; n2++) {
     var n = notes[n2];

@@ -109,7 +109,7 @@
     function startClock(){stopClock();clockEighth=0;tickClock();clockTimer=setInterval(tickClock,30000/currentTempo);}
     function stopClock(){if(clockTimer){clearInterval(clockTimer);clockTimer=null;}}
     function tap(){var p=P();if(p&&typeof p.tap==="function"){try{p.tap();}catch(e){try{p.tap(performance.now());}catch(e2){}}}}
-    document.addEventListener("pointerdown",function(e){var t=e.target;if(t&&t.closest&&(t.closest("input")||t.closest("button")||t.closest("select")||t.closest("a")))return;if(flowState==="showing"){e.preventDefault();beginPlay();}else if(flowState==="done"){e.preventDefault();nextExercise();}},true);
+    document.addEventListener("pointerdown",function(e){var t=e.target;if(t&&t.closest&&(t.closest("input")||t.closest("button")||t.closest("select")||t.closest("a")))return;if(flowState==="showing"){e.preventDefault();beginPlay();}else if(flowState==="showing"){e.preventDefault();beginPlay();}else if(flowState==="done"){e.preventDefault();nextExercise();}},true);
     window.addEventListener("message",function(ev){var d=ev.data;if(!d)return;
       if(d.type==="praxis-metro"){if(d.tempo!=null)setTempo(d.tempo);if(d.playing){if(!renderedRhythm){exerciseCount++;showExercise(randRhythm());}beginPlay();}else{if(playing||flowState==="playing"||flowState==="tapping"){hardStop();flowState="done";setInfo("Click for next","","");post({type:"drill-state",playing:false});}}}
       else if(d.type==="praxis-tap"){tap();}
