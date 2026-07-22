@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ETEC 531 — Rhythm Runner (v34)</title>
+<title>ETEC 531 — Rhythm Runner (v35)</title>
 <style>
   :root{--ink:#1c1917;--line:#e7e5e4;--line2:#d6d3d1;--mut:#78716c;--grey:#535353;}
   *{box-sizing:border-box}
@@ -97,7 +97,7 @@
     </div>
   </div>
 <script>
-var BUILD = 'RR v34';
+var BUILD = 'RR v35';
 var settings = { aid: 'none' };
 var METRO = true;
 var MARKS = true;
@@ -343,23 +343,16 @@ function buildBars(count) {
 function pruneRegen(cb) {
   var cx = M.cx;
   var ppb = M.ppb;
-  var edge = cb + (W - cx + 40) / ppb;
+  var rightEdge = cb + (W - cx + 40) / ppb;
+  var cutBeat = MUSIC0 + 4 * Math.ceil((rightEdge - MUSIC0) / 4);
+  if (cutBeat < MUSIC0 + 4) cutBeat = MUSIC0 + 4;
   var kept = [];
-  var firstDrop = Infinity;
-  var keptEnd = edge;
   for (var i = 0; i < notes.length; i++) {
-    var n = notes[i];
-    if (n.beat > cb - 8 && n.beat <= edge) {
-      kept.push(n);
-      var e = n.beat + n.len / 144;
-      if (e > keptEnd) keptEnd = e;
-    } else if (n.beat > edge) {
-      if (n.beat < firstDrop) firstDrop = n.beat;
-    }
+    var nb = notes[i].beat;
+    if (nb < cutBeat && nb > cb - 8) kept.push(notes[i]);
   }
   notes = kept;
-  if (firstDrop < Infinity) genBeat = firstDrop;
-  else genBeat = Math.max(keptEnd, cb + 4);
+  genBeat = cutBeat;
   buildBars(4);
 }
 var actx = null;
