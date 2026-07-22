@@ -197,6 +197,15 @@
 .bc-btns{display:flex;gap:6px}
 .bc-btns .btn{min-height:28px;padding:4px 9px;font-size:12px}
 .bank-empty{color:var(--Rhythm-muted);font-size:13px;margin:0}
+#rec-record{width:64px;height:64px;border-radius:50%;background:#dc2626;color:#fff;border:3px solid #991b1b;font-size:24px;line-height:1;cursor:pointer;display:block;margin:10px auto 0;box-shadow:0 3px 10px rgba(220,38,38,.35);transition:transform .15s,box-shadow .15s;padding:0}
+#rec-record:hover{transform:scale(1.08);box-shadow:0 5px 15px rgba(220,38,38,.45)}
+#rec-record:active{transform:scale(.92)}
+#rec-play{background:#16a34a !important;color:#fff !important;border-color:#16a34a !important}
+#rec-play:hover{background:#15803d !important}
+#rec-cancel{background:#d97706 !important;color:#fff !important;border-color:#d97706 !important}
+#rec-cancel:hover{background:#b45309 !important}
+#rec-redo{background:#6b7280 !important;color:#fff !important;border-color:#6b7280 !important}
+#rec-redo:hover{background:#4b5563 !important}
 </style>
 </head>
 <body>
@@ -277,10 +286,10 @@
                     <button type="button" class="btn small" id="rec-play" disabled>&#9654; Play</button>
                     <button type="button" class="btn small primary" id="rec-submit" disabled>Submit to bank</button>
                     <button type="button" class="btn small" id="rec-redo">&#8635; Redo</button>
-                    <button type="button" class="btn small" id="rec-cancel">Cancel</button>
+                    <button type="button" class="btn small" id="rec-cancel">■ Stop</button>
                   </div>
                 </div>
-              <button type="button" class="btn accent full" id="rec-record">&#9679; Record a 2-bar rhythm</button>
+              <button type="button" id="rec-record" title="Record a 2-bar rhythm">●</button>
               </div>
               <div class="presets">
                 <button class="preset selected" aria-pressed="true" data-name="Local Database">Local Database<span>Teacher-curated archive · 21 patterns</span></button>
@@ -526,21 +535,21 @@
     setStatus("Starting...");
     Promise.resolve(ctx.resume()).then(function(){
       var t0=ctx.currentTime+0.25,c;
-      for(c=0;c<4;c++){(function(c){var at=t0+c*Q;clickAt(at,c===0?1320:990,.35);var d=(at-ctx.currentTime)*1000;setTimeout(function(){setStatus("Count-in: "+(c+1));},Math.max(0,d));})(c);}
-      recAudioStart=t0+4*Q;
+      for(c=0;c<4;c++){(function(c){var at=t0+c*Q;clickAt(at,c===0?1320:990,.5);var d=(at-ctx.currentTime)*1000;setTimeout(function(){setStatus("Count-in: "+(c+1));},Math.max(0,d));})(c);}
+      recAudioStart=t0+4*Q;for(var mb=0;mb<8;mb++){(function(mb){clickAt(recAudioStart+mb*Q,mb%4===0?1100:880,.3);})(mb);}
       var recD=(recAudioStart-ctx.currentTime)*1000;
       setTimeout(function(){setStatus("Recording - tap the pad (2 bars)");},Math.max(0,recD));
       recActive=true;tickRec();
     });
   }
-  function tickRec(){if(!recActive)return;if(actx&&actx.currentTime>=recAudioStart+recWindowLen){finalize();return;}rafId=requestAnimationFrame(tickRec);}
+  function tickRec(){if(!actx)return;var now=actx.currentTime;if(!recActive&&now>=recAudioStart){recActive=true;setStatus("Recording - tap the pad (2 bars)");}if(now>=recAudioStart+recWindowLen){finalize();return;}rafId=requestAnimationFrame(tickRec);}
   function tapNow(){
     if(!recActive||!actx)return;
     var now=actx.currentTime;
     if(now<recAudioStart||now>=recAudioStart+recWindowLen)return;
     var off=now-recAudioStart,slot=Math.round(off/EIGHTH);
     if(slot<0)slot=0;if(slot>15)slot=15;
-    taps.add(slot);render($("#rec-staff"),gridFromSet(taps));clickAt(now+0.001,1500,.18);
+    taps.add(slot);render($("#rec-staff"),gridFromSet(taps));clickAt(now+0.001,1500,.3);
   }
   function finalize(){
     recActive=false;if(rafId){cancelAnimationFrame(rafId);rafId=null;}

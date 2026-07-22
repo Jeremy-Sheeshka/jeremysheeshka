@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ETEC 531 — Rhythm Runner (v45)</title>
+<title>ETEC 531 — Rhythm Runner (v46)</title>
 <style>
   :root{--ink:#1c1917;--line:#e7e5e4;--line2:#d6d3d1;--mut:#78716c;--grey:#535353;}
   *{box-sizing:border-box}
@@ -102,7 +102,7 @@
     </div>
   </div>
 <script>
-var BUILD = 'RR v45';
+var BUILD = 'RR v46';
 var settings = { aid: 'none' };
 var METRO = true;
 var MARKS = true;
@@ -117,7 +117,7 @@ var MAX_LEVEL = 5;
 var TAP_EARLY = 0.22;
 var TAP_LATE = 0.22;
 var MISS_AT = 0.30;
-var _gid = 0;
+var BAR_NUDGE = 0.20;
 function rgb(r, g, b) {
   return 'rgb(' + r + ',' + g + ',' + b + ')';
 }
@@ -176,7 +176,7 @@ function resize() {
   var gy = Math.round(H * 0.74);
   var stem = 48 * s;
   var hr = 9 * s;
-  var jJ = stem + hr;
+  var jJ = stem + 2 * hr;
   var dH = 23 * ps;
   if (jJ > gy - dH - 8) {
     jJ = Math.max(stem * 0.7, gy - dH - 8);
@@ -453,14 +453,6 @@ function pruneRegen(cb) {
   notes = kept;
   genBeat = cutBeat;
   buildBars(4);
-}
-function insetPx(n) {
-  var cg = clamp(Math.round(M.ppb * 0.18), 8, 45);
-  var headExt = M.hr * 0.95;
-  var push = cg + headExt;
-  if (n.gbb < 0.01) return push;
-  if (Math.abs(n.gend - 4) < 0.01) return -push;
-  return 0;
 }
 var actx = null;
 var masterGain = null;
@@ -931,7 +923,7 @@ function drawWorld(cb) {
   for (i = 0; i < notes.length; i++) {
     var lin = cx + (notes[i].beat - cb) * ppb;
     notes[i]._x = lin;
-    notes[i]._dx = lin + insetPx(notes[i]);
+    notes[i]._dx = lin;
   }
   var bth = Math.max(4, Math.round(6 * s));
   var bi = 0;
@@ -962,7 +954,7 @@ function drawWorld(cb) {
   for (var kk = kStart; kk <= kEnd; kk++) {
     if (kk < 1) continue;
     var B = MUSIC0 + 4 * kk;
-    var bx = cx + (B - cb) * ppb;
+    var bx = cx + (B - BAR_NUDGE - cb) * ppb;
     if (bx < -4 || bx > W + 4) continue;
     ctx.fillRect(Math.round(bx - bbw / 2), gy - tickHalf, bbw, tickHalf * 2);
   }
