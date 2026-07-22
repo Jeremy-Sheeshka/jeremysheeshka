@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ETEC 531 — Rhythm Runner (v47)</title>
+<title>ETEC 531 — Rhythm Runner (v49)</title>
 <style>
   :root{--ink:#1c1917;--line:#e7e5e4;--line2:#d6d3d1;--mut:#78716c;--grey:#535353;}
   *{box-sizing:border-box}
@@ -84,6 +84,7 @@
           <select id="optAid">
             <option value="none">none</option>
             <option value="syllables">ta / ti</option>
+            <option value="numbers" selected>1 2 3 4</option>
           </select>
         </div>
       </div>
@@ -102,8 +103,8 @@
     </div>
   </div>
 <script>
-var BUILD = 'RR v47';
-var settings = { aid: 'none' };
+var BUILD = 'RR v49';
+var settings = { aid: 'numbers' };
 var METRO = true;
 var MARKS = true;
 var bpm = 120;
@@ -114,8 +115,8 @@ var CLEF_BEAT = 4.5;
 var RUN_START = 6;
 var HI_KEY = 'rr_hi_v1';
 var MAX_LEVEL = 5;
-var TAP_EARLY = 0.22;
-var TAP_LATE = 0.22;
+var TAP_EARLY = 0.15;
+var TAP_LATE = 0.20;
 var MISS_AT = 0.30;
 var BAR_NUDGE = 0.20;
 var _gid = 0;
@@ -723,35 +724,12 @@ function actionPrimary() {
 }
 function updateNotes(cb, now) {
   if (cb < RUN_START) return;
-  var cx = M.cx;
-  var ps = M.ps;
-  var bodyL = cx - 1 * ps;
-  var bodyR = cx + 8 * ps;
-  var feet = M.gy + yOff;
   for (var i = 0; i < notes.length; i++) {
     var n = notes[i];
     if (n.resolved || n.rest) continue;
-    var nx = cx + (n.beat - cb) * M.ppb;
-    var noteL = nx - M.hr;
-    var noteR = nx + M.hr * 0.8 + 4 * M.s;
-    var obsH = (n.len >= 576) ? (M.hr * 1.6) : M.stem;
-    if (noteL <= bodyR && noteR >= bodyL) {
-      if (feet <= M.gy - obsH * 0.30) {
-        n.air = true;
-        if (n.gid > 0) {
-          var f;
-          for (f = i + 1; f < notes.length && notes[f].gid === n.gid; f++) notes[f].air = true;
-          var bwd;
-          for (bwd = i - 1; bwd >= 0 && notes[bwd].gid === n.gid; bwd--) notes[bwd].air = true;
-        }
-      }
-    }
     if (cb >= n.beat + MISS_AT) {
-      if (n.tapped || n.air) {
-        registerClear(n, now);
-      } else {
-        registerMiss(n, now, cb);
-      }
+      if (n.tapped) registerClear(n, now);
+      else registerMiss(n, now, cb);
     }
   }
 }
@@ -917,7 +895,12 @@ function drawNote(x, n) {
     try {
       var bib = ((n.bib % 4) + 4) % 4;
       var plus = (bib % 1) >= 0.5;
-      var lab = plus ? 'ti' : 'ta';
+      var lab;
+      if (settings.aid === 'numbers') {
+        lab = plus ? '+' : String(Math.floor(bib) + 1);
+      } else {
+        lab = plus ? 'ti' : 'ta';
+      }
       ctx.fillStyle = GREY;
       ctx.font = '700 ' + Math.round(11 * s) + 'px system-ui,sans-serif';
       ctx.textAlign = 'center';
@@ -996,16 +979,18 @@ function drawDino(now, cb) {
   if (!(py > 0)) py = ps;
   var dH = SH * py;
   var dW = SW * px;
-  var left = cx - 11 * px;
+  var left = cx - 16 * px;
   var top = gy + yOff + dropY - dH;
   if (!isFinite(left)) left = cx - 80;
   if (!isFinite(top)) top = gy - 160;
   var jJ = (isFinite(M.jJ) && M.jJ > 0) ? M.jJ : 1;
   var air = clamp((-yOff) / jJ, 0, 1);
-  ctx.fillStyle = rgba(0, 0, 0, 0.13 * (1 - air * 0.7));
-  ctx.beginPath();
-  ctx.ellipse(cx, gy + 5, Math.max(2, dW * 0.42 * (1 - air * 0.4)), Math.max(2, 5 * (1 - air * 0.4)), 0, 0, 7);
-  ctx.fill();
+  if (dropY < 40) {
+    ctx.fillStyle = rgba(0, 0, 0, 0.13 * (1 - air * 0.7));
+    ctx.beginPath();
+    ctx.ellipse(cx - 4 * px, gy + 5, Math.max(2, dW * 0.42 * (1 - air * 0.4)), Math.max(2, 5 * (1 - air * 0.4)), 0, 0, 7);
+    ctx.fill();
+  }
   var hurt = now < hurtUntil;
   var live = playing && cb >= RUN_START;
   var running = live && !jumping;
@@ -1101,9 +1086,11 @@ function frame(now) {
             sqX = 1.06;
             sqY = 0.94;
           } else {
-            var pe = Math.pow(p, 0.62);
-            yOff = jumpFromY * (1 - p) - jumpH * Math.sin(Math.PI * pe);
-            if (p < 0.10) { sqX = 0.97; sqY = 1.04; }
+            var shape;
+            if (p < 0.30) shape = Math.sin((Math.PI / 2) * (p / 0.30));
+            else shape = Math.cos((Math.PI / 2) * ((p - 0.30) / 0.70));
+            yOff = jumpFromY * (1 - p) - jumpH * shape;
+            if (p < 0.08) { sqX = 0.97; sqY = 1.04; }
           }
         }
       }
