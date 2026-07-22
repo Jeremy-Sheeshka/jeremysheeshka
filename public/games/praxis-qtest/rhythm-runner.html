@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ETEC 531 — Rhythm Runner (v44)</title>
+<title>ETEC 531 — Rhythm Runner (v45)</title>
 <style>
   :root{--ink:#1c1917;--line:#e7e5e4;--line2:#d6d3d1;--mut:#78716c;--grey:#535353;}
   *{box-sizing:border-box}
@@ -102,7 +102,7 @@
     </div>
   </div>
 <script>
-var BUILD = 'RR v44';
+var BUILD = 'RR v45';
 var settings = { aid: 'none' };
 var METRO = true;
 var MARKS = true;
@@ -256,28 +256,48 @@ var CLOUD = [
 ".XXXXXXXXXXXXXXXXXXXXX."
 ];
 var CW = 23, CH = 8;
-var TREBLE = [
-"........XX...",
-".......XXX...",
-".......X.....",
-".......X.....",
-".......XX....",
-".......X.X...",
-".......X..X..",
-".......X..X..",
-"......XX.X...",
-".....X.XX....",
-"....X..X.....",
-"...X...X.....",
-"...X...X.....",
-"....X..X.....",
-".....XXX.....",
-".......X.....",
-".......X.....",
-".....XX......",
-".....X.X.....",
-"......XX....."
+var TREBLE_A = [
+"......XX....",
+".....XXXX...",
+".....X..X...",
+".....X..X...",
+"......XXX...",
+".....XX.....",
+"...XXXXX....",
+"..XX.X.XX...",
+"..XX.X.XX...",
+"..XX.XX.X...",
+"...XXXXX....",
+".....XX.....",
+".....XX.....",
+"....XX......",
+"...XX.......",
+"..XX.X......",
+"..XXXX......",
+"...XX......."
 ];
+var TREBLE_B = [
+".......XX...",
+"......XXXX..",
+"......X..X..",
+"......X..X..",
+"......X..X..",
+".......XXX..",
+"......XX....",
+"....XXXXX...",
+"...XX.X.XX..",
+"...XX.X.XX..",
+"...XX.X.XX..",
+"...XX.XX.X..",
+"....XXXXX...",
+"......XX....",
+".....XX.....",
+"....XX......",
+"...XX.X.....",
+"...XXXX.....",
+"....XX......"
+];
+var TREBLES = [TREBLE_A, TREBLE_B];
 function drawMatrix(m, left, top, px, py, col, eye) {
   for (var r = 0; r < m.length; r++) {
     var row = m[r];
@@ -558,7 +578,7 @@ var dropY = -260;
 var hurtUntil = -1;
 var lastT = performance.now();
 var clouds = [];
-var skyClefs = [];
+var skyClef = null;
 function updatePlayBtn() {
   if (playing) {
     playBtn.textContent = '■ Stop';
@@ -741,14 +761,12 @@ function initClouds() {
   }
 }
 function initSky() {
-  skyClefs = [];
-  for (var i = 0; i < 2; i++) {
-    skyClefs.push({
-      x: Math.random() * W,
-      y: 24 + Math.random() * (H * 0.30),
-      s: 1.0 + Math.random() * 0.5
-    });
-  }
+  skyClef = {
+    x: Math.random() * W,
+    y: 24 + Math.random() * (H * 0.30),
+    s: 1.2 + Math.random() * 0.6,
+    g: Math.floor(Math.random() * TREBLES.length)
+  };
 }
 function drawClouds(dt) {
   var s = M.s;
@@ -771,26 +789,33 @@ function drawSky(dt) {
   var ppb = M.ppb;
   var speed = ppb / secPerBeat;
   var cpx = Math.max(2, Math.round(2 * s));
-  for (var i = 0; i < skyClefs.length; i++) {
-    var cl = skyClefs[i];
-    cl.x -= speed * 0.08 * cl.s * dt;
-    var pxs = cpx * cl.s;
-    var clefH = 20 * pxs;
-    var clefW = 13 * pxs;
-    if (cl.x < -clefW - 20) {
-      cl.x = W + Math.random() * 160 + 40;
-      cl.y = 24 + Math.random() * (H * 0.30);
-      cl.s = 1.0 + Math.random() * 0.5;
-      pxs = cpx * cl.s;
-      clefH = 20 * pxs;
-      clefW = 13 * pxs;
-    }
-    var maxTop = M.gy - 24 - clefH;
-    var drawY = cl.y;
-    if (drawY > maxTop) drawY = maxTop;
-    if (drawY < 8) drawY = 8;
-    drawMatrix(TREBLE, cl.x, drawY, pxs, pxs, SKY_CLEF, SKY_CLEF);
+  var cl = skyClef;
+  var pxs = cpx * cl.s;
+  var glyph = TREBLES[cl.g];
+  var rows = glyph.length;
+  var cols = 0;
+  for (var r = 0; r < rows; r++) { if (glyph[r].length > cols) cols = glyph[r].length; }
+  var clefW = cols * pxs;
+  var clefH = rows * pxs;
+  cl.x -= speed * 0.08 * cl.s * dt;
+  if (cl.x < -clefW - 20) {
+    cl.x = W + 40 + Math.random() * 160;
+    cl.y = 24 + Math.random() * (H * 0.30);
+    cl.s = 1.2 + Math.random() * 0.6;
+    cl.g = (cl.g + 1) % TREBLES.length;
+    pxs = cpx * cl.s;
+    glyph = TREBLES[cl.g];
+    rows = glyph.length;
+    cols = 0;
+    for (var r2 = 0; r2 < rows; r2++) { if (glyph[r2].length > cols) cols = glyph[r2].length; }
+    clefW = cols * pxs;
+    clefH = rows * pxs;
   }
+  var maxTop = M.gy - 24 - clefH;
+  var drawY = cl.y;
+  if (drawY > maxTop) drawY = maxTop;
+  if (drawY < 8) drawY = 8;
+  drawMatrix(glyph, cl.x, drawY, pxs, pxs, SKY_CLEF, SKY_CLEF);
 }
 function drawLine() {
   var lw = Math.max(1.4, 1.8 * M.s);

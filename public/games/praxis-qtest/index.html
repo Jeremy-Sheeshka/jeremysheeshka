@@ -183,7 +183,7 @@
 .rec-head small{display:block;color:var(--Rhythm-muted);font-size:12px;margin-top:3px}
 .rec-stage{border:1px solid var(--Rhythm-line);border-radius:13px;background:var(--Rhythm-bg);padding:14px;margin-bottom:12px}
 .rec-status{font-size:13px;font-weight:700;margin-bottom:10px;min-height:18px}
-.rec-staff{width:100%;height:auto;display:block;color:var(--Rhythm-ink);background:var(--Rhythm-surface);border:1px solid var(--Rhythm-line);border-radius:10px}
+.rec-staff{width:100%;height:auto;display:block;color:#000;background:#fff;border:1px solid var(--Rhythm-line);border-radius:10px}
 .rec-pad{margin-top:10px;min-height:66px;display:grid;place-items:center;border:2px solid var(--Rhythm-accent);border-radius:12px;background:var(--Rhythm-soft);color:var(--Rhythm-accent);font-weight:800;font-size:14px;cursor:pointer;user-select:none;touch-action:manipulation}
 .rec-pad:active{background:var(--Rhythm-accent);color:var(--Rhythm-accent-ink)}
 .rec-controls{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
@@ -192,7 +192,7 @@
 .bank-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
 .bank-card{border:1px solid var(--Rhythm-line);border-radius:12px;background:var(--Rhythm-surface);padding:10px;cursor:pointer;transition:transform .15s,border-color .15s}
 .bank-card:hover{transform:translateY(-2px);border-color:var(--Rhythm-accent)}
-.bank-staff{width:100%;height:auto;display:block;color:var(--Rhythm-ink)}
+.bank-staff{width:100%;height:auto;display:block;color:#000;background:#fff;border-radius:8px}
 .bc-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px;font-size:11px;color:var(--Rhythm-muted);font-weight:700}
 .bc-btns{display:flex;gap:6px}
 .bc-btns .btn{min-height:28px;padding:4px 9px;font-size:12px}
@@ -485,7 +485,7 @@
   var actx=null;
   function ensureActx(){var AC=window.AudioContext||window.webkitAudioContext;if(!AC)return null;if(!actx)actx=new AC();return actx;}
   function emptyGrid(){var g=[],i;for(i=0;i<16;i++)g.push(0);return g;}
-  function gridFromSet(set){var g=emptyGrid();set.forEach(function(s){g[s]=1;});return g;}
+  function gridFromSet(set){var g=emptyGrid();var sorted=Array.from(set).sort(function(a,b){return a-b;});for(var i=0;i<sorted.length;i++){var start=sorted[i];var end=(i+1<sorted.length)?sorted[i+1]:16;for(var s=start;s<end;s++)g[s]=1;}return g;}
   function decompose(L){var D=[8,6,4,3,2,1],out=[],i;while(L>0){for(i=0;i<D.length;i++){if(D[i]<=L){out.push(D[i]);L-=D[i];break;}}}return out;}
   function elements(grid){var els=[],bi,i;for(bi=0;bi<2;bi++){var b=grid.slice(bi*8,bi*8+8);i=0;while(i<8){var v=b[i],j=i;while(j<8&&b[j]===v)j++;var run=j-i,ds=decompose(run),abs=bi*8+i,k;for(k=0;k<ds.length;k++){els.push({type:v?"note":"rest",slot:abs,dur:ds[k]});abs+=ds[k];}i=j;}}return els;}
   function mk(svg,t,a){var e=document.createElementNS(NS,t);Object.keys(a).forEach(function(k){e.setAttribute(k,String(a[k]));});return e;}
