@@ -166,7 +166,7 @@
       if(ov && h.indexOf('</head>')!==-1) h=h.replace('</head>','<style>'+ov+'</style></head>');
       if(bridge){ bridge=bridge.replace(/<\/script/gi,'<\\/script'); var inj='<scr'+'ipt>window.__PRAXIS_COOP=true;console.log("[coop-bridge] injected ok");</scr'+'ipt><scr'+'ipt>'+bridge+'</scr'+'ipt>'; h=(h.indexOf('</body>')!==-1)?h.replace('</body>',inj+'</body>'):h+inj; }
       else { console.error('[praxis-coop] embed-bridge.js?v=20260722v7 did NOT load - overlays will be missing. Verify /games/praxis-qtest/embed-bridge.js?v=20260722v7 is deployed.'); }
-      f.srcdoc=h;
+      h=h.replace(/\/games\/rhythm-app\/ovelser\/js\/min\/rhythm_image-min\.js/g,'/games/praxis-qtest/rhythm_image-min.js');f.srcdoc=h;
     })
     .catch(function(e){ console.error('[praxis-coop] load failed',e); });
   })();

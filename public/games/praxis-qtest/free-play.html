@@ -531,7 +531,7 @@ label.metro-field:has([data-metro-beats]){display:none !important}
           h=h.replace(/<meta[^>]*content-security-policy[^>]*>/gi,'');
           if(ov){h=h.replace('</head>','<style>'+ov+'</style></head>');}
           if(bridge){var inj=SO+bridge+SC;h=(h.indexOf('</body>')!==-1)?h.replace('</body>',inj+'</body>'):h+inj;}
-          f.srcdoc=h;
+          h=h.replace(/\/games\/rhythm-app\/ovelser\/js\/min\/rhythm_image-min\.js/g,'/games/praxis-qtest/rhythm_image-min.js');f.srcdoc=h;
         }).catch(function(e){
           console.error('[praxis] drill load failed',e);
           f.srcdoc='<html><body style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:system-ui;color:#666"><p>Exercise failed to load.</p></body></html>';
