@@ -97,11 +97,11 @@
   </div>
 
 <script>
-var BUILD = 'RR v28';
+var BUILD = 'RR v29';
 var settings = { aid:'none' };
-var METRO=true, PULSE=true, MARKS=true;
-var LEAD = 6;
-var CLEF_BEAT = 4.5;
+var METRO=true, MARKS=true;
+var LEAD = 2;
+var CLEF_BEAT = -4;
 var HI_KEY = 'rr_hi_v1';
 var MAX_LEVEL = 5;
 var TAP_EARLY = 0.22, TAP_LATE = 0.22, MISS_AT = 0.30;
@@ -115,9 +115,6 @@ var HURT_RED = rgb(220,38,38);
 var BARLINE  = rgb(120,113,108);
 var GREY     = rgb(154,148,139);
 var WHITE    = rgb(255,255,255);
-var CLOUDCOL = rgb(230,230,230);
-var READYCOL = rgb(168,162,158);
-var DOTCOL   = rgb(226,226,226);
 
 var stage=document.getElementById('stage'), canvas=document.getElementById('track'), ctx=canvas.getContext('2d');
 var playBtn=document.getElementById('playBtn'), tempoEl=document.getElementById('tempo'), bpmEl=document.getElementById('bpm');
@@ -206,17 +203,6 @@ function makeHurt(rows){
 }
 var HURT=makeHurt(STAND);
 var SW=22, SH=23;
-var CLOUD=[
-"..........XXX..........",
-"........XX...XX........",
-"......XX.......XX......",
-"...XXX...........XXX...",
-"..X...............X....",
-".X.................X...",
-"X...................X..",
-".XXXXXXXXXXXXXXXXXXXXX."
-];
-var CW=23, CH=8;
 
 function drawMatrix(m, left, top, psx, psy, color, eye){
   for(var r=0;r<m.length;r++){
@@ -321,17 +307,15 @@ function curBeatNow(){
   return (performance.now() - playStartPerf)/1000/secPerBeat;
 }
 
-var playing=false, pausedBeat=LEAD+0.5, lastBeatInt=-1, pulseT=0;
+var playing=false, pausedBeat=LEAD+0.5;
 var streak=0, milestoneT=-1;
 var hiScore=(function(){try{var v=parseInt(localStorage.getItem(HI_KEY),10); return isFinite(v)?v:0;}catch(e){return 0;}})();
 function bumpHi(v){ if(v>hiScore){ hiScore=v; try{localStorage.setItem(HI_KEY,String(hiScore));}catch(e){} } }
 var jumping=false, bouncing=false, jumpStart=0, jumpFromY=0, jumpH=0, jumpD=1, yOff=0, runFrame=0, lastLegPhase=-1;
 var sqX=1, sqY=1;
 var dropY=-260, hurtUntil=-1;
-var clouds=[], lastT=performance.now();
+var lastT=performance.now();
 var lastErr='', needPrune=false;
-
-function initClouds(){ clouds=[]; for(var i=0;i<4;i++) clouds.push({ x:Math.random()*W, y:30+Math.random()*(H*0.32), s:0.7+Math.random()*0.7 }); }
 
 function updatePlayBtn(){
   if(playing){ playBtn.textContent='■ Stop'; playBtn.classList.add('on'); }
@@ -350,7 +334,7 @@ function start(){
   streak=0; milestoneT=-1; jumping=false; bouncing=false; yOff=0; hurtUntil=-1; lastLegPhase=-1; runFrame=0;
   needPrune=false; lastErr=''; if(errBox) errBox.style.display='none';
   readyEl.style.display='none';
-  playing=true; lastBeatInt=-1; pulseT=performance.now();
+  playing=true;
   updatePlayBtn();
   if(!schedId) schedId=setInterval(schedule,25);
 }
@@ -424,17 +408,25 @@ function updateNotes(cb, now){
   }
 }
 
+function drawLine(){
+  var gY=M.groundY;
+  var lineW=Math.max(1.4,1.8*M.scale);
+  ctx.strokeStyle=INK; ctx.lineWidth=lineW;
+  ctx.beginPath(); ctx.moveTo(0, gY); ctx.lineTo(W, gY); ctx.stroke();
+}
 function drawClefTimeSig(gx){
   var s=M.scale, gY=M.groundY;
   var barH=26*s, barW=3.6*s, gap=3.2*s, top=gY-barH/2;
   ctx.fillStyle=INK;
   ctx.fillRect(Math.round(gx), Math.round(top), Math.ceil(barW), Math.ceil(barH));
   ctx.fillRect(Math.round(gx+barW+gap), Math.round(top), Math.ceil(barW), Math.ceil(barH));
-  var tx=gx+barW*2+gap+9*s;
-  ctx.font='800 '+Math.round(24*s)+'px "Courier New",ui-monospace,monospace';
-  ctx.textAlign='center';
-  ctx.textBaseline='alphabetic'; ctx.fillText('4', tx, gY-2*s);
-  ctx.textBaseline='top'; ctx.fillText('4', tx, gY+2*s);
+  try{
+    var tx=gx+barW*2+gap+9*s;
+    ctx.font='800 '+Math.round(24*s)+'px "Courier New",ui-monospace,monospace';
+    ctx.textAlign='center';
+    ctx.textBaseline='alphabetic'; ctx.fillText('4', tx, gY-2*s);
+    ctx.textBaseline='top'; ctx.fillText('4', tx, gY+2*s);
+  }catch(e){}
 }
 function drawRest(x){
   var s=M.scale, cy=M.groundY;
@@ -447,16 +439,15 @@ function drawNote(x,n){
   var s=M.scale, hr=M.headR, cy=M.groundY, open=n.len>=288;
   var stemW=Math.max(1.6,2*s);
   if(n.len<576){
-    var sx=x+hr*0.8, top=M.groundY-M.stemH;
+    var sx=x+hr*0.7, top=M.groundY-M.stemH;
     ctx.strokeStyle=INK; ctx.lineWidth=stemW; ctx.lineCap='round';
     ctx.beginPath(); ctx.moveTo(sx, M.groundY); ctx.lineTo(sx, top); ctx.stroke();
     if(n.beam==='flag'){ ctx.beginPath(); ctx.moveTo(sx,top); ctx.quadraticCurveTo(sx+10*s,top+8*s,sx+6*s,top+18*s); ctx.stroke(); }
   }
-  ctx.save(); ctx.translate(x,cy); ctx.rotate(-0.34);
-  ctx.beginPath(); ctx.ellipse(0,0,hr,hr*0.62,0,0,7);
+  ctx.beginPath();
+  ctx.ellipse(x, cy, hr*0.92, hr*0.64, 0, 0, 7);
   if(open){ ctx.lineWidth=Math.max(1.8,2.2*s); ctx.strokeStyle=INK; ctx.fillStyle=WHITE; ctx.fill(); ctx.stroke(); }
   else { ctx.fillStyle=INK; ctx.fill(); }
-  ctx.restore();
   if(MARKS && n.judged){
     var my=M.groundY+19*s; ctx.lineWidth=2.4*s; ctx.lineCap='round';
     ctx.strokeStyle = (n.judged==='hit') ? INK : HURT_RED;
@@ -464,48 +455,34 @@ function drawNote(x,n){
     else { ctx.beginPath(); ctx.moveTo(x-4*s,my-4*s); ctx.lineTo(x+4*s,my+4*s); ctx.moveTo(x+4*s,my-4*s); ctx.lineTo(x-4*s,my+4*s); ctx.stroke(); }
   }
   if(settings.aid!=='none' && !n.rest){
-    var bib=((n.beatInBar%4)+4)%4, plus=(bib%1)>=0.5;
-    var lab = plus ? 'ti' : 'ta';
-    ctx.fillStyle=GREY; ctx.font='700 '+Math.round(11*s)+'px system-ui,sans-serif'; ctx.textAlign='center';
-    ctx.fillText(lab, x, M.groundY+35*s);
+    try{
+      var bib=((n.beatInBar%4)+4)%4, plus=(bib%1)>=0.5;
+      var lab = plus ? 'ti' : 'ta';
+      ctx.fillStyle=GREY; ctx.font='700 '+Math.round(11*s)+'px system-ui,sans-serif'; ctx.textAlign='center';
+      ctx.fillText(lab, x, M.groundY+35*s);
+    }catch(e){}
   }
 }
 function pad(n,w){ w=w||5; n=String(n|0); while(n.length<w) n='0'+n; return n; }
 
-function drawClouds(dt){
-  var s=M.scale, cx=M.centerX, ppb=M.pxPerBeat, speed=ppb/secPerBeat;
-  var cps=Math.max(2,Math.round(2*s));
-  for(var ci=0;ci<clouds.length;ci++){
-    var cl=clouds[ci];
-    cl.x -= speed*0.12*cl.s*dt;
-    if(cl.x < -CW*cps-10){ cl.x = W + Math.random()*120; cl.y = 24+Math.random()*(H*0.3); cl.s=0.7+Math.random()*0.7; }
-    drawMatrix(CLOUD, cl.x, cl.y, cps*cl.s, cps*cl.s, CLOUDCOL, CLOUDCOL);
-  }
-}
 function drawWorld(cb){
   var s=M.scale, gY=M.groundY, cx=M.centerX, ppb=M.pxPerBeat;
-  var lineW=Math.max(1.4,1.8*s);
-  var clefX = cx + (CLEF_BEAT - cb)*ppb;
-  var lineFrom = Math.max(0, clefX - 14*s);
-  if(lineFrom < W){
-    ctx.strokeStyle=INK; ctx.lineWidth=lineW;
-    ctx.beginPath(); ctx.moveTo(lineFrom, gY); ctx.lineTo(W, gY); ctx.stroke();
-  }
   ctx.strokeStyle=BARLINE; ctx.lineWidth=Math.max(1.4,1.8*s);
   var bStart=Math.ceil((cb - cx/ppb)/4)*4;
   var bEnd=Math.floor((cb + (W-cx)/ppb)/4)*4;
   for(var b=bStart;b<=bEnd;b+=4){
-    if(b<=LEAD) continue;
+    if(b<=0) continue;
     var bx=cx + (b - 0.12 - cb)*ppb;
-    if(bx < lineFrom || bx<-2 || bx>W+2) continue;
+    if(bx<-2||bx>W+2) continue;
     ctx.beginPath(); ctx.moveTo(bx, gY - M.stemH*0.85); ctx.lineTo(bx, gY + 8*s); ctx.stroke();
   }
+  var clefX = cx + (CLEF_BEAT - cb)*ppb;
   if(clefX>-70 && clefX<W+70) drawClefTimeSig(clefX);
   for(var i=0;i<notes.length;i++) notes[i]._x = cx + (notes[i].beat - cb)*ppb;
   var run=[];
   function flushBeam(){
     if(run.length>=2){
-      var xs=[]; for(var a=0;a<run.length;a++){ var xx=run[a]._x; if(xx>=-120&&xx<=W+120) xs.push(xx + M.headR*0.8); }
+      var xs=[]; for(var a=0;a<run.length;a++){ var xx=run[a]._x; if(xx>=-120&&xx<=W+120) xs.push(xx + M.headR*0.7); }
       if(xs.length>=2){
         var minx=Math.min.apply(null,xs), maxx=Math.max.apply(null,xs);
         ctx.fillStyle=INK;
@@ -541,59 +518,17 @@ function drawDino(now, cb){
   var top = gY + yOff + dropY - dinoH;
   if(!isFinite(left)) left = cx - 80;
   if(!isFinite(top)) top = gY - 160;
-  var lineHere = playing && cb >= CLEF_BEAT;
   var air = clamp((-yOff)/((isFinite(M.jumpJ)&&M.jumpJ>0)?M.jumpJ:1), 0, 1);
-  if(lineHere){
-    ctx.fillStyle = rgba(0,0,0, 0.13*(1-air*0.7));
-    ctx.beginPath();
-    ctx.ellipse(cx, gY+5, Math.max(2,(dinoW*0.42)*(1-air*0.4)), Math.max(2,5*(1-air*0.4)), 0, 0, 7);
-    ctx.fill();
-  }
+  ctx.fillStyle = rgba(0,0,0, 0.13*(1-air*0.7));
+  ctx.beginPath();
+  ctx.ellipse(cx, gY+5, Math.max(2,(dinoW*0.42)*(1-air*0.4)), Math.max(2,5*(1-air*0.4)), 0, 0, 7);
+  ctx.fill();
   var hurtActive = now < hurtUntil;
-  var running = lineHere && !jumping;
+  var running = playing && !jumping;
   var pose = jumping ? STAND : (hurtActive ? HURT : (running ? (runFrame?RUNB:RUNA) : STAND));
   var spriteCol = hurtActive ? ((Math.floor(now/80)%2===0) ? rgb(220,38,38) : rgb(83,83,83)) : rgb(83,83,83);
   var eyeCol = rgb(255,255,255);
-  try{
-    drawMatrix(pose, left, top, psx, psy, spriteCol, eyeCol);
-  }catch(e){
-    reportErr('dino',e);
-  }
-}
-function drawPulse(now){
-  var gY=M.groundY, cx=M.centerX;
-  var pp=clamp(1-(now-pulseT)/240,0,1);
-  if(pp>0){ ctx.strokeStyle=rgba(83,83,83,0.25*pp); ctx.lineWidth=2;
-    ctx.beginPath(); ctx.ellipse(cx, gY+5, 18+22*(1-pp), 6+5*(1-pp), 0,0,7); ctx.stroke(); }
-}
-function drawCountIn(cb){
-  var s=M.scale, gY=M.groundY, cx=M.centerX;
-  var dTop=gY - M.dinoH;
-  var dotsY=dTop - 16*s;
-  var numY=dotsY - 18*s - 62*s;
-  var readyY=numY - 62*s - 16*s;
-  if(cb < LEAD-4){
-    ctx.fillStyle=READYCOL; ctx.font='800 '+Math.round(20*s)+'px system-ui,sans-serif';
-    ctx.textAlign='center'; ctx.textBaseline='middle';
-    ctx.fillText('GET  READY', cx, numY);
-    return;
-  }
-  var cn=Math.ceil(LEAD-cb), frac=1-(cb-Math.floor(cb));
-  ctx.save();
-  ctx.translate(cx, numY);
-  var pop=1+0.28*frac; ctx.scale(pop,pop);
-  ctx.fillStyle=rgba(83,83,83,0.35+0.55*frac);
-  ctx.font='900 '+Math.round(124*s)+'px "Courier New",ui-monospace,monospace';
-  ctx.textAlign='center'; ctx.textBaseline='middle';
-  ctx.fillText(String(cn>0?cn:1), 0, 0);
-  ctx.restore();
-  ctx.fillStyle=READYCOL; ctx.font='700 '+Math.round(12*s)+'px system-ui,sans-serif'; ctx.textAlign='center';
-  ctx.fillText('GET  READY', cx, readyY);
-  for(var di=0;di<4;di++){
-    var done = cb >= (LEAD-4+di);
-    ctx.fillStyle = done ? rgb(83,83,83) : DOTCOL;
-    ctx.beginPath(); ctx.arc(cx + (di-1.5)*16*s, dotsY, 4*s, 0, 7); ctx.fill();
-  }
+  drawMatrix(pose, left, top, psx, psy, spriteCol, eyeCol);
 }
 function drawHUD(now){
   var s=M.scale;
@@ -608,12 +543,10 @@ function drawHUD(now){
 
 function draw(now, dt, cb){
   ctx.clearRect(0,0,W,H);
-  try{ if(playing) drawClouds(dt); }catch(e){ reportErr('clouds',e); }
+  try{ drawLine(); }catch(e){ reportErr('line',e); }
   try{ if(playing) drawWorld(cb); }catch(e){ reportErr('world',e); }
   try{ drawDino(now, cb); }catch(e){ reportErr('dino',e); }
-  try{ if(playing && PULSE) drawPulse(now); }catch(e){ reportErr('pulse',e); }
-  try{ if(playing && cb<LEAD) drawCountIn(cb); }catch(e){ reportErr('count',e); }
-  try{ if(playing && cb>=LEAD) drawHUD(now); }catch(e){ reportErr('hud',e); }
+  try{ if(playing) drawHUD(now); }catch(e){ reportErr('hud',e); }
 }
 
 function frame(now){
@@ -621,8 +554,6 @@ function frame(now){
   var cb=curBeatNow();
   if(playing){
     try{
-      var bi=Math.floor(cb+1e-6);
-      if(bi!==lastBeatInt){ lastBeatInt=bi; pulseT=now; }
       if(jumping){
         var p=(now-jumpStart)/jumpD;
         if(p>=1){
@@ -633,13 +564,11 @@ function frame(now){
           if(p<0.10){ sqX=0.97; sqY=1.04; }
         }
       }
-      var lineHereP = cb >= CLEF_BEAT;
-      if(lineHereP && !jumping){
+      if(!jumping){
         var legPhase=Math.floor(cb*2);
         if(legPhase!==lastLegPhase){ lastLegPhase=legPhase; runFrame=runFrame?0:1; }
       } else {
         lastLegPhase=Math.floor(cb*2);
-        if(!lineHereP) runFrame=0;
       }
       updateNotes(cb, now);
       if(needPrune){ pruneRegen(cb); needPrune=false; }
@@ -666,7 +595,7 @@ window.addEventListener('keydown', function(e){
 
 document.getElementById('optAid').addEventListener('change', function(){ settings.aid=this.value; });
 
-resize(); initClouds(); buildBars(8); updatePlayBtn();
+resize(); buildBars(8); updatePlayBtn();
 requestAnimationFrame(frame);
 </script>
 </body>

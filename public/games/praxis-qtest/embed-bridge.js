@@ -49,12 +49,13 @@
   })();
   var PLAY_FLAGS={includeCountIn:true,includePlaying:false,includeTapping:true,includeCountOut:false};
   var LISTEN_FLAGS={includeCountIn:true,includePlaying:true,includeTapping:false,includeCountOut:false};
+  var currentMode=null;
   var currentFlags=PLAY_FLAGS;
 
   if(IS_COOP){
   (function(){
     ["RhythmPlayer","Rhythm","RhythmComponent","RhythmImage","Afspilning","Toneafspilning","Nodebillede","Opgave"].forEach(function(n){try{if(!window["Music"+n]&&window["Musikipedia"+n])window["Music"+n]=window["Musikipedia"+n];}catch(e){}});
-    var playing=false,rhythmObj=null,rhythmImage=null,renderedRhythm=null,lastData=null;
+    var playing=false,_lastStop=0,rhythmObj=null,rhythmImage=null,renderedRhythm=null,lastData=null;
     var flowState="init",exerciseCount=0,currentTempo=88;
     var numBars=8,splitMode="2s",owner=[],seq=0;
     var settings={loop:false,ab:true,cue:true,metroSound:true,master:false,marks:true,cursor:true};
@@ -84,7 +85,7 @@
       };
       var origSR=p.setRhythm;p.setRhythm=function(t){rhythmObj=t;return origSR.apply(this,arguments);};
     })();
-    function reinit(flags){currentFlags=flags;try{P().initialisation(baseCfg||{});}catch(e){console.log("[bridge] reinit err",e&&e.message);}}
+    function reinit(flags){if(currentMode===flags)return;currentMode=flags;currentFlags=flags;try{P().initialisation(baseCfg||{});}catch(e){console.log("[bridge] reinit err",e&&e.message);}}
     function applyRhythm(){var p=P();if(!p||!renderedRhythm)return;p.setRhythm(renderedRhythm);if(!settings.metroSound||settings.master){try{p.removeMetronome();}catch(e){}}try{p.setMarkNotesDuringTapping(!!settings.marks);}catch(e){}}
     function randBar(){var beats=[],i;for(i=0;i<4;i++){if(Math.random()<0.30)beats.push([{length:72,rest:false},{length:72,rest:false}]);else beats.push([{length:144,rest:false}]);}var comps=[],idx=0;while(idx<4){var rem=4-idx,r=Math.random(),g=1;if(rem>=4&&r<0.10)g=4;else if(rem>=2&&r<0.32)g=2;if(g===4)comps.push({length:576,rest:false});else if(g===2)comps.push({length:288,rest:false});else comps=comps.concat(beats[idx]);idx+=g;}return {components:comps};}
     function randRhythm(){var bars=[],i;for(i=0;i<numBars;i++)bars.push(randBar());return {metricalStructure:"4/4",bars:bars};}
@@ -98,9 +99,9 @@
     function showExercise(data){var p=P();if(!p||!rhythmImage)return;try{p.stop();}catch(e){}stopClock();cursor.stop();lastData=data;var rhythm=new MusicRhythm(data);rhythmImage.setRhythm(rhythm);renderedRhythm=rhythmImage.getRhythm();p.setRhythm(renderedRhythm);applyTempo();if(!settings.metroSound||settings.master){try{p.removeMetronome();}catch(e){}}try{p.setMarkNotesDuringTapping(!!settings.marks);}catch(e){}rhythmImage.showInfoBox(true);owner=computeSplit(numBars,splitMode);seq++;flowState="showing";setInfo("Press Play","","1");postSplit();post({type:"praxis-new-exercise"});renderAB();renderAids();setTimeout(function(){renderAB();renderAids();},160);watchOverlays(refreshOverlays);}
     function nextExercise(){exerciseCount++;showExercise(randRhythm());post({type:"drill-state",playing:false,exercise:exerciseCount});}
     function unlockAudio(){try{if(window.Howler&&window.Howler.ctx&&window.Howler.ctx.state==="suspended")window.Howler.ctx.resume();}catch(e){}}
-    function beginPlay(){var p=P();if(!p)return;listenMode=false;reinit(PLAY_FLAGS);applyRhythm();unlockAudio();applyTempo();runId++;completedId=-1;flowState="playing";playing=true;try{p.play();}catch(e){}post({type:"drill-state",playing:true,mode:"play"});}
-    function beginListen(){var p=P();if(!p)return;listenMode=true;reinit(LISTEN_FLAGS);applyRhythm();unlockAudio();applyTempo();runId++;completedId=-1;flowState="playing";playing=true;try{p.play();}catch(e){}post({type:"drill-state",playing:true,mode:"listen"});}
-    function hardStop(){var p=P();try{if(p)p.stop();}catch(e){}try{if(p)p.skipCountOut();}catch(e){}try{if(window.Howler&&typeof window.Howler.stop==="function")window.Howler.stop();}catch(e){}stopClock();cursor.stop();playing=false;}
+    function beginPlay(){var p=P();if(!p)return;if(performance.now()-_lastStop<300)return;listenMode=false;reinit(PLAY_FLAGS);applyRhythm();unlockAudio();applyTempo();runId++;completedId=-1;flowState="playing";playing=true;try{p.play();}catch(e){}post({type:"drill-state",playing:true,mode:"play"});}
+    function beginListen(){var p=P();if(!p)return;if(performance.now()-_lastStop<300)return;listenMode=true;reinit(LISTEN_FLAGS);applyRhythm();unlockAudio();applyTempo();runId++;completedId=-1;flowState="playing";playing=true;try{p.play();}catch(e){}post({type:"drill-state",playing:true,mode:"listen"});}
+    function hardStop(){var p=P();try{if(p)p.stop();}catch(e){}try{if(p)p.skipCountOut();}catch(e){}try{if(window.Howler&&typeof window.Howler.stop==="function")window.Howler.stop();}catch(e){}stopClock();cursor.stop();playing=false;_lastStop=performance.now();}
     function completeExercise(){if(completedId===runId)return;completedId=runId;hardStop();if(settings.loop&&!listenMode){setTimeout(function(){if(lastData){showExercise(lastData);beginPlay();}},500);}else{flowState="done";setInfo("Click for next","","");post({type:"drill-state",playing:false});}}
     function setTempo(b){if(!b)return;currentTempo=b;applyTempo();if(cursor&&cursor.setTempo)cursor.setTempo(b);}
     function post(m){try{if(window.parent&&window.parent!==window)window.parent.postMessage(m,"*");}catch(e){}}
@@ -127,7 +128,7 @@
 
   (function(){
     ["RhythmPlayer","Rhythm","RhythmComponent","RhythmImage","Afspilning","Toneafspilning","Nodebillede","Opgave"].forEach(function(n){try{if(!window["Music"+n]&&window["Musikipedia"+n])window["Music"+n]=window["Musikipedia"+n];}catch(e){}});
-    var playing=false,audioUnlocked=false,rhythmObj=null,rhythmImage=null,renderedRhythm=null;
+    var playing=false,_lastStop=0,audioUnlocked=false,rhythmObj=null,rhythmImage=null,renderedRhythm=null;
     var flowState="init",exerciseCount=0,numBars=4,currentTempo=88;
     var runId=0,completedId=-1;
     var fsettings={metroSound:true,master:false,marks:true,cursor:true};
@@ -155,7 +156,7 @@
       };
       var origSR=p.setRhythm;p.setRhythm=function(t){rhythmObj=t;return origSR.apply(this,arguments);};
     })();
-    function reinit(flags){currentFlags=flags;try{P().initialisation(baseCfg||{});}catch(e){console.log("[bridge] reinit err",e&&e.message);}}
+    function reinit(flags){if(currentMode===flags)return;currentMode=flags;currentFlags=flags;try{P().initialisation(baseCfg||{});}catch(e){console.log("[bridge] reinit err",e&&e.message);}}
     function applyRhythm(){var p=P();if(!p||!renderedRhythm)return;p.setRhythm(renderedRhythm);if(!fsettings.metroSound||fsettings.master){try{p.removeMetronome();}catch(e){}}try{p.setMarkNotesDuringTapping(!!fsettings.marks);}catch(e){}}
     function randBar(){var beats=[],i;for(i=0;i<4;i++){if(Math.random()<0.30)beats.push([{length:72,rest:false},{length:72,rest:false}]);else beats.push([{length:144,rest:false}]);}var comps=[],idx=0;while(idx<4){var rem=4-idx,r=Math.random(),g=1;if(rem>=4&&r<0.10)g=4;else if(rem>=2&&r<0.32)g=2;if(g===4)comps.push({length:576,rest:false});else if(g===2)comps.push({length:288,rest:false});else comps=comps.concat(beats[idx]);idx+=g;}return {components:comps};}
     function randRhythm(){var bars=[],i;for(i=0;i<numBars;i++)bars.push(randBar());return {metricalStructure:"4/4",bars:bars};}
@@ -166,9 +167,9 @@
     function showExercise(data){var p=P();if(!p||!rhythmImage)return;try{p.stop();}catch(e){}cursor.stop();var rhythm=new MusicRhythm(data);rhythmImage.setRhythm(rhythm);renderedRhythm=rhythmImage.getRhythm();p.setRhythm(renderedRhythm);applyTempo();if(!fsettings.metroSound||fsettings.master){try{p.removeMetronome();}catch(e){}}try{p.setMarkNotesDuringTapping(!!fsettings.marks);}catch(e){}rhythmImage.showInfoBox(true);flowState="showing";setInfo("Click to start","","1");post({type:"praxis-new-exercise"});renderAids();setTimeout(renderAids,160);watchOverlays(refreshOverlays);}
     function nextExercise(){exerciseCount++;showExercise(randRhythm());post({type:"drill-state",playing:false,exercise:exerciseCount});}
     function unlockAudio(){try{if(window.Howler&&window.Howler.ctx&&window.Howler.ctx.state==="suspended")window.Howler.ctx.resume();}catch(e){}if(audioUnlocked)return;try{if(window.Howler){window.Howler.mute(false);if(typeof window.Howler.volume==="function")window.Howler.volume(1);}var AC=window.AudioContext||window.webkitAudioContext;if(AC){var c=new AC();if(c.state==="suspended")c.resume();c.close&&c.close();}audioUnlocked=true;}catch(e){}}
-    function beginPlay(){var p=P();if(!p)return;listenMode=false;reinit(PLAY_FLAGS);applyRhythm();unlockAudio();applyTempo();runId++;completedId=-1;flowState="playing";playing=true;try{p.play();}catch(e){}post({type:"drill-state",playing:true,mode:"play"});}
-    function beginListen(){var p=P();if(!p)return;listenMode=true;reinit(LISTEN_FLAGS);applyRhythm();unlockAudio();applyTempo();runId++;completedId=-1;flowState="playing";playing=true;try{p.play();}catch(e){}post({type:"drill-state",playing:true,mode:"listen"});}
-    function hardStop(){var p=P();try{if(p)p.stop();}catch(e){}try{if(p)p.skipCountOut();}catch(e){}try{if(window.Howler&&typeof window.Howler.stop==="function")window.Howler.stop();}catch(e){}cursor.stop();playing=false;}
+    function beginPlay(){var p=P();if(!p)return;if(performance.now()-_lastStop<300)return;listenMode=false;reinit(PLAY_FLAGS);applyRhythm();unlockAudio();applyTempo();runId++;completedId=-1;flowState="playing";playing=true;try{p.play();}catch(e){}post({type:"drill-state",playing:true,mode:"play"});}
+    function beginListen(){var p=P();if(!p)return;if(performance.now()-_lastStop<300)return;listenMode=true;reinit(LISTEN_FLAGS);applyRhythm();unlockAudio();applyTempo();runId++;completedId=-1;flowState="playing";playing=true;try{p.play();}catch(e){}post({type:"drill-state",playing:true,mode:"listen"});}
+    function hardStop(){var p=P();try{if(p)p.stop();}catch(e){}try{if(p)p.skipCountOut();}catch(e){}try{if(window.Howler&&typeof window.Howler.stop==="function")window.Howler.stop();}catch(e){}cursor.stop();playing=false;_lastStop=performance.now();}
     function completeExercise(){if(completedId===runId)return;completedId=runId;hardStop();flowState="done";setInfo("Click for next","","");post({type:"drill-state",playing:false});}
     function setTempo(b){if(!b)return;currentTempo=b;applyTempo();if(cursor&&cursor.setTempo)cursor.setTempo(b);}
     function post(m){try{if(window.parent&&window.parent!==window)window.parent.postMessage(m,"*");}catch(e){}}
