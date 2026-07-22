@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ETEC 531 — Rhythm Runner (v40)</title>
+<title>ETEC 531 — Rhythm Runner (v43)</title>
 <style>
   :root{--ink:#1c1917;--line:#e7e5e4;--line2:#d6d3d1;--mut:#78716c;--grey:#535353;}
   *{box-sizing:border-box}
@@ -102,7 +102,7 @@
     </div>
   </div>
 <script>
-var BUILD = 'RR v40';
+var BUILD = 'RR v43';
 var settings = { aid: 'none' };
 var METRO = true;
 var MARKS = true;
@@ -130,6 +130,7 @@ var EYE = rgb(255, 255, 255);
 var RED = rgb(220, 38, 38);
 var GREY = rgb(154, 148, 139);
 var WHITE = rgb(255, 255, 255);
+var CLOUDCOL = rgb(230, 230, 230);
 var stage = document.getElementById('stage');
 var canvas = document.getElementById('track');
 var ctx = canvas.getContext('2d');
@@ -243,6 +244,17 @@ function makeHurt(rows) {
 }
 var HURT = makeHurt(STAND);
 var SW = 22, SH = 23;
+var CLOUD = [
+"..........XXX..........",
+"........XX...XX........",
+"......XX.......XX......",
+"...XXX...........XXX...",
+"..X...............X....",
+".X.................X...",
+"X...................X..",
+".XXXXXXXXXXXXXXXXXXXXX."
+];
+var CW = 23, CH = 8;
 function drawMatrix(m, left, top, px, py, col, eye) {
   for (var r = 0; r < m.length; r++) {
     var row = m[r];
@@ -264,11 +276,11 @@ function levelFromStreak() {
   return 4;
 }
 function weightsFor(level) {
-  if (level <= 0) return { whole: 0.35, half: 0.65, quarter: 0, eighth: 0, halfRest: 0, quarterRest: 0 };
-  if (level === 1) return { whole: 0.20, half: 0.40, quarter: 0, eighth: 0, halfRest: 0.40, quarterRest: 0 };
-  if (level === 2) return { whole: 0.10, half: 0.30, quarter: 0.40, eighth: 0, halfRest: 0.20, quarterRest: 0 };
-  if (level === 3) return { whole: 0.08, half: 0.22, quarter: 0.30, eighth: 0, halfRest: 0.20, quarterRest: 0.20 };
-  return { whole: 0.05, half: 0.15, quarter: 0.25, eighth: 0.30, halfRest: 0.10, quarterRest: 0.15 };
+  if (level <= 0) return { whole: 0.36, half: 0.49, quarter: 0.15, eighth: 0, halfRest: 0, quarterRest: 0 };
+  if (level === 1) return { whole: 0.16, half: 0.34, quarter: 0.26, eighth: 0, halfRest: 0.24, quarterRest: 0 };
+  if (level === 2) return { whole: 0.08, half: 0.22, quarter: 0.34, eighth: 0, halfRest: 0.16, quarterRest: 0.20 };
+  if (level === 3) return { whole: 0.05, half: 0.15, quarter: 0.40, eighth: 0.22, halfRest: 0.08, quarterRest: 0.10 };
+  return { whole: 0.04, half: 0.12, quarter: 0.40, eighth: 0.30, halfRest: 0.06, quarterRest: 0.08 };
 }
 var notes = [];
 var genBeat = MUSIC0;
@@ -324,6 +336,7 @@ function buildBars(count) {
   for (var b = 0; b < count; b++) {
     var comps = randBar(lvl);
     var barStart = genBeat;
+    var slice = [];
     for (var c = 0; c < comps.length; c++) {
       var co = comps[c];
       var n = {
@@ -333,6 +346,8 @@ function buildBars(count) {
         bib: genBeat - barStart,
         beam: co.beam || null,
         gid: co.gid || 0,
+        gbb: 0,
+        gend: 0,
         judged: null,
         resolved: false,
         air: false,
@@ -341,7 +356,43 @@ function buildBars(count) {
         _dx: 0
       };
       notes.push(n);
+      slice.push(n);
       genBeat += co.length / 144;
+    }
+    var k = 0;
+    while (k < slice.length) {
+      if (slice[k].len === 72 && !slice[k].rest) {
+        var j = k;
+        while (j < slice.length && slice[j].len === 72 && !slice[j].rest) {
+          j++;
+        }
+        var runLen = j - k;
+        for (var m = k; m < j; m++) {
+          slice[m].beam = (runLen >= 2) ? 'beam' : 'flag';
+        }
+        k = j;
+      } else {
+        k++;
+      }
+    }
+    var gi = 0;
+    while (gi < slice.length) {
+      var gg = slice[gi].gid;
+      if (gg > 0) {
+        var gj = gi;
+        while (gj < slice.length && slice[gj].gid === gg) gj++;
+        var gminbb = slice[gi].bib;
+        var gmaxend = slice[gj - 1].bib + slice[gj - 1].len / 144;
+        for (var gm = gi; gm < gj; gm++) {
+          slice[gm].gbb = gminbb;
+          slice[gm].gend = gmaxend;
+        }
+        gi = gj;
+      } else {
+        slice[gi].gbb = slice[gi].bib;
+        slice[gi].gend = slice[gi].bib + slice[gi].len / 144;
+        gi++;
+      }
     }
   }
 }
@@ -361,16 +412,11 @@ function pruneRegen(cb) {
   buildBars(4);
 }
 function insetPx(n) {
-  var s = M.s;
-  var hr = M.hr;
-  var G = Math.max(4, Math.round(7 * s));
-  var bb = n.bib;
-  var end = bb + n.len / 144;
-  var leftExt, rightExt;
-  if (n.rest) { leftExt = 4 * s; rightExt = 5 * s; }
-  else { leftExt = hr * 0.95; rightExt = hr * 0.95; }
-  if (bb < 0.01) return leftExt + G;
-  if (Math.abs(end - 4) < 0.01) return -(rightExt + G);
+  var cg = clamp(Math.round(M.ppb * 0.18), 8, 45);
+  var headExt = M.hr * 0.95;
+  var push = cg + headExt;
+  if (n.gbb < 0.01) return push;
+  if (Math.abs(n.gend - 4) < 0.01) return -push;
   return 0;
 }
 var actx = null;
@@ -488,6 +534,7 @@ var sqX = 1, sqY = 1;
 var dropY = -260;
 var hurtUntil = -1;
 var lastT = performance.now();
+var clouds = [];
 function updatePlayBtn() {
   if (playing) {
     playBtn.textContent = '■ Stop';
@@ -657,6 +704,32 @@ function updateNotes(cb, now) {
         registerMiss(n, now, cb);
       }
     }
+  }
+}
+function initClouds() {
+  clouds = [];
+  for (var i = 0; i < 4; i++) {
+    clouds.push({
+      x: Math.random() * W,
+      y: 30 + Math.random() * (H * 0.32),
+      s: 0.7 + Math.random() * 0.7
+    });
+  }
+}
+function drawClouds(dt) {
+  var s = M.s;
+  var ppb = M.ppb;
+  var speed = ppb / secPerBeat;
+  var cps = Math.max(2, Math.round(2 * s));
+  for (var ci = 0; ci < clouds.length; ci++) {
+    var cl = clouds[ci];
+    cl.x -= speed * 0.12 * cl.s * dt;
+    if (cl.x < -CW * cps - 10) {
+      cl.x = W + Math.random() * 120;
+      cl.y = 24 + Math.random() * (H * 0.3);
+      cl.s = 0.7 + Math.random() * 0.7;
+    }
+    drawMatrix(CLOUD, cl.x, cl.y, cps * cl.s, cps * cl.s, CLOUDCOL, CLOUDCOL);
   }
 }
 function drawLine() {
@@ -906,8 +979,9 @@ function pad(n, w) {
   while (n.length < w) n = '0' + n;
   return n;
 }
-function draw(now, cb) {
+function draw(now, dt, cb) {
   ctx.clearRect(0, 0, W, H);
+  drawClouds(dt);
   drawLine();
   if (playing) drawWorld(cb);
   drawDino(now, cb);
@@ -953,7 +1027,7 @@ function frame(now) {
       updateNotes(cb, now);
       if (genBeat < cb + 16) buildBars(4);
     }
-    draw(now, cb);
+    draw(now, dt, cb);
   } catch (e) {
     showErr('GAME ERROR\n' + (e && e.message ? e.message : e));
   }
@@ -998,6 +1072,7 @@ document.getElementById('optAid').addEventListener('change', function () {
   settings.aid = this.value;
 });
 resize();
+initClouds();
 buildBars(4);
 updatePlayBtn();
 requestAnimationFrame(frame);
