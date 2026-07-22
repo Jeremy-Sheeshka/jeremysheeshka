@@ -509,8 +509,8 @@ label.metro-field:has([data-metro-beats]){display:none !important}
         var DRILL='/games/rhythm-app/exercise/720/';
         Promise.all([
           fetch(DRILL).then(function(r){return r.text();}),
-          fetch('/games/praxis-qtest/embed-bridge.js?v=20260722v7').then(function(r){return r.text();}).catch(function(){return '';}),
-          fetch('/games/praxis-qtest/embed-overrides.css?v=20260722v7').then(function(r){return r.text();}).catch(function(){return '';})
+          fetch('/games/praxis-qtest/embed-bridge.js?v=20260722v10').then(function(r){return r.text();}).catch(function(){return '';}),
+          fetch('/games/praxis-qtest/embed-overrides.css?v=20260722v10').then(function(r){return r.text();}).catch(function(){return '';})
         ]).then(function(res){
           var h=res[0],bridge=res[1],ov=res[2];
           h=h.replace(/if\s*\(\s*top\s*==\s*self\s*\)/g,'if(true)');
@@ -529,7 +529,7 @@ label.metro-field:has([data-metro-beats]){display:none !important}
           h=h.replace(/window\.top\.location\.replace\([^)]*\)/g,'/*x*/');
           h=h.replace(/parent\.location\s*=[^;}\n]*/g,'/*x*/');
           h=h.replace(/<meta[^>]*content-security-policy[^>]*>/gi,'');
-          if(ov){h=h.replace('</head>','<style>'+ov+'</style></head>');}
+          if(ov){h=h.replace('</head>','<style>'+ov+'</style><style id="praxis-reveal">#drill-frame{opacity:0;transition:opacity .15s ease}#drill-frame.praxis-shown{opacity:1}</style></head>');}
           if(bridge){var inj=SO+bridge+SC;h=(h.indexOf('</body>')!==-1)?h.replace('</body>',inj+'</body>'):h+inj;}
           h=h.replace(/\/games\/rhythm-app\/ovelser\/js\/min\/rhythm_image-min\.js/g,'/games/praxis-qtest/rhythm_image-min.js');f.srcdoc=h;
         }).catch(function(e){
@@ -730,7 +730,7 @@ label.metro-field:has([data-metro-beats]){display:none !important}
 
   window.addEventListener('message',function(ev){
     var d=ev.data; if(!d)return;
-    if(d.type==='drill-ready'){ post({type:'praxis-settings',settings:settings}); post({type:'praxis-aid',mode:'none'}); post({type:'praxis-mute',muted:muted}); sizeCanvas(); }
+    if(d.type==='drill-ready'){try{frame.classList.add('praxis-shown');}catch(e){} post({type:'praxis-settings',settings:settings}); post({type:'praxis-aid',mode:'none'}); post({type:'praxis-mute',muted:muted}); sizeCanvas(); }
     else if(d.type==='drill-state'){ if(typeof d.exercise==='number' && d.exercise!==lastEx){ lastEx=d.exercise; clearDrawing(); } }
     else if(d.type==='praxis-new-exercise'){ clearDrawing(); }/*nxm-fp*/
   });
@@ -777,5 +777,5 @@ label.metro-field:has([data-metro-beats]){display:none !important}
   window.addEventListener('message',function(ev){var d=ev.data;if(!d||d.type!=='drill-state')return;if(!d.playing&&listening){listening=false;setBtn();}});
 })();
 </script>
-</body>
+<!-- PRAXIS_REVEAL_SAFETY --><script>setTimeout(function(){var f=document.getElementById("drill-frame");if(f)f.classList.add("praxis-shown");},5000);</script></body>
 </html>

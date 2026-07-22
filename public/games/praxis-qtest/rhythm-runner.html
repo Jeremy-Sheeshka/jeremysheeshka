@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ETEC 531 — Rhythm Runner (v35)</title>
+<title>ETEC 531 — Rhythm Runner (v36)</title>
 <style>
   :root{--ink:#1c1917;--line:#e7e5e4;--line2:#d6d3d1;--mut:#78716c;--grey:#535353;}
   *{box-sizing:border-box}
@@ -97,7 +97,7 @@
     </div>
   </div>
 <script>
-var BUILD = 'RR v35';
+var BUILD = 'RR v36';
 var settings = { aid: 'none' };
 var METRO = true;
 var MARKS = true;
@@ -753,20 +753,6 @@ function drawWorld(cb) {
   var gy = M.gy;
   var cx = M.cx;
   var ppb = M.ppb;
-  var bw = Math.max(2, 2.4 * s);
-  ctx.fillStyle = INK;
-  var lo = cb - cx / ppb;
-  var hi = cb + (W - cx) / ppb;
-  var mStart = Math.floor((lo - MUSIC0) / 4);
-  var mEnd = Math.ceil((hi - MUSIC0) / 4);
-  for (var m = mStart; m <= mEnd; m++) {
-    if (m < 0) continue;
-    var bb = MUSIC0 + 4 * (m + 1);
-    var bx = cx + (bb - cb) * ppb;
-    if (bx < -2 || bx > W + 2) continue;
-    var bh = Math.round(M.stem * 0.9 + 9 * s);
-    ctx.fillRect(Math.round(bx - bw / 2), Math.round(gy - M.stem * 0.9), Math.ceil(bw), bh);
-  }
   var clefX = cx + (CLEF_BEAT - cb) * ppb;
   if (clefX > -70 && clefX < W + 70) drawClef(clefX);
   for (var i = 0; i < notes.length; i++) {
@@ -789,6 +775,32 @@ function drawWorld(cb) {
     } else {
       bi++;
     }
+  }
+  var lo = cb - cx / ppb;
+  var hi = cb + (W - cx) / ppb;
+  var kStart = Math.floor((lo - MUSIC0) / 4);
+  var kEnd = Math.ceil((hi - MUSIC0) / 4);
+  var tickHalf = Math.round(14 * s);
+  var bbw = Math.max(2, Math.round(2.2 * s));
+  ctx.fillStyle = INK;
+  for (var kk = kStart; kk <= kEnd; kk++) {
+    if (kk < 1) continue;
+    var B = MUSIC0 + 4 * kk;
+    var dLast = 4;
+    var bestBeat = -1e9;
+    var bestLen = 576;
+    for (var si = 0; si < notes.length; si++) {
+      var sn = notes[si];
+      if (sn.beat < B && sn.beat > bestBeat) {
+        bestBeat = sn.beat;
+        bestLen = sn.len;
+      }
+    }
+    if (bestBeat > -1e8) dLast = bestLen / 144;
+    var barBeat = B - dLast / 2;
+    var bx = cx + (barBeat - cb) * ppb;
+    if (bx < -4 || bx > W + 4) continue;
+    ctx.fillRect(Math.round(bx - bbw / 2), gy - tickHalf, bbw, tickHalf * 2);
   }
   for (var n2 = 0; n2 < notes.length; n2++) {
     var n = notes[n2];
