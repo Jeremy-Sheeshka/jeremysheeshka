@@ -515,10 +515,28 @@ function largestLeq(x){var set=[8,4,2,1],i;for(i=0;i<set.length;i++){if(set[i]<=
 function pushRests(tiles,start,len){var s=start,rem=len;while(rem>0){var v;if(s%8===0&&rem>=8){v=8;}else{var cap=Math.min(rem,4-(s%4));v=largestLeq(cap);if(v<1)v=1;}tiles.push({type:"rest",onset:s,dur:v});s+=v;rem-=v;}}
 function computeTiles(evlist){
   var evs=[],i;
-  for(i=0;i<evlist.length;i++){var e=evlist[i];var end=e.end!=null?e.end:(recAudioStart+windowLen);end=Math.min(end,recAudioStart+windowLen);var onset=Math.round((e.start-userLatency)/EIGHTH);if(onset<0)onset=0;if(onset>SLOTS-1)onset=SLOTS-1;var durRaw=(end-e.start)/EIGHTH;if(durRaw<=0)continue;evs.push({onset:onset,dur:clampSet(durRaw)});}
+  for(i=0;i<evlist.length;i++){
+    var e=evlist[i];
+    var press=e.start;
+    var release=(e.end==null)?(recAudioStart+windowLen):e.end;
+    if(release>recAudioStart+windowLen)release=recAudioStart+windowLen;
+    if(release<press)release=press;
+    var nextPress=(i+1<evlist.length)?evlist[i+1].start:(recAudioStart+windowLen);
+    var onset=Math.round((press-recAudioStart-userLatency)/EIGHTH);
+    if(onset<0)onset=0;
+    if(onset>SLOTS-1)onset=SLOTS-1;
+    var holdE=(release-press)/EIGHTH;
+    var p2pE=(nextPress-press)/EIGHTH;
+    if(p2pE<1)p2pE=1;
+    var durE;
+    if(i===evlist.length-1){ durE=(holdE>=1.0)?Math.round(holdE):Math.round(Math.min(p2pE,2)); }
+    else { durE=(holdE>=0.5*p2pE)?Math.round(holdE):Math.round(p2pE); }
+    if(durE<1)durE=1;
+    evs.push({onset:onset,dur:clampSet(durE)});
+  }
   evs.sort(function(a,b){return a.onset-b.onset;});
   var cursor=0,tiles=[];
-  for(i=0;i<evs.length;i++){var o=evs[i].onset;if(o<cursor)o=cursor;if(o>=SLOTS)break;if(o>cursor)pushRests(tiles,cursor,o-cursor);var maxfit=SLOTS-o;var d=largestLeq(Math.min(evs[i].dur,maxfit));if(d<1)d=1;tiles.push({type:"note",onset:o,dur:d});cursor=o+d;}
+  for(i=0;i<evs.length;i++){var o=Math.max(evs[i].onset,cursor);if(o>=SLOTS)break;if(o>cursor)pushRests(tiles,cursor,o-cursor);var maxfit=SLOTS-o;var d=largestLeq(Math.min(evs[i].dur,maxfit));if(d<1)d=1;tiles.push({type:"note",onset:o,dur:d});cursor=o+d;}
   if(cursor<SLOTS)pushRests(tiles,cursor,SLOTS-cursor);
   return tiles;
 }
