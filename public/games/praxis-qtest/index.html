@@ -577,7 +577,7 @@ function splitCrossings(tiles){
     if(t.type!=="note"){out.push(t);continue;}
     if(t.dur>=8){out.push(t);continue;}
     var onset=t.onset,end=onset+t.dur,cuts=[],b;
-    for(b=0;b<B.length;b++){if(B[b]>onset&&B[b]<end)cuts.push(B[b]);}
+    for(b=0;b<B.length;b++){var bb=B[b];if(bb>onset&&bb<end){if((bb%8===4)&&t.dur===6&&(onset%8===0))continue;cuts.push(bb);}}
     if(cuts.length===0){out.push(t);continue;}
     var prev=onset,pieces=[],c;
     for(c=0;c<cuts.length;c++){pieces.push({type:"note",onset:prev,dur:cuts[c]-prev});prev=cuts[c];}
