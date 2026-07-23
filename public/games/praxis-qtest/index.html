@@ -293,7 +293,7 @@ body:not(.on-home) .annotation-tabs,body:not(.on-home) .annotation-panel,body:no
                   <div class="rec-status" id="rec-status">Press Record, then tap along after the 4-beat count-in.</div>
                   <svg class="rec-staff" id="rec-staff" viewBox="0 0 640 120" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Your recorded rhythm"></svg>
                   <div class="rec-pips" id="rec-pips"><i></i><i></i><i></i><i></i></div>
-              <div class="rec-pad" id="rec-pad" role="button" tabindex="0" aria-label="Tap pad">Tap or hold &mdash; click / Spacebar</div>
+              <div class="rec-pad" id="rec-pad" role="button" tabindex="0" aria-label="Tap pad">Tap or hold &mdash; Click or Spacebar</div>
                   <div class="rec-controls">
                     <button type="button" class="btn small" id="rec-play" disabled>&#9654; Play</button>
                     <button type="button" class="btn small primary" id="rec-submit" disabled>Submit to bank</button>
@@ -560,6 +560,7 @@ function drawNote(svg,t){
   if(t.dur<8){var sx=x+hr*0.85;mk(svg,"line",{x1:sx,y1:SY-1,x2:sx,y2:SY-35,stroke:"#222","stroke-width":1.8});}
   mk(svg,"ellipse",{cx:x,cy:SY,rx:hr,ry:hr*0.72,fill:open?"none":"#222",stroke:"#222","stroke-width":open?2:0.5,transform:"rotate(-15 "+x+" "+SY+")"});
   if(t.dur<8){var sx2=x+hr*0.85;if(!t._beam&&t.dur===1){mk(svg,"path",{d:"M"+sx2+" "+(SY-35)+" q 8 4 6 13",fill:"none",stroke:"#222","stroke-width":1.8});}}
+  if(t.dur===3||t.dur===6){mk(svg,"circle",{cx:x+hr+4,cy:SY-6,r:2.2,fill:"#222"});}
 }
 function drawRest(svg,t){
   var x=slotX(t.onset+(t.dur-1)/2);
@@ -686,9 +687,6 @@ function startRec(){
   Promise.resolve(ctx.resume()).then(function(){startCalibration(ctx.currentTime+0.3);});
 }
 function wire(){
-  var _st=$("#rec-stage"),_rc=$("#rec-record");if(_st)_st.classList.add("hidden");if(_rc)_rc.classList.remove("hidden");
-  var _su=document.querySelector(".rec-setup");if(_rc&&_su&&_rc.parentNode){_rc.parentNode.insertBefore(_rc,_su);}
-
   var rr=$("#rec-record");if(rr)rr.addEventListener("click",startRec);
   var rd=$("#rec-redo");if(rd)rd.addEventListener("click",startRec);
   var rc=$("#rec-cancel");if(rc)rc.addEventListener("click",function(){state="idle";if(rafId){cancelAnimationFrame(rafId);rafId=null;}var st=$("#rec-stage"),rb=$("#rec-record");if(st)st.classList.add("hidden");if(rb)rb.classList.remove("hidden");clearPips();});
