@@ -517,8 +517,9 @@ function setStatus(t){var el=$("#rec-status");if(el)el.textContent=t;}
 function setSubmit(on){var a=$("#rec-submit"),b=$("#rec-play");if(a)a.disabled=!on;if(b)b.disabled=!on;}
 function mk(svg,t,a){var e=document.createElementNS(NS,t);Object.keys(a).forEach(function(k){e.setAttribute(k,String(a[k]));});svg.appendChild(e);return e;}
 function slotX(s){return LM+(s+0.5)*SW;}
-function clampSet(x){var set=[1,2,4,8],best=1,bd=1e9,i;for(i=0;i<set.length;i++){var d=Math.abs(x-set[i]);if(d<bd){bd=d;best=set[i];}}return best;}
+function clampSet(x){var set=[1,2,3,4,6,8],best=1,bd=1e9,i;for(i=0;i<set.length;i++){var d=Math.abs(x-set[i]);if(d<bd){bd=d;best=set[i];}}return best;}
 function largestLeq(x){var set=[8,4,2,1],i;for(i=0;i<set.length;i++){if(set[i]<=x)return set[i];}return 1;}
+function largestLeqNote(x){var set=[8,6,4,3,2,1],i;for(i=0;i<set.length;i++){if(set[i]<=x)return set[i];}return 1;}
 function pushRests(tiles,start,len){var s=start,rem=len;while(rem>0){var v;if(s%8===0&&rem>=8){v=8;}else{var cap=Math.min(rem,4-(s%4));v=largestLeq(cap);if(v<1)v=1;}tiles.push({type:"rest",onset:s,dur:v});s+=v;rem-=v;}}
 function computeTiles(evlist){
   var evs=[],i;
@@ -543,7 +544,7 @@ function computeTiles(evlist){
   }
   evs.sort(function(a,b){return a.onset-b.onset;});
   var cursor=0,tiles=[];
-  for(i=0;i<evs.length;i++){var o=Math.max(evs[i].onset,cursor);if(o>=SLOTS)break;if(o>cursor)pushRests(tiles,cursor,o-cursor);var maxfit=SLOTS-o;var d=largestLeq(Math.min(evs[i].dur,maxfit));if(d<1)d=1;tiles.push({type:"note",onset:o,dur:d});cursor=o+d;}
+  for(i=0;i<evs.length;i++){var o=Math.max(evs[i].onset,cursor);if(o>=SLOTS)break;if(o>cursor)pushRests(tiles,cursor,o-cursor);var maxfit=SLOTS-o;var d=largestLeqNote(Math.min(evs[i].dur,maxfit));if(d<1)d=1;tiles.push({type:"note",onset:o,dur:d});cursor=o+d;}
   if(cursor<SLOTS)pushRests(tiles,cursor,SLOTS-cursor);
   return tiles;
 }
@@ -560,7 +561,7 @@ function drawNote(svg,t){
   if(t.dur<8){var sx=x+hr*0.85;mk(svg,"line",{x1:sx,y1:SY-1,x2:sx,y2:SY-35,stroke:"#222","stroke-width":1.8});}
   mk(svg,"ellipse",{cx:x,cy:SY,rx:hr,ry:hr*0.72,fill:open?"none":"#222",stroke:"#222","stroke-width":open?2:0.5,transform:"rotate(-15 "+x+" "+SY+")"});
   if(t.dur<8){var sx2=x+hr*0.85;if(!t._beam&&t.dur===1){mk(svg,"path",{d:"M"+sx2+" "+(SY-35)+" q 8 4 6 13",fill:"none",stroke:"#222","stroke-width":1.8});}}
-  if(t.dur===3||t.dur===6){mk(svg,"circle",{cx:x+hr+4,cy:SY-6,r:2.2,fill:"#222"});}
+  if(t.dur===3||t.dur===6){mk(svg,"circle",{cx:x+hr+5,cy:SY-8,r:2.3,fill:"#222"});}
 }
 function drawRest(svg,t){
   var x=slotX(t.onset+(t.dur-1)/2);
