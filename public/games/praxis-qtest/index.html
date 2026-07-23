@@ -213,6 +213,11 @@
 #rec-redo{background:#6b7280 !important;color:#fff !important;border-color:#6b7280 !important}
 #rec-redo:hover{background:#4b5563 !important}
 </style>
+<style id="praxis-home-gate">
+body:not(.on-home) .annotation-tabs,body:not(.on-home) .annotation-panel,body:not(.on-home) .annotation-overlay{display:none !important}
+#rec-record{min-height:64px;font-size:15px;border-radius:12px}
+#rec-record .rec-bullet{color:#dc2626;font-weight:900}
+</style>
 </head>
 <body>
   <header class="topbar">
@@ -297,7 +302,7 @@
                   </div>
                 </div>
               <div class="rec-setup"><label>Tempo <input type="range" id="rec-tempo" min="50" max="180" value="88"> <span class="rec-tempo-val" id="rec-tempo-val">88</span> BPM</label><label>Your name <input type="text" id="rec-name" maxlength="24" placeholder="e.g. Jordan"></label></div>
-              <button type="button" class="btn accent full" id="rec-record">&#9679; Record a 2-bar rhythm</button>
+              <button type="button" class="btn accent full" id="rec-record"><span class="rec-bullet">&#9679;</span> Record a 2-bar rhythm</button>
               </div>
               <div class="presets">
                 <button class="preset selected" aria-pressed="true" data-name="Local Database">Local Database<span>Teacher-curated archive · 21 patterns</span></button>
@@ -405,6 +410,8 @@
           if(a.dataset.nav===id){a.setAttribute("aria-current","page");} else {a.removeAttribute("aria-current");}
         });
         window.scrollTo({top:0,behavior:"smooth"});
+        document.body.classList.toggle("on-home", id==="screen-home");
+        if(id!=="screen-home"){try{closeAnnotation();}catch(e){}}
         closeMenu();
       }
       $$("[data-nav]").forEach(b=>b.addEventListener("click",e=>{e.preventDefault();showScreen(b.dataset.nav);}));
@@ -679,6 +686,9 @@ function startRec(){
   Promise.resolve(ctx.resume()).then(function(){startCalibration(ctx.currentTime+0.3);});
 }
 function wire(){
+  var _st=$("#rec-stage"),_rc=$("#rec-record");if(_st)_st.classList.add("hidden");if(_rc)_rc.classList.remove("hidden");
+  var _su=document.querySelector(".rec-setup");if(_rc&&_su&&_rc.parentNode){_rc.parentNode.insertBefore(_rc,_su);}
+
   var rr=$("#rec-record");if(rr)rr.addEventListener("click",startRec);
   var rd=$("#rec-redo");if(rd)rd.addEventListener("click",startRec);
   var rc=$("#rec-cancel");if(rc)rc.addEventListener("click",function(){state="idle";if(rafId){cancelAnimationFrame(rafId);rafId=null;}var st=$("#rec-stage"),rb=$("#rec-record");if(st)st.classList.add("hidden");if(rb)rb.classList.remove("hidden");clearPips();});
