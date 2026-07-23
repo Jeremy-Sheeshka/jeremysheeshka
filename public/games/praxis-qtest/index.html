@@ -176,7 +176,14 @@
       *,*:before,*:after{scroll-behavior:auto !important;animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
     }
   </style>
-<style id="praxis-bank">.rec-setup{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin:10px 0 4px;font-size:13px;font-weight:700}
+<style id="praxis-bank">
+.doing-wrap{position:relative;display:inline-flex}
+.doing-pop{position:absolute;top:calc(100% + 10px);right:0;width:min(320px,82vw);padding:14px 16px;border:1px solid var(--Rhythm-line);border-radius:12px;background:var(--Rhythm-surface);box-shadow:var(--Rhythm-shadow);color:var(--Rhythm-ink);font-size:13px;line-height:1.55;font-weight:500;text-align:left;opacity:0;visibility:hidden;transform:translateY(-4px);transition:opacity .16s ease,transform .16s ease,visibility .16s;z-index:40;pointer-events:none}
+.doing-pop strong{display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--Rhythm-accent);margin-bottom:7px;font-weight:800}
+.doing-pop em{color:var(--Rhythm-muted);font-style:italic}
+.doing-pop .doing-go{display:inline-block;margin-top:9px;font-size:11px;font-weight:800;letter-spacing:.04em;color:var(--Rhythm-accent)}
+.doing-wrap:hover .doing-pop,.doing-wrap:focus-within .doing-pop{opacity:1;visibility:visible;transform:none}
+.rec-setup{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin:10px 0 4px;font-size:13px;font-weight:700}
 .rec-setup label{display:flex;align-items:center;gap:8px}
 .rec-setup input[type=range]{width:150px}
 .rec-setup input[type=text]{min-width:120px;padding:5px 8px;border:1px solid var(--Rhythm-line);border-radius:8px;background:var(--Rhythm-surface);font-weight:600}
@@ -285,7 +292,7 @@ body:not(.on-home) .annotation-tabs,body:not(.on-home) .annotation-panel,body:no
         <div class="dashboard-grid">
           <div>
             <article class="card dataset-card" id="feature-resist">
-              <div class="card-label"><strong>Datasets</strong><button class="feature-link" id="weekly-doing-link">The Doing</button></div>
+              <div class="card-label"><strong>Datasets</strong><span class="doing-wrap"><button class="feature-link" id="weekly-doing-link">The Doing</button><span class="doing-pop" role="tooltip"><strong>The Doing</strong>Tap a two-bar rhythm from a song you are listening to right now and add it to the bank. Then sit with the prompt: <em>what did the app assume about your rhythm that was not true, and what would have to change to fit what you brought in?</em><span class="doing-go">Click to open the full prompt in the Gallery &rarr;</span></span></span></div>
               <input class="sr-only" id="file-input" type="file" accept=".pdf,.png,.jpg,.jpeg">
               <div class="rec-panel" id="rec-panel">
                 <div class="rec-head"><strong>Record a 2-Bar Rhythm</strong><small>Tap your own two bars using eighth notes, quarter notes, half notes, or whole notes &mdash; press and hold for a longer note. When finished, submit it to the class&rsquo;s rhythm bank.</small></div>
@@ -512,7 +519,7 @@ recomputeTiming();
 var SY=70,LM=70,RM=20,VW=700,VH=120,SW=(VW-LM-RM)/SLOTS,hr=6;
 var actx=null;
 function ensureActx(){var AC=window.AudioContext||window.webkitAudioContext;if(!AC)return null;if(!actx)actx=new AC();return actx;}
-function clickAt(time,freq,vol){if(!actx)return;var o=actx.createOscillator(),g=actx.createGain();o.type="sine";o.frequency.value=freq;g.gain.setValueAtTime(.0001,time);g.gain.exponentialRampToValueAtTime(vol||.3,time+.004);g.gain.exponentialRampToValueAtTime(.0001,time+.09);o.connect(g).connect(actx.destination);o.start(time);o.stop(time+.11);}
+function clickAt(time,freq,vol){if(!actx)return;var o=actx.createOscillator(),g=actx.createGain();_nodes.push(o);o.type="sine";o.frequency.value=freq;g.gain.setValueAtTime(.0001,time);g.gain.exponentialRampToValueAtTime(vol||.3,time+.004);g.gain.exponentialRampToValueAtTime(.0001,time+.09);o.connect(g).connect(actx.destination);o.start(time);o.stop(time+.11);}
 function setStatus(t){var el=$("#rec-status");if(el)el.textContent=t;}
 function setSubmit(on){var a=$("#rec-submit"),b=$("#rec-play");if(a)a.disabled=!on;if(b)b.disabled=!on;}
 function mk(svg,t,a){var e=document.createElementNS(NS,t);Object.keys(a).forEach(function(k){e.setAttribute(k,String(a[k]));});svg.appendChild(e);return e;}
@@ -611,9 +618,9 @@ function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp
 var recAudioStart=0, userLatency=DEFAULT_LATENCY;
 var calibOffsets=[], calibBeatTimes=[], events=[], activeEvent=null, lastTiles=null, rafId=null;
 var state="idle";
-var _tmrs=[],_prevSig="";
+var _tmrs=[],_prevSig="",_nodes=[];
 function _sched(fn,ms){var id=setTimeout(fn,ms);_tmrs.push(id);return id;}
-function _clearTmrs(){for(var i=0;i<_tmrs.length;i++)clearTimeout(_tmrs[i]);_tmrs.length=0;if(rafId){cancelAnimationFrame(rafId);rafId=null;}}
+function _clearTmrs(){for(var i=0;i<_tmrs.length;i++)clearTimeout(_tmrs[i]);_tmrs.length=0;if(rafId){cancelAnimationFrame(rafId);rafId=null;}for(var j=0;j<_nodes.length;j++){try{_nodes[j].disconnect();}catch(e){}}_nodes.length=0;}
 var KEY="praxis_bank_v4";
 var API="/api/rhythms";
 var bank=[]; var remote=false;
@@ -713,7 +720,7 @@ function startRec(){
 function wire(){
   var rr=$("#rec-record");if(rr)rr.addEventListener("click",startRec);
   var rd=$("#rec-redo");if(rd)rd.addEventListener("click",startRec);
-  var rc=$("#rec-cancel");if(rc)rc.addEventListener("click",function(){state="idle";_clearTmrs();var _sl=$("#rec-tempo");if(_sl)_sl.disabled=false;var st=$("#rec-stage"),rb=$("#rec-record");if(st)st.classList.add("hidden");if(rb)rb.classList.remove("hidden");clearPips();});
+  var rc=$("#rec-cancel");if(rc)rc.addEventListener("click",function(){_clearTmrs();var _ph=document.querySelector('#rec-staff line[stroke="#e11d48"]');if(_ph&&_ph.parentNode)_ph.parentNode.removeChild(_ph);var _sl=$("#rec-tempo");if(_sl)_sl.disabled=false;clearPips();if(activeEvent){activeEvent.end=(actx?actx.currentTime:activeEvent.start);events.push(activeEvent);activeEvent=null;}if(events.length===0){renderEmpty();lastTiles=null;state="done";setStatus("");setSubmit(false);}else{var tiles=computeTiles(events);lastTiles=tiles;var notes=tiles.filter(function(t){return t.type==="note";});var svg=$("#rec-staff");if(svg)render(svg,tiles);state="done";setStatus("");if(notes.length>0)setSubmit(true);else setSubmit(false);}});
   var rp=$("#rec-play");if(rp)rp.addEventListener("click",function(){if(lastTiles)play(lastTiles,curBPM);});
   var rs=$("#rec-submit");if(rs)rs.addEventListener("click",function(){if(!lastTiles)return;var name=readName();var tiles=lastTiles.slice();var bpm=curBPM;submitRhythm(name,bpm,tiles).then(function(){toast("Saved to the bank");});var st=$("#rec-stage"),rb=$("#rec-record");if(st)st.classList.add("hidden");if(rb)rb.classList.remove("hidden");state="idle";clearPips();});
   var pad=$("#rec-pad");if(pad)pad.addEventListener("pointerdown",onDown);
