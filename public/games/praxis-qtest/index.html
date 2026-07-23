@@ -570,6 +570,23 @@ function drawRest(svg,t){
   else if(t.dur>=2){mk(svg,"path",{d:"M "+(x+2)+" "+(SY-11)+" C "+(x-3)+" "+(SY-7)+" "+(x+3)+" "+(SY-3)+" "+(x-1)+" "+(SY+1)+" C "+(x+3)+" "+(SY+5)+" "+(x-3)+" "+(SY+9)+" "+(x+1)+" "+(SY+12),fill:"none",stroke:"#222","stroke-width":1.6});}
   else{mk(svg,"circle",{cx:x+2,cy:SY-8,r:1.8,fill:"#222"});mk(svg,"line",{x1:x+2,y1:SY-8,x2:x-2,y2:SY+4,stroke:"#222","stroke-width":1.6});}
 }
+function splitCrossings(tiles){
+  var B=[4,8,12],out=[],i;
+  for(i=0;i<tiles.length;i++){
+    var t=tiles[i];
+    if(t.type!=="note"){out.push(t);continue;}
+    if(t.dur>=8){out.push(t);continue;}
+    var onset=t.onset,end=onset+t.dur,cuts=[],b;
+    for(b=0;b<B.length;b++){if(B[b]>onset&&B[b]<end)cuts.push(B[b]);}
+    if(cuts.length===0){out.push(t);continue;}
+    var prev=onset,pieces=[],c;
+    for(c=0;c<cuts.length;c++){pieces.push({type:"note",onset:prev,dur:cuts[c]-prev});prev=cuts[c];}
+    pieces.push({type:"note",onset:prev,dur:end-prev});
+    for(c=0;c<pieces.length-1;c++)pieces[c].tied=true;
+    for(c=0;c<pieces.length;c++)out.push(pieces[c]);
+  }
+  return out;
+}
 function render(svg,tiles){
   while(svg.firstChild)svg.removeChild(svg.firstChild);
   svg.setAttribute("viewBox","0 0 "+VW+" "+VH);
@@ -579,8 +596,10 @@ function render(svg,tiles){
   mk(svg,"rect",{x:27,y:SY-18,width:4,height:36,fill:"#222",rx:1});
   var t1=mk(svg,"text",{x:46,y:SY-2,"font-size":20,"font-weight":"bold","text-anchor":"middle",fill:"#222","font-family":"serif"});t1.textContent="4";
   var t2=mk(svg,"text",{x:46,y:SY+18,"font-size":20,"font-weight":"bold","text-anchor":"middle",fill:"#222","font-family":"serif"});t2.textContent="4";
-  var groups=computeBeams(tiles),i;
-  for(i=0;i<tiles.length;i++){var t=tiles[i];if(t.type==="rest")drawRest(svg,t);else drawNote(svg,t);}
+  var split=splitCrossings(tiles);
+  var groups=computeBeams(split),i;
+  for(i=0;i<split.length;i++){var t=split[i];if(t.type==="rest")drawRest(svg,t);else drawNote(svg,t);}
+  for(i=0;i<split.length;i++){var u=split[i];if(u.tied&&i+1<split.length){var xa=slotX(u.onset)+hr*0.6,xb=slotX(split[i+1].onset)-hr*0.6,ym=SY+11;mk(svg,"path",{d:"M"+xa+" "+ym+" Q "+((xa+xb)/2)+" "+(ym+8)+" "+xb+" "+ym,fill:"none",stroke:"#222","stroke-width":1.4});}}
   for(var g=0;g<groups.length;g++){var gr=groups[g];if(gr.length>=2){var x1=slotX(gr[0].onset)+hr*0.85,x2=slotX(gr[gr.length-1].onset)+hr*0.85;mk(svg,"rect",{x:x1,y:SY-35,width:Math.max(1,x2-x1),height:3,fill:"#222",rx:0.5});}}
   var bx=LM+8*SW;mk(svg,"line",{x1:bx,y1:SY-28,x2:bx,y2:SY+18,stroke:"#222","stroke-width":1.5});
   var fx=LM+16*SW;mk(svg,"line",{x1:fx-4,y1:SY-28,x2:fx-4,y2:SY+18,stroke:"#222","stroke-width":1.5});mk(svg,"line",{x1:fx,y1:SY-28,x2:fx,y2:SY+18,stroke:"#222","stroke-width":2.5});
@@ -645,7 +664,7 @@ function finishRecording(){
   var notes=tiles.filter(function(t){return t.type==="note";});
   var svg=$("#rec-staff");if(svg)render(svg,tiles);
   clearPips();
-  if(notes.length>0){setStatus("Done - "+notes.length+" note(s). Play, submit, or redo.");setSubmit(true);}
+  if(notes.length>0){setStatus("");setSubmit(true);}
   else{setStatus("No notes captured - hit Redo.");setSubmit(false);}
 }
 function tickRec(){if(state!=="recording")return;if(activeEvent)renderPreview();rafId=requestAnimationFrame(tickRec);}
