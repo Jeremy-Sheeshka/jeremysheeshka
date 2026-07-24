@@ -25,5 +25,6 @@ export default new Map([
 ["src/content/post/2026-06-21-md-playground.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fpost%2F2026-06-21-md-playground.mdx&astroContentModuleFlag=true")],
 ["src/content/post/2026-06-28-etec522-analyst-report.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fpost%2F2026-06-28-etec522-analyst-report.mdx&astroContentModuleFlag=true")],
 ["src/content/post/2026-07-08-etec531-week8-doings.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fpost%2F2026-07-08-etec531-week8-doings.mdx&astroContentModuleFlag=true")],
-["src/content/post/2026-07-10-draft-tools-and-experiments.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fpost%2F2026-07-10-draft-tools-and-experiments.mdx&astroContentModuleFlag=true")]]);
+["src/content/post/2026-07-10-draft-tools-and-experiments.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fpost%2F2026-07-10-draft-tools-and-experiments.mdx&astroContentModuleFlag=true")],
+["src/content/post/2026-07-21-etec531-curriculum-otherwise-rhythm.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fpost%2F2026-07-21-etec531-curriculum-otherwise-rhythm.mdx&astroContentModuleFlag=true")]]);
 		
