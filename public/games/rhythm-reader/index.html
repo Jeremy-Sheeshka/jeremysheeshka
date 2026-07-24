@@ -334,19 +334,22 @@ body:not(.on-home) .annotation-tabs,body:not(.on-home) .annotation-panel,body:no
     </section>
 
     <!-- GALLERY -->
-    <section class="screen" id="screen-gallery">
+        <section class="screen" id="screen-gallery">
       <div class="wrap">
         <button class="btn small" data-nav="screen-1" style="margin-bottom:18px">← Dashboard</button>
         <p class="eyebrow">Gallery · literature and an invitation</p>
         <h2 class="section-head">Read what shaped this, then try it yourself.</h2>
-        <p class="subtle">This studio was built in conversation with a handful of ideas about datasets, feedback, and who a "universal" exercise is designed for. The reading below informed specific decisions inside the app; the prompt at the end is for you.</p>
-        <div class="gallery-extras" style="margin-top:34px;display:flex;flex-direction:column;gap:20px">
-          <article class="card dataset-card"><div class="card-label"><strong>Project Overview</strong></div><p class="subtle">[Overview statement &mdash; ~150 words: what Rhythm Reader is, what it reimagines about rhythm literacy, and how the studio holds what learners bring in. Replace this placeholder.]</p></article>
-          <article class="card dataset-card"><div class="card-label"><strong>Authors</strong></div><ul class="lit-list"><li>[Group member 1 &mdash; role / contribution]</li><li>[Group member 2 &mdash; role / contribution]</li><li>[Group member 3 &mdash; role / contribution]</li><li>[Group member 4 &mdash; role / contribution]</li></ul></article>
-          <article class="card dataset-card"><div class="card-label"><strong>AI Tooling Disclosure</strong></div><p class="subtle">This project was developed with the assistance of AI tooling ([list tools]). AI was used for [e.g. scaffolding code, debugging, and drafting explanatory text]; all pedagogical design decisions, final code review, and the written reflections below are the authors&rsquo; own. [Edit to match your actual workflow.]</p></article>
-          <article class="card dataset-card"><div class="card-label"><strong>Individual Responses</strong></div><div style="display:flex;flex-direction:column;gap:16px;margin-top:6px"><div><h3 style="margin:0 0 6px;font-size:16px">Response 1 &mdash; [Name]</h3><p class="subtle">[150&ndash;200 word individual reflection. Replace this placeholder.]</p></div><div><h3 style="margin:0 6px;font-size:16px">Response 2 &mdash; [Name]</h3><p class="subtle">[150&ndash;200 word individual reflection. Replace this placeholder.]</p></div><div><h3 style="margin:0 0 6px;font-size:16px">Response 3 &mdash; [Name]</h3><p class="subtle">[150&ndash;200 word individual reflection. Replace this placeholder.]</p></div></div></article>
-        </div>
-        <div class="dashboard-grid">
+        <p class="subtle">This studio was built in conversation with a handful of ideas about datasets, feedback, and who a “universal” exercise is designed for. The reading below informed specific decisions inside the app; the prompt at the end is for you.</p>
+
+        <article class="card action-card" id="doing-prompt-card" style="margin-top:34px">
+              <span class="line-icon">✎</span>
+              <h3>A doing prompt for the cohort</h3>
+              <p>Take a piece of music you're listening to right now and tap out a two-bar rhythm.</p>
+              <p>Post your two bars and your sequence to the gallery, and answer: <em>What did the app assume about your rhythm that wasn't true — and what would have to change to fit what you brought in?</em></p>
+              <button class="btn primary full" data-nav="screen-1">Try the Doing →</button>
+            </article>
+
+        <div class="dashboard-grid" style="margin-top:20px">
           <div>
             <article class="card dataset-card">
               <div class="card-label"><strong>References</strong></div>
@@ -365,15 +368,21 @@ body:not(.on-home) .annotation-tabs,body:not(.on-home) .annotation-panel,body:no
             </article>
           </div>
           <div class="action-stack">
-            <article class="card action-card" id="doing-prompt-card">
-              <span class="line-icon">✎</span>
-              <h3>A doing prompt for the cohort</h3>
-              <p>Take a piece of music you're listening to right now and tap out a two-bar rhythm.</p>
-              <p>Post your two bars and your sequence to the gallery, and answer: <em>What did the app assume about your rhythm that wasn't true — and what would have to change to fit what you brought in?</em></p>
-              <button class="btn primary full" data-nav="screen-1">Try the Doing →</button>
+            <article class="card dataset-card">
+              <div class="card-label"><strong>AI Tooling Disclosure</strong></div>
+              <p class="subtle">This project was developed with the assistance of AI tooling. AI was used for ____. ____ was used.</p>
             </article>
           </div>
         </div>
+
+        <article class="card dataset-card" style="margin-top:20px">
+          <div class="card-label"><strong>Individual Responses</strong></div>
+          <div style="display:flex;flex-direction:column;gap:16px;margin-top:6px">
+            <div><h3 style="margin:0 0 6px;font-size:16px">Response 1 &mdash; Chris Perry</h3><p class="subtle">[150&ndash;200 word individual reflection. Replace this placeholder.]</p></div>
+            <div><h3 style="margin:0 0 6px;font-size:16px">Response 2 &mdash; Samuel Teo</h3><p class="subtle">[150&ndash;200 word individual reflection. Replace this placeholder.]</p></div>
+            <div><h3 style="margin:0 0 6px;font-size:16px">Response 3 &mdash; Jeremy Sheeshka</h3><p class="subtle">[150&ndash;200 word individual reflection. Replace this placeholder.]</p></div>
+          </div>
+        </article>
       </div>
     </section>
   </main>
