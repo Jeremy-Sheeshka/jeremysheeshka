@@ -11,11 +11,19 @@ import Figure from "../../components/blocks/Figure.astro";
 <Prose>
 
 # Curriculum Otherwise
-<div class="md:floatin the dino-left md:w-1/5 md:mr-6 md:mb-4 w-full mb-6 mt-2"> <Figure src="/assets/images/blog/dinosaur-mode.png" alt="Dinosaur Mode, a rhythm-training game styled after chrome://dino" /> </div>
 
-Check out Chris Perry, Samuel Teo, and my reimagining of the Sight Reading Factory app.
+<div class="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-8 my-4">
+    <div class="md:w-1/5 w-2/3 max-w-xs flex-shrink-0">
+        <Figure src="/assets/images/blog/dinosaur-mode.png" alt="Dinosaur Mode, a rhythm-training game styled after chrome://dino" />
+    </div>
+    <div class="text-center md:text-left">
+        <p class="mb-0">Check out Chris Perry, Samuel Teo, and my reimagining of the Sight Reading Factory app.</p>
+        <div class="mt-4">
+            <a href="/games/rhythm-reader/" class="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold no-underline transition-colors">
+                Play Rhythm Reader
+            </a>
+        </div>
+    </div>
+</div>
 
-<div class="mt-6"> <a href="/games/rhythm-reader/" class="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold no-underline transition-colors"> Play Rhythm Reader </a> </div>
-
-<div class="clear-both"></div>
 </Prose>
