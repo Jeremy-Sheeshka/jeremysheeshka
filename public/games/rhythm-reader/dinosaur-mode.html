@@ -97,6 +97,7 @@
     <div class="ov" id="ready">
       <div class="card">
         <div class="big">DINOSAUR MODE</div>
+      <div class="sub2" id="intro-hi" style="margin-top:12px;font-variant-numeric:tabular-nums"></div>
         <div class="sub">A SRF inspired tribute to chrome://dino</div>
         <div class="sub2">Press Play or Hit Space</div>
       </div>
@@ -1165,6 +1166,33 @@ initSky();
 buildBars(4);
 updatePlayBtn();
 requestAnimationFrame(frame);
+</script>
+
+<script data-intro-hi>
+(function(){
+  function readHi(){
+    var raw=null; try{ raw=localStorage.getItem("rr_hi_v1"); }catch(e){}
+    if(raw===null||raw==="") return 0;
+    try{ var p=JSON.parse(raw); if(typeof p==="number") return p; if(p&&typeof p.score==="number") return p.score; }catch(e){}
+    var n=parseInt(raw,10); return (isFinite(n)&&n>0)?n:0;
+  }
+  function fill(){ var el=document.getElementById("intro-hi"); if(!el) return; var v=readHi(); el.textContent="ALL-TIME BEST  "+(v>0?v:"--"); }
+  function hook(){
+    fill();
+    var ready=document.getElementById("ready");
+    if(ready && "MutationObserver" in window){
+      var mo=new MutationObserver(function(){
+        var cs=getComputedStyle(ready);
+        var vis=!ready.hidden && cs.display!=="none" && cs.visibility!=="hidden";
+        if(vis) fill();
+      });
+      mo.observe(ready,{attributes:true,attributeFilter:["hidden","style","class"]});
+    }
+    window.addEventListener("focus",fill);
+    document.addEventListener("visibilitychange",fill);
+  }
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",hook); else hook();
+})();
 </script>
 </body>
 </html>
