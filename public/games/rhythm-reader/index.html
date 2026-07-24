@@ -314,11 +314,11 @@ body:not(.on-home) .annotation-tabs,body:not(.on-home) .annotation-panel,body:no
                     <button type="button" class="btn small" id="rec-cancel">■ Stop</button>
                   </div>
                 </div>
-              <div class="rec-setup"><label>Tempo <input type="range" id="rec-tempo" min="50" max="180" value="88"> <span class="rec-tempo-val" id="rec-tempo-val">88</span> BPM</label><label>Your name <input type="text" id="rec-name" maxlength="24" placeholder="e.g. Jordan"></label></div>
+              <div class="rec-setup"><label>Tempo <input type="range" id="rec-tempo" min="50" max="180" value="100"> <span class="rec-tempo-val" id="rec-tempo-val">100</span> BPM</label><label>Your name <input type="text" id="rec-name" maxlength="24" placeholder="e.g. Jordan"></label></div>
               
               </div>
               <div class="presets">
-                <button class="preset selected" aria-pressed="true" data-name="Local Database">Local Database<span>Teacher-curated archive · 21 patterns</span></button>
+                <button class="preset selected" aria-pressed="true" data-name="Local Database">Local Database<span id="preset-count">Student curated rhythm archive · 0 rhythms</span></button>
               </div>
             </article>
           </div>
@@ -519,7 +519,7 @@ body:not(.on-home) .annotation-tabs,body:not(.on-home) .annotation-panel,body:no
 var $=function(s){return document.querySelector(s);};
 var NS="http://www.w3.org/2000/svg";
 var SLOTS=16, DEFAULT_LATENCY=0.08;
-var curBPM=88, EIGHTH, Q, windowLen;
+var curBPM=100, EIGHTH, Q, windowLen;
 function recomputeTiming(){ EIGHTH=60/curBPM/2; Q=EIGHTH*2; windowLen=SLOTS*EIGHTH; }
 recomputeTiming();
 var SY=70,LM=70,RM=20,VW=700,VH=120,SW=(VW-LM-RM)/SLOTS,hr=6;
@@ -697,7 +697,7 @@ function finishRecording(){
 function tickRec(){if(state!=="recording")return;if(activeEvent)renderPreview();rafId=requestAnimationFrame(tickRec);}
 function readName(){var inp=$("#rec-name");var n=inp?inp.value.trim():"";try{localStorage.setItem("praxis_user_name",n);}catch(e){}if(!n)n="Anonymous";return n;}
 function renderBank(){
-  var grid=$("#bank-grid");if(!grid)return;var a=bank;grid.innerHTML="";var mine=myTokens();updateBadge();
+  var grid=$("#bank-grid");if(!grid)return;var a=bank;grid.innerHTML="";var mine=myTokens();updateBadge();var _pc=$("#preset-count");if(_pc)_pc.textContent="Student curated rhythm archive · "+a.length+" rhythms";
   if(!a.length){grid.innerHTML='<p class="bank-empty">No rhythms yet - be the first to submit above.</p>';return;}
   a.slice().reverse().forEach(function(item){
     var tiles=item.tiles||[];

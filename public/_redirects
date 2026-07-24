@@ -1,1 +1,2 @@
 /api/*  /.netlify/functions/:splat  200
+/games/praxis-qtest/*  /games/rhythm-reader/:splat  301

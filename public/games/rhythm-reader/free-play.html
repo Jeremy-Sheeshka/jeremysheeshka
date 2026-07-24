@@ -383,7 +383,7 @@
       }
     }
   </style>
-<link rel="stylesheet" href="/games/praxis-qtest/embed-nav.css">
+<link rel="stylesheet" href="/games/rhythm-reader/embed-nav.css">
 
 <style id="praxis-layout2">
 .topbar,.topbar__nav,.metronome--top{overflow:visible !important;height:auto !important;max-height:none !important}
@@ -509,8 +509,8 @@ label.metro-field:has([data-metro-beats]){display:none !important}
         var DRILL='/games/rhythm-app/exercise/720/';
         Promise.all([
           fetch(DRILL).then(function(r){return r.text();}),
-          fetch('/games/praxis-qtest/embed-bridge.js?v=20260722v10').then(function(r){return r.text();}).catch(function(){return '';}),
-          fetch('/games/praxis-qtest/embed-overrides.css?v=20260722v10').then(function(r){return r.text();}).catch(function(){return '';})
+          fetch('/games/rhythm-reader/embed-bridge.js?v=20260722v10').then(function(r){return r.text();}).catch(function(){return '';}),
+          fetch('/games/rhythm-reader/embed-overrides.css?v=20260722v10').then(function(r){return r.text();}).catch(function(){return '';})
         ]).then(function(res){
           var h=res[0],bridge=res[1],ov=res[2];
           h=h.replace(/if\s*\(\s*top\s*==\s*self\s*\)/g,'if(true)');
@@ -531,7 +531,7 @@ label.metro-field:has([data-metro-beats]){display:none !important}
           h=h.replace(/<meta[^>]*content-security-policy[^>]*>/gi,'');
           if(ov){h=h.replace('</head>','<style>'+ov+'</style><style id="praxis-reveal">#drill-frame{opacity:0;transition:opacity .15s ease}#drill-frame.praxis-shown{opacity:1}</style></head>');}
           if(bridge){var inj=SO+bridge+SC;h=(h.indexOf('</body>')!==-1)?h.replace('</body>',inj+'</body>'):h+inj;}
-          h=h.replace(/\/games\/rhythm-app\/ovelser\/js\/min\/rhythm_image-min\.js/g,'/games/praxis-qtest/rhythm_image-min.js');f.srcdoc=h;
+          h=h.replace(/\/games\/rhythm-app\/ovelser\/js\/min\/rhythm_image-min\.js/g,'/games/rhythm-reader/rhythm_image-min.js');f.srcdoc=h;
         }).catch(function(e){
           console.error('[praxis] drill load failed',e);
           f.srcdoc='<html><body style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:system-ui;color:#666"><p>Exercise failed to load.</p></body></html>';
@@ -608,7 +608,7 @@ label.metro-field:has([data-metro-beats]){display:none !important}
   </footer>
 
   <!-- standalone metronome removed: engine metronome is the single source -->
-<script src="/games/praxis-qtest/metro-sender.js"></script>
+<script src="/games/rhythm-reader/metro-sender.js"></script>
 
 <!-- PRAXIS_FREEPLAY_EXTRAS_V1 -->
 <style id="praxis-fp-extras">
@@ -778,10 +778,12 @@ label.metro-field:has([data-metro-beats]){display:none !important}
 })();
 </script>
 <!-- PRAXIS_REVEAL_SAFETY --><script>setTimeout(function(){var f=document.getElementById("drill-frame");if(f)f.classList.add("praxis-shown");},5000);</script>
+
+
 <script data-dino-launcher>
 (function(){
   var cb=document.getElementById("fp-set-dino");
-  if(cb){ cb.addEventListener("change", function(){ if(this.checked){ window.location.href="./rhythm-runner.html"; } }); }
+  if(cb){ cb.addEventListener("change", function(){ if(this.checked){ window.location.href="./dinosaur-mode.html"; } }); }
 })();
 </script>
 </body>

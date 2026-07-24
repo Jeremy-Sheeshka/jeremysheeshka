@@ -4,7 +4,7 @@
 **Owner:** Jeremy Sheeshka
 **Repo:** github.com:Jeremy-Sheeshka/jeremysheeshka.git
 **Local path:** /home/sheeshka/Desktop/jeremysheeshka/
-**Production URL:** https://jeremysheeshka.ca/games/praxis-qtest/
+**Production URL:** https://jeremysheeshka.ca/games/rhythm-reader/
 
 ---
 
@@ -49,7 +49,7 @@ Also: **Dashboard** page (index.html) with Cultural Datasets card, Ensemble Mode
 
 ## 3. File Inventory
 
-### In public/games/praxis-qtest/
+### In public/games/rhythm-reader/
 
 | File | Purpose |
 |------|---------|
@@ -149,10 +149,10 @@ Patched ~15+ times with string replacements. At least one corrupted an if/else c
     # 2. Restart proxy if bridge/CSS changed:
     pkill -f praxis-test-proxy/proxy.mjs
     nohup node /home/sheeshka/praxis-test-proxy/proxy.mjs > /tmp/praxis-proxy.log 2>&1 &
-    # 3. Test locally: http://localhost:4321/games/praxis-qtest/free-play.html
+    # 3. Test locally: http://localhost:4321/games/rhythm-reader/free-play.html
     # 4. Deploy:
     cd /home/sheeshka/Desktop/jeremysheeshka && git add -A && git commit -m msg && git push
-    # 5. Test production: https://jeremysheeshka.ca/games/praxis-qtest/free-play.html
+    # 5. Test production: https://jeremysheeshka.ca/games/rhythm-reader/free-play.html
     # 6. Hard reload: Ctrl+Shift+R
 
 ---
