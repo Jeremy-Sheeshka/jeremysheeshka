@@ -530,14 +530,7 @@ label.metro-field:has([data-metro-beats]){display:none !important}
           h=h.replace(/parent\.location\s*=[^;}\n]*/g,'/*x*/');
           h=h.replace(/<meta[^>]*content-security-policy[^>]*>/gi,'');
           if(ov){h=h.replace('</head>','<style>'+ov+'</style><style id="praxis-reveal">#drill-frame{opacity:0;transition:opacity .15s ease}#drill-frame.praxis-shown{opacity:1}</style></head>');}
-          if(bridge){var inj=SO+bridge+SC;h=(h.indexOf('
-<script data-dino-launcher>
-(function(){
-  var cb=document.getElementById("fp-set-dino");
-  if(cb){ cb.addEventListener("change", function(){ if(this.checked){ window.location.href="./rhythm-runner.html"; } }); }
-})();
-</script>
-</body>')!==-1)?h.replace('</body>',inj+'</body>'):h+inj;}
+          if(bridge){var inj=SO+bridge+SC;h=(h.indexOf('</body>')!==-1)?h.replace('</body>',inj+'</body>'):h+inj;}
           h=h.replace(/\/games\/rhythm-app\/ovelser\/js\/min\/rhythm_image-min\.js/g,'/games/praxis-qtest/rhythm_image-min.js');f.srcdoc=h;
         }).catch(function(e){
           console.error('[praxis] drill load failed',e);
@@ -784,5 +777,12 @@ label.metro-field:has([data-metro-beats]){display:none !important}
   window.addEventListener('message',function(ev){var d=ev.data;if(!d||d.type!=='drill-state')return;if(!d.playing&&listening){listening=false;setBtn();}});
 })();
 </script>
-<!-- PRAXIS_REVEAL_SAFETY --><script>setTimeout(function(){var f=document.getElementById("drill-frame");if(f)f.classList.add("praxis-shown");},5000);</script></body>
+<!-- PRAXIS_REVEAL_SAFETY --><script>setTimeout(function(){var f=document.getElementById("drill-frame");if(f)f.classList.add("praxis-shown");},5000);</script>
+<script data-dino-launcher>
+(function(){
+  var cb=document.getElementById("fp-set-dino");
+  if(cb){ cb.addEventListener("change", function(){ if(this.checked){ window.location.href="./rhythm-runner.html"; } }); }
+})();
+</script>
+</body>
 </html>
