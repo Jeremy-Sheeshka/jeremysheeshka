@@ -74,6 +74,10 @@
 .coop-head .student-card.a{order:0}
 .coop-head .student-card.b{order:2}
 </style>
+
+<style id="coop-bars-prefix">
+#coop-a-bars::before,#coop-b-bars::before{content:"Bars ";}
+</style>
 </head>
 <body>
 <script>Object.defineProperty(window,"tempo",{get:function(){var e=document.querySelector("[data-metro-bpm-input]")||document.querySelector("[data-metro-tempo]");return e?parseInt(e.value)||88:88;},configurable:true});</script>
@@ -145,7 +149,7 @@
     <label><span>Visual Pulse</span><input type="checkbox" id="set-cursor" checked></label>
     <label><span>Turn overlay and audio cues</span><input type="checkbox" id="set-ab" checked></label>
     <label><span>Loop pattern</span><input type="checkbox" id="set-loop"></label>
-    <div class="hint">Draw / aid appear in the bar once enabled. A = higher cue + blue tint, B = lower cue + gold tint.</div>
+
   </div>
 
   <script>
