@@ -557,7 +557,6 @@ function computeTiles(evlist){
       var gapN=(j+1<m)?(onOf(j+1)-o):999;
       var dur;
       if(gapN===1){dur=1;}
-      else if(j===m-1){var gapP=(j>0)?(o-onOf(j-1)):999;if(gapP===1){dur=1;}else if(o%2===0){dur=2;}else{dur=1;}}
       else{dur=2;}
       evs.push({onset:o,dur:dur});j++;
     }
@@ -635,12 +634,12 @@ function render(svg,tiles){
 }
 function clearPips(){var ps=document.querySelectorAll("#rec-pips i");for(var i=0;i<ps.length;i++){ps[i].className="";}}
 function lightPip(n,accent){var ps=document.querySelectorAll("#rec-pips i");for(var i=0;i<ps.length;i++){ps[i].className=(i===n)?("on"+(accent?" accent":"")):"";}}
-function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c];});}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
 var recAudioStart=0, userLatency=DEFAULT_LATENCY;
 var calibOffsets=[], calibBeatTimes=[], events=[], activeEvent=null, lastTiles=null;
 var state="idle";
 var KEY="praxis_bank_v4";
-var API="/api/rhythms";
+var FB="https://rhythm-studio-39713-default-rtdb.firebaseio.com";
 var bank=[]; var remote=false; var _bankStatus="not checked";
 function myTokens(){try{var r=localStorage.getItem("praxis_my_tokens");return r?JSON.parse(r):[];}catch(e){return [];}}
 function addMyToken(tk){var a=myTokens();a.push(tk);try{localStorage.setItem("praxis_my_tokens",JSON.stringify(a));}catch(e){}}
@@ -648,9 +647,9 @@ function newToken(){try{if(crypto&&crypto.randomUUID)return crypto.randomUUID();
 function loadLocal(){var raw=null;try{raw=localStorage.getItem(KEY);}catch(e){}if(raw===null){var seed=[{id:1,name:"Example",bpm:88,tiles:[{type:"note",onset:0,dur:2},{type:"note",onset:2,dur:2},{type:"note",onset:4,dur:2},{type:"note",onset:6,dur:2},{type:"note",onset:8,dur:2},{type:"note",onset:10,dur:2},{type:"note",onset:12,dur:2},{type:"note",onset:14,dur:2}],seed:true,ts:Date.now()}];try{localStorage.setItem(KEY,JSON.stringify(seed));}catch(e){}return seed;}try{return JSON.parse(raw)||[];}catch(e){return [];}}
 function saveLocal(a){try{localStorage.setItem(KEY,JSON.stringify(a));}catch(e){}}
 function toast(m){var t=$("#toast");if(!t)return;t.textContent=m;t.classList.remove("hidden");clearTimeout(toast._t);toast._t=setTimeout(function(){t.classList.add("hidden");},2200);}
-async function refreshBank(){var _r;try{_r=await fetch(API,{headers:{accept:"application/json"}});if(_r.ok){var d=await _r.json();if(Array.isArray(d)){bank=d;remote=true;_bankStatus="connected";renderBank();return;}_bankStatus="bad response";}else{_bankStatus="http "+_r.status;}}catch(e){_bankStatus="network error";}remote=false;bank=loadLocal();renderBank();}
-async function submitRhythm(name,bpm,tiles){if(remote){try{var r=await fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({name:name,bpm:bpm,tiles:tiles})});if(r.ok){var item=await r.json();if(item&&item.token)addMyToken(item.token);bank.push(item);renderBank();return;}}catch(e){}remote=false;bank=loadLocal();}var tk=newToken();var item={id:Date.now(),name:name,bpm:bpm,tiles:tiles,token:tk,ts:Date.now()};var a=bank.slice();a.push(item);saveLocal(a);addMyToken(tk);bank=loadLocal();renderBank();}
-async function deleteRhythm(item){if(remote&&item.token){try{var r=await fetch(API,{method:"DELETE",headers:{"content-type":"application/json"},body:JSON.stringify({id:item.id,token:item.token})});if(r.ok){bank=bank.filter(function(x){return x.id!==item.id;});renderBank();return;}}catch(e){}}var a=loadLocal().filter(function(x){return x.id!==item.id;});saveLocal(a);bank=loadLocal();renderBank();}
+async function refreshBank(){var _r;try{_r=await fetch(FB+"/rhythms.json",{headers:{accept:"application/json"}});if(_r.ok){var obj=await _r.json();var arr=[];if(obj){var ks=Object.keys(obj);for(var i=0;i<ks.length;i++){var it=obj[ks[i]];if(it&&typeof it==="object"){it.id=ks[i];arr.push(it);}}}arr.sort(function(a,b){return (a.ts||0)-(b.ts||0);});remote=true;_bankStatus="connected";bank=arr;renderBank();return;}_bankStatus="http "+_r.status;}catch(e){_bankStatus="network error";}remote=false;bank=loadLocal();renderBank();}
+async function submitRhythm(name,bpm,tiles){var tk=newToken();var payload={name:name,bpm:bpm,tiles:tiles,token:tk,ts:Date.now()};if(remote){try{var r=await fetch(FB+"/rhythms.json",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(payload)});if(r.ok){var resp=await r.json();var item={id:resp.name,name:name,bpm:bpm,tiles:tiles,token:tk,ts:payload.ts};addMyToken(tk);bank.push(item);renderBank();return;}}catch(e){}remote=false;}var item2={id:Date.now(),name:name,bpm:bpm,tiles:tiles,token:tk,ts:payload.ts};var a=bank.slice();a.push(item2);saveLocal(a);addMyToken(tk);bank=loadLocal();renderBank();}
+async function deleteRhythm(item){if(remote){try{var r=await fetch(FB+"/rhythms/"+encodeURIComponent(String(item.id))+".json",{method:"DELETE"});if(r.ok){bank=bank.filter(function(x){return x.id!==item.id;});renderBank();return;}}catch(e){}}var a=loadLocal().filter(function(x){return x.id!==item.id;});saveLocal(a);bank=loadLocal();renderBank();}
 function renderEmpty(){var svg=$("#rec-staff");if(svg)render(svg,[]);}
 function setPadLabel(){var p=$("#rec-pad");if(!p)return;if(state==="calibrating"||state==="recording"){p.innerHTML="Tap or hold &mdash; Click or Spacebar";}else{p.innerHTML='<span class="rec-bullet">&#9679;</span> Record a 2-bar rhythm';}}
 function renderPreview(){var evs=events.slice();if(activeEvent)evs.push({start:activeEvent.start,end:actx?actx.currentTime:activeEvent.start});var tiles=computeTiles(evs);var sig="";for(var i=0;i<tiles.length;i++)sig+=tiles[i].type[0]+tiles[i].onset+":"+tiles[i].dur+",";if(sig===_prevSig)return;_prevSig=sig;var svg=$("#rec-staff");if(svg)render(svg,tiles);}
@@ -705,7 +704,7 @@ function tickRec(){if(state!=="recording")return;if(activeEvent)renderPreview();
 function readName(){var inp=$("#rec-name");var n=inp?inp.value.trim():"";try{localStorage.setItem("praxis_user_name",n);}catch(e){}if(!n)n="Anonymous";return n;}
 function renderBank(){
   var grid=$("#bank-grid");if(!grid)return;var a=bank;grid.innerHTML="";var mine=myTokens();
-  var bm=$("#bank-mode");if(bm){if(remote){bm.textContent="Shared bank";bm.className="bank-mode live";bm.title="Connected - rhythms are saved on the server and shared across every browser and session.";}else{bm.textContent="This device only";bm.className="bank-mode local";bm.title="Not sharing ("+_bankStatus+"). Saved on this browser only. To share across browsers: open your Netlify site settings and enable Blobs (one click), then reload this page.";}}
+  var bm=$("#bank-mode");if(bm){if(remote){bm.textContent="Shared bank";bm.className="bank-mode live";bm.title="Connected - rhythms are saved on Firebase and shared across every browser and session.";}else{bm.textContent="This device only";bm.className="bank-mode local";bm.title="Not sharing ("+_bankStatus+"). Saved on this browser only. To share: in Firebase open Realtime Database > Rules, publish the open rules, then reload this page.";}}
   if(!a.length){grid.innerHTML='<p class="bank-empty">No rhythms yet - be the first to submit above.</p>';return;}
   a.slice().reverse().forEach(function(item){
     var tiles=item.tiles||[];
