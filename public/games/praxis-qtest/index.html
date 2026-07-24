@@ -618,6 +618,7 @@ function render(svg,tiles){
   var split=splitCrossings(tiles);
   var groups=computeBeams(split),i;
   for(i=0;i<split.length;i++){var t=split[i];if(t.type==="rest")drawRest(svg,t);else drawNote(svg,t);}
+  for(var g=0;g<groups.length;g++){var gr=groups[g];if(gr.length>=2){var x1=slotX(gr[0].onset)+hr*0.85,x2=slotX(gr[gr.length-1].onset)+hr*0.85;mk(svg,"rect",{x:x1,y:SY-35,width:Math.max(1,x2-x1),height:3,fill:"#222",rx:0.5});}}
   for(i=0;i<split.length;i++){var u=split[i];if(u.tied&&i+1<split.length){var xa=slotX(u.onset)+hr*0.6,xb=slotX(split[i+1].onset)-hr*0.6,ym=SY+11;mk(svg,"path",{d:"M"+xa+" "+ym+" Q "+((xa+xb)/2)+" "+(ym+8)+" "+xb+" "+ym,fill:"none",stroke:"#222","stroke-width":1.4});}}
   var bx=LM+8*SW;mk(svg,"line",{x1:bx,y1:SY-28,x2:bx,y2:SY+18,stroke:"#222","stroke-width":1.5});
   var fx=LM+16*SW;mk(svg,"line",{x1:fx-4,y1:SY-28,x2:fx-4,y2:SY+18,stroke:"#222","stroke-width":1.5});mk(svg,"line",{x1:fx,y1:SY-28,x2:fx,y2:SY+18,stroke:"#222","stroke-width":2.5});
