@@ -530,7 +530,14 @@ label.metro-field:has([data-metro-beats]){display:none !important}
           h=h.replace(/parent\.location\s*=[^;}\n]*/g,'/*x*/');
           h=h.replace(/<meta[^>]*content-security-policy[^>]*>/gi,'');
           if(ov){h=h.replace('</head>','<style>'+ov+'</style><style id="praxis-reveal">#drill-frame{opacity:0;transition:opacity .15s ease}#drill-frame.praxis-shown{opacity:1}</style></head>');}
-          if(bridge){var inj=SO+bridge+SC;h=(h.indexOf('</body>')!==-1)?h.replace('</body>',inj+'</body>'):h+inj;}
+          if(bridge){var inj=SO+bridge+SC;h=(h.indexOf('
+<script data-dino-launcher>
+(function(){
+  var cb=document.getElementById("fp-set-dino");
+  if(cb){ cb.addEventListener("change", function(){ if(this.checked){ window.location.href="./rhythm-runner.html"; } }); }
+})();
+</script>
+</body>')!==-1)?h.replace('</body>',inj+'</body>'):h+inj;}
           h=h.replace(/\/games\/rhythm-app\/ovelser\/js\/min\/rhythm_image-min\.js/g,'/games/praxis-qtest/rhythm_image-min.js');f.srcdoc=h;
         }).catch(function(e){
           console.error('[praxis] drill load failed',e);
@@ -653,7 +660,7 @@ label.metro-field:has([data-metro-beats]){display:none !important}
   <label><span>Show ✓ / ✗ marks</span><input type="checkbox" id="fp-set-marks" checked></label>
   <label><span>Metronome click</span><input type="checkbox" id="fp-set-sound" checked></label>
   <label><span>Visual Pulse</span><input type="checkbox" id="fp-set-cursor" checked></label>
-  <div class="hint">Metronome &amp; master apply on the next exercise. Draw / aid appear in the bar once enabled.</div>
+  <label><span>Dinosaur Mode</span><input type="checkbox" id="fp-set-dino"></label>
 </div>
 <script>
 (function(){
