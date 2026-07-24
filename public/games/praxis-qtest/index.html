@@ -200,7 +200,7 @@
 .rec-stage{border:1px solid var(--Rhythm-line);border-radius:13px;background:var(--Rhythm-bg);padding:14px;margin-bottom:12px}
 .rec-status{font-size:13px;font-weight:700;margin-bottom:10px;min-height:18px}
 .rec-staff{width:100%;height:auto;display:block;border:1px solid #ccc;border-radius:10px;background:#fff}
-.rec-pad{margin-top:10px;min-height:66px;display:grid;place-items:center;border:2px solid var(--Rhythm-accent);border-radius:12px;background:var(--Rhythm-soft);color:var(--Rhythm-accent);font-weight:800;font-size:14px;cursor:pointer;user-select:none;touch-action:manipulation}
+.rec-pad{margin-top:10px;min-height:66px;display:flex;align-items:center;justify-content:center;text-align:center;border:2px solid var(--Rhythm-accent);border-radius:12px;background:var(--Rhythm-soft);color:var(--Rhythm-accent);font-weight:800;font-size:14px;cursor:pointer;user-select:none;touch-action:manipulation}
 .rec-pad:active{background:var(--Rhythm-accent);color:var(--Rhythm-accent-ink)}
 .rec-controls{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 .rec-controls .btn[disabled]{opacity:.4;cursor:not-allowed}
@@ -222,7 +222,10 @@
 #rec-record{display:none !important}
 #rec-stage.hidden{display:block !important}
 .rec-pad .rec-bullet{color:#dc2626;font-weight:900;margin-right:6px}
-</style>
+
+.bank-mode{margin-left:auto;font-size:11px;font-weight:800;letter-spacing:.04em;padding:3px 10px;border-radius:999px;border:1px solid var(--Rhythm-line);color:var(--Rhythm-muted);white-space:nowrap}
+.bank-mode.live{color:#16a34a;border-color:#16a34a;background:rgba(22,163,74,.12)}
+.bank-mode.local{color:#d97706;border-color:#d97706;background:rgba(217,119,6,.12)}</style>
 <style id="praxis-home-gate">
 body:not(.on-home) .annotation-tabs,body:not(.on-home) .annotation-panel,body:not(.on-home) .annotation-overlay{display:none !important}
 #rec-record{min-height:64px;font-size:15px;border-radius:12px}
@@ -322,7 +325,7 @@ body:not(.on-home) .annotation-tabs,body:not(.on-home) .annotation-panel,body:no
         </div>
         <div class="bank-wrap">
           <article class="card dataset-card">
-            <div class="card-label"><strong>Community Rhythm Bank</strong></div>
+            <div class="card-label"><strong>Community Rhythm Bank</strong><span id="bank-mode" class="bank-mode"></span></div>
             <p class="subtle" style="margin:0 0 14px;font-size:13px">Two-bar rhythms recorded by our cohort. Tap any rhythm to hear it. Submit yours above.</p>
             <div class="bank-grid" id="bank-grid"></div>
           </article>
@@ -551,18 +554,16 @@ function computeTiles(evlist){
       if(hd>maxd){hd=maxd>8?maxd:largestLeqNote(maxd);}if(hd<1)hd=1;
       evs.push({onset:o,dur:hd});j++;
     }else{
-      var space=(j+1<m)?(onOf(j+1)-o):(SLOTS-o);
-      if(space===1){
-        if((j+1<m)&&!isHeld(j+1)){evs.push({onset:o,dur:1});evs.push({onset:onOf(j+1),dur:1});j+=2;}
-        else{evs.push({onset:o,dur:1});j++;}
-      }else{
-        var d=2;var maxd2=(j+1<m)?Math.max(1,onOf(j+1)-o):(SLOTS-o);if(d>maxd2){d=maxd2>8?maxd2:largestLeqNote(maxd2);}if(d<1)d=1;
-        evs.push({onset:o,dur:d});j++;
-      }
+      var gapN=(j+1<m)?(onOf(j+1)-o):999;
+      var dur;
+      if(gapN===1){dur=1;}
+      else if(j===m-1){var gapP=(j>0)?(o-onOf(j-1)):999;if(gapP===1){dur=1;}else if(o%2===0){dur=2;}else{dur=1;}}
+      else{dur=2;}
+      evs.push({onset:o,dur:dur});j++;
     }
   }
   var tiles=[],cursor=0,k;
-  for(k=0;k<evs.length;k++){var oo=evs[k].onset,dd=evs[k].dur;if(oo>cursor)pushRests(tiles,cursor,oo-cursor);else if(oo<cursor)oo=cursor;var maxfit=SLOTS-oo;var ddd=dd>maxfit?(maxfit>8?maxfit:largestLeqNote(maxfit)):dd;if(ddd<1)ddd=1;tiles.push({type:"note",onset:oo,dur:ddd});cursor=oo+ddd;}
+  for(k=0;k<evs.length;k++){var oo=evs[k].onset,dd=evs[k].dur;if(oo>cursor)pushRests(tiles,cursor,oo-cursor);else if(oo<cursor)oo=cursor;var maxfit=SLOTS-oo;if(dd>maxfit)dd=maxfit;if(dd<1)dd=1;tiles.push({type:"note",onset:oo,dur:dd});cursor=oo+dd;}
   if(cursor<SLOTS)pushRests(tiles,cursor,SLOTS-cursor);
   return tiles;
 }
@@ -640,14 +641,14 @@ var calibOffsets=[], calibBeatTimes=[], events=[], activeEvent=null, lastTiles=n
 var state="idle";
 var KEY="praxis_bank_v4";
 var API="/api/rhythms";
-var bank=[]; var remote=false;
+var bank=[]; var remote=false; var _bankStatus="not checked";
 function myTokens(){try{var r=localStorage.getItem("praxis_my_tokens");return r?JSON.parse(r):[];}catch(e){return [];}}
 function addMyToken(tk){var a=myTokens();a.push(tk);try{localStorage.setItem("praxis_my_tokens",JSON.stringify(a));}catch(e){}}
 function newToken(){try{if(crypto&&crypto.randomUUID)return crypto.randomUUID();}catch(e){}return "tk-"+Date.now()+"-"+Math.random().toString(36).slice(2);}
 function loadLocal(){var raw=null;try{raw=localStorage.getItem(KEY);}catch(e){}if(raw===null){var seed=[{id:1,name:"Example",bpm:88,tiles:[{type:"note",onset:0,dur:2},{type:"note",onset:2,dur:2},{type:"note",onset:4,dur:2},{type:"note",onset:6,dur:2},{type:"note",onset:8,dur:2},{type:"note",onset:10,dur:2},{type:"note",onset:12,dur:2},{type:"note",onset:14,dur:2}],seed:true,ts:Date.now()}];try{localStorage.setItem(KEY,JSON.stringify(seed));}catch(e){}return seed;}try{return JSON.parse(raw)||[];}catch(e){return [];}}
 function saveLocal(a){try{localStorage.setItem(KEY,JSON.stringify(a));}catch(e){}}
 function toast(m){var t=$("#toast");if(!t)return;t.textContent=m;t.classList.remove("hidden");clearTimeout(toast._t);toast._t=setTimeout(function(){t.classList.add("hidden");},2200);}
-async function refreshBank(){try{var r=await fetch(API,{headers:{accept:"application/json"}});if(r.ok){var d=await r.json();if(Array.isArray(d)){bank=d;remote=true;renderBank();return;}}}catch(e){}remote=false;bank=loadLocal();renderBank();}
+async function refreshBank(){var _r;try{_r=await fetch(API,{headers:{accept:"application/json"}});if(_r.ok){var d=await _r.json();if(Array.isArray(d)){bank=d;remote=true;_bankStatus="connected";renderBank();return;}_bankStatus="bad response";}else{_bankStatus="http "+_r.status;}}catch(e){_bankStatus="network error";}remote=false;bank=loadLocal();renderBank();}
 async function submitRhythm(name,bpm,tiles){if(remote){try{var r=await fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({name:name,bpm:bpm,tiles:tiles})});if(r.ok){var item=await r.json();if(item&&item.token)addMyToken(item.token);bank.push(item);renderBank();return;}}catch(e){}remote=false;bank=loadLocal();}var tk=newToken();var item={id:Date.now(),name:name,bpm:bpm,tiles:tiles,token:tk,ts:Date.now()};var a=bank.slice();a.push(item);saveLocal(a);addMyToken(tk);bank=loadLocal();renderBank();}
 async function deleteRhythm(item){if(remote&&item.token){try{var r=await fetch(API,{method:"DELETE",headers:{"content-type":"application/json"},body:JSON.stringify({id:item.id,token:item.token})});if(r.ok){bank=bank.filter(function(x){return x.id!==item.id;});renderBank();return;}}catch(e){}}var a=loadLocal().filter(function(x){return x.id!==item.id;});saveLocal(a);bank=loadLocal();renderBank();}
 function renderEmpty(){var svg=$("#rec-staff");if(svg)render(svg,[]);}
@@ -704,6 +705,7 @@ function tickRec(){if(state!=="recording")return;if(activeEvent)renderPreview();
 function readName(){var inp=$("#rec-name");var n=inp?inp.value.trim():"";try{localStorage.setItem("praxis_user_name",n);}catch(e){}if(!n)n="Anonymous";return n;}
 function renderBank(){
   var grid=$("#bank-grid");if(!grid)return;var a=bank;grid.innerHTML="";var mine=myTokens();
+  var bm=$("#bank-mode");if(bm){if(remote){bm.textContent="Shared bank";bm.className="bank-mode live";bm.title="Connected - rhythms are saved on the server and shared across every browser and session.";}else{bm.textContent="This device only";bm.className="bank-mode local";bm.title="Not sharing ("+_bankStatus+"). Saved on this browser only. To share across browsers: open your Netlify site settings and enable Blobs (one click), then reload this page.";}}
   if(!a.length){grid.innerHTML='<p class="bank-empty">No rhythms yet - be the first to submit above.</p>';return;}
   a.slice().reverse().forEach(function(item){
     var tiles=item.tiles||[];
