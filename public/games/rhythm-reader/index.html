@@ -225,7 +225,10 @@
 
 .bank-mode{margin-left:auto;font-size:11px;font-weight:800;letter-spacing:.04em;padding:3px 10px;border-radius:999px;border:1px solid var(--Rhythm-line);color:var(--Rhythm-muted);white-space:nowrap}
 .bank-mode.live{color:#16a34a;border-color:#16a34a;background:rgba(22,163,74,.12)}
-.bank-mode.local{color:#d97706;border-color:#d97706;background:rgba(217,119,6,.12)}</style>
+.bank-mode.local{color:#d97706;border-color:#d97706;background:rgba(217,119,6,.12)}
+.gallery-split{display:grid;grid-template-columns:minmax(285px,.72fr) minmax(0,1.45fr);gap:20px;margin-top:34px}
+@media(max-width:860px){.gallery-split{grid-template-columns:1fr}}
+</style>
 <style id="praxis-home-gate">
 body:not(.on-home) .annotation-tabs,body:not(.on-home) .annotation-panel,body:not(.on-home) .annotation-overlay{display:none !important}
 #rec-record{min-height:64px;font-size:15px;border-radius:12px}
@@ -334,20 +337,32 @@ body:not(.on-home) .annotation-tabs,body:not(.on-home) .annotation-panel,body:no
     </section>
 
     <!-- GALLERY -->
-        <section class="screen" id="screen-gallery">
+            <section class="screen" id="screen-gallery">
       <div class="wrap">
         <button class="btn small" data-nav="screen-1" style="margin-bottom:18px">← Dashboard</button>
         <p class="eyebrow">Gallery · literature and an invitation</p>
         <h2 class="section-head">Read what shaped this, then try it yourself.</h2>
         <p class="subtle">This studio was built in conversation with a handful of ideas about datasets, feedback, and who a “universal” exercise is designed for. The reading below informed specific decisions inside the app; the prompt at the end is for you.</p>
 
-        <article class="card action-card" id="doing-prompt-card" style="margin-top:34px">
+        <div class="gallery-split">
+          <div class="action-stack">
+            <article class="card action-card" id="doing-prompt-card">
               <span class="line-icon">✎</span>
               <h3>A doing prompt for the cohort</h3>
               <p>Take a piece of music you're listening to right now and tap out a two-bar rhythm.</p>
               <p>Post your two bars and your sequence to the gallery, and answer: <em>What did the app assume about your rhythm that wasn't true — and what would have to change to fit what you brought in?</em></p>
               <button class="btn primary full" data-nav="screen-1">Try the Doing →</button>
             </article>
+          </div>
+          <article class="card dataset-card">
+            <div class="card-label"><strong>Individual Responses</strong></div>
+            <div style="display:flex;flex-direction:column;gap:16px;margin-top:6px">
+              <div><h3 style="margin:0 0 6px;font-size:16px">Response 1 &mdash; Chris Perry</h3><p class="subtle">[150&ndash;200 word individual reflection. Replace this placeholder.]</p></div>
+              <div><h3 style="margin:0 0 6px;font-size:16px">Response 2 &mdash; Samuel Teo</h3><p class="subtle">[150&ndash;200 word individual reflection. Replace this placeholder.]</p></div>
+              <div><h3 style="margin:0 0 6px;font-size:16px">Response 3 &mdash; Jeremy Sheeshka</h3><p class="subtle">[150&ndash;200 word individual reflection. Replace this placeholder.]</p></div>
+            </div>
+          </article>
+        </div>
 
         <div class="dashboard-grid" style="margin-top:20px">
           <div>
@@ -374,15 +389,6 @@ body:not(.on-home) .annotation-tabs,body:not(.on-home) .annotation-panel,body:no
             </article>
           </div>
         </div>
-
-        <article class="card dataset-card" style="margin-top:20px">
-          <div class="card-label"><strong>Individual Responses</strong></div>
-          <div style="display:flex;flex-direction:column;gap:16px;margin-top:6px">
-            <div><h3 style="margin:0 0 6px;font-size:16px">Response 1 &mdash; Chris Perry</h3><p class="subtle">[150&ndash;200 word individual reflection. Replace this placeholder.]</p></div>
-            <div><h3 style="margin:0 0 6px;font-size:16px">Response 2 &mdash; Samuel Teo</h3><p class="subtle">[150&ndash;200 word individual reflection. Replace this placeholder.]</p></div>
-            <div><h3 style="margin:0 0 6px;font-size:16px">Response 3 &mdash; Jeremy Sheeshka</h3><p class="subtle">[150&ndash;200 word individual reflection. Replace this placeholder.]</p></div>
-          </div>
-        </article>
       </div>
     </section>
   </main>
