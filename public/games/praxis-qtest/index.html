@@ -296,11 +296,11 @@ body:not(.on-home) .annotation-tabs,body:not(.on-home) .annotation-panel,body:no
               <input class="sr-only" id="file-input" type="file" accept=".pdf,.png,.jpg,.jpeg">
               <div class="rec-panel" id="rec-panel">
                 <div class="rec-head"><strong>Record a 2-Bar Rhythm</strong><small>Tap your own two bars using eighth notes, quarter notes, half notes, or whole notes &mdash; press and hold for a longer note. When finished, submit it to the class&rsquo;s rhythm bank.</small></div>
-                <div class="rec-stage hidden" id="rec-stage">
-                  <div class="rec-status" id="rec-status">Press Record, then tap along after the 4-beat count-in.</div>
+                <div class="rec-stage" id="rec-stage">
+                  <div class="rec-status" id="rec-status">Tap the pad below to start, then tap along after the 4-beat count-in.</div>
                   <svg class="rec-staff" id="rec-staff" viewBox="0 0 640 120" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Your recorded rhythm"></svg>
                   <div class="rec-pips" id="rec-pips"><i></i><i></i><i></i><i></i></div>
-              <div class="rec-pad" id="rec-pad" role="button" tabindex="0" aria-label="Tap pad">Tap or hold &mdash; Click or Spacebar</div>
+              <div class="rec-pad" id="rec-pad" role="button" tabindex="0" aria-label="Tap pad"><span class="rec-bullet">&#9679;</span> Record a 2-bar rhythm</div>
                   <div class="rec-controls">
                     <button type="button" class="btn small" id="rec-play" disabled>&#9654;</button>
                     <button type="button" class="btn small primary" id="rec-submit" disabled>Submit to bank</button>
@@ -309,7 +309,7 @@ body:not(.on-home) .annotation-tabs,body:not(.on-home) .annotation-panel,body:no
                   </div>
                 </div>
               <div class="rec-setup"><label>Tempo <input type="range" id="rec-tempo" min="50" max="180" value="88"> <span class="rec-tempo-val" id="rec-tempo-val">88</span> BPM</label><label>Your name <input type="text" id="rec-name" maxlength="24" placeholder="e.g. Jordan"></label></div>
-              <button type="button" class="btn accent full" id="rec-record"><span class="rec-bullet">&#9679;</span> Record a 2-bar rhythm</button>
+              
               </div>
               <div class="presets">
                 <button class="preset selected" aria-pressed="true" data-name="Local Database">Local Database<span>Teacher-curated archive · 21 patterns</span></button>
@@ -661,7 +661,7 @@ function calibTap(){if(state!=="calibrating"||!actx)return;var now=actx.currentT
 function noteDown(){if(activeEvent)return;var now=actx.currentTime;activeEvent={start:now,end:null};clickAt(now+0.001,1500,0.2);}
 function noteUp(){if(!activeEvent)return;var now=actx.currentTime;if(now<activeEvent.start)now=activeEvent.start+0.001;activeEvent.end=Math.min(now,recAudioStart+windowLen);events.push(activeEvent);activeEvent=null;renderPreview();}
 function startCalibration(t0){
-  state="calibrating";calibOffsets=[];calibBeatTimes=[];clearPips();
+  state="calibrating";calibOffsets=[];calibBeatTimes=[];clearPips();setPadLabel();
   setStatus("Tap along with the count-in (1 2 3 4)");
   for(var c=0;c<4;c++){(function(cc){var bt=t0+cc*Q;calibBeatTimes.push(bt);clickAt(bt,cc===0?1320:990,0.5);var d=(bt-actx.currentTime)*1000;_sched(function(){setStatus("Count-in: "+(cc+1)+" - tap now");lightPip(cc,cc===0);},Math.max(0,d));})(c);}
   var calibEnd=t0+4*Q;var delay=(calibEnd-actx.currentTime)*1000;
@@ -686,6 +686,7 @@ function finishRecording(){
   var _sl=$("#rec-tempo");if(_sl)_sl.disabled=false;
   if(notes.length>0){setStatus("");setSubmit(true);}
   else{setStatus("No taps recorded - hit Redo.");setSubmit(false);}
+  setPadLabel();
 }
 function tickRec(){if(state!=="recording")return;if(activeEvent)renderPreview();rafId=requestAnimationFrame(tickRec);}
 function readName(){var inp=$("#rec-name");var n=inp?inp.value.trim():"";try{localStorage.setItem("praxis_user_name",n);}catch(e){}if(!n)n="Anonymous";return n;}
@@ -716,10 +717,10 @@ function onDown(ev){
     ev.preventDefault();
     ev.stopPropagation();
     if(ev.repeat)return;
-    if(state==="idle")return;
+    if(state==="idle"||state==="done"){startRec();return;}
   }else if(ev&&ev.type==="pointerdown"){
-    if(state==="idle")return;
     ev.preventDefault();
+    if(state==="idle"||state==="done"){startRec();return;}
   }
   if(!actx)ensureActx();
   if(state==="calibrating")calibTap();else if(state==="recording")noteDown();
@@ -731,16 +732,14 @@ function startRec(){
   var sl=$("#rec-tempo");curBPM=sl?parseInt(sl.value,10)||88:88;recomputeTiming();if(sl)sl.disabled=true;
   readName();
   state="idle";events=[];activeEvent=null;lastTiles=null;setSubmit(false);renderEmpty();clearPips();
-  var rec=$("#rec-record"),st=$("#rec-stage");
-  if(rec)rec.classList.add("hidden");if(st)st.classList.remove("hidden");
   if(document.activeElement&&document.activeElement.blur)document.activeElement.blur();
   Promise.resolve(ctx.resume()).then(function(){startCalibration(ctx.currentTime+0.3);});
 }
+function setPadLabel(){var p=$("#rec-pad");if(!p)return;if(state==="calibrating"||state==="recording"){p.innerHTML="Tap or hold &mdash; Click or Spacebar";}else{p.innerHTML='<span class="rec-bullet">&#9679;</span> Record a 2-bar rhythm';}}
 function wire(){
-  var _st=$("#rec-stage"),_rc=$("#rec-record");if(_st)_st.classList.add("hidden");if(_rc)_rc.classList.remove("hidden");
-  var rr=$("#rec-record");if(rr)rr.addEventListener("click",startRec);
+  setPadLabel();
   var rd=$("#rec-redo");if(rd)rd.addEventListener("click",startRec);
-  var rc=$("#rec-cancel");if(rc)rc.addEventListener("click",function(){stopPlay();_clearTmrs();var _ph=document.querySelector('#rec-staff line[stroke="#e11d48"]');if(_ph&&_ph.parentNode)_ph.parentNode.removeChild(_ph);var _sl=$("#rec-tempo");if(_sl)_sl.disabled=false;clearPips();if(activeEvent){activeEvent.end=(actx?actx.currentTime:activeEvent.start);events.push(activeEvent);activeEvent=null;}if(events.length===0){renderEmpty();lastTiles=null;state="done";setStatus("");setSubmit(false);}else{var tiles=computeTiles(events);lastTiles=tiles;var notes=tiles.filter(function(t){return t.type==="note";});var svg=$("#rec-staff");if(svg)render(svg,tiles);state="done";setStatus("");if(notes.length>0)setSubmit(true);else setSubmit(false);}});
+  var rc=$("#rec-cancel");if(rc)rc.addEventListener("click",function(){stopPlay();_clearTmrs();var _ph=document.querySelector('#rec-staff line[stroke="#e11d48"]');if(_ph&&_ph.parentNode)_ph.parentNode.removeChild(_ph);var _sl=$("#rec-tempo");if(_sl)_sl.disabled=false;clearPips();if(activeEvent){activeEvent.end=(actx?actx.currentTime:activeEvent.start);events.push(activeEvent);activeEvent=null;}if(events.length===0){renderEmpty();lastTiles=null;state="done";setStatus("");setSubmit(false);}else{var tiles=computeTiles(events);lastTiles=tiles;var notes=tiles.filter(function(t){return t.type==="note";});var svg=$("#rec-staff");if(svg)render(svg,tiles);state="done";setStatus("");if(notes.length>0)setSubmit(true);else setSubmit(false);}setPadLabel();});
   var rp=$("#rec-play");if(rp)rp.addEventListener("click",function(){if(!lastTiles)return;var svg=$("#rec-staff");if(_playing&&_playBtn===rp){stopPlay();}else{play(lastTiles,curBPM,rp,svg);}});
   var rs=$("#rec-submit");if(rs)rs.addEventListener("click",function(){if(!lastTiles)return;stopPlay();var name=readName();var tiles=lastTiles.slice();var bpm=curBPM;submitRhythm(name,bpm,tiles).then(function(){toast("Saved to the bank");});var _sb=$("#rec-submit");if(_sb)_sb.disabled=true;});
   var pad=$("#rec-pad");if(pad)pad.addEventListener("pointerdown",onDown);
