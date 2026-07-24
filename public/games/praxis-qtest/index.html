@@ -534,9 +534,8 @@ function setSubmit(on){var a=$("#rec-submit"),b=$("#rec-play");if(a)a.disabled=!
 function mk(svg,t,a){var e=document.createElementNS(NS,t);Object.keys(a).forEach(function(k){e.setAttribute(k,String(a[k]));});svg.appendChild(e);return e;}
 function slotX(s){return LM+(s+0.5)*SW;}
 function clampSet(x){var set=[1,2,3,4,6,8],best=1,bd=1e9,i;for(i=0;i<set.length;i++){var d=Math.abs(x-set[i]);if(d<bd||(d===bd&&set[i]>best)){bd=d;best=set[i];}}return best;}
-function largestLeq(x){var set=[8,4,2,1],i;for(i=0;i<set.length;i++){if(set[i]<=x)return set[i];}return 1;}
 function largestLeqNote(x){var set=[8,6,4,3,2,1],i;for(i=0;i<set.length;i++){if(set[i]<=x)return set[i];}return 1;}
-function pushRests(tiles,start,len){var s=start,rem=len;while(rem>0){var v;if(s%8===0&&rem>=8){v=8;}else{var cap=Math.min(rem,4-(s%4));v=largestLeq(cap);if(v<1)v=1;}tiles.push({type:"rest",onset:s,dur:v});s+=v;rem-=v;}}
+function pushRests(tiles,start,len){var s=start,rem=len;while(rem>0){var v;if(s%8===0&&rem>=8){v=8;}else{var cap=Math.min(rem,4-(s%4));v=largestLeqNote(cap);if(v<1)v=1;}tiles.push({type:"rest",onset:s,dur:v});s+=v;rem-=v;}}
 function computeTiles(evlist){
   var n=evlist.length;if(n===0)return [];
   var onR=[],holdE=[],i;
@@ -554,10 +553,8 @@ function computeTiles(evlist){
       if(hd>maxd){hd=maxd>8?maxd:largestLeqNote(maxd);}if(hd<1)hd=1;
       evs.push({onset:o,dur:hd});j++;
     }else{
-      var gapN=(j+1<m)?(onOf(j+1)-o):999;
-      var dur;
-      if(gapN===1){dur=1;}
-      else{dur=2;}
+      var gapN=(j+1<m)?(onOf(j+1)-o):999;var dur;
+      if(gapN===1){dur=1;}else{dur=2;}
       evs.push({onset:o,dur:dur});j++;
     }
   }
@@ -571,8 +568,7 @@ function splitCrossings(tiles){
   for(i=0;i<tiles.length;i++){
     var t=tiles[i];
     if(t.type!=="note"){out.push(t);continue;}
-    var onset=t.onset,end=onset+t.dur;
-    var barCuts=[],p;
+    var onset=t.onset,end=onset+t.dur;var barCuts=[],p;
     for(p=8;p<end;p+=8){if(p>onset)barCuts.push(p);}
     var pieces=[],prev=onset,b;
     for(b=0;b<barCuts.length;b++){pieces.push({onset:prev,dur:barCuts[b]-prev});prev=barCuts[b];}
@@ -580,8 +576,7 @@ function splitCrossings(tiles){
     var finalPieces=[],k;
     for(k=0;k<pieces.length;k++){
       var pc=pieces[k],pEnd=pc.onset+pc.dur;
-      var isWholeBar=(pc.dur===8&&pc.onset%8===0);
-      var isDottedHalfDown=(pc.dur===6&&pc.onset%8===0);
+      var isWholeBar=(pc.dur===8&&pc.onset%8===0);var isDottedHalfDown=(pc.dur===6&&pc.onset%8===0);
       var midCuts=[],mm;
       if(!isWholeBar&&!isDottedHalfDown){var firstMid=pc.onset-(pc.onset%8)+4;if(firstMid<=pc.onset)firstMid+=8;for(mm=firstMid;mm<pEnd;mm+=8){midCuts.push(mm);}}
       var prev2=pc.onset,j;
@@ -623,8 +618,7 @@ function render(svg,tiles){
   mk(svg,"rect",{x:27,y:SY-18,width:4,height:36,fill:"#222",rx:1});
   var t1=mk(svg,"text",{x:46,y:SY-2,"font-size":20,"font-weight":"bold","text-anchor":"middle",fill:"#222","font-family":"serif"});t1.textContent="4";
   var t2=mk(svg,"text",{x:46,y:SY+18,"font-size":20,"font-weight":"bold","text-anchor":"middle",fill:"#222","font-family":"serif"});t2.textContent="4";
-  var split=splitCrossings(tiles);
-  var groups=computeBeams(split),i;
+  var split=splitCrossings(tiles);var groups=computeBeams(split),i;
   for(i=0;i<split.length;i++){var t=split[i];if(t.type==="rest")drawRest(svg,t);else drawNote(svg,t);}
   for(var g=0;g<groups.length;g++){var gr=groups[g];if(gr.length>=2){var x1=slotX(gr[0].onset)+hr*0.85,x2=slotX(gr[gr.length-1].onset)+hr*0.85;mk(svg,"rect",{x:x1,y:SY-35,width:Math.max(1,x2-x1),height:3,fill:"#222",rx:0.5});}}
   for(i=0;i<split.length;i++){var u=split[i];if(u.tied&&i+1<split.length){var xa=slotX(u.onset)+hr*0.6,xb=slotX(split[i+1].onset)-hr*0.6,ym=SY+11;mk(svg,"path",{d:"M"+xa+" "+ym+" Q "+((xa+xb)/2)+" "+(ym+8)+" "+xb+" "+ym,fill:"none",stroke:"#222","stroke-width":1.4});}}
@@ -647,10 +641,10 @@ function newToken(){try{if(crypto&&crypto.randomUUID)return crypto.randomUUID();
 function loadLocal(){var raw=null;try{raw=localStorage.getItem(KEY);}catch(e){}if(raw===null){var seed=[{id:1,name:"Example",bpm:88,tiles:[{type:"note",onset:0,dur:2},{type:"note",onset:2,dur:2},{type:"note",onset:4,dur:2},{type:"note",onset:6,dur:2},{type:"note",onset:8,dur:2},{type:"note",onset:10,dur:2},{type:"note",onset:12,dur:2},{type:"note",onset:14,dur:2}],seed:true,ts:Date.now()}];try{localStorage.setItem(KEY,JSON.stringify(seed));}catch(e){}return seed;}try{return JSON.parse(raw)||[];}catch(e){return [];}}
 function saveLocal(a){try{localStorage.setItem(KEY,JSON.stringify(a));}catch(e){}}
 function toast(m){var t=$("#toast");if(!t)return;t.textContent=m;t.classList.remove("hidden");clearTimeout(toast._t);toast._t=setTimeout(function(){t.classList.add("hidden");},2200);}
-async function refreshBank(){var _r;try{_r=await fetch(FB+"/rhythms.json",{headers:{accept:"application/json"}});if(_r.ok){var obj=await _r.json();var arr=[];if(obj){var ks=Object.keys(obj);for(var i=0;i<ks.length;i++){var it=obj[ks[i]];if(it&&typeof it==="object"){it.id=ks[i];arr.push(it);}}}arr.sort(function(a,b){return (a.ts||0)-(b.ts||0);});remote=true;_bankStatus="connected";bank=arr;renderBank();return;}_bankStatus="http "+_r.status;}catch(e){_bankStatus="network error";}remote=false;bank=loadLocal();renderBank();}
-async function submitRhythm(name,bpm,tiles){var tk=newToken();var payload={name:name,bpm:bpm,tiles:tiles,token:tk,ts:Date.now()};if(remote){try{var r=await fetch(FB+"/rhythms.json",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(payload)});if(r.ok){var resp=await r.json();var item={id:resp.name,name:name,bpm:bpm,tiles:tiles,token:tk,ts:payload.ts};addMyToken(tk);bank.push(item);renderBank();return;}}catch(e){}remote=false;}var item2={id:Date.now(),name:name,bpm:bpm,tiles:tiles,token:tk,ts:payload.ts};var a=bank.slice();a.push(item2);saveLocal(a);addMyToken(tk);bank=loadLocal();renderBank();}
-async function deleteRhythm(item){if(remote){try{var r=await fetch(FB+"/rhythms/"+encodeURIComponent(String(item.id))+".json",{method:"DELETE"});if(r.ok){bank=bank.filter(function(x){return x.id!==item.id;});renderBank();return;}}catch(e){}}var a=loadLocal().filter(function(x){return x.id!==item.id;});saveLocal(a);bank=loadLocal();renderBank();}
-function updateBadge(){var bm=$("#bank-mode");if(!bm)return;if(remote){bm.textContent="Shared bank";bm.className="bank-mode live";bm.title="Connected - rhythms are saved on Firebase and shared across every browser and session.";}else{bm.textContent="This device only";bm.className="bank-mode local";bm.title="Not sharing ("+_bankStatus+"). Saved on this browser only. To share: in Firebase open Realtime Database > Rules, publish the open rules, then reload this page.";}}
+function updateBadge(){var bm=$("#bank-mode");if(!bm)return;if(remote){bm.textContent="Shared bank";bm.className="bank-mode live";bm.title="Connected - rhythms are saved on Firebase and shared across every browser and session.";}else{bm.textContent="This device only";bm.className="bank-mode local";bm.title="Not sharing ("+_bankStatus+"). Saved on this browser only. To share: in Firebase open Realtime Database > Rules, set .read and .write to true and Publish, then reload this page.";}}
+async function refreshBank(){var _r;try{_r=await fetch(FB+"/rhythms.json",{headers:{accept:"application/json"}});if(_r.ok){var obj=await _r.json();var arr=[];if(obj){var ks=Object.keys(obj);for(var i=0;i<ks.length;i++){var it=obj[ks[i]];if(it&&typeof it==="object"){it.id=ks[i];arr.push(it);}}}arr.sort(function(a,b){return (a.ts||0)-(b.ts||0);});remote=true;_bankStatus="connected";bank=arr;updateBadge();renderBank();return;}_bankStatus="http "+_r.status;}catch(e){_bankStatus="network error";}remote=false;updateBadge();bank=loadLocal();renderBank();}
+async function submitRhythm(name,bpm,tiles){var tk=newToken();var payload={name:name,bpm:bpm,tiles:tiles,token:tk,ts:Date.now()};if(remote){try{var r=await fetch(FB+"/rhythms.json",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(payload)});if(r.ok){var resp=await r.json();var item={id:resp.name,name:name,bpm:bpm,tiles:tiles,token:tk,ts:payload.ts};addMyToken(tk);bank.push(item);updateBadge();renderBank();return;}}catch(e){}remote=false;}var item2={id:Date.now(),name:name,bpm:bpm,tiles:tiles,token:tk,ts:payload.ts};var a=bank.slice();a.push(item2);saveLocal(a);addMyToken(tk);bank=loadLocal();updateBadge();renderBank();}
+async function deleteRhythm(item){if(remote){try{var r=await fetch(FB+"/rhythms/"+encodeURIComponent(String(item.id))+".json",{method:"DELETE"});if(r.ok){bank=bank.filter(function(x){return x.id!==item.id;});updateBadge();renderBank();return;}}catch(e){}}var a=loadLocal().filter(function(x){return x.id!==item.id;});saveLocal(a);bank=loadLocal();updateBadge();renderBank();}
 function renderEmpty(){var svg=$("#rec-staff");if(svg)render(svg,[]);}
 function setPadLabel(){var p=$("#rec-pad");if(!p)return;if(state==="calibrating"||state==="recording"){p.innerHTML="Tap or hold &mdash; Click or Spacebar";}else{p.innerHTML='<span class="rec-bullet">&#9679;</span> Record a 2-bar rhythm';}}
 function renderPreview(){var evs=events.slice();if(activeEvent)evs.push({start:activeEvent.start,end:actx?actx.currentTime:activeEvent.start});var tiles=computeTiles(evs);var sig="";for(var i=0;i<tiles.length;i++)sig+=tiles[i].type[0]+tiles[i].onset+":"+tiles[i].dur+",";if(sig===_prevSig)return;_prevSig=sig;var svg=$("#rec-staff");if(svg)render(svg,tiles);}
@@ -665,8 +659,7 @@ function play(tiles,bpm,btn,svg){
   Promise.resolve(ctx.resume()).then(function(){
     var t0=ctx.currentTime+0.12,i;
     for(i=0;i<tiles.length;i++){var t=tiles[i];if(t.type==="note"){noteAt(t0+t.onset*EIGHTH,(t.onset%2===0)?660:520);}}
-    var ph=svg?svg.querySelector('line[stroke="#e11d48"]'):null;
-    var startT=performance.now();
+    var ph=svg?svg.querySelector('line[stroke="#e11d48"]'):null;var startT=performance.now();
     (function anim(){if(!_playing){return;}var elapsed=performance.now()-startT-120;if(elapsed<0){_playRaf=requestAnimationFrame(anim);return;}var slot=elapsed/(EIGHTH*1000);if(slot>=SLOTS){if(ph)ph.setAttribute("opacity","0");_playing=false;if(_playBtn){try{_playBtn.textContent=">";_playBtn.setAttribute("title","Play");}catch(e){}_playBtn=null;}return;}var x=LM+slot*SW;if(ph){ph.setAttribute("x1",x);ph.setAttribute("x2",x);ph.setAttribute("opacity","0.9");}_playRaf=requestAnimationFrame(anim);})();
   });
 }
@@ -704,8 +697,7 @@ function finishRecording(){
 function tickRec(){if(state!=="recording")return;if(activeEvent)renderPreview();rafId=requestAnimationFrame(tickRec);}
 function readName(){var inp=$("#rec-name");var n=inp?inp.value.trim():"";try{localStorage.setItem("praxis_user_name",n);}catch(e){}if(!n)n="Anonymous";return n;}
 function renderBank(){
-  var grid=$("#bank-grid");if(!grid)return;var a=bank;grid.innerHTML="";var mine=myTokens();
-  var bm=$("#bank-mode");if(bm){if(remote){bm.textContent="Shared bank";bm.className="bank-mode live";bm.title="Connected - rhythms are saved on Firebase and shared across every browser and session.";}else{bm.textContent="This device only";bm.className="bank-mode local";bm.title="Not sharing ("+_bankStatus+"). Saved on this browser only. To share: in Firebase open Realtime Database > Rules, publish the open rules, then reload this page.";}}
+  var grid=$("#bank-grid");if(!grid)return;var a=bank;grid.innerHTML="";var mine=myTokens();updateBadge();
   if(!a.length){grid.innerHTML='<p class="bank-empty">No rhythms yet - be the first to submit above.</p>';return;}
   a.slice().reverse().forEach(function(item){
     var tiles=item.tiles||[];
@@ -750,8 +742,7 @@ function startRec(){
   Promise.resolve(ctx.resume()).then(function(){startCalibration(ctx.currentTime+0.3);});
 }
 function wire(){
-  setPadLabel();
-  renderEmpty();
+  setPadLabel();renderEmpty();
   setStatus("Tap the pad below to start, then tap along after the 4-beat count-in.");
   var rr=$("#rec-record");if(rr)rr.addEventListener("click",startRec);
   var rd=$("#rec-redo");if(rd)rd.addEventListener("click",startRec);
