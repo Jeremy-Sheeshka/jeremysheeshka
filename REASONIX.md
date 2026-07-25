@@ -21,7 +21,7 @@ not here.
 - Published posts: `src/content/post/*.mdx`
 - Drafts: same directory, `draft: true` in frontmatter
 - Images and media: `public/images/blog/<slug>/`
-- **Image sourcing rule:** For permanent blog posts, host images locally in `public/images/blog/<slug>/`. Do not use external image URLs (Unsplash, Imgur, etc.) in permanent posts. External images cause CSP violations and create a dependency on external hosts. Drafts or throwaway notes may use external images temporarily.
+- **Image sourcing rule:** Do not download or add images to `public/images/` — the author supplies those. For permanent posts, use only images that already exist locally. For test/draft posts, you may use placeholder images from any online source (Unsplash, etc.) or reuse an existing local image as a filler.
 - Slug convention: kebab-case matching the filename
 - Content collection schema: `src/content.config.ts`
 - Layouts: `src/layouts/`
