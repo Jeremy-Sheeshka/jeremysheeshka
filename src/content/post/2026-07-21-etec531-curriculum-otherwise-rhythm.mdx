@@ -15,10 +15,13 @@ import Figure from "../../components/blocks/Figure.astro";
 <div class="mt-12 grid grid-cols-1 items-center gap-10 md:mt-20 md:grid-cols-2 md:gap-16">
 
   <div class="overflow-hidden rounded-xl shadow-2xl shadow-black/40 ring-1 ring-white/10">
-    <Figure
-      src="/assets/images/blog/dinosaur-mode.png"
-      alt="Dinosaur Mode, a rhythm-training game styled after chrome://dino"
-    />
+    <iframe
+      src="/games/rhythm-reader/dinosaur-mode.html"
+      title="Dinosaur Mode — playable rhythm-training game"
+      class="w-full"
+      style="border: none; background: #fff; aspect-ratio: 994/1468; min-height: 400px;"
+      loading="lazy"
+    ></iframe>
   </div>
 
   <div class="flex flex-col gap-7">
