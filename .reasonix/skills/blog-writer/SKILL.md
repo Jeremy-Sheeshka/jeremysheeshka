@@ -189,6 +189,9 @@ lists and before/after pairs.
 - [ ] No filler transitions (rule 18).
 - [ ] No corporate vocabulary (rule 19).
 - [ ] No listicle energy in prose (rule 20).
+[ ] No announce-then-list structure (rule 21).
+[ ] No meta-reassurance (rule 22).
+[ ] No perfect parallelism across sibling sections (rule 23).
 - [ ] Paragraphs open with the point (rule 5).
 - [ ] One idea per paragraph (rule 6).
 - [ ] Paragraphs run 3-5 sentences; at most one longer paragraph for

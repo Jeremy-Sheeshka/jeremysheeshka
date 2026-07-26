@@ -1,2 +1,2 @@
 [permissions]
-allow = ["Edit"]
+allow = ["Edit", "Bash(cat /etc/os-release 2>/dev/null; pveversion 2>/dev/null; hostnamectl 2>/dev/null | head -5)", "Bash(which pvesh pveversion qm pct 2>/dev/null; apt list --installed 2>/dev/null | grep -i proxmox; rpm -qa 2>/dev/null | grep -i proxmox; pacman -Q 2>/dev/null | grep -i proxmox)", "Bash(which sshpass 2>/dev/null; which expect 2>/dev/null; dpkg -l sshpass 2>/dev/null; pacman -Q sshpass 2>/dev/null)", "Bash(sudo pacman -S --noconfirm sshpass 2>&1)"]

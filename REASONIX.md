@@ -57,6 +57,7 @@ subagent.
    `src/components/` unless explicitly asked.
 5. Never delete an existing post.
 6. No naming students or real learners. No medical or legal advice presented as fact.
+7. Never invent a personal anecdote, memory, feeling, or biographical detail that is not present in the notes or source material the author provided. If the notes do not say it happened, it did not happen. First-person voice is not a license to fabricate a first-person life. When the notes lack personal material, write the idea rather than a fake memory around it. Flag the gap if a section needs personal grounding the notes do not supply.
    or legal advice presented as fact]
 7. **Auto-push default.** After completing a task that produces file changes (edit, create, move, delete), the agent must commit and push to `main` by default. The author may override this per-task by saying "don't push" or "no push." If a push was performed, notify the author immediately with a summary of what changed and a one-line revert instruction (`git revert <sha>`).
 
