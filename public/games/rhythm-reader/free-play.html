@@ -528,6 +528,9 @@ body{overflow-x:hidden}
         window.__fpDiff=window.__fpDiff||'easy';
         var TL=window.__fpDiff==='hard'?'tl=1e2e3e4e':'tl=1e2e3e4e';
         DRILL=DRILL+'?'+TL;
+        window.__fpDiff=window.__fpDiff||'easy';
+        var TL=window.__fpDiff==='hard'?'tl=1e2e3e4e':'tl=1e2e3e4e';
+        DRILL=DRILL+'?'+TL;
         Promise.all([
           fetch(DRILL).then(function(r){return r.text();}),
           fetch('/games/rhythm-reader/embed-bridge.js?v=20260722v10').then(function(r){return r.text();}).catch(function(){return '';}),
