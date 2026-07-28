@@ -685,7 +685,7 @@ async function refreshBank(){
 }
 async function submitRhythm(name,bpm,tiles){
   if(currentBank==="local"){var tk=newToken();var item={id:Date.now(),name:name,bpm:bpm,tiles:tiles,token:tk,ts:Date.now()};var a=loadLocal();a.push(item);saveLocal(a);addMyToken(tk);bank=loadLocal();updateBadge();renderBank();toast("Saved to your Local Rhythm Bank");return true;}
-  try{var r=await fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({name:name,bpm:bpm,tiles:tiles})});if(r.ok){remote=true;_bankStatus="connected";await refreshBank();toast("Saved to the Cultural Rhythm Bank");return true;}_bankStatus="http "+r.status;}catch(e){_bankStatus="network error";}
+  try{var r=await fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({name:name,bpm:bpm,tiles:tiles})});if(r.ok){var _it=await r.json();if(_it&&_it.token)addMyToken(_it.token);remote=true;_bankStatus="connected";await refreshBank();toast("Saved to the Cultural Rhythm Bank");return true;}_bankStatus="http "+r.status;}catch(e){_bankStatus="network error";}
   remote=false;updateBadge();renderBank();toast("Couldn't reach the shared bank ("+_bankStatus+").");return false;
 }
 async function deleteRhythm(item){
