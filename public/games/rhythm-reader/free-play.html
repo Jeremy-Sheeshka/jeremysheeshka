@@ -416,6 +416,11 @@ label.metro-field:has([data-metro-beats]){display:none !important}
 }
 @media (max-width:560px){ .dock{flex-wrap:wrap !important} }
 </style>
+<style id="fp-nav-scale">
+@media (min-width:861px){ .metronome--top{flex-wrap:nowrap !important;overflow-x:auto !important;gap:8px !important} .metronome--top>.metro-toggle,.metronome--top>label.metro-field{flex:0 1 auto !important;min-width:0 !important} }
+@media (max-width:860px){ .dock{flex-wrap:wrap !important;justify-content:flex-start !important} }
+@media (max-width:560px){ .dock{flex-wrap:wrap !important;justify-content:center !important;gap:8px !important} }
+</style>
 </head>
 <body>
 <script>Object.defineProperty(window,"tempo",{get:function(){var e=document.querySelector("[data-metro-bpm-input]")||document.querySelector("[data-metro-tempo]");return e?parseInt(e.value)||88:88;},configurable:true});</script>
@@ -646,8 +651,8 @@ label.metro-field:has([data-metro-beats]){display:none !important}
 <button id="mute-btn" title="Mute / unmute" aria-pressed="false">🔊</button>
 <div id="praxis-settings-pop" hidden>
   <h4>SETTINGS</h4>
-  <label><span>Show “Draw” in bar</span><input type="checkbox" id="fp-set-showdraw"></label>
-  <label><span>Show “Counting aid” in bar</span><input type="checkbox" id="fp-set-showaid"></label>
+  <label><span>Show “Draw” in bar</span><input type="checkbox" id="fp-set-showdraw" checked></label>
+  <label><span>Show “Counting aid” in bar</span><input type="checkbox" id="fp-set-showaid" checked></label>
   <label><span>Master: self-count (silent)</span><input type="checkbox" id="fp-set-master"></label>
   <label><span>Line cursor</span><input type="checkbox" id="fp-set-cursor2" checked></label>
   <label><span>Show ✓ / ✗ marks</span><input type="checkbox" id="fp-set-marks" checked></label>
@@ -660,7 +665,7 @@ label.metro-field:has([data-metro-beats]){display:none !important}
   var $=function(s){return document.querySelector(s);}, $$=function(s){return Array.prototype.slice.call(document.querySelectorAll(s));};
   var frame=$('#drill-frame'), stage=$('.stage')||($('main')||document.body);
   var _sd=true; // dots default
-  var settings={showDraw:false,showAid:false,master:false,metroSound:true,cursor:true};
+  var settings={showDraw:true,showAid:true,master:false,metroSound:true,cursor:true};
   var muted=false, lastEx=-1;
 
   /* canvas */
