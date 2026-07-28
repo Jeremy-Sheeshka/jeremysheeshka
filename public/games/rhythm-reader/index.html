@@ -674,22 +674,22 @@ function updateBadge(){
   if(bt)bt.textContent=(currentBank==="cultural")?"Cultural Rhythm Bank":"Local Rhythm Bank";
   if(bd)bd.textContent=(currentBank==="cultural")?"Culturally-situated two-bar rhythms shared across the cohort. Tap any rhythm to hear it. Add yours above with a cultural name or title.":"Two-bar rhythms saved on this device only. Tap any rhythm to hear it. Add yours above.";
   if(!bm)return;
-  if(currentBank==="local"){bm.textContent="On this device";bm.className="bank-mode device";bm.title="Personal rhythms saved on this browser only.";return;}
+  if(currentBank==="local"){if(remote){bm.textContent="Local Rhythm Bank";bm.className="bank-mode device";bm.title="Your personal rhythms, saved to the cloud (separate from the shared Cultural bank).";}else{bm.textContent="Offline";bm.className="bank-mode local";bm.title="Local bank unreachable ("+_bankStatus+").";}return;}
   if(remote){bm.textContent="ETEC 531's Got Rhythm";bm.className="bank-mode live";bm.title="Connected - shared across every browser and session.";}
   else{bm.textContent="Offline";bm.className="bank-mode local";bm.title="Shared bank unreachable ("+_bankStatus+").";}
 }
 async function refreshBank(){
-  if(currentBank==="local"){remote=false;_bankStatus="local";bank=loadLocal();updateBadge();renderBank();return;}
+  if(currentBank==="local"){var _l;try{_l=await fetch("/api/rhythms_local",{headers:{accept:"application/json"}});if(_l.ok){var _ld=await _l.json();bank=Array.isArray(_ld)?_ld:[];remote=true;_bankStatus="connected";updateBadge();renderBank();return;}_bankStatus="http "+_l.status;}catch(e){_bankStatus="network error";}remote=false;bank=[];updateBadge();renderBank();return;}
   var _r;try{_r=await fetch(API,{headers:{accept:"application/json"}});if(_r.ok){var d=await _r.json();if(Array.isArray(d)){bank=d;remote=true;_bankStatus="connected";updateBadge();renderBank();return;}_bankStatus="bad shape";}else{_bankStatus="http "+_r.status;}}catch(e){_bankStatus="network error";}
   remote=false;bank=[];updateBadge();renderBank();
 }
 async function submitRhythm(name,bpm,tiles){
-  if(currentBank==="local"){var tk=newToken();var item={id:Date.now(),name:name,bpm:bpm,tiles:tiles,token:tk,ts:Date.now()};var a=loadLocal();a.push(item);saveLocal(a);addMyToken(tk);bank=loadLocal();updateBadge();renderBank();toast("Saved to your Local Rhythm Bank");return true;}
+  if(currentBank==="local"){try{var _r=await fetch("/api/rhythms_local",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({name:name,bpm:bpm,tiles:tiles})});if(_r.ok){var _li=await _r.json();if(_li&&_li.token)addMyToken(_li.token);await refreshBank();toast("Saved to your Local Rhythm Bank");return true;}}catch(e){}toast("Couldn\u2019t save to the Local bank.");return false;}
   try{var r=await fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({name:name,bpm:bpm,tiles:tiles})});if(r.ok){var _it=await r.json();if(_it&&_it.token)addMyToken(_it.token);remote=true;_bankStatus="connected";await refreshBank();toast("Saved to the Cultural Rhythm Bank");return true;}_bankStatus="http "+r.status;}catch(e){_bankStatus="network error";}
   remote=false;updateBadge();renderBank();toast("Couldn't reach the shared bank ("+_bankStatus+").");return false;
 }
 async function deleteRhythm(item){
-  if(currentBank==="local"){var a=loadLocal().filter(function(x){return x.id!==item.id;});saveLocal(a);bank=loadLocal();updateBadge();renderBank();return;}
+  if(currentBank==="local"){try{var _r=await fetch("/api/rhythms_local",{method:"DELETE",headers:{"content-type":"application/json"},body:JSON.stringify({id:item.id,token:item.token})});if(_r.ok){bank=bank.filter(function(x){return x.id!==item.id;});updateBadge();renderBank();return;}}catch(e){}toast("Couldn\u2019t delete from the Local bank.");return;}
   try{var r=await fetch(API,{method:"DELETE",headers:{"content-type":"application/json"},body:JSON.stringify({id:item.id,token:item.token})});if(r.ok){bank=bank.filter(function(x){return x.id!==item.id;});updateBadge();renderBank();return;}}catch(e){}
   toast("Couldn't delete from the shared bank.");
 }
@@ -765,7 +765,8 @@ function renderBank(){
     var em;
     if(currentBank==="cultural"&&!remote){em='<p class="bank-empty">The shared Cultural Rhythm Bank isn&rsquo;t reachable right now ('+esc(_bankStatus)+'). Your personal rhythms live under the Local Rhythm Bank tab.</p>';}
     else if(currentBank==="cultural"){em='<p class="bank-empty">No cultural rhythms yet &mdash; be the first to add one above with a cultural name or title.</p>';}
-    else{em='<p class="bank-empty">No local rhythms yet &mdash; record one above and it&rsquo;ll save on this device.</p>';}
+    else if(currentBank==="local"&&!remote){em='<p class="bank-empty">The Local Rhythm Bank isn&rsquo;t reachable right now ('+esc(_bankStatus)+').</p>';}
+    else{em='<p class="bank-empty">No local rhythms yet &mdash; record one above and it&rsquo;ll save to your Local Rhythm Bank.</p>';}
     grid.innerHTML=em;return;
   }
   a.slice().reverse().forEach(function(item){
