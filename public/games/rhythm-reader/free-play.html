@@ -525,6 +525,9 @@ body{overflow-x:hidden}
         var host=location.hostname;
         if(host==='localhost'||host==='127.0.0.1'){f.src='http://localhost:4735/games/rhythm-app/exercise/720/';return;}
         var DRILL='/games/rhythm-app/exercise/720/';
+        window.__fpDiff=window.__fpDiff||'easy';
+        var TL=window.__fpDiff==='hard'?'tl=1e2e3e4e':'tl=1e2e3e4e';
+        DRILL=DRILL+'?'+TL;
         Promise.all([
           fetch(DRILL).then(function(r){return r.text();}),
           fetch('/games/rhythm-reader/embed-bridge.js?v=20260722v10').then(function(r){return r.text();}).catch(function(){return '';}),
@@ -549,7 +552,9 @@ body{overflow-x:hidden}
           h=h.replace(/<meta[^>]*content-security-policy[^>]*>/gi,'');
           if(ov){h=h.replace('</head>','<style>'+ov+'</style><style id="praxis-reveal">#drill-frame{opacity:0;transition:opacity .15s ease}#drill-frame.praxis-shown{opacity:1}</style></head>');}
           if(bridge){var inj=SO+bridge+SC;h=(h.indexOf('</body>')!==-1)?h.replace('</body>',inj+'</body>'):h+inj;}
-          h=h.replace(/\/games\/rhythm-app\/ovelser\/js\/min\/rhythm_image-min\.js/g,'/games/rhythm-reader/rhythm_image-min.js');f.srcdoc=h;
+          h=h.replace(/\/games\/rhythm-app\/ovelser\/js\/min\/rhythm_image-min\.js/g,'/games/rhythm-reader/rhythm_image-min.js');
+          try{if(window.__fpDiff==='easy'){h=h.replace(/\bsekstendedel[0-9]*\b/g,'fjerdedel');}}catch(e){}
+          f.srcdoc=h;
         }).catch(function(e){
           console.error('[praxis] drill load failed',e);
           f.srcdoc='<html><body style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:system-ui;color:#666"><p>Exercise failed to load.</p></body></html>';
