@@ -38,7 +38,7 @@ direction, and the conflict resolution order all live there. Do not
 rely on memory of them. Reference them by number in your reasoning and
 in any notes you leave for the author. If STYLE_GUIDE.md is
 unavailable in this context, stop and ask for it rather than
-improvising the voice.
+improvising the voice. Then read two or three recent published posts from src/content/post/ as live calibration. Pick prose-heavy posts, not the kitchen-sink template, not the MDX playground, not the diary, and not a post carrying an AI-tooling disclaimer. You are listening for the live voice, not mining sentences. The Voice Exemplars in STYLE_GUIDE.md are frozen samples; the recent posts are the current register.
 
 ## What This Subagent Never Does
 
@@ -192,6 +192,7 @@ lists and before/after pairs.
 [ ] No announce-then-list structure (rule 21).
 [ ] No meta-reassurance (rule 22).
 [ ] No perfect parallelism across sibling sections (rule 23).
+[ ] Concrete specificity; no generic personal detail (rule 24).
 - [ ] Paragraphs open with the point (rule 5).
 - [ ] One idea per paragraph (rule 6).
 - [ ] Paragraphs run 3-5 sentences; at most one longer paragraph for

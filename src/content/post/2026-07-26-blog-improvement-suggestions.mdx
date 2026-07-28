@@ -1,0 +1,234 @@
+---
+title: "Notes Toward a Better Blog"
+description: "A codebase audit and a wishlist of features, refactors, and structural changes I'm considering for this site."
+publishDate: "2026-07-26"
+tags: ["astro", "meta", "blogging", "components"]
+draft: true
+---
+
+import Prose from "../../components/blocks/Prose.astro";
+import Callout from "../../components/blocks/Callout.astro";
+import Figure from "../../components/blocks/Figure.astro";
+import Card from "../../components/ui/Card.astro";
+import Badge from "../../components/ui/Badge.astro";
+
+<Prose>
+
+I spent an afternoon walking through every file in this blog — every component, every layout, every post, every config file. Not to fix anything (that comes later, if at all), but to see what's here and what could be.
+
+This post is the audit. A running list of things I think the blog could use, grouped by category. Some of these are quick wins. Some are full-on projects. None of them are promises — I'm writing this to have a record, not a roadmap.
+
+If you're reading this, treat it as a backstage tour. I'm thinking out loud.
+
+---
+
+## 1. Structural: content modelling
+
+The blog has two content collections: `post` and `note`. Posts are the main event — full articles with tags, dates, cover images, and all the frontmatter bells. Notes are lighter: title, optional description, publish date, body. They render differently, listed separately, no tags.
+
+This works fine, but there are gaps.
+
+### Dedicated project collection
+
+Right now the `/projects/` page pulls from the `note` collection and filters by tag. The "Digital Garden" project, "Math Champion", "Learn and Lead" — these are notes with project vibes. But they don't have the fields a project page actually wants: a live URL, a GitHub link, a status indicator (active/archived/winding-down), a team or solo credit.
+
+A proper `project` collection, even just 4-5 entries, would let me surface them differently. A card with a screenshot and a link is more useful than a note in a list.
+
+### Series as a first-class concept
+
+Forty-something posts, most of them tied to a course code. ETEC 511 alone spans eight posts. Right now there's no way to navigate between them except by clicking the same tag and squinting. A `series` frontmatter field — `series: "ETEC 511"`, with an optional `seriesOrder: 3` — would let me build a "Part of: ETEC 511" banner at the top of each post, a prev/next-in-series nav at the bottom, and a landing page per series. The data's already in the frontmatter. It just needs wiring.
+
+### Tag descriptions
+
+The `tag` collection already exists in `content.config.ts`. It accepts `title` and `description`. But it's empty — no tag metadata files in `src/content/tag/`. If I wrote a short description for each tag and surfaced it at the top of `/tags/[tag]/`, every filtered page would read less like a search result and more like a curated collection.
+
+---
+
+## 2. Navigation and wayfinding
+
+### The /posts/ vs /blog/ thing
+
+The home page says "See all posts" and links to `/posts/`. That's fine. But there's no `/blog/` route. If someone types `jeremysheeshka.ca/blog` expecting the common convention, they get a 404. A one-line redirect in Netlify's `_redirects` or `netlify.toml` would fix it.
+
+### Table of contents in posts
+
+The `TOC.astro` component already exists. It generates a nested heading tree from the rendered content. But it's not wired into the `BlogPost` layout — it's just a component waiting to be used. Long posts (the ETEC 531 Curriculum Journey, the Etec542 portfolio) would benefit from a sticky sidebar TOC. The component lives in `src/components/blog/TOC.astro`. It needs a home in the layout.
+
+### Breadcrumbs
+
+Tag-filtered pages (`/tags/etec531/`) have no breadcrumb. The tags index is one click away but there's no hint. A simple `Tags → etec531` breadcrumb would make the navigation feel less like a dead end.
+
+### Pagination indicators
+
+The paginated list pages (`/posts/2/`, `/posts/3/`) show "Previous" and "Next" but no "Page 2 of 9". The `Paginator.astro` component could show the current position without much effort.
+
+---
+
+## 3. Reading experience
+
+### Reading progress bar
+
+A thin coloured bar across the top of the viewport that fills as you scroll. It's a tiny script, zero dependencies, and it signals "you're X% through this" without the reader asking. The `BlogPost.astro` layout already has an IntersectionObserver for the back-to-top button — same mechanism, different target.
+
+### Estimated read time in the listing
+
+Post preview cards show the date and title. Reading time is computed during the build (`remark-reading-time.ts`) and injected into frontmatter, but it only renders inside the individual post. Showing it on the listing page would help people decide whether they have time for a deep read or a skim.
+
+### Image lightbox
+
+The `Figure.astro` component renders images with captions and responsive sizing. But clicking an image does nothing. A lightbox — overlay, full-size image, close on click — would be especially useful for the diagrams, maps, and annotated screenshots that show up in the ETEC 531 and IP posts. The blog already has Embla Carousel for gallery views. A lightbox is simpler to implement and covers more use cases.
+
+### Dark mode image variants
+
+Some images (screenshots with white backgrounds, diagrams with transparent lines) break in dark mode. A `data-dark-src` attribute or a paired image component that swaps based on the `data-theme` attribute would fix this without a full CDN switch.
+
+---
+
+## 4. Community and interaction
+
+### Webmentions — actually set up
+
+The WebMentions component suite (`webmentions/Comments.astro`, `webmentions/Likes.astro`, `webmentions/index.astro`) is fully wired. The `BaseHead` component includes the necessary `<link>` tags. The `.env` has `WEBMENTION_API_KEY`, `WEBMENTION_URL`, and `WEBMENTION_PINGBACK` keys. But the actual webmention.io account registration and pingback sending — the steps that make the data flow — aren't documented anywhere in the repo. The component renders an empty section by default. Turning this on would mean:
+
+1. Registering the domain on webmention.io
+2. Adding rel="webmention" to outgoing links (or using the API)
+3. Setting up the pingback endpoint
+
+The infrastructure is there. It just needs the push.
+
+### Newsletter integration
+
+Not a big one. A single form field at the bottom of long posts, pointing at Buttondown or Letterbird, with a "Subscribe for new posts" label. No popups. No modals. Just a text input and a button. The blog has the right audience (educators, instructional designers) and the right tone for a low-volume newsletter.
+
+### Comments via GitHub issues
+
+For people who don't want to write a webmention, a "Reply on GitHub" link at the bottom of each post would be trivial. The post slug maps cleanly to a URL path. A link template in the layout generates the right target.
+
+---
+
+## 5. Performance and technical
+
+### Image optimisation audit
+
+The blog uses `astro:assets` with the `Image` component on the home page and in `Masthead`. But many inline images in posts use standard `<img>` tags with static paths. Running all post images through Astro's image service would add automatic AVIF/WebP conversion, responsive srcsets, and lazy loading. The `Figure.astro` component already accepts an `ImageData` type — it's a question of migrating existing uses.
+
+### Bundle analysis
+
+The `SurvivanceGame.jsx` component is 102 KB of React RPG code. It's only used on one post (ETEC 544 IP#6). With Astro's client directives, it's likely only loading on that page. Worth confirming. The rest of the bundle — expressive-code, React, lucide-react — is probably fine, but a `vite-bundle-visualizer` run would show whether anything is bigger than expected.
+
+### Preconnect hints
+
+The `BaseHead` component loads Google Fonts (Homemade Apple) and Umami analytics. Adding `<link rel="preconnect" href="https://fonts.googleapis.com">` and `https://fonts.gstatic.com` would save a DNS round trip on first load. Same for the analytics endpoint.
+
+### Content Security Policy — tighten
+
+The `netlify.toml` has a broad CSP. `script-src` allows `unsafe-inline` and `unsafe-eval` (needed for some inline scripts and the game components). The image sources include `iili.io` and `images.unsplash.com` — probably leftover from development. An annual CSP review pass would keep the attack surface clean.
+
+---
+
+## 6. Accessibility
+
+### Skip-to-content
+
+The `SkipLink.astro` component exists — three lines, renders a visually-hidden "Skip to content" link. It's imported in `Base.astro` but only renders after the Header. For keyboard users, the skip link should be the first focusable element on the page. A positioning fix (absolute, top-0, translate from negative to visible on focus) would make it functional.
+
+### Heading hierarchy
+
+Some posts jump from an `<h2>` to an `<h4>` without an `<h3>` in between. The remark `heading-ids` plugin handles anchors fine, but the outline sketch is uneven. A lint rule or an `astro:check` addition would catch skips.
+
+### Focus management on navigation
+
+Navigating between pages with the browser's back button resets scroll position — that's expected. But navigating from a post back to the listing page doesn't focus the heading at the top. Screen reader users would start reading from wherever focus lands. A small script in the layout that focuses `<h1>` on page load after a history navigation would fix this.
+
+### Colour contrast in prose
+
+The custom prose styles in `tailwind.config.ts` set link colours and code backgrounds. The dark-mode `prose-invert` class handles most of the inversion. But the link underline offset and hover colours use `bright-sun` (yellow) — on a cream background in light mode, that might be borderline. Worth checking with a contrast checker.
+
+---
+
+## 7. Editorial and content
+
+### A "kitchen sink" that's actually used
+
+The kitchen sink template post exists, it's in the repo, it's thorough. But it's a draft — a reference document. The components it documents (`Callout`, `Quote`, `Figure`, `Badge`, `Card`, `AudioPlayer`, `TabsMini`, `Steps`, `Accordion`, `GalleryGrid`, `PullQuote`, `Reveal`, `QuickPoll`) are scattered across posts already, but inconsistently. An editorial checklist — "before publishing, scan the kitchen sink and see if any of these fit" — would make the template earn its keep.
+
+### Post-post footnotes
+
+Some posts end abruptly. The `BlogPost.astro` layout renders the content, then WebMentions, then prev/next links. A dedicated "Footnotes / Colophon" section at the bottom — where I can link to tools used, shout out sources, or note updates — would give the ending a landing spot.
+
+### Post series landing pages
+
+If I add the `series` frontmatter field, each series should have a dedicated page. `/series/etec-511/` would show all eight posts in order, with a short description of the course and a visual status indicator. This is somewhere between a content-model change and a navigation improvement.
+
+### Freeform tags vs controlled vocabulary
+
+Right now tags are freeform — whatever I type in frontmatter gets deduped and lowercased. The collection has 22 unique tags. Some overlap ("etec 500" vs "etec522" — inconsistent spacing and naming). A `src/content/tag/` directory with one file per tag would enforce a controlled vocabulary, give each tag a description (see above), and add a landing page hook. The `tag` collection already supports this. It's just empty.
+
+---
+
+## 8. Component library health
+
+### Shadcn/ui — deeper integration
+
+The `components.json` says new-york style, stone base colour, CSS variables, Lucide icons. But the `src/components/ui/` directory has only three components: `Badge.astro`, `ButtonLink.astro`, and `Card.astro`. Shadcn's Astro port supports `Button`, `Input`, `Dialog`, `Sheet`, `Tooltip`, `Popover`, `DropdownMenu`, and more. Adding a few of these — especially `Dialog` (for the image lightbox) and `Tooltip` (for glossary definitions) — would be low-effort.
+
+### Component documentation
+
+Most of the custom components (`TabsMini`, `Steps`, `Timeline`, `Accordion`, `GalleryGrid`, `QuickPoll`, `PullQuote`, `Reveal`) have no usage documentation in the repo. The kitchen sink template shows some, but it's a post, not a reference. A `COMPONENTS.md` or a Storybook-style page listing each component with its props and an example would make the blog easier to build on.
+
+### Duplicated logic
+
+The home page listing, the tag-filtered listing, and the search results all render post previews differently. `PostPreview.astro` is the canonical card component, but it's wrapped in custom HTML in three separate places. Moving the wrapper into `PostPreview` or into a `PostList.astro` wrapper would reduce duplication.
+
+---
+
+## 9. Build and deployment
+
+### CI lint step
+
+The `biome.json` config is thorough — tab indentation, LF endings, organised imports, a healthy set of lint rules. But there's no `lint` script in `package.json`, and the build (`pnpm build`) doesn't run the linter first. Adding `"lint": "biome check ."` and `"lint:fix": "biome check --write ."` to `package.json` would make it possible to run before every build.
+
+### Type-checking in CI
+
+`astro:check` isn't in the build pipeline either. The `tsconfig.json` exists. Adding `"check": "astro check"` and running it in CI would catch type mismatches before they reach `pnpm build`.
+
+### Netlify deploy context
+
+The `netlify.toml` has no deploy context blocks. No staging branch, no preview deploys with different environment variables. Adding `[context.deploy-preview]` and `[context.branch-deploy]` blocks would let draft posts be previewed without setting `draft: false`.
+
+---
+
+## 10. Stretch: would be cool
+
+### Interactive glossary
+
+A tooltip component that pulls definitions from a `glossary.json` file. Hover over a term in any post, see the definition without leaving the page. Useful for the TPACK, ZPD, constructive alignment crowd.
+
+### "My stack" page
+
+A single `/uses/` page listing tools, hardware, software, and workflows. Common convention in the dev blog world. The blog already has the infrastructure — a page with cards and badges.
+
+### Print stylesheet
+
+Some of these posts are cited in academic work. A print-friendly CSS (hidden nav, visible URLs, no dark mode, serif body text) would make them easier to reference on paper.
+
+### Local-first reading list
+
+A `/reading/` page with books and papers organised by topic, each with a one-line note on why it mattered. Data stored in a JSON file in `src/data/`. Rendered as a paginated list with tags.
+
+---
+
+## Summary, ranked by effort
+
+| Effort | Change |
+|--------|--------|
+| **Easy (an hour or less)** | /blog/ redirect, reading progress bar, skip-link fix, preconnect hints, breadcrumbs, lint scripts, pagination indicator |
+| **Medium (a few hours)** | TOC wiring in layout, series frontmatter + nav, image lightbox, dark-mode image variants, print CSS, post-post footer/colophon |
+| **Bigger (a day or more)** | Dedicated project collection, tag metadata files, bundle analysis, controlled tag vocabulary, webmentions setup, "My Stack" page |
+| **Stretch (could evolve)** | Interactive glossary, full shadcn component integration, component documentation hub, newsletter integration, reading list |
+
+None of these are urgent. The blog works. People read it, they find it through search, the RSS feeds deliver. But I'd rather have the list exist and pick from it than rediscover each gap the next time I write a post.
+
+Back to writing.
+
+</Prose>

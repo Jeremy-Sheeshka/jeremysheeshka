@@ -180,11 +180,11 @@ This: "Feedback only works if the student can act on it."
 particularly in light of recent shifts in assessment practice."
 2026 register: "Worth interrogating? Yes. Especially now."
 
-AI Tells (rules 21-23)
+AI Tells (rules 21-24)
 
 These target patterns that read as machine-generated even when every
 other rule passes. A draft can satisfy rules 1-20 and still sound
-like an AI doing an impression. These three close that gap. The
+like an AI doing an impression. These four close that gap. The
 banned phrases below are the mechanical backstop, greppable like the
 others.
 
@@ -207,50 +207,112 @@ structure and length. Asymmetry reads as human. Uniformity reads as
 generated. No fixed phrase. The test: if three or more sibling
 sections share the same skeleton and length, break the pattern.
 
+Concrete specificity (rule 24). Name the exact thing, not the category. A "turquoise bunny guitar strap," not "an old strap." "Three eight-foot pressure-treated two-by-sixes," not "some lumber." Generic personal detail is a fabrication tell and the single biggest separator between the real voice and AI prose. When a post needs a personal detail, use a specific named one or flag the gap. Never fill it with a plausible generality.
+
 Voice Exemplars (from published posts)
 
-Sampled automatically from published posts in src/content/post/.
-Drafts are excluded. Re-run `.reasonix/sample_voice.py` to refresh
-as the archive grows. These are real paragraphs, not imitations.
-Read them as calibration for the texture the rules describe.
-Each is tagged with its source post. Prune any that do not fit.
+Real excerpts from the published archive, grouped by the move they
+demonstrate. These are calibration, not templates. Read them to hear
+the texture the rules describe. Each is tagged with its source post.
+Do not copy them. Do not reuse their sentences. Match the texture.
 
-From `2026-04-05-etec542-hoa4`:
+## Concrete specificity (the antidote to fabricated personal detail)
 
-<div class="overflow-x-auto my-6 rounded-lg border border-gray-200 dark:border-gray-600"> <table class="w-full border-collapse text-sm"> <tbody> <tr class="border-b border-gray-200 dark:border-gray-600"> <td class="px-4 py-3 font-bold text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 align-top w-1/3">Title of the work</td> <td class="px-4 py-3 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 align-top">Algorithmic biases and the discoverability of digital cultural content</td> </tr> <tr class="border-b border-gray-200 dark:border-gray-600"> <td class="px-4 py-3 font-bold text-gray-900 dark:text-gray-100 bg-blue-50 dark:bg-gray-700 align-top">Author(s)</td> <td class="px-4 py-3 text-gray-700 dark:text-gray-300 bg-blue-50 dark:bg-gray-700 align-top">Jonathan Paquette</td> </tr> <tr class="border-b border-gray-200 dark:border-gray-600"> <td class="px-4 py-3 font-bold text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 align-top">Year of publication</td> <td class="px-4 py-3 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 align-top">2025</td> </tr> <tr class="border-b border-gray-200 dark:border-gray-600"> <td class="px-4 py-3 font-bold text-gray-900 dark:text-gray-100 bg-blue-50 dark:bg-gray-700 align-top">Complete reference in APA7 format</td> <td class="px-4 py-3 text-gray-700 dark:text-gray-300 bg-blue-50 dark:bg-gray-700 align-top"> Paquette, J. (2025). Algorithmic biases and the discoverability of digital cultural content. <em>Journal of Cultural Management and Cultural Policy, 11</em>(2), 269–278. <a href="https://doi.org/10.1177/27018466251366274" target="_blank" class="text-blue-600 dark:text-blue-400 hover:underline">https://doi.org/10.1177/27018466251366274</a> </td> </tr> <tr class="border-b border-gray-200 dark:border-gray-600"> <td class="px-4 py-3 font-bold text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 align-top"> Abstract or introduction </td> <td class="px-4 py-3 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 align-top leading-relaxed"> The digital era has transformed how the production of culture is accessed, how it circulates, and how it is organized. In this article, I wish to discuss the notion of discoverability. This notion, I argue, is one of the most recent cultural policy instruments that has emerged in the digital era. Discoverability implies creating conditions under which the public can easily encounter cultural content that is culturally relevant. In other words, the notion of discoverability includes the capacity to encounter local cultural content and content that is made in languages other than English. Discoverability, however, tends to function on algorithmic biases that privilege English-language cultural content and content produced by large global corporations. From a cultural policy perspective, discoverability is rooted in two basic dimensions: the regulation of culture and the accessibility of culture. This article emphasizes the place of French-language content and touches on two dimensions: the accessibility of French-language digital content in general, and the issue of cultural content from French-speaking minorities. In doing so, it also sheds light on strategies and policies that are pertinent to other languages and to other linguistic minorities. </td> </tr> <tr class="border-b border-gray-200 dark:border-gray-600"> <td class="px-4 py-3 font-bold text-gray-900 dark:text-gray-100 bg-blue-50 dark:bg-gray-700 align-top"> Keywords </td> <td class="px-4 py-3 text-gray-700 dark:text-gray-300 bg-blue-50 dark:bg-gray-700 align-top"> discoverability, cultural policy, accessibility, francophonie, digital cultural policy </td> </tr> <tr class="border-b border-gray-200 dark:border-gray-600"> <td class="px-4 py-3 font-bold text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 align-top"> Is this an empirical study? </td> <td class="px-4 py-3 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 align-top">No</td> </tr> <tr class="border-b border-gray-200 dark:border-gray-600"> <td class="px-4 py-3 font-bold text-gray-900 dark:text-gray-100 bg-blue-50 dark:bg-gray-700 align-top"> Methodology of the study? </td> <td class="px-4 py-3 text-gray-700 dark:text-gray-300 bg-blue-50 dark:bg-gray-700 align-top leading-relaxed"> <p class="mb-2">This publication is explicitly framed as a theoretical and conceptual policy essay. The methodology relies on three approaches:</p> <ul class="list-disc list-inside space-y-2"> <li><strong>Policy and Historical Document Analysis:</strong> The author traces the evolution of cultural policy through historical trade negotiations, including GATT and the Uruguay Round (1986–1993), as well as framework documents like the 2005 UNESCO Convention and the 2025 Declaration of the Ministers of Culture of la Francophonie.</li> <li><strong>Secondary Quantitative Data:</strong> The author utilizes 2024 quadrennial periodic reports from France, the United Kingdom, Italy, and Canada to describe the current landscape of digital streaming consumption.</li> <li><strong>Theoretical Literature Review:</strong> The essay conceptualizes algorithms as "actants" and sociotechnical intermediaries by integrating sociological and philosophical perspectives from thinkers such as Heidegger and Callon.</li> </ul> </td> </tr> <tr class="border-b border-gray-200 dark:border-gray-600"> <td class="px-4 py-3 font-bold text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 align-top"> If there is a 'sample' under study, what is it? </td> <td class="px-4 py-3 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 align-top leading-relaxed"> <p class="mb-2">As a conceptual essay, there is no traditional sample size; the author analyzes a selected set of policy documents and secondary data:</p> <ul class="list-disc list-inside space-y-2"> <li><strong>Government Reports:</strong> 2024 UNESCO periodic reports on streaming consumption in France, the United Kingdom, Italy, and Canada.</li> <li><strong>Policy Frameworks:</strong> The 2005 UNESCO Convention, the 2017 Abidjan Declaration, and the 2025 Declaration of the Ministers of Culture of la Francophonie.</li> </ul> </td> </tr> <tr> <td class="px-4 py-3 font-bold text-gray-900 dark:text-gray-100 bg-blue-50 dark:bg-gray-700 align-top"> If the location of the study is important, list it. </td> <td class="px-4 py-3 text-gray-700 dark:text-gray-300 bg-blue-50 dark:bg-gray-700 align-top">Written in Canada (University of Ottawa); international scope with a focus on Francophone nations.</td> </tr> </tbody> </table> </div>
+From `2026-05-30-etec531-1.2doing`:
 
-From `2026-07-23-reasonix-ai-writing-workflow`:
-
-I have been experimenting with something quietly for months. It sits in a directory called `.reasonix/` at the root of this blog's repo. Most readers will never see it. It is not a product. It is not a startup. It is a set of Markdown files that tell an AI how to write like me.
-
-From `2026-07-23-reasonix-ai-writing-workflow`:
-
-This level of specificity is not an aesthetic choice. It is load-bearing architecture. Without it, the system defaults to generic AI-written prose. With it, something closer to my actual voice emerges.
-
-From `2026-01-17-etec542-hoa1`:
-
-<div class="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg"> <h4 class="font-bold text-lg mb-2">What if I say something wrong?</h4> <p class="text-sm"> It's ok! Hardware store cashiers are fairly understanding themselves and are often still learning the correct terminology for wood products too. While there might be some initial fear of judgment in ordering lumber, the culture of learning present within this subculture values the attempt. </p> </div> </div>
+The artifact I choose is my old acoustic "campfire" guitar. It has a
+crack through the face of it, a painter's tape patch covering a hole
+filled with wood fill, a misfit G-string tuner/machine head, a
+turquoise bunny guitar strap my friend made, and to top everything
+off, the high E and B strings are currently strung on the wrong
+machine heads (the B string broke previously and this was my quick
+solution). There really isn't anything special about this guitar I'd
+say.
 
 From `2026-01-17-etec542-hoa1`:
 
-In this example, let's say we're repairing rotten floor boards and posts on an exterior deck. In modern construction, often times lumber is not cut to the size it is called. If you measure a “2x4” board, you will find it is actually 1.5” x 3.5”. While 2x4 is the usual name for this type of board, its name does not reflect its true physical reality . Head to the hardware store. If you know what you are after, speak to a cashier to get started. If you are unsure of what materials you need or need to ask questions, speak to someone at customer service or the contractors desk. When ordering materials, it is common to use measurements and terminologies to effectively communicate needs: “I need three eight-foot pressure-treated two-by-sixes and a treated twelve foot six-by-six post.” Avoid highly contextual language and questions when placing your order: “I’m trying to fix the rot on my back deck, what do you think I should use?” After ordering lumber, head to the back lumberyard or warehouse with your order. You will generally be expected to select, transport and load your own individual wood yourself. When selecting your pieces there is a ritual called “sighting” whereby people choose the straightest and nicest pieces of wood. Where you lift a board, close one eye, and look down the edge to check for “hockey sticking” (warping) or twisting. If you come across "bad" boards during your search you may reject them, but you must re-stack them neatly. Being mindful of this shows consideration towards the shared environment. After selecting your pieces, it is your responsibility to safely load up your vehicle.
+When ordering materials, it is common to use measurements and
+terminologies to effectively communicate needs: "I need three
+eight-foot pressure-treated two-by-sixes and a treated twelve foot
+six-by-six post."
 
-From `2026-02-05-etec542-HOA2`:
-
-How can we critically examine whether our teaching is culturally responsive and centered around indigenous ways of knowing without being a "decorated" Western education model with cultural elements? What does this look like for me in my current context as a non-indigenous teacher?
+## Thinking-aloud and the honest admission of struggle
 
 From `2026-03-14-etec544-FieldAssignment`:
 
-<details class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800/50 dark:hover:bg-gray-800 open:bg-white dark:open:bg-gray-900 transition-colors"> <summary class="font-bold cursor-pointer flex items-center gap-1 select-none text-gray-900 dark:text-gray-100"> <span class="text-lg">What will I find interesting about it / boring or tedious about it?</span> </summary> <div class="mt-4 space-y-4"> <p class="text-gray-700 dark:text-gray-300 leading-relaxed"> Living in Prince Rupert now for about a decade, I feel I have experienced a lot of various situations that might be relevant to this game: basement walls leaking from hydrostatic pressure, redoing my perimeter drainage, working with sump pumps, seeing water mains burst around town. I'm ready! Most of the work involved with exterior water problems and leak remediation is often a repetitive and physically strenuous. I am curious as to how the game navigates this without being too tedious and boring for the player. If you've ever overtightened a plumbing fitting accidentally causing it to leak, or had to work on water lines on the third floor of a building, you will know that turning on and off valves in the basement to check for leaks can get old fast. Additionally, I wonder how the game will touch upon any civil or residential responsibilities involved with exterior drainage and if there is any real diagnostic work involved (like tracing a leak hidden inside a wall) or if it is mostly about remediating disaster-type situations. Sometimes with exterior drainage, there is an overlap between different trades like plumbing, electrical, gas, and carpentry. I am interested to see if or how this is navigated at all. </p> </div> </details>
+Having once accidentally cut through a live water line inside my
+bathroom wall (pre-bathroom reno that is), I've developed an
+appreciation of plumbing work and drainage systems in residential
+contexts.
 
-From `2026-03-20-etec544-ip2`:
+From `2026-03-14-etec544-FieldAssignment`:
 
-<div class="ref-card bg-gray-50 dark:bg-gray-800/50"> <span class="ref-tag">Level 1</span> <p>Zainuddin, Z., Chu, S. K. W., Shujahat, M., & Perera, C. J. (2020). The impact of gamification on learning and instruction: A systematic review of empirical evidence. <em>Educational Research Review</em>, 30, 100326.</p> <a href="https://doi.org/10.1016/j.edurev.2020.100326" class="ref-link">View Source →</a> </div> </div>
+What took me 2.5 hours to accomplish, the streamer completed in under
+15 minutes. They sprinted everywhere where I had only ever walked, and
+they worked on the big problems before focusing on the smaller ones.
 
-From `2026-03-25-etec542-critical-incident`:
+## The commitment move, played straight
 
-<div class="grid gap-6 md:grid-cols-2 mt-4"> <div class="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg"> <h4 class="font-bold text-lg mb-2">What Could Have Resolved It:</h4> <p class="text-sm"> A quick phone call or in-person conversation would have allowed both parties to clarify intent, hear tone, and repair the misunderstanding in real-time. Instead, the asynchronous email format locked each person into their initial interpretation. <br /> <br /> <i>What does one do when another sustains and refuses to mediate a virtual misunderstanding? </i> </p> </div>
+From `2026-05-30-etec531-1.2doing`:
 
-From `2026-04-08-etec544-ip6`:
+"Ever heard Happy Birthday in minor? Neither have I. Let's try it!" In
+this sense the guitar is what Pinar might call a site of lived
+existential experience, something that shaped how I understood myself
+as a learner in relation to others without ever announcing itself as
+curriculum.
 
-<p class="text-gray-700 dark:text-gray-300 leading-relaxed"> While I will not pretend to have mastered the underlying logic and code to get to this point, AI allowed me to extend my current abilities to build something far more ambitious than I could have ever achieved alone throughout several days of technical fandangling. This was a fun experience. </p> </div> </details>
+## Cite-then-take: theory grounded in lived experience
+
+From `2026-04-10-etec544-undercooked-review`:
+
+Gee (2008) describes games as environments that foreground specific
+aspects of a problem while backgrounding others to keep play
+manageable. DrainSim's early levels were so heavily guided that I
+found myself simply following instructions rather than developing my
+own internal logic.
+
+## Dry humor, concrete and understated
+
+From `2026-06-20-etec531-ai-slop`:
+
+One AI even cycled to the word CRAP which would most definitely derail
+a class full of younger elementary-aged students.
+
+## The rhetorical question as the wrestle
+
+From `2026-02-05-etec542-HOA2`:
+
+How can we critically examine whether our teaching is culturally
+responsive and centered around indigenous ways of knowing without
+being a "decorated" Western education model with cultural elements?
+What does this look like for me in my current context as a
+non-indigenous teacher?
+
+## Observed voice patterns (distilled from the archive)
+
+These recur across the real posts. They complement the numbered rules.
+Reach for these textures when drafting.
+
+Concrete over abstract. Name the exact thing, not the category. A
+"turquoise bunny guitar strap," not "an old strap." "Three eight-foot
+pressure-treated two-by-sixes," not "some lumber." Generic personal
+detail reads as fabricated. Specific detail reads as lived. This is
+the single biggest separator between the real voice and AI prose.
+
+The parenthetical aside. A wry clarifying parenthesis interrupts the
+sentence: "(pre-bathroom reno that is)." It signals a mind editing
+itself in real time. Sparingly. One per paragraph at most.
+
+Willingness to look incompetent. The author admits struggle concretely
+and without self-pity: two hours raking leaves, 2.5 hours where a
+streamer took 15. The admission is specific and a little funny. AI
+defaults to a competent narrator. The real voice defaults to an honest
+struggler.
+
+Theory then lived experience. A citation or concept is immediately
+grounded in something the author actually did or saw. The theory never
+floats.
+
+The I-to-we pivot. At reflective moments the author moves from "I" to
+"we" to implicate the reader and the profession: "culture is not
+something we have but something we do."

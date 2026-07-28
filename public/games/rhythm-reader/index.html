@@ -228,7 +228,10 @@
 .bank-mode.local{color:#d97706;border-color:#d97706;background:rgba(217,119,6,.12)}
 .gallery-split{display:grid;grid-template-columns:minmax(285px,.72fr) minmax(0,1.45fr);gap:20px;margin-top:34px}
 @media(max-width:860px){.gallery-split{grid-template-columns:1fr}}
-</style>
+
+.presets{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:560px){.presets{grid-template-columns:1fr}}
+.bank-mode.device{color:#2563eb;border-color:#2563eb;background:rgba(37,99,235,.12)}</style>
 <style id="praxis-home-gate">
 body:not(.on-home) .annotation-tabs,body:not(.on-home) .annotation-panel,body:not(.on-home) .annotation-overlay{display:none !important}
 #rec-record{min-height:64px;font-size:15px;border-radius:12px}
@@ -294,7 +297,7 @@ body:not(.on-home) .annotation-tabs,body:not(.on-home) .annotation-panel,body:no
         <p class="lede">Bring culturally situated rhythm into a flexible practice studio. Explore alone, project a shared pulse, or negotiate an exchange with a peer.</p>
 
         <div class="status-strip">
-          <div class="status-item"><span>Current collection</span><strong id="status-dataset">Local Database</strong></div>
+          <div class="status-item"><span>Current collection</span><strong id="status-dataset">Cultural Rhythm Bank</strong></div>
           <div class="status-item"><span>Session state</span><strong>Ready to begin</strong></div>
         </div>
 
@@ -304,7 +307,7 @@ body:not(.on-home) .annotation-tabs,body:not(.on-home) .annotation-panel,body:no
               <div class="card-label"><strong>Datasets</strong><span class="doing-wrap"><button class="feature-link" id="weekly-doing-link">The Doing</button><span class="doing-pop" role="tooltip"><strong>The Doing</strong>Tap a two-bar rhythm from a song you are listening to right now and add it to the bank. Then sit with the prompt: <em>what did the app assume about your rhythm that was not true, and what would have to change to fit what you brought in?</em><span class="doing-go">Click to open the full prompt in the Gallery &rarr;</span></span></span></div>
               <input class="sr-only" id="file-input" type="file" accept=".pdf,.png,.jpg,.jpeg">
               <div class="rec-panel" id="rec-panel">
-                <div class="rec-head"><strong>Record a 2-Bar Rhythm</strong><small>Tap your own two bars using eighth notes, quarter notes, half notes, or whole notes &mdash; press and hold for a longer note. When finished, submit it to the class&rsquo;s rhythm bank.</small></div>
+                <div class="rec-head"><strong>Record a 2-Bar Rhythm</strong><small>Tap your own two bars using eighth notes, quarter notes, half notes, or whole notes &mdash; press and hold for a longer note. When finished, submit it to <span id="rec-submit-target">the shared Cultural Rhythm Bank</span>.</small></div>
                 <div class="rec-stage" id="rec-stage">
                   <div class="rec-status" id="rec-status">Tap the pad below to start, then tap along after the 4-beat count-in.</div>
                   <svg class="rec-staff" id="rec-staff" viewBox="0 0 640 120" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Your recorded rhythm"></svg>
@@ -317,19 +320,20 @@ body:not(.on-home) .annotation-tabs,body:not(.on-home) .annotation-panel,body:no
                     <button type="button" class="btn small" id="rec-cancel">■ Stop</button>
                   </div>
                 </div>
-              <div class="rec-setup"><label>Tempo <input type="range" id="rec-tempo" min="50" max="180" value="100"> <span class="rec-tempo-val" id="rec-tempo-val">100</span> BPM</label><label>Your name <input type="text" id="rec-name" maxlength="24" placeholder="e.g. Jordan"></label></div>
+              <div class="rec-setup"><label>Tempo <input type="range" id="rec-tempo" min="50" max="180" value="100"> <span class="rec-tempo-val" id="rec-tempo-val">100</span> BPM</label><label><span id="rec-name-label">Cultural name / title</span> <input type="text" id="rec-name" maxlength="40" placeholder="e.g. Afro-Cuban Clave, a lullaby, a chant"></label></div>
               
               </div>
               <div class="presets">
-                <button class="preset selected" aria-pressed="true" data-name="Local Database">Local Database<span id="preset-count">Student curated rhythm archive · 0 rhythms</span></button>
+                <button class="preset" aria-pressed="false" data-name="Local Rhythm Bank" data-bank="local">Local Rhythm Bank<span id="preset-count-local">Your rhythms on this device · 0</span></button>
+                <button class="preset selected" aria-pressed="true" data-name="Cultural Rhythm Bank" data-bank="cultural">Cultural Rhythm Bank<span id="preset-count-cultural">Shared cultural rhythms · 0</span></button>
               </div>
             </article>
           </div>
         </div>
         <div class="bank-wrap">
           <article class="card dataset-card">
-            <div class="card-label"><strong>Community Rhythm Bank</strong><span id="bank-mode" class="bank-mode"></span></div>
-            <p class="subtle" style="margin:0 0 14px;font-size:13px">Two-bar rhythms recorded by our cohort. Tap any rhythm to hear it. Submit yours above.</p>
+            <div class="card-label"><strong id="bank-title">Cultural Rhythm Bank</strong><span id="bank-mode" class="bank-mode"></span></div>
+            <p id="bank-desc" class="subtle" style="margin:0 0 14px;font-size:13px">Culturally-situated two-bar rhythms shared across the cohort. Tap any rhythm to hear it. Add yours above with a cultural name or title.</p>
             <div class="bank-grid" id="bank-grid"></div>
           </article>
         </div>
@@ -538,6 +542,7 @@ body:not(.on-home) .annotation-tabs,body:not(.on-home) .annotation-panel,body:no
 (function(){
 "use strict";
 var $=function(s){return document.querySelector(s);};
+var $$=function(s){return Array.prototype.slice.call(document.querySelectorAll(s));};
 var NS="http://www.w3.org/2000/svg";
 var SLOTS=16, DEFAULT_LATENCY=0.08;
 var curBPM=100, EIGHTH, Q, windowLen;
@@ -653,19 +658,41 @@ function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp
 var recAudioStart=0, userLatency=DEFAULT_LATENCY;
 var calibOffsets=[], calibBeatTimes=[], events=[], activeEvent=null, lastTiles=null;
 var state="idle";
-var KEY="praxis_bank_v4";
+var KEY_LOCAL="praxis_bank_local";
+var KEY_LEGACY="praxis_bank_v4";
 var API="/api/rhythms";
+var currentBank="cultural";
 var bank=[]; var remote=false; var _bankStatus="not checked";
 function myTokens(){try{var r=localStorage.getItem("praxis_my_tokens");return r?JSON.parse(r):[];}catch(e){return [];}}
 function addMyToken(tk){var a=myTokens();a.push(tk);try{localStorage.setItem("praxis_my_tokens",JSON.stringify(a));}catch(e){}}
 function newToken(){try{if(crypto&&crypto.randomUUID)return crypto.randomUUID();}catch(e){}return "tk-"+Date.now()+"-"+Math.random().toString(36).slice(2);}
-function loadLocal(){var raw=null;try{raw=localStorage.getItem(KEY);}catch(e){}if(raw===null){var seed=[{id:1,name:"Example",bpm:88,tiles:[{type:"note",onset:0,dur:2},{type:"note",onset:2,dur:2},{type:"note",onset:4,dur:2},{type:"note",onset:6,dur:2},{type:"note",onset:8,dur:2},{type:"note",onset:10,dur:2},{type:"note",onset:12,dur:2},{type:"note",onset:14,dur:2}],seed:true,ts:Date.now()}];try{localStorage.setItem(KEY,JSON.stringify(seed));}catch(e){}return seed;}try{return JSON.parse(raw)||[];}catch(e){return [];}}
-function saveLocal(a){try{localStorage.setItem(KEY,JSON.stringify(a));}catch(e){}}
+function loadLocal(){var raw=null;try{raw=localStorage.getItem(KEY_LOCAL);}catch(e){}if(raw===null){var leg=null;try{leg=localStorage.getItem(KEY_LEGACY);}catch(e){}if(leg){try{localStorage.setItem(KEY_LOCAL,leg);}catch(e){}raw=leg;}}if(raw===null){var seed=[{id:1,name:"Example",bpm:88,tiles:[{type:"note",onset:0,dur:2},{type:"note",onset:2,dur:2},{type:"note",onset:4,dur:2},{type:"note",onset:6,dur:2},{type:"note",onset:8,dur:2},{type:"note",onset:10,dur:2},{type:"note",onset:12,dur:2},{type:"note",onset:14,dur:2}],seed:true,ts:Date.now()}];try{localStorage.setItem(KEY_LOCAL,JSON.stringify(seed));}catch(e){}return seed;}try{return JSON.parse(raw)||[];}catch(e){return [];}}
+function saveLocal(a){try{localStorage.setItem(KEY_LOCAL,JSON.stringify(a));}catch(e){}}
 function toast(m){var t=$("#toast");if(!t)return;t.textContent=m;t.classList.remove("hidden");clearTimeout(toast._t);toast._t=setTimeout(function(){t.classList.add("hidden");},2200);}
-function updateBadge(){var bm=$("#bank-mode");if(!bm)return;if(remote){bm.textContent="ETEC 531's Got Rhythm";bm.className="bank-mode live";bm.title="Connected - rhythms are saved on the server and shared across every browser and session.";}else{bm.textContent="This device only";bm.className="bank-mode local";bm.title="Not sharing ("+_bankStatus+"). Saved on this browser only.";}}
-async function refreshBank(){var _r;try{_r=await fetch(API,{headers:{accept:"application/json"}});if(_r.ok){var d=await _r.json();if(Array.isArray(d)){bank=d;remote=true;_bankStatus="connected";updateBadge();renderBank();return;}_bankStatus="bad shape";}else{_bankStatus="http "+_r.status;}}catch(e){_bankStatus="network error";}remote=false;updateBadge();bank=loadLocal();renderBank();}
-async function submitRhythm(name,bpm,tiles){if(remote){try{var r=await fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({name:name,bpm:bpm,tiles:tiles})});if(r.ok){var item=await r.json();if(item&&item.token)addMyToken(item.token);bank.push(item);updateBadge();renderBank();return;}}catch(e){}remote=false;}var tk=newToken();var item2={id:Date.now(),name:name,bpm:bpm,tiles:tiles,token:tk,ts:Date.now()};var a=bank.slice();a.push(item2);saveLocal(a);addMyToken(tk);bank=loadLocal();updateBadge();renderBank();}
-async function deleteRhythm(item){if(remote){try{var r=await fetch(API,{method:"DELETE",headers:{"content-type":"application/json"},body:JSON.stringify({id:item.id,token:item.token})});if(r.ok){bank=bank.filter(function(x){return x.id!==item.id;});updateBadge();renderBank();return;}}catch(e){}}var a=loadLocal().filter(function(x){return x.id!==item.id;});saveLocal(a);bank=loadLocal();updateBadge();renderBank();}
+function updateBadge(){
+  var bm=$("#bank-mode"),bt=$("#bank-title"),bd=$("#bank-desc");
+  if(bt)bt.textContent=(currentBank==="cultural")?"Cultural Rhythm Bank":"Local Rhythm Bank";
+  if(bd)bd.textContent=(currentBank==="cultural")?"Culturally-situated two-bar rhythms shared across the cohort. Tap any rhythm to hear it. Add yours above with a cultural name or title.":"Two-bar rhythms saved on this device only. Tap any rhythm to hear it. Add yours above.";
+  if(!bm)return;
+  if(currentBank==="local"){bm.textContent="On this device";bm.className="bank-mode device";bm.title="Personal rhythms saved on this browser only.";return;}
+  if(remote){bm.textContent="ETEC 531's Got Rhythm";bm.className="bank-mode live";bm.title="Connected - shared across every browser and session.";}
+  else{bm.textContent="Offline";bm.className="bank-mode local";bm.title="Shared bank unreachable ("+_bankStatus+").";}
+}
+async function refreshBank(){
+  if(currentBank==="local"){remote=false;_bankStatus="local";bank=loadLocal();updateBadge();renderBank();return;}
+  var _r;try{_r=await fetch(API,{headers:{accept:"application/json"}});if(_r.ok){var d=await _r.json();if(Array.isArray(d)){bank=d;remote=true;_bankStatus="connected";updateBadge();renderBank();return;}_bankStatus="bad shape";}else{_bankStatus="http "+_r.status;}}catch(e){_bankStatus="network error";}
+  remote=false;bank=[];updateBadge();renderBank();
+}
+async function submitRhythm(name,bpm,tiles){
+  if(currentBank==="local"){var tk=newToken();var item={id:Date.now(),name:name,bpm:bpm,tiles:tiles,token:tk,ts:Date.now()};var a=loadLocal();a.push(item);saveLocal(a);addMyToken(tk);bank=loadLocal();updateBadge();renderBank();toast("Saved to your Local Rhythm Bank");return true;}
+  try{var r=await fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({name:name,bpm:bpm,tiles:tiles})});if(r.ok){remote=true;_bankStatus="connected";await refreshBank();toast("Saved to the Cultural Rhythm Bank");return true;}_bankStatus="http "+r.status;}catch(e){_bankStatus="network error";}
+  remote=false;updateBadge();renderBank();toast("Couldn't reach the shared bank ("+_bankStatus+").");return false;
+}
+async function deleteRhythm(item){
+  if(currentBank==="local"){var a=loadLocal().filter(function(x){return x.id!==item.id;});saveLocal(a);bank=loadLocal();updateBadge();renderBank();return;}
+  try{var r=await fetch(API,{method:"DELETE",headers:{"content-type":"application/json"},body:JSON.stringify({id:item.id,token:item.token})});if(r.ok){bank=bank.filter(function(x){return x.id!==item.id;});updateBadge();renderBank();return;}}catch(e){}
+  toast("Couldn't delete from the shared bank.");
+}
 function renderEmpty(){var svg=$("#rec-staff");if(svg)render(svg,[]);}
 function setPadLabel(){var p=$("#rec-pad");if(!p)return;if(state==="calibrating"||state==="recording"){p.innerHTML="Tap or hold &mdash; Click or Spacebar";}else{p.innerHTML='<span class="rec-bullet">&#9679;</span> Record a 2-bar rhythm';}}
 function renderPreview(){var evs=events.slice();if(activeEvent)evs.push({start:activeEvent.start,end:actx?actx.currentTime:activeEvent.start});var tiles=computeTiles(evs);var sig="";for(var i=0;i<tiles.length;i++)sig+=tiles[i].type[0]+tiles[i].onset+":"+tiles[i].dur+",";if(sig===_prevSig)return;_prevSig=sig;var svg=$("#rec-staff");if(svg)render(svg,tiles);}
@@ -717,17 +744,37 @@ function finishRecording(){
   setPadLabel();
 }
 function tickRec(){if(state!=="recording")return;if(activeEvent)renderPreview();rafId=requestAnimationFrame(tickRec);}
-function readName(){var inp=$("#rec-name");var n=inp?inp.value.trim():"";try{localStorage.setItem("praxis_user_name",n);}catch(e){}if(!n)n="Anonymous";return n;}
+function readName(){var inp=$("#rec-name");var n=inp?inp.value.trim():"";if(!n)n=(currentBank==="cultural")?"Untitled":"Anonymous";return n;}
+function applyBankUI(){
+  var lbl=$("#rec-name-label"),inp=$("#rec-name"),tgt=$("#rec-submit-target");
+  if(currentBank==="cultural"){
+    if(lbl)lbl.textContent="Cultural name / title";
+    if(inp){inp.value="";inp.placeholder="e.g. Afro-Cuban Clave, a lullaby, a chant";inp.maxLength=40;}
+    if(tgt)tgt.textContent="the shared Cultural Rhythm Bank";
+  }else{
+    if(lbl)lbl.textContent="Your name";
+    if(inp){inp.value="";inp.placeholder="e.g. Jordan";inp.maxLength=24;}
+    if(tgt)tgt.textContent="your Local Rhythm Bank";
+  }
+}
 function renderBank(){
-  var grid=$("#bank-grid");if(!grid)return;var a=bank;grid.innerHTML="";var mine=myTokens();updateBadge();var _pc=$("#preset-count");if(_pc)_pc.textContent="Student curated rhythm archive · "+a.length+" rhythms";
-  if(!a.length){grid.innerHTML='<p class="bank-empty">No rhythms yet - be the first to submit above.</p>';return;}
+  var grid=$("#bank-grid");if(!grid)return;var a=bank;grid.innerHTML="";var mine=myTokens();updateBadge();
+  var pc=document.getElementById("preset-count-"+currentBank);
+  if(pc)pc.textContent=(currentBank==="cultural"?"Shared cultural rhythms · ":"Your rhythms on this device · ")+a.length;
+  if(!a.length){
+    var em;
+    if(currentBank==="cultural"&&!remote){em='<p class="bank-empty">The shared Cultural Rhythm Bank isn&rsquo;t reachable right now ('+esc(_bankStatus)+'). Your personal rhythms live under the Local Rhythm Bank tab.</p>';}
+    else if(currentBank==="cultural"){em='<p class="bank-empty">No cultural rhythms yet &mdash; be the first to add one above with a cultural name or title.</p>';}
+    else{em='<p class="bank-empty">No local rhythms yet &mdash; record one above and it&rsquo;ll save on this device.</p>';}
+    grid.innerHTML=em;return;
+  }
   a.slice().reverse().forEach(function(item){
     var tiles=item.tiles||[];
     var card=document.createElement("div");card.className="bank-card";
     var svg=document.createElementNS(NS,"svg");svg.setAttribute("viewBox","0 0 "+VW+" "+VH);svg.setAttribute("class","bank-staff");card.appendChild(svg);
     render(svg,tiles);
     var meta=document.createElement("div");meta.className="bc-meta";
-    var lbl=document.createElement("span");lbl.innerHTML=esc(item.name||"Anonymous")+" &middot; "+(item.bpm||88)+" BPM";
+    var lbl=document.createElement("span");lbl.innerHTML=esc(item.name||"Untitled")+" &middot; "+(item.bpm||88)+" BPM";
     var row=document.createElement("span");row.className="bc-btns";
     var pb=document.createElement("button");pb.type="button";pb.className="btn small";pb.textContent=">";pb.title="Play";
     row.appendChild(pb);
@@ -757,7 +804,7 @@ function onUp(ev){if(ev&&ev.type==="keyup"){if(!(ev.code==="Space"||ev.key===" "
 function startRec(){
   var ctx=ensureActx();if(!ctx){setStatus("Audio not supported.");return;}
   stopPlay();_clearTmrs();
-  var sl=$("#rec-tempo");curBPM=sl?parseInt(sl.value,10)||88:88;recomputeTiming();if(sl)sl.disabled=true;
+  var sl=$("#rec-tempo");curBPM=sl?parseInt(sl.value,10)||100:100;recomputeTiming();if(sl)sl.disabled=true;
   readName();
   state="idle";events=[];activeEvent=null;lastTiles=null;setSubmit(false);renderEmpty();clearPips();setPadLabel();
   if(document.activeElement&&document.activeElement.blur)document.activeElement.blur();
@@ -770,14 +817,16 @@ function wire(){
   var rd=$("#rec-redo");if(rd)rd.addEventListener("click",startRec);
   var rc=$("#rec-cancel");if(rc)rc.addEventListener("click",function(){stopPlay();_clearTmrs();var _ph=document.querySelector('line[stroke="#e11d48"]');if(_ph&&_ph.parentNode)_ph.parentNode.removeChild(_ph);var _sl=$("#rec-tempo");if(_sl)_sl.disabled=false;clearPips();if(activeEvent){activeEvent.end=(actx?actx.currentTime:activeEvent.start);events.push(activeEvent);activeEvent=null;}if(events.length===0){renderEmpty();lastTiles=null;state="done";setStatus("");setSubmit(false);}else{var tiles=computeTiles(events);lastTiles=tiles;var notes=tiles.filter(function(t){return t.type==="note";});var svg=$("#rec-staff");if(svg)render(svg,tiles);state="done";setStatus("");if(notes.length>0)setSubmit(true);else setSubmit(false);}setPadLabel();});
   var rp=$("#rec-play");if(rp)rp.addEventListener("click",function(){if(!lastTiles)return;var svg=$("#rec-staff");if(_playing&&_playBtn===rp){stopPlay();}else{play(lastTiles,curBPM,rp,svg);}});
-  var rs=$("#rec-submit");if(rs)rs.addEventListener("click",function(){if(!lastTiles)return;stopPlay();var name=readName();var tiles=lastTiles.slice();var bpm=curBPM;submitRhythm(name,bpm,tiles).then(function(){toast("Saved to the bank");});var _sb=$("#rec-submit");if(_sb)_sb.disabled=true;});
+  var rs=$("#rec-submit");if(rs)rs.addEventListener("click",function(){if(!lastTiles)return;stopPlay();var name=readName();var tiles=lastTiles.slice();var bpm=curBPM;var _sb=$("#rec-submit");if(_sb)_sb.disabled=true;submitRhythm(name,bpm,tiles).then(function(ok){if(!ok&&_sb)_sb.disabled=false;});});
   var pad=$("#rec-pad");if(pad)pad.addEventListener("pointerdown",onDown);
   document.addEventListener("keydown",onDown,true);
   window.addEventListener("pointerup",onUp);
   window.addEventListener("keyup",onUp);
   var slider=$("#rec-tempo"),vv=$("#rec-tempo-val");
-  if(slider){slider.value=curBPM;if(vv)vv.textContent=curBPM;slider.addEventListener("input",function(){curBPM=parseInt(slider.value,10)||88;if(vv)vv.textContent=curBPM;recomputeTiming();});}
-  var nameInp=$("#rec-name");if(nameInp){try{nameInp.value=localStorage.getItem("praxis_user_name")||"";}catch(e){}}
+  if(slider){slider.value=curBPM;if(vv)vv.textContent=curBPM;slider.addEventListener("input",function(){curBPM=parseInt(slider.value,10)||100;if(vv)vv.textContent=curBPM;recomputeTiming();});}
+  applyBankUI();
+  var _lc=loadLocal().length;var _pl=document.getElementById("preset-count-local");if(_pl)_pl.textContent="Your rhythms on this device · "+_lc;
+  $$(".preset").forEach(function(b){b.addEventListener("click",function(){var bk=b.getAttribute("data-bank");if(!bk||bk===currentBank)return;currentBank=bk;applyBankUI();refreshBank();});});
   refreshBank();
 }
 if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",wire);}else{wire();}
