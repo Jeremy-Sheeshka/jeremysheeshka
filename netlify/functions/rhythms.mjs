@@ -63,7 +63,8 @@ export default async (req, context) => {
       const tiles = Array.isArray(body.tiles) ? body.tiles.slice(0, 64) : [];
       const id = String(Date.now()) + "-" + Math.floor(Math.random() * 1000000);
       const token = randomUUID();
-      const item = { id: id, name: name, bpm: bpm, tiles: tiles, token: token, ts: Date.now() };
+      const unit = (body && body.unit==="s16") ? "s16" : "e8";
+    const item = { id: id, name: name, bpm: bpm, tiles, unit: tiles, token: token, ts: Date.now() };
       await fbPut("/rhythms/" + encodeURIComponent(id), item);
       return json(item, 201);
     }

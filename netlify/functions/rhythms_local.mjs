@@ -17,7 +17,8 @@ export default async (req, context) => {
       const tiles=Array.isArray(body.tiles)?body.tiles.slice(0,64):[];
       const id=String(Date.now())+"-"+Math.floor(Math.random()*1000000);
       const token=(crypto&&crypto.randomUUID)?crypto.randomUUID():("tk-"+Date.now()+"-"+Math.floor(Math.random()*1e9));
-      const item={id,name,bpm,tiles,token,ts:Date.now()};
+      const unit = (body && body.unit==="s16") ? "s16" : "e8";
+    const item={id,name,bpm,tiles, unit,token,ts:Date.now()};
       await put(id,item);
       return json(item,201);
     }
