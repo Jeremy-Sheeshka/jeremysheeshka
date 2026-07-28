@@ -421,6 +421,19 @@ label.metro-field:has([data-metro-beats]){display:none !important}
 @media (max-width:860px){ .dock{flex-wrap:wrap !important;justify-content:flex-start !important} }
 @media (max-width:560px){ .dock{flex-wrap:wrap !important;justify-content:center !important;gap:8px !important} }
 </style>
+<style id="fp-toolbar-tight">
+.topbar{height:auto !important;min-height:0 !important;padding:7px clamp(12px,3vw,34px) !important}
+.metronome--top,.dock{height:auto !important;max-height:none !important;min-height:0 !important;padding:6px 12px !important;gap:8px !important;overflow-x:auto !important;overflow-y:visible !important}
+.metronome--top{flex-wrap:nowrap !important}
+.dock{flex-wrap:wrap !important}
+.metronome--top .metro-toggle,.dock .metro-toggle,.metronome--top .metro-mute,.dock .metro-mute{min-width:0 !important;min-height:32px !important;padding:5px 10px !important;font-size:12px !important}
+.metronome--top .metro-field,.dock .metro-field{gap:6px !important;font-size:12px !important}
+.metronome--top .metro-range,.dock .metro-range{width:84px !important}
+.metronome--top .metro-select,.dock .metro-select{padding:3px 6px !important;font-size:12px !important}
+.metronome--top [data-metro-bpm-input],.dock [data-metro-bpm-input],.metronome--top .metro-output,.dock .metro-output{width:46px !important;min-width:46px !important;padding:4px 6px !important;font-size:12px !important}
+@media (max-width:560px){ .dock{justify-content:center !important} }
+body{overflow-x:hidden}
+</style>
 </head>
 <body>
 <script>Object.defineProperty(window,"tempo",{get:function(){var e=document.querySelector("[data-metro-bpm-input]")||document.querySelector("[data-metro-tempo]");return e?parseInt(e.value)||88:88;},configurable:true});</script>
@@ -434,9 +447,9 @@ label.metro-field:has([data-metro-beats]){display:none !important}
     </a>
 
     <nav class="topbar__nav" aria-label="Free Play navigation">
-      <a href="./index.html">Dashboard</a>
+      
       <a href="./free-play.html" aria-current="page">Free Play</a>
-      <a href="./co-op.html">Co-Op</a>
+      <a href="./co-op.html">Co-Op</a><a href="./index.html">Rhythm Bank</a>
     </nav>
 
     <section
