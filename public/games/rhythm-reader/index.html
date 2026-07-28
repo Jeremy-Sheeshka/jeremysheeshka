@@ -307,7 +307,7 @@ body:not(.on-home) .annotation-tabs,body:not(.on-home) .annotation-panel,body:no
               <div class="card-label"><strong>Datasets</strong><span class="doing-wrap"><button class="feature-link" id="weekly-doing-link">The Doing</button><span class="doing-pop" role="tooltip"><strong>The Doing</strong>Tap a two-bar rhythm from a song you are listening to right now and add it to the bank. Then sit with the prompt: <em>what did the app assume about your rhythm that was not true, and what would have to change to fit what you brought in?</em><span class="doing-go">Click to open the full prompt in the Gallery &rarr;</span></span></span></div>
               <input class="sr-only" id="file-input" type="file" accept=".pdf,.png,.jpg,.jpeg">
               <div class="rec-panel" id="rec-panel">
-                <div class="rec-head"><strong>Record a 2-Bar Rhythm</strong><small>Tap your own two bars using eighth notes, quarter notes, half notes, or whole notes &mdash; press and hold for a longer note. When finished, submit it to <span id="rec-submit-target">the shared Cultural Rhythm Bank</span>.</small></div>
+                <div class="rec-head"><strong>Record a 2-Bar Rhythm</strong><small>Tap your own two bars &mdash; a quick tap is a 16th note, so tap each 16th for fast rhythms (1&nbsp;e&nbsp;+&nbsp;a, 1&nbsp;e, +&nbsp;a, 1&nbsp;e&nbsp;a). Press &amp; hold a tap to lengthen it into an 8th, quarter, half, or whole note. When finished, submit it to <span id="rec-submit-target">the shared Cultural Rhythm Bank</span>.</small></div>
                 <div class="rec-stage" id="rec-stage">
                   <div class="rec-status" id="rec-status">Tap the pad below to start, then tap along after the 4-beat count-in.</div>
                   <svg class="rec-staff" id="rec-staff" viewBox="0 0 640 120" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Your recorded rhythm"></svg>
@@ -573,15 +573,18 @@ function computeTiles(evlist){
   var evs=[],j=0;
   while(j<m){
     var o=onOf(j);
-    if(isHeld(j)){
-      var raw=Math.round(holdE[idx[j]]);var hd=raw>16?raw:clampSet(raw);if(hd<1)hd=1;
-      var nxtO=(j+1<m)?onOf(j+1):SLOTS;var maxd=Math.max(1,nxtO-o);
-      if(hd>maxd){hd=maxd>16?maxd:largestLeqNote(maxd);}if(hd<1)hd=1;
-      evs.push({onset:o,dur:hd});j++;
-    }else{
-      var gapN=(j+1<m)?(onOf(j+1)-o):999;var dur;if(gapN>=4)dur=4;else if(gapN>=2)dur=2;else dur=1;if(dur>gapN)dur=gapN;if(dur<1)dur=1;
-      evs.push({onset:o,dur:dur});j++;
-    }
+    var gapN=(j+1<m)?(onOf(j+1)-o):(SLOTS-o);
+    var holdSix=Math.round(holdE[idx[j]]);
+    var releaseAbs=o+holdSix;
+    var nextPress=(j+1<m)?onOf(j+1):99999;
+    var silence=nextPress-releaseAbs;
+    var dur;
+    if(silence<1.0){dur=largestLeqNote(gapN);}
+    else if(holdSix>=2){dur=clampSet(holdSix);}
+    else{dur=(gapN===4||gapN===6||gapN===8||gapN===12||gapN===16)?gapN:1;}
+    if(dur>gapN){dur=largestLeqNote(gapN);}
+    if(dur<1){dur=1;}
+    evs.push({onset:o,dur:dur});j++;
   }
   var tiles=[],cursor=0,k;
   for(k=0;k<evs.length;k++){var oo=evs[k].onset,dd=evs[k].dur;if(oo>cursor)pushRests(tiles,cursor,oo-cursor);else if(oo<cursor)oo=cursor;var maxfit=SLOTS-oo;if(dd>maxfit)dd=maxfit;if(dd<1)dd=1;tiles.push({type:"note",onset:oo,dur:dd});cursor=oo+dd;}
