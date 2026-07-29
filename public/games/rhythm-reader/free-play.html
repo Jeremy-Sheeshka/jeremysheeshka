@@ -456,6 +456,20 @@ body{overflow-x:hidden}
 [data-metro-gear] svg{width:22px !important;height:22px !important}
 @media (max-width:860px){ .metronome--top,.dock{flex-wrap:wrap !important;justify-content:center !important} }
 </style>
+<style id="fp-nav-onerow">
+@media (max-width:1180px){
+  .topbar{flex-wrap:nowrap !important;gap:8px !important;overflow-x:auto !important;overflow-y:hidden !important;scrollbar-width:none;}
+  .topbar::-webkit-scrollbar{display:none}
+  .topbar__nav{flex:0 0 auto !important;gap:2px !important}
+  .topbar__nav a{padding:5px 8px !important;font-size:12px !important;white-space:nowrap !important}
+  .metronome--top,.dock{flex:0 0 auto !important;flex-wrap:nowrap !important;gap:6px !important;min-width:0 !important}
+  .metronome--top .metro-toggle,.dock .metro-toggle,.metronome--top .seg button,.dock .seg button{min-height:32px !important;padding:4px 9px !important;font-size:12px !important;white-space:nowrap !important}
+  .metronome--top [data-metro-tempo],.dock [data-metro-tempo]{width:78px !important;min-width:60px !important}
+  .metronome--top [data-metro-bpm-input],.dock [data-metro-bpm-input]{width:48px !important;min-width:44px !important}
+  .metronome--top .metro-select,.dock .metro-select{padding:4px 6px !important;font-size:12px !important}
+  .brand__badge{width:30px !important;height:30px !important;font-size:.72rem !important}
+}
+</style>
 </head>
 <body>
 <script>Object.defineProperty(window,"tempo",{get:function(){var e=document.querySelector("[data-metro-bpm-input]")||document.querySelector("[data-metro-tempo]");return e?parseInt(e.value)||88:88;},configurable:true});</script>

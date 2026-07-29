@@ -247,6 +247,7 @@ body:not(.on-home) .annotation-tabs,body:not(.on-home) .annotation-panel,body:no
 .bank-actions .btn{font-size:12px !important;line-height:1.2 !important;padding:6px 10px !important}
 .bank-actions .btn span{font-size:10px !important}
 </style>
+<style id="praxis-map-hide">#annotation-map,.annotation-map{display:none !important}</style>
 </head>
 <body>
   <header class="topbar">
@@ -280,7 +281,7 @@ body:not(.on-home) .annotation-tabs,body:not(.on-home) .annotation-panel,body:no
     <section class="screen" id="screen-home">
       <div class="wrap home-wrap">
         <p class="eyebrow">Curriculum Otherwise · a reimagined sight reading factory</p>
-        <h1>Multimodal rhythm reading and notation, built for every learner.</h1>
+        <h1>Rhythmic literacy skills built around the learner and communities of practice.</h1>
         <p class="lede">Rhythm Reader is a free, in-browser tool for learning to read rhythm by sight, sound, and touch. Pick a counting aid, hear a pattern, tap it back, and grow at your own pace.</p>
         <div class="home-grid">
           <article class="card home-card">
@@ -334,7 +335,7 @@ body:not(.on-home) .annotation-tabs,body:not(.on-home) .annotation-panel,body:no
               
               </div>
               <div class="presets">
-                <button class="preset" aria-pressed="false" data-name="Local Rhythm Bank" data-bank="local">Local Rhythm Bank<span id="preset-count-local">Your rhythms on this device · 0</span></button>
+                <button class="preset" aria-pressed="false" data-name="Local Rhythm Bank" data-bank="local">Local Rhythm Bank<span id="preset-count-local">Rhythms ETEC 531 has submitted. · 0</span></button>
                 <button class="preset selected" aria-pressed="true" data-name="Cultural Rhythm Bank" data-bank="cultural">Cultural Rhythm Bank<span id="preset-count-cultural">Shared cultural rhythms · 0</span></button>
               </div>
             </article>
@@ -399,7 +400,7 @@ body:not(.on-home) .annotation-tabs,body:not(.on-home) .annotation-panel,body:no
           <div class="action-stack">
             <article class="card dataset-card">
               <div class="card-label"><strong>AI Tooling Disclosure</strong></div>
-              <p class="subtle">Artificial intelligence (Claude Sonnet 5, NotebookLM and Qwen 3.8 Max) were used as supportive tools to develop and vibecode this artifact through iterative cycles. AI assisted with refining language, guided the process of stitching the code together, and was used to improve the clarity and organization of the website. The decision to design the tool as it has been shared remain the final diecisions of the authors.</p>
+              <p class="subtle">Artificial intelligence (Claude Sonnet 5, NotebookLM and Qwen 3.8 Max) were used as supportive tools to develop and vibecode this artifact through iterative cycles. AI assisted with refining language, guided the process of stitching the code together, and was used to improve the clarity and organization of the website. The decision to design the tool as it has been shared remains the final decisions of the authors.</p>
             </article>
           </div>
         </div>
@@ -419,7 +420,7 @@ body:not(.on-home) .annotation-tabs,body:not(.on-home) .annotation-panel,body:no
     <div class="annotation-content">
       <h2 id="annotation-heading"></h2>
       <p id="annotation-copy"></p>
-      <div class="annotation-map"><strong>Design connection</strong><span id="annotation-map"></span></div>
+      <div class="annotation-map"><span id="annotation-map"></span></div>
     </div>
   </aside>
   <div class="toast hidden" id="toast" role="status" aria-live="polite"></div>
@@ -433,19 +434,19 @@ body:not(.on-home) .annotation-tabs,body:not(.on-home) .annotation-panel,body:no
         resist: {
           title: "RESIST / Missing datasets",
           copy: "Sight Reading Factory (SRF) relies on Western music notation as the only mode for students to sight-read with, which hinders users of this tool who may have learned how to read music with a different notation system or who learn more effectively using other modes. The current model of SRF’s feedback is also problematic as it shows an accuracy percentage with a breakdown of correct notes, wrong notes, missing notes, and notes that were played early or late, but does not indicate exactly which notes or rhythms are incorrect or offer suggestions on how to improve. To resist these limitations and to make our tool widely accessible, we have included options at the top of the screen to help students in other ways, such as numbers that appear below the notation, takadimi (etc. syllables like ta and ti-ti), a playback option for the aural mode, and even a “draw” mode for students who might want to make their own notes. All of these options are toggleable and off by default, giving users the freedom to choose from their preferences without forcing these options onto them or being overwhelming. There is also an accompanying introductory video to our artifact that serves as scaffolding for students to start reading basic rhythms before they use our tool – in case, for example, they have no idea what takadimi is!",
-          map: "Cultural Datasets, upload staging, and the choice of collection make the source material part of the learning decision — not decoration around a universal exercise.",
+          map: "",
           target: "feature-resist"
         },
         relate: {
           title: "RELATE / Learning between peers",
           copy: "In our critical reading, we found that SRF works best when its users have a steady Internet connection and when they already have a sense of how to read rhythms solely from visually interpreting the symbols. It is also only accessible through accounts with active subscriptions. This reflects a “privilege hazard” in which students who are learning this skill for the first time are left behind. To acknowledge and relate to students who may not own a device or have constant access to the Internet, we have implemented the option to download rhythms with any of the alternate sight reading methods mentioned above. While an initial connection is required, students are ultimately enabled to work “offline” and in their own spaces if they prefer without losing the affordances offered by engaging with our artifact online. Students are not restricted by physical place, and are not “restricted” to requiring Internet access to use our redesigned tool. Finally, our tool is open to the general public and is not bound by any registration or paywall.",
-          map: "Chunk audition, partner notes, shared tempo, turn focus, and dual readiness make negotiation visible and consequential (see the Co-Op page).",
+          map: "",
           target: null
         },
         imagine: {
           title: "IMAGINE / Feedback without failure",
           copy: "While sets of rhythms can be manually inserted from which to practice into our tool, such as tricky syncopations in a piece that a middle school band is learning, we ultimately imagine a space where our tool can be used with real-world applicability beyond fulfilling a music curriculum. To accomplish this we envision having a living, evolving “Rhythm Bank” that contains rhythms and beats from all over the world such as Afro-Cuban clave rhythms or a reggae drum beat, that users can access separate from our sight-reading generation feature. This bank will give users the opportunity to engage with the music of cultures different from their own where they can see it, hear it, and even clap it back if they wish, and by doing so they may gain a heightened awareness for identifying these styles in the music they consume. We have also reversed this process so users can “identify” a rhythm they may have heard for the first time by inputting it, where it will be searched against our “Rhythm Bank” database. Depending on the results, if it matches a current entry, users will see the notation, be able to hear it played back, and if applicable, the name of the rhythm and the culture it originates from.",
-          map: "Free Play agency, Ensemble pulse, neutral observations, and the listen–clap–chant scaffold provide multiple non-punitive routes through difficulty.",
+          map: "",
           target: "feature-imagine"
         }
       };
@@ -784,7 +785,7 @@ function exportBankPDF(){var sheet=document.getElementById("print-sheet");if(!sh
 function renderBank(){
   var grid=$("#bank-grid");if(!grid)return;var a=bank;grid.innerHTML="";var mine=myTokens();updateBadge();
   var pc=document.getElementById("preset-count-"+currentBank);
-  if(pc)pc.textContent=(currentBank==="cultural"?"Shared cultural rhythms · ":"Your rhythms on this device · ")+a.length;
+  if(pc)pc.textContent=(currentBank==="cultural"?"Shared cultural rhythms · ":"Rhythms ETEC 531 has submitted. · ")+a.length;
   if(!a.length){
     var em;
     if(currentBank==="cultural"&&!remote){em='<p class="bank-empty">The Cultural Rhythm Bank isn&rsquo;t reachable right now ('+esc(_bankStatus)+').</p>';}
@@ -854,7 +855,7 @@ function wire(){
   var _seq="",_seqT=0;document.addEventListener("keydown",function(e){var tg=e.target;if(tg&&(tg.tagName==="INPUT"||tg.tagName==="TEXTAREA")){return;}if(e.ctrlKey||e.metaKey||e.altKey){return;}if(e.key&&e.key.length===1&&/[a-zA-Z]/.test(e.key)){var now=Date.now();if(now-_seqT>1800){_seq="";}_seqT=now;_seq=(_seq+e.key.toLowerCase()).slice(-8);if(_seq.indexOf("curate")>=0){_seq="";adminMode=!adminMode;toast(adminMode?"curator mode on":"curator mode off");renderBank();}}});
 
   applyBankUI();
-  var _lc=loadLocal().length;var _pl=document.getElementById("preset-count-local");if(_pl)_pl.textContent="Your rhythms on this device · "+_lc;
+  var _lc=loadLocal().length;var _pl=document.getElementById("preset-count-local");if(_pl)_pl.textContent="Rhythms ETEC 531 has submitted. · "+_lc;
   $$(".preset").forEach(function(b){b.addEventListener("click",function(){var bk=b.getAttribute("data-bank");if(!bk||bk===currentBank)return;currentBank=bk;applyBankUI();refreshBank();});});
   refreshBank();
 }
