@@ -61,7 +61,7 @@
   function rowInfo(v){var perRow=L.rowCap*16;var row=Math.floor(v/perRow);if(row<0){row=0;}if(row>=L.numRows){row=L.numRows-1;}var rowStartBar=row*L.rowCap;var rowBars=L.rowCap;if(rowStartBar+rowBars>SLOTS/16){rowBars=SLOTS/16-rowStartBar;}if(rowBars<0){rowBars=0;}var rowEndSix=row*perRow+rowBars*16;var local=v-row*perRow;return {row:row,rowBars:rowBars,rowEndSix:rowEndSix,local:local};}
   function cursorX(v){if(v<0){v=0;}if(v>SLOTS){v=SLOTS;}var ri=rowInfo(v);var local=ri.local;var atEnd=false;if(local>=ri.rowBars*16-0.5){local=ri.rowBars*16-0.5;atEnd=true;}if(local<0){local=0;}var x=L.LM+(local+0.5)*L.uSlot;var cy=ri.row*L.ROW_H+L.CY0;return {x:x,cy:cy,row:ri.row,atEnd:atEnd,rowEndSix:ri.rowEndSix};}
   function mk(svg,t,a){var e=document.createElementNS(NS,t);for(var k in a){e.setAttribute(k,String(a[k]));}svg.appendChild(e);return e;}
-  function syl(d,o){if(d>=4){return "ta";}if(d===2){return "ti";}return ["ti","ka","ti","ka"][o%4];}
+  function syl(d,o){if(d>=4){return "ta";}if(d===2){return "ti";}return ["ta","ka","di","mi"][o%4];}
   function num(o){var b=(Math.floor(o/4)%4)+1;var p=o%4;return p===0?String(b):(p===1?"e":(p===2?"+":"a"));}
   function curAid(){var ab=aidBtns(),i;for(i=0;i<ab.length;i++){if(ab[i].classList.contains("on")){var t=(ab[i].textContent||"").trim();return /none/i.test(t)?"none":(/ta|ti/i.test(t)?"syl":"num");}}return "syl";}
   function pickPat(){var tot=0,i;for(i=0;i<PAT_HARD.length;i++){tot+=PAT_HARD[i].w;}var r=Math.random()*tot,acc=0;for(i=0;i<PAT_HARD.length;i++){acc+=PAT_HARD[i].w;if(r<acc){return PAT_HARD[i].p;}}return PAT_HARD[0].p;}
@@ -182,7 +182,7 @@
     {find:"play",h:"Play / Stop",p:"Starts the metronome and the exercise. While it is playing, this same button becomes Stop - press it to halt everything and reset."},
     {find:"listen",h:"Listen",p:"Plays the rhythm for you first with a 1-2-3-4 count-in, so you can hear it before you tap."},
     {find:"draw",h:"Draw",p:"Turns on a red drawing layer so you can scribble notes to yourself on the staff before you read or practice a rhythm."},
-    {find:"aid",h:"Counting aid",p:"Writes the count under each note - ta / ti for quarters and eighths, and ti-ka-ti-ka (or 1 e + a) for sixteenths - so you can read it out loud as you go."},
+    {find:"aid",h:"Counting aid",p:"Writes the count under each note - ta / ti for quarters and eighths, and ta-ka-di-mi (or 1 e + a) for sixteenths - so you can read it out loud as you go."},
     {find:"gear",h:"Settings",p:"More options live here, like the line cursor and the check / cross marks. The counting aid and draw buttons are up in the bar."},
     {find:"stage",h:"The stage",p:"The rhythm appears here. Tap on the beat as it plays - a green "+CHK+" when you land on it, a red "+CRS+" when you drift."}
   ];
