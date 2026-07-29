@@ -279,21 +279,21 @@ body:not(.on-home) .annotation-tabs,body:not(.on-home) .annotation-panel,body:no
     <!-- HOME -->
     <section class="screen" id="screen-home">
       <div class="wrap home-wrap">
-        <p class="eyebrow">Curriculum Otherwise · a reimagined sight-reading studio</p>
-        <h1>Rhythm literacy built with the room, not around it.</h1>
-        <p class="lede">Rhythm began as a standard rhythm drill: a fixed canon, a metronome, a red mark for a wrong answer. This studio reimagines that premise as a universal, constructivist environment — one that assumes every student already arrives with rhythm, and asks the platform to notice, hold, and build from what they bring in.</p>
+        <p class="eyebrow">Curriculum Otherwise · a reimagined sight reading factory</p>
+        <h1>Multimodal rhythm reading and notation, built for every learner.</h1>
+        <p class="lede">Rhythm Reader is a free, in-browser tool for learning to read rhythm by sight, sound, and touch. Pick a counting aid, hear a pattern, tap it back, and grow at your own pace.</p>
         <div class="home-grid">
           <article class="card home-card">
-            <h3>What changed, and why</h3>
-            <p class="subtle">Three design moves reshape the original tool. Look for the small <strong>RESIST</strong>, <strong>RELATE</strong>, and <strong>IMAGINE</strong> tags throughout the studio — open any of them, or use the tabs on the right edge of the screen, to read the annotation attached to that decision.</p>
+            <h3>What we changed</h3>
+            <p class="subtle">We rebuilt the original drill around three ideas: <strong>RESIST</strong>, <strong>RELATE</strong>, and <strong>IMAGINE</strong>. Open any tag, or use the tabs on the right edge, to read the thinking behind each one.</p>
           </article>
           <article class="card home-card">
             <h3>How to move through it</h3>
-            <p class="subtle">Start in the Dashboard to choose a rhythm collection. From there, practice alone in Free Play, or negotiate a shared phrase with a partner in Trade Fours. When you're ready, visit the Gallery for the literature behind this redesign and one prompt for trying it yourself.</p>
+            <p class="subtle">Start in Free Play and work through a rhythm or two. When you are ready, visit the Gallery for the doing prompt.</p>
           </article>
         </div>
         <div class="home-actions">
-          <button class="btn primary" id="enter-studio">Enter the studio →</button>
+          <button class="btn primary" id="enter-studio">Enter the app →</button>
           <button class="btn" data-nav="screen-gallery">Gallery &amp; doing prompt</button>
         </div>
       </div>
@@ -418,7 +418,7 @@ body:not(.on-home) .annotation-tabs,body:not(.on-home) .annotation-panel,body:no
     <div class="annotation-head"><span class="annotation-title">ACADEMIC ANNOTATION</span><button class="close" id="annotation-close" aria-label="Close annotation">×</button></div>
     <div class="annotation-content">
       <h2 id="annotation-heading"></h2>
-      <p id="annotation-copy"></p>
+      <div id="annotation-copy"></div>
       <div class="annotation-map"><strong>Design connection</strong><span id="annotation-map"></span></div>
     </div>
   </aside>
@@ -432,7 +432,7 @@ body:not(.on-home) .annotation-tabs,body:not(.on-home) .annotation-panel,body:no
       const annotations = {
         resist: {
           title: "RESIST / Missing datasets",
-          copy: "A rhythm drill that generates from one canon treats that canon as neutral. Following Ọnụọha (2016), we treat the gaps as the finding — the \"missing datasets\" that reveal what a system deems worth collecting. D'Ignazio and Klein (2020) name the default a \"privilege hazard\": one tradition posed as the starting point for everyone. So the dataset is made visible, selectable, and incomplete, and a family or community upload sits beside Afro-Cuban Claves without ranking one above another. Alvarez (2019) pushes further: a tool that only delivers material on demand trains \"learned passivity.\" Rhythm resists that too — asking students to co-construct the practice rather than consume it.",
+          copy: "Sight Reading Factory (SRF) relies on Western music notation as the only mode for students to sight-read with, which hinders users of this tool who may have learned how to read music with a different notation system or who learn more effectively using other modes. The current model of SRF’s feedback is also problematic as it shows an accuracy percentage with a breakdown of correct notes, wrong notes, missing notes, and notes that were played early or late, but does not indicate exactly which notes or rhythms are incorrect or offer suggestions on how to improve. To resist these limitations and to make our tool widely accessible, we have included options at the top of the screen to help students in other ways, such as numbers that appear below the notation, takadimi (etc. syllables like ta and ti-ti), a playback option for the aural mode, and even a “draw” mode for students who might want to make their own notes. All of these options are toggleable and off by default, giving users the freedom to choose from their preferences without forcing these options onto them or being overwhelming. There is also an accompanying introductory video to our artifact that serves as scaffolding for students to start reading basic rhythms before they use our tool – in case, for example, they have no idea what takadimi is!",
           map: "Cultural Datasets, upload staging, and the choice of collection make the source material part of the learning decision — not decoration around a universal exercise.",
           target: "feature-resist"
         },
@@ -444,7 +444,7 @@ body:not(.on-home) .annotation-tabs,body:not(.on-home) .annotation-panel,body:no
         },
         imagine: {
           title: "IMAGINE / Feedback without failure",
-          copy: "The studio imagines feedback as a change in activity, not a verdict on identity. Reifinger (2020) describes reading as developmental — moving from the enactive (body and voice) to the symbolic (the mark on the page) — so a missed beat opens a scaffold to clap and chant the rhythm before the notation returns, building audiation rather than logging a red X. Free Play records participation without scores, and Kalantzis and Cope (2010) recast the teacher here as a designer of learning environments rather than a dispenser of correct answers. Difficulty becomes an invitation to reorganize perception and action together — and, for strong players, to take creative risks with phrasing rather than chasing algorithmic perfection.",
+          copy: "While sets of rhythms can be manually inserted from which to practice into our tool, such as tricky syncopations in a piece that a middle school band is learning, we ultimately imagine a space where our tool can be used with real-world applicability beyond fulfilling a music curriculum. To accomplish this we envision having a living, evolving “Rhythm Bank” that contains rhythms and beats from all over the world such as Afro-Cuban clave rhythms or a reggae drum beat, that users can access separate from our sight-reading generation feature. This bank will give users the opportunity to engage with the music of cultures different from their own where they can see it, hear it, and even clap it back if they wish, and by doing so they may gain a heightened awareness for identifying these styles in the music they consume. We have also reversed this process so users can “identify” a rhythm they may have heard for the first time by inputting it, where it will be searched against our “Rhythm Bank” database. Depending on the results, if it matches a current entry, users will see the notation, be able to hear it played back, and if applicable, the name of the rhythm and the culture it originates from.@@PARA@@Note: Due to the scope of this project, this idea is not programmed for use, but it is visually represented through the “Rhythm Bank” button where users would access this feature)",
           map: "Free Play agency, Ensemble pulse, neutral observations, and the listen–clap–chant scaffold provide multiple non-punitive routes through difficulty.",
           target: "feature-imagine"
         }
@@ -532,7 +532,7 @@ body:not(.on-home) .annotation-tabs,body:not(.on-home) .annotation-panel,body:no
       function openAnnotation(k){
         const a=annotations[k];
         $("#annotation-heading").textContent=a.title;
-        $("#annotation-copy").textContent=a.copy;
+        var _ac=String(a.copy).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");$("#annotation-copy").innerHTML=_ac.split("@@PARA@@").map(function(s){return "<p>"+s+"</p>";}).join("");
         $("#annotation-map").textContent=a.map;
         panel.classList.add("open"); overlay.classList.add("open"); panel.setAttribute("aria-hidden","false");
         $$(".annotation-tab").forEach(t=>t.classList.toggle("active",t.dataset.annotation===k));
