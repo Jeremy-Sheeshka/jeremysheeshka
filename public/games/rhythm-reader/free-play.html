@@ -434,6 +434,14 @@ label.metro-field:has([data-metro-beats]){display:none !important}
 @media (max-width:560px){ .dock{justify-content:center !important} }
 body{overflow-x:hidden}
 </style>
+
+<style id="fp-nav-fit">
+.metronome--top{gap:10px !important;flex-wrap:nowrap !important}
+.metronome--top .metro-field{flex:0 0 auto !important}
+.metronome--top [data-bpm-wrap]{flex:0 0 auto !important}
+.metronome--top [data-metro-bpm-input]{min-width:54px !important;width:54px !important;text-align:center !important;padding:6px 4px !important}
+@media (max-width:1100px){.metronome--top{overflow-x:auto !important}}
+</style>
 </head>
 <body>
 <script>Object.defineProperty(window,"tempo",{get:function(){var e=document.querySelector("[data-metro-bpm-input]")||document.querySelector("[data-metro-tempo]");return e?parseInt(e.value)||88:88;},configurable:true});</script>
@@ -674,11 +682,11 @@ body{overflow-x:hidden}
   <h4>SETTINGS</h4>
   <label><span>Show “Draw” in bar</span><input type="checkbox" id="fp-set-showdraw" checked></label>
   <label><span>Show “Counting aid” in bar</span><input type="checkbox" id="fp-set-showaid" checked></label>
-  <label><span>Master: self-count (silent)</span><input type="checkbox" id="fp-set-master"></label>
+  
   <label><span>Line cursor</span><input type="checkbox" id="fp-set-cursor2" checked></label>
   <label><span>Show ✓ / ✗ marks</span><input type="checkbox" id="fp-set-marks" checked></label>
   <label><span>Metronome click</span><input type="checkbox" id="fp-set-sound" checked></label>
-  <label><span>Visual Pulse</span><input type="checkbox" id="fp-set-cursor" checked></label>
+  
   <label><span>Dinosaur Mode</span><input type="checkbox" id="fp-set-dino"></label>
 </div>
 <script>
