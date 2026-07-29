@@ -56,3 +56,42 @@ These conventions are what every future session should follow; they exist becaus
 - Open/optional: re-enabling the original third-party drill as an escape-hatch button (currently hidden by design); the Rhythm Bank's own notation could later be extracted into a reusable component for blog posts (the renderer is pure "tiles in, SVG out").
 - If a single generated rhythm's beaming or a tap window ever feels off on a specific machine, the levers are `WIN` (hit window, seconds) for timing and the `PAT_HARD` weights / `drawBeams` stub caps for notation - change surgically, re-verify.
 
+<!-- SESSION-UPDATE-START -->
+## Session Update — July 29, 2026
+
+### Recorder transcription simplify pass (Rhythm Bank recorder, `index.html`)
+- Added `simplifyTiles(tiles)`, inserted before `finishRecording` and wrapping both `computeTiles(events)` call sites (`simplifyTiles(computeTiles(events))`).
+- Algorithm: reconstructs readable note durations from tap **onsets only** (onsets never move, so the rhythm the user played is unchanged). Each note expands to fill the silence up to the next beat line, so a staccato tap with an eighth gap becomes a clean one-tailed eighth; a full beat of silence stays a **quarter rest**; a genuinely held note keeps its length (the pass never shortens a note the recorder already gave a real duration). Net effect: removes sixteenth-rest clutter and lone sixteenths, and turns the "two-tailed eighths" (which were actually mis-drawn sixteenths) into real one-tailed eighths. No separate flag bug — the two-tail appearance was the wrong `dur`, fixed by the pass.
+- Tile schema: `{type:"note"|"rest", onset, dur, tied}` in sixteenth units (`unit:"s16"`; old 8th-grid entries are doubled via `u16`). dur values: 16=whole, 8=half, 4=quarter, 2=eighth, 1=sixteenth.
+- Verified with a Node sim (5 cases): eighth taps → 4 eighths; quarter + quarter-rest + quarter; off-beat 16th kept + quarter rest; held half preserved + half rest; 16th-pair + eighth + final quarter. All PASS.
+
+### Rhythm Bank defaults & buttons
+- **Local Rhythm Bank is the sole default-selected collection**: `currentBank="local"`; the Local button carries `class="preset selected"` + `aria-pressed="true"`; Cultural and Teacher have `selected` removed.
+- **Teacher Imported Rhythms** is a disabled teaser button (`data-bank="teacher"`, `disabled`, `aria-disabled="true"`), never highlighted — a coming-soon placeholder.
+- Bank button structure: `<button class="preset" data-bank="cultural|local|teacher">`; the active state is the `selected` class + `aria-pressed`; the `currentBank` JS var sets the default and the bank's own init selects the matching button.
+
+### Home page / Gallery content
+- Hero title: **"Think it. Play it. Bank it."** (was "Welcome to the Rhythm Bank").
+- RESIST/RELATE/IMAGINE card: "We redesigned SRF to focus around three central curricular ideas: RESIST, RELATE, and IMAGINE. Take a minute to read the thinking behind each of these concepts by looking at the tabs to the right."
+- **References** (`<ul class="lit-list">`, APA-7, alphabetized): added **Musicca. (n.d.). *Rhythms* [Interactive exercise]. https://www.musicca.com/rhythms** (after Kalantzis / before Ọnụọha) and **Sight Reading Factory. (n.d.). *Sight Reading Factory* [Web application]. https://www.sightreadingfactory.com/** (after Reifinger / before Stenberg). Both carry the project's "Behind…" annotation convention. Musicca is cited because the recorder's notation-generation engine was adapted/independently rebuilt after studying Musicca's rhythm exercise.
+- **Draft Proposal card** added to the Gallery grid (before References): links to `/assets/pdf/Curriculum Otherwise - Draft Proposal - June 21 2026.pdf` (filename detected in `public/assets/pdf/` and URL-encoded).
+
+### Co-Op settings toggle (`co-op.html`)
+- Added a capture-phase click handler (`#praxis-cop-settings-toggle`) that toggles `#gear-pop` (the settings menu) open/closed on a gear click, and closes it on a click outside. Wired to both `[data-metro-gear]` buttons (header + footer). Validated by node-checking only the injected snippet (not the page's pre-existing inline JS).
+
+### Recorder render functions (from probe of `index.html`)
+- `render(svg, tiles)`: draws the staff, barlines, notes (`drawNote`), rests (`drawRest`), beams (`computeBeams`/`splitCrossings`), ties.
+- `drawRest(svg, t)`: draws rests by dur (16=whole rect, 8=half rect, 4=quarter squiggle, 2=eighth, 1=sixteenth).
+- `computeTiles(events)`: converts tap events to tiles — the seam wrapped by `simplifyTiles`.
+
+### Lessons / conventions (important for future edits)
+- **Verbatim-copy rule**: when inserting user-provided text (e.g., the annotate paragraphs), insert it byte-for-byte and match the target paragraph by *content* (a distinctive keyword), not by exact spacing — earlier anchors missed because of stray double-spaces in the source.
+- **Cache-bust / decoupled writes**: validate only the snippet you inject, never the page's pre-existing inline JS (Co-Op's JS legitimately contains the text `</script>` inside a `srcdoc` string, which breaks naive script extraction and produces false `node --check` failures). Decouple file writes so one file's failure doesn't block another's.
+- **Anchor discipline**: prefer content-based anchors over exact-string anchors; make optional edits non-fatal so they can't block the primary change; always read-back and node-check before writing.
+- The free-play "yes" generator (`fp-onboard.js`) and the Rhythm Bank recorder are separate engines: the free-play generator uses `PAT_HARD` (a beat-pattern library favoring quarters/eighths/halves/quarter-rests, no lone sixteenths, no sixteenth rests); the recorder uses `computeTiles` + `simplifyTiles`.
+
+### Open / optional follow-ups
+- Optional in-text credit where the recorder engine is described, e.g. "the notation-generation logic was adapted from Musicca's rhythm exercise (Musicca, n.d.)."
+- Optional secondary Draft-Proposal link on the home hero / "How to move through it" card for discoverability (currently Gallery-only by design).
+- Free-play "yes" generator could later add bar-level patterns (halves/wholes spanning beats) if desired.
+
