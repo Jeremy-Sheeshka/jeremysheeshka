@@ -779,21 +779,24 @@ function startRecording(startTime){
   tickRec();
 }
 function simplifyTiles(tiles){
-  var notes=[],i;for(i=0;i<tiles.length;i++){if(tiles[i].type==="note")notes.push(tiles[i]);}
-  notes.sort(function(a,b){return a.onset-b.onset;});
+  var S=2;
+  var raw=[],i;for(i=0;i<tiles.length;i++){if(tiles[i].type==="note")raw.push(tiles[i].onset|0);}
+  raw.sort(function(a,b){return a-b;});
+  var on=[];for(i=0;i<raw.length;i++){var q=S===1?raw[i]:(Math.round(raw[i]/S)*S);if(on.length===0||q!==on[on.length-1])on.push(q);}
   var TRACK=32,out=[];
-  for(var k=0;k<notes.length;k++){
-    var nt=notes[k];var nextOnset=(k+1<notes.length)?notes[k+1].onset:TRACK;
-    var gap=nextOnset-nt.onset;if(gap<1)gap=1;
-    var nb=(Math.floor(nt.onset/4)+1)*4;if(nb<=nt.onset)nb=nt.onset+4;
-    var cap=nb-nt.onset;if(cap<1)cap=1;var fill=gap<cap?gap:cap;
-    var ind=nt.dur||1;if(ind>gap)ind=gap;var md=ind>fill?ind:fill;
-    out.push({type:"note",onset:nt.onset,dur:md,tied:nt.tied});
-    var left=nextOnset-(nt.onset+md);if(left>=4){out.push({type:"rest",onset:nt.onset+md,dur:left});}
-  }
-  if(out.length&&out[out.length-1].type==="rest")out.pop();
+  function legalNote(o,maxd){if(maxd>=16&&o%16===0)return 16;if(maxd>=8&&o%8===0)return 8;if(maxd>=4&&o%4===0)return 4;return 2;}
+  function rests(o,len,arr){var rem=len,p=o;while(rem>0){var r=(rem>=8&&p%8===0)?8:(rem>=4?4:2);arr.push({type:"rest",onset:p,dur:r});p+=r;rem-=r;}}
+  for(var k=0;k<on.length;k++){
+    var o=on[k];var barStart=Math.floor(o/16)*16;var barEnd=barStart+16;
+    var firstInBar=(k===0)||(Math.floor(on[k-1]/16)!==Math.floor(o/16));
+    if(firstInBar&&o-barStart>=S)rests(barStart,o-barStart,out);
+    var nextO=(k+1<on.length)?on[k+1]:TRACK;
+    var gap=nextO-o;if(gap<S)gap=S;var cap=barEnd-o;if(cap<S)cap=S;var allowed=gap<cap?gap:cap;
+    var dur=legalNote(o,allowed);out.push({type:"note",onset:o,dur:dur,tied:false});
+    var leftover=nextO-(o+dur);var be=barEnd-(o+dur);if(leftover>be)leftover=be;if(leftover>=S)rests(o+dur,leftover,out);}
   return out;
 }
+
 function finishRecording(){
   if(activeEvent){activeEvent.end=recAudioStart+windowLen;events.push(activeEvent);activeEvent=null;}
   state="done";if(rafId){cancelAnimationFrame(rafId);rafId=null;}
