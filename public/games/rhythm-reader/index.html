@@ -248,6 +248,23 @@ body:not(.on-home) .annotation-tabs,body:not(.on-home) .annotation-panel,body:no
 .bank-actions .btn span{font-size:10px !important}
 </style>
 <style id="praxis-map-hide">#annotation-map,.annotation-map{display:none !important}</style>
+<style id="gallery-layout">
+details.resp{border:1px solid var(--Rhythm-line,#d8dee7);border-radius:12px;background:var(--Rhythm-surface,#fff);overflow:hidden;transition:border-color .15s ease,box-shadow .15s ease}
+details.resp:hover{border-color:color-mix(in srgb,var(--Rhythm-accent,#1d4ed8) 40%,var(--Rhythm-line,#d8dee7));box-shadow:0 4px 14px rgba(15,23,42,.06)}
+details.resp>summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 15px;font-weight:700;font-size:15px;transition:background .15s ease}
+details.resp>summary::-webkit-details-marker{display:none}
+details.resp>summary:hover{background:color-mix(in srgb,var(--Rhythm-accent,#1d4ed8) 6%,transparent)}
+details.resp .resp-chev{transition:transform .2s ease;font-size:18px;line-height:1;color:var(--Rhythm-muted,#5b6472)}
+details.resp[open] .resp-chev{transform:rotate(90deg)}
+details.resp[open]>summary{border-bottom:1px solid var(--Rhythm-line,#d8dee7)}
+details.resp .resp-body{padding:14px 15px 16px}
+details.resp .resp-body p{margin:0 0 11px;line-height:1.65}
+details.resp .resp-body p:last-child{margin-bottom:0}
+details.resp .resp-body p.subtle{color:var(--Rhythm-muted,#5b6472)}
+#screen-gallery .dashboard-grid{display:block !important;column-count:2;column-gap:16px}
+#screen-gallery .dashboard-grid>*{break-inside:avoid;-webkit-column-break-inside:avoid;display:inline-block;width:100%;vertical-align:top;margin:0 0 16px}
+@media(max-width:820px){#screen-gallery .dashboard-grid{column-count:1}}
+</style>
 </head>
 <body>
   <header class="topbar">
@@ -352,8 +369,8 @@ body:not(.on-home) .annotation-tabs,body:not(.on-home) .annotation-panel,body:no
             <section class="screen" id="screen-gallery">
       <div class="wrap">
         <button class="btn small" data-nav="screen-1" style="margin-bottom:18px">← Rhythm Bank</button>
-        <p class="eyebrow">Gallery · literature and an invitation</p>
-        <h2 class="section-head">Read what shaped this, then try it yourself.</h2>
+        <p class="eyebrow">Gallery &middot; Doings &middot; References</p>
+        <h2 class="section-head">Read about what went into our redesign.</h2>
         <p class="subtle">We redesigned SRF to focus around three central curricular ideas: <strong>RESIST</strong>, <strong>RELATE</strong>, and <strong>IMAGINE</strong>. Take a minute to read the thinking behind each of these concepts by looking at the tabs to the right.</p>
 
         <div class="gallery-split">
@@ -369,9 +386,9 @@ body:not(.on-home) .annotation-tabs,body:not(.on-home) .annotation-panel,body:no
           <article class="card dataset-card">
             <div class="card-label"><strong>Individual Responses</strong></div>
             <div style="display:flex;flex-direction:column;gap:16px;margin-top:6px">
-              <div><h3 style="margin:0 0 6px;font-size:16px">Response 1 &mdash; Chris Perry</h3><p class="subtle">[150&ndash;200 word individual reflection. Replace this placeholder.]</p></div>
-              <div><h3 style="margin:0 0 6px;font-size:16px">Response 2 &mdash; Samuel Teo</h3><p class="subtle">[150&ndash;200 word individual reflection. Replace this placeholder.]</p></div>
-              <div><h3 style="margin:0 0 6px;font-size:16px">Response 3 &mdash; Jeremy Sheeshka</h3><p class="subtle">[150&ndash;200 word individual reflection. Replace this placeholder.]</p></div>
+              <details class="resp"><summary><span class="resp-name">Chris Perry</span><span class="resp-chev" aria-hidden="true">&#8250;</span></summary><div class="resp-body"><p class="subtle">[150&ndash;200 word individual reflection. Replace this placeholder.]</p></div></details>
+              <details class="resp"><summary><span class="resp-name">Samuel Teo</span><span class="resp-chev" aria-hidden="true">&#8250;</span></summary><div class="resp-body"><p class="subtle">[150&ndash;200 word individual reflection. Replace this placeholder.]</p></div></details>
+              <details class="resp"><summary><span class="resp-name">Jeremy Sheeshka</span><span class="resp-chev" aria-hidden="true">&#8250;</span></summary><div class="resp-body"><p>In Week 6, I was still an outsider to SRF, having never had the budget to bring the technology into my classroom when I was teaching band. My curiosity about, and experiences with, SRF were still largely conceptual at that point. I had wondered whether the algorithm could generate material in the style of real composers, and how (if?) it represented place-based and cultural traditions entangled within various musical styles. Critically examining and engaging in a redesign of SRF brought to my attention the gaps and hidden curriculum it presented users with. Doing this design work made me acutely aware of the responsibility I had over how a user engaged with the app, and made it important for our group to build in solutions that increase accessibility for learners with different backgrounds and relationships to music.</p><p>Building in the toggleable modes during gameplay (numbers, takadimi, aural playback, draw, and my personal favourite: dinosaur mode), as well as imagining how the co-op mode would work, forced me to confront how enactive/symbolic distinctions were being made by the end-user and how to accommodate this through tools that assist with decoding rhythm, whether through notation or multimodal alternatives like a dinosaur runner game. That said, it is clear to me that clicking a mouse or tapping a spacebar does not fuel the same kinesthetic learning and building of muscle memory that clapping a rhythm in a circle or feeling it lock in with other players would.</p><p>Annotating our redesign through RESIST, RELATE, and IMAGINE helped me understand that there is no one-size-fits-all approach, and that a tool which meets someone where they are can accelerate learning without forcing everyone through the same path. In the case of our redesign, simply including an option to listen to a rhythm before trying to read and play it opened up new possibilities for user choice and flow. The Rhythm Bank extends this further by grounding rhythmic reading in place-based and cultural traditions, while offering an option to connect locally through a classroom or community of music learners. While something like this generative rhythm-reading sandbox could have helped me in my own practice, working through 16th note rhythms two bars at a time and reading with my ears rather than my eyes and brain, I only recognized what was missing once I was the one building the listen-first option.</p><p>What I have not figured out yet is whether the generated rhythms are musically sound and worth practicing. Inclusive scaffolding alone does not guarantee compositional quality, and my Week 6 question about whether that quality is there remains open. Even so, while naming SRF's limitations proved straightforward, building around them showed me that these were non-neutral choices made to cater to a particular audience of learners.</p></div></details>
             </div>
           </article>
         </div>
