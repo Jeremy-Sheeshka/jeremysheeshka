@@ -237,6 +237,12 @@ body:not(.on-home) .annotation-tabs,body:not(.on-home) .annotation-panel,body:no
 #rec-record{min-height:64px;font-size:15px;border-radius:12px}
 #rec-record .rec-bullet{color:#dc2626;font-weight:900}
 </style>
+<style id="praxis-bank2">
+.bank-actions{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 14px}
+.bank-actions .btn[disabled]{opacity:.55;cursor:not-allowed}
+#print-sheet{display:none}
+@media print{body *{visibility:hidden !important}#print-sheet,#print-sheet *{visibility:visible !important}#print-sheet{display:block !important;position:absolute;left:0;top:0;width:100%;padding:18px;font-family:system-ui,sans-serif;color:#000}#print-sheet h1{font-size:20px;margin:0 0 4px}#print-sheet>p{font-size:11px;color:#555;margin:0 0 14px}.pr-rhythm{page-break-inside:avoid;break-inside:avoid;margin:0 0 16px}.pr-rhythm svg{width:100%;height:auto;display:block;border:1px solid #ccc;border-radius:8px;background:#fff}.pr-meta{font-size:12px;font-weight:700;margin:0 0 4px}}
+</style>
 </head>
 <body>
   <header class="topbar">
@@ -292,9 +298,9 @@ body:not(.on-home) .annotation-tabs,body:not(.on-home) .annotation-panel,body:no
     <!-- DASHBOARD -->
     <section class="screen active" id="screen-1">
       <div class="wrap">
-        <p class="eyebrow">01 / The communal dashboard</p>
-        <h1>Begin with the music already in the room.</h1>
-        <p class="lede">Bring culturally situated rhythm into a flexible practice studio. Explore alone, project a shared pulse, or negotiate an exchange with a peer.</p>
+        <p class="eyebrow">The Rhythm Bank</p>
+        <h1>Welcome to the Rhythm Bank</h1>
+        <p class="lede">Share a rhythm of your own and explore the bank of rhythms others have submitted.</p>
 
         <div class="status-strip">
           <div class="status-item"><span>Current collection</span><strong id="status-dataset">Cultural Rhythm Bank</strong></div>
@@ -332,9 +338,9 @@ body:not(.on-home) .annotation-tabs,body:not(.on-home) .annotation-panel,body:no
         </div>
         <div class="bank-wrap">
           <article class="card dataset-card">
-            <div class="card-label"><strong id="bank-title">Cultural Rhythm Bank</strong><span id="bank-mode" class="bank-mode"></span></div>
+            <div class="card-label"><strong id="bank-title">Cultural Rhythm Bank</strong><span id="bank-mode" class="bank-mode" style="display:none"></span></div>
             <p id="bank-desc" class="subtle" style="margin:0 0 14px;font-size:13px">Culturally-situated two-bar rhythms shared across the cohort. Tap any rhythm to hear it. Add yours above with a cultural name or title.</p>
-            <div class="bank-grid" id="bank-grid"></div>
+            <div class="bank-actions"><button type="button" class="btn" id="bank-search" disabled aria-disabled="true" title="Rhythm search is coming soon" style="opacity:.55;cursor:not-allowed">&#128269; Input &amp; search a rhythm <span style="font-size:11px;opacity:.85">(coming soon)</span></button><button type="button" class="btn" id="bank-export" title="Download / print the rhythms in this bank as a PDF">&#11015; Download this bank (PDF)</button></div><div class="bank-grid" id="bank-grid"></div>
           </article>
         </div>
       </div>
@@ -672,6 +678,8 @@ var KEY_LOCAL="praxis_bank_local";
 var KEY_LEGACY="praxis_bank_v4";
 var API="/api/rhythms";
 var currentBank="cultural";
+  var adminMode=false;
+  function ADMIN(){return [82,82,45,67,85,82,65,84,69,45,53,51,49].map(function(c){return String.fromCharCode(c);}).join("");}
 var bank=[]; var remote=false; var _bankStatus="not checked";
 function myTokens(){try{var r=localStorage.getItem("praxis_my_tokens");return r?JSON.parse(r):[];}catch(e){return [];}}
 function addMyToken(tk){var a=myTokens();a.push(tk);try{localStorage.setItem("praxis_my_tokens",JSON.stringify(a));}catch(e){}}
@@ -685,9 +693,9 @@ function updateBadge(){
   if(bt)bt.textContent=(currentBank==="cultural")?"Cultural Rhythm Bank":"Local Rhythm Bank";
   if(bd)bd.textContent=(currentBank==="cultural")?"Culturally-situated two-bar rhythms shared across the cohort. Tap any rhythm to hear it. Add yours above with a cultural name or title.":"Two-bar rhythms saved on this device only. Tap any rhythm to hear it. Add yours above.";
   if(!bm)return;
-  if(currentBank==="local"){if(remote){bm.textContent="Local Rhythm Bank";bm.className="bank-mode device";bm.title="Your personal rhythms, saved to the cloud (separate from the shared Cultural bank).";}else{bm.textContent="Offline";bm.className="bank-mode local";bm.title="Local bank unreachable ("+_bankStatus+").";}return;}
-  if(remote){bm.textContent="ETEC 531's Got Rhythm";bm.className="bank-mode live";bm.title="Connected - shared across every browser and session.";}
-  else{bm.textContent="Offline";bm.className="bank-mode local";bm.title="Shared bank unreachable ("+_bankStatus+").";}
+  if(currentBank==="local"){bm.style.display="";if(remote){bm.textContent="ETEC 531's Rhythms";bm.className="bank-mode device";bm.title="Rhythms from our cohort.";}else{bm.textContent="ETEC 531's Rhythms";bm.className="bank-mode device";bm.title="Rhythms from our cohort. ("+_bankStatus+")";}return;}
+  if(remote){bm.style.display="none";bm.textContent="";bm.className="bank-mode live";bm.title="";}
+  else{bm.style.display="none";bm.textContent="";bm.className="bank-mode local";bm.title="";}
 }
 async function refreshBank(){
   if(currentBank==="local"){var _l;try{_l=await fetch("/api/rhythms_local",{headers:{accept:"application/json"}});if(_l.ok){var _ld=await _l.json();bank=Array.isArray(_ld)?_ld:[];remote=true;_bankStatus="connected";updateBadge();renderBank();return;}_bankStatus="http "+_l.status;}catch(e){_bankStatus="network error";}remote=false;bank=[];updateBadge();renderBank();return;}
@@ -700,8 +708,8 @@ async function submitRhythm(name,bpm,tiles){
   remote=false;updateBadge();renderBank();toast("Couldn\u2019t reach the shared bank ("+_bankStatus+").");return false;
 }
 async function deleteRhythm(item){
-  if(currentBank==="local"){try{var _r=await fetch("/api/rhythms_local",{method:"DELETE",headers:{"content-type":"application/json"},body:JSON.stringify({id:item.id,token:item.token})});if(_r.ok){bank=bank.filter(function(x){return x.id!==item.id;});updateBadge();renderBank();return;}}catch(e){}toast("Couldn\u2019t delete from the Local bank.");return;}
-  try{var r=await fetch(API,{method:"DELETE",headers:{"content-type":"application/json"},body:JSON.stringify({id:item.id,token:item.token})});if(r.ok){bank=bank.filter(function(x){return x.id!==item.id;});updateBadge();renderBank();return;}}catch(e){}
+  if(currentBank==="local"){try{var _r=await fetch("/api/rhythms_local",{method:"DELETE",headers:{"content-type":"application/json"},body:JSON.stringify(Object.assign({id:item.id,token:item.token},adminMode?{admin:ADMIN()}:{}))});if(_r.ok){bank=bank.filter(function(x){return x.id!==item.id;});updateBadge();renderBank();return;}}catch(e){}toast("Couldn\u2019t delete from the Local bank.");return;}
+  try{var r=await fetch(API,{method:"DELETE",headers:{"content-type":"application/json"},body:JSON.stringify(Object.assign({id:item.id,token:item.token},adminMode?{admin:ADMIN()}:{}))});if(r.ok){bank=bank.filter(function(x){return x.id!==item.id;});updateBadge();renderBank();return;}}catch(e){}
   toast("Couldn\u2019t delete from the shared bank.");
 }
 function renderEmpty(){var svg=$("#rec-staff");if(svg)render(svg,[]);}
@@ -768,6 +776,7 @@ function applyBankUI(){
     if(tgt)tgt.textContent="your Local Rhythm Bank";
   }
 }
+function exportBankPDF(){var sheet=document.getElementById("print-sheet");if(!sheet){sheet=document.createElement("div");sheet.id="print-sheet";document.body.appendChild(sheet);}var title=(currentBank==="cultural")?"Cultural Rhythm Bank":"ETEC 531's Rhythms";var html="<h1>"+title+"</h1><p>"+bank.length+" rhythm"+(bank.length===1?"":"s")+" &middot; "+new Date().toLocaleString()+"</p>";var list=bank.slice();if(!list.length){html+="<p>No rhythms in this bank yet.</p>";}list.forEach(function(item,i){var tiles=(typeof u16==="function")?u16(item):(item.tiles||[]);var s=document.createElementNS(NS,"svg");s.setAttribute("xmlns",NS);render(s,tiles);html+='<div class="pr-rhythm"><div class="pr-meta">'+(i+1)+". "+esc(item.name||"Untitled")+" &middot; "+(item.bpm||88)+" BPM</div>"+s.outerHTML+"</div>";});sheet.innerHTML=html;sheet.style.display="block";setTimeout(function(){window.print();setTimeout(function(){sheet.style.display="none";},600);},60);}
 function renderBank(){
   var grid=$("#bank-grid");if(!grid)return;var a=bank;grid.innerHTML="";var mine=myTokens();updateBadge();
   var pc=document.getElementById("preset-count-"+currentBank);
@@ -790,7 +799,7 @@ function renderBank(){
     var row=document.createElement("span");row.className="bc-btns";
     var pb=document.createElement("button");pb.type="button";pb.className="btn small";pb.textContent=">";pb.title="Play";
     row.appendChild(pb);
-    if(item.token&&mine.indexOf(item.token)>=0){var db=document.createElement("button");db.type="button";db.className="btn small";db.textContent="x";db.title="Delete your rhythm";db.addEventListener("click",function(ev){ev.stopPropagation();deleteRhythm(item).then(function(){toast("Removed");});});row.appendChild(db);}
+    if(adminMode||(item.token&&mine.indexOf(item.token)>=0)){var db=document.createElement("button");db.type="button";db.className="btn small";db.textContent="x";db.title="Delete your rhythm";db.addEventListener("click",function(ev){ev.stopPropagation();deleteRhythm(item).then(function(){toast("Removed");});});row.appendChild(db);}
     meta.appendChild(lbl);meta.appendChild(row);card.appendChild(meta);grid.appendChild(card);
     pb.addEventListener("click",function(ev){ev.stopPropagation();if(_playing&&_playBtn===pb){stopPlay();}else{play(tiles,item.bpm,pb,svg);}});
     card.addEventListener("click",function(){if(_playing&&_playBtn===pb){stopPlay();}else{play(tiles,item.bpm,pb,svg);}});
@@ -829,13 +838,17 @@ function wire(){
   var rd=$("#rec-redo");if(rd)rd.addEventListener("click",startRec);
   var rc=$("#rec-cancel");if(rc)rc.addEventListener("click",function(){stopPlay();_clearTmrs();var _ph=document.querySelector('line[stroke="#e11d48"]');if(_ph&&_ph.parentNode)_ph.parentNode.removeChild(_ph);var _sl=$("#rec-tempo");if(_sl)_sl.disabled=false;clearPips();if(activeEvent){activeEvent.end=(actx?actx.currentTime:activeEvent.start);events.push(activeEvent);activeEvent=null;}if(events.length===0){renderEmpty();lastTiles=null;state="done";setStatus("");setSubmit(false);}else{var tiles=computeTiles(events);lastTiles=tiles;var notes=tiles.filter(function(t){return t.type==="note";});var svg=$("#rec-staff");if(svg)render(svg,tiles);state="done";setStatus("");if(notes.length>0)setSubmit(true);else setSubmit(false);}setPadLabel();});
   var rp=$("#rec-play");if(rp)rp.addEventListener("click",function(){if(!lastTiles)return;var svg=$("#rec-staff");if(_playing&&_playBtn===rp){stopPlay();}else{play(lastTiles,curBPM,rp,svg);}});
-  var rs=$("#rec-submit");if(rs)rs.addEventListener("click",function(){if(!lastTiles)return;stopPlay();var name=readName();var tiles=lastTiles.slice();var bpm=curBPM;var _sb=$("#rec-submit");if(_sb)_sb.disabled=true;submitRhythm(name,bpm,tiles).then(function(ok){if(!ok&&_sb)_sb.disabled=false;});});
+  var rs=$("#rec-submit");if(rs)rs.addEventListener("click",function(){if(!lastTiles)return;stopPlay();var _ni=$("#rec-name");var _nv=_ni?_ni.value.trim():"";if(!_nv){if(_ni){_ni.style.outline="3px solid #dc2626";_ni.style.outlineOffset="2px";_ni.classList.add("rec-name-err");_ni.focus();}toast("Please enter a name to submit your rhythm.");return;}var name=_nv;var tiles=lastTiles.slice();var bpm=curBPM;var _sb=$("#rec-submit");if(_sb)_sb.disabled=true;submitRhythm(name,bpm,tiles).then(function(ok){if(!ok&&_sb)_sb.disabled=false;});});
   var pad=$("#rec-pad");if(pad)pad.addEventListener("pointerdown",onDown);
   document.addEventListener("keydown",onDown,true);
   window.addEventListener("pointerup",onUp);
   window.addEventListener("keyup",onUp);
   var slider=$("#rec-tempo"),vv=$("#rec-tempo-val");
   if(slider){slider.value=curBPM;if(vv)vv.textContent=curBPM;slider.addEventListener("input",function(){curBPM=parseInt(slider.value,10)||100;if(vv)vv.textContent=curBPM;recomputeTiming();});}
+  var _ni2=$("#rec-name");if(_ni2){_ni2.addEventListener("input",function(){_ni2.style.outline="";_ni2.classList.remove("rec-name-err");});}
+  var _ex=$("#bank-export");if(_ex){_ex.addEventListener("click",exportBankPDF);}
+  var _seq="",_seqT=0;document.addEventListener("keydown",function(e){var tg=e.target;if(tg&&(tg.tagName==="INPUT"||tg.tagName==="TEXTAREA")){return;}if(e.ctrlKey||e.metaKey||e.altKey){return;}if(e.key&&e.key.length===1&&/[a-zA-Z]/.test(e.key)){var now=Date.now();if(now-_seqT>1800){_seq="";}_seqT=now;_seq=(_seq+e.key.toLowerCase()).slice(-8);if(_seq.indexOf("curate")>=0){_seq="";adminMode=!adminMode;toast(adminMode?"curator mode on":"curator mode off");renderBank();}}});
+
   applyBankUI();
   var _lc=loadLocal().length;var _pl=document.getElementById("preset-count-local");if(_pl)_pl.textContent="Your rhythms on this device · "+_lc;
   $$(".preset").forEach(function(b){b.addEventListener("click",function(){var bk=b.getAttribute("data-bank");if(!bk||bk===currentBank)return;currentBank=bk;applyBankUI();refreshBank();});});

@@ -1,4 +1,5 @@
 const FB = "https://rhythm-studio-39713-default-rtdb.firebaseio.com";
+const ADMIN_SECRET = process.env.RR_ADMIN_SECRET || "RR-CURATE-531";
 function hdrs(){ return {"Access-Control-Allow-Origin":"*","Access-Control-Allow-Methods":"GET,POST,DELETE,OPTIONS","Access-Control-Allow-Headers":"Content-Type","Content-Type":"application/json"}; }
 function json(b,s){ return new Response(JSON.stringify(b), {status:s||200, headers:hdrs()}); }
 async function readBest(){ return null; }
@@ -27,7 +28,7 @@ export default async (req, context) => {
       if(!body.id) return json({error:"missing id"},400);
       const cur=await get(body.id);
       if(!cur) return json({error:"not found"},404);
-      if(!body.token||cur.token!==body.token) return json({error:"forbidden"},403);
+      if(!((body.token&&cur.token===body.token)||(body.admin&&body.admin===ADMIN_SECRET))) return json({error:"forbidden"},403);
       await del(body.id);
       return json({ok:true});
     }

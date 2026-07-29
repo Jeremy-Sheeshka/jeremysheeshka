@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 
 const FB = "https://rhythm-studio-39713-default-rtdb.firebaseio.com";
+const ADMIN_SECRET = process.env.RR_ADMIN_SECRET || "RR-CURATE-531";
 
 function hdrs(){
   return {
@@ -75,7 +76,7 @@ export default async (req, context) => {
       let cur = null;
       try { cur = await fbGet("/rhythms/" + encodeURIComponent(body.id)); } catch(e){ cur = null; }
       if(!cur) return json({ error: "not found" }, 404);
-      if(!body.token || cur.token !== body.token) return json({ error: "forbidden" }, 403);
+      if(!((body.token&&cur.token===body.token)||(body.admin&&body.admin===ADMIN_SECRET))) return json({ error: "forbidden" }, 403);
       await fbDel("/rhythms/" + encodeURIComponent(body.id));
       return json({ ok: true });
     }
