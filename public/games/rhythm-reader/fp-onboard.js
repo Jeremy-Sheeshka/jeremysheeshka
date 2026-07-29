@@ -66,7 +66,7 @@
   function curAid(){var ab=aidBtns(),i;for(i=0;i<ab.length;i++){if(ab[i].classList.contains("on")){var t=(ab[i].textContent||"").trim();return /none/i.test(t)?"none":(/ta|ti/i.test(t)?"syl":"num");}}return "syl";}
   function pickPat(){var tot=0,i;for(i=0;i<PAT_HARD.length;i++){tot+=PAT_HARD[i].w;}var r=Math.random()*tot,acc=0;for(i=0;i<PAT_HARD.length;i++){acc+=PAT_HARD[i].w;if(r<acc){return PAT_HARD[i].p;}}return PAT_HARD[0].p;}
   function expandBeat(p,b){var out=[],o=0,i;for(i=0;i<p.length;i++){out.push({t:p[i][0],o:b*4+o,d:p[i][1]});o+=p[i][1];}return out;}
-  function randBarHard(){var tiles=[],b,i;for(b=0;b<4;b++){var beat=expandBeat(pickPat(),b);for(i=0;i<beat.length;i++){tiles.push(beat[i]);}}return tiles;}
+  function randBarHard(){var P=[[["n",4]],[["n",2],["n",2]],[["n",2],["r",2]],[["r",2],["n",2]],[["r",4]],[["n",1],["n",1],["n",1],["n",1]],[["n",1],["n",1],["r",2]],[["r",2],["n",1],["n",1]],[["n",2],["n",1],["n",1]],[["n",1],["n",1],["n",2]]];var W=[5,5,2,2,1,4,3,3,3,3];var tot=0,i;for(i=0;i<W.length;i++){tot+=W[i];}var tiles=[],b;for(b=0;b<4;b++){var r=Math.random()*tot,acc=0,pat=P[0],j;for(j=0;j<W.length;j++){acc+=W[j];if(r<acc){pat=P[j];break;}}var sum=0;for(j=0;j<pat.length;j++){sum+=pat[j][1];}if(sum!==4){pat=[["n",4]];}var o=0;for(j=0;j<pat.length;j++){tiles.push({t:pat[j][0],o:b*4+o,d:pat[j][1]});o+=pat[j][1];}}return tiles;}
   function randBarEasy(){
     var tiles=[],b=0,guard=0;
     var r=Math.random();
