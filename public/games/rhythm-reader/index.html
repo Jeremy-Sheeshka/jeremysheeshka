@@ -418,7 +418,7 @@ body:not(.on-home) .annotation-tabs,body:not(.on-home) .annotation-panel,body:no
     <div class="annotation-head"><span class="annotation-title">ACADEMIC ANNOTATION</span><button class="close" id="annotation-close" aria-label="Close annotation">×</button></div>
     <div class="annotation-content">
       <h2 id="annotation-heading"></h2>
-      <div id="annotation-copy"></div>
+      <p id="annotation-copy"></p>
       <div class="annotation-map"><strong>Design connection</strong><span id="annotation-map"></span></div>
     </div>
   </aside>
@@ -438,13 +438,13 @@ body:not(.on-home) .annotation-tabs,body:not(.on-home) .annotation-panel,body:no
         },
         relate: {
           title: "RELATE / Learning between peers",
-          copy: "Trade Fours reframes fluency as a relation rather than an individual possession. Graham (2024) shows symmetrical peer-assisted learning lifts sight-reading because learners lean on social guidance and joint problem-solving instead of reading in isolated silence — so both students lead, listen, audition, and leave a note for one another, and dual consent slows the rush from notation to judgment. Stenberg and Cross (2019) add that how notation is visually chunked changes who can read it, so reducing cognitive load is treated as an inclusion issue, not a convenience. This is the belonging the B.C. curriculum asks art to hold: success becomes preparing an intelligible handoff and sustaining a common temporal world — not merely playing your own notes correctly.",
+          copy: "In our critical reading, we found that SRF works best when its users have a steady Internet connection and when they already have a sense of how to read rhythms solely from visually interpreting the symbols. It is also only accessible through accounts with active subscriptions. This reflects a “privilege hazard” in which students who are learning this skill for the first time are left behind. To acknowledge and relate to students who may not own a device or have constant access to the Internet, we have implemented the option to download rhythms with any of the alternate sight reading methods mentioned above. While an initial connection is required, students are ultimately enabled to work “offline” and in their own spaces if they prefer without losing the affordances offered by engaging with our artifact online. Students are not restricted by physical place, and are not “restricted” to requiring Internet access to use our redesigned tool. Finally, our tool is open to the general public and is not bound by any registration or paywall.",
           map: "Chunk audition, partner notes, shared tempo, turn focus, and dual readiness make negotiation visible and consequential (see the Co-Op page).",
           target: null
         },
         imagine: {
           title: "IMAGINE / Feedback without failure",
-          copy: "While sets of rhythms can be manually inserted from which to practice into our tool, such as tricky syncopations in a piece that a middle school band is learning, we ultimately imagine a space where our tool can be used with real-world applicability beyond fulfilling a music curriculum. To accomplish this we envision having a living, evolving “Rhythm Bank” that contains rhythms and beats from all over the world such as Afro-Cuban clave rhythms or a reggae drum beat, that users can access separate from our sight-reading generation feature. This bank will give users the opportunity to engage with the music of cultures different from their own where they can see it, hear it, and even clap it back if they wish, and by doing so they may gain a heightened awareness for identifying these styles in the music they consume. We have also reversed this process so users can “identify” a rhythm they may have heard for the first time by inputting it, where it will be searched against our “Rhythm Bank” database. Depending on the results, if it matches a current entry, users will see the notation, be able to hear it played back, and if applicable, the name of the rhythm and the culture it originates from.@@PARA@@Note: Due to the scope of this project, this idea is not programmed for use, but it is visually represented through the “Rhythm Bank” button where users would access this feature)",
+          copy: "While sets of rhythms can be manually inserted from which to practice into our tool, such as tricky syncopations in a piece that a middle school band is learning, we ultimately imagine a space where our tool can be used with real-world applicability beyond fulfilling a music curriculum. To accomplish this we envision having a living, evolving “Rhythm Bank” that contains rhythms and beats from all over the world such as Afro-Cuban clave rhythms or a reggae drum beat, that users can access separate from our sight-reading generation feature. This bank will give users the opportunity to engage with the music of cultures different from their own where they can see it, hear it, and even clap it back if they wish, and by doing so they may gain a heightened awareness for identifying these styles in the music they consume. We have also reversed this process so users can “identify” a rhythm they may have heard for the first time by inputting it, where it will be searched against our “Rhythm Bank” database. Depending on the results, if it matches a current entry, users will see the notation, be able to hear it played back, and if applicable, the name of the rhythm and the culture it originates from.",
           map: "Free Play agency, Ensemble pulse, neutral observations, and the listen–clap–chant scaffold provide multiple non-punitive routes through difficulty.",
           target: "feature-imagine"
         }
@@ -532,7 +532,7 @@ body:not(.on-home) .annotation-tabs,body:not(.on-home) .annotation-panel,body:no
       function openAnnotation(k){
         const a=annotations[k];
         $("#annotation-heading").textContent=a.title;
-        var _ac=String(a.copy).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");$("#annotation-copy").innerHTML=_ac.split("@@PARA@@").map(function(s){return "<p>"+s+"</p>";}).join("");
+        $("#annotation-copy").textContent=a.copy;
         $("#annotation-map").textContent=a.map;
         panel.classList.add("open"); overlay.classList.add("open"); panel.setAttribute("aria-hidden","false");
         $$(".annotation-tab").forEach(t=>t.classList.toggle("active",t.dataset.annotation===k));
