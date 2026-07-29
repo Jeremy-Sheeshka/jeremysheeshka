@@ -165,7 +165,22 @@
     .then(function(res){
       var h=res[0], bridge=res[1], ov=res[2];
       console.log('[praxis-coop] loaded drill='+(h?h.length:0)+' bridge='+(bridge?bridge.length:0)+' css='+(ov?ov.length:0));
-      if(!h){ f.srcdoc='<html><body style="font-family:system-ui;padding:2rem;color:#666"><p>Could not load the exercise (drill fetch failed).</p></body></html>'; return; }
+      if(!h){ f.srcdoc='<html><body style="font-family:system-ui;padding:2rem;color:#666"><p>Could not load the exercise (drill fetch failed).</p><script id="praxis-cop-settings-toggle">
+(function(){
+  function $(s){return document.querySelector(s);}
+  function $$(s){return Array.prototype.slice.call(document.querySelectorAll(s));}
+  var menu=$("#gear-pop");var gears=$$("[data-metro-gear]");
+  if(!menu||!gears.length)return;
+  function setMenu(open){menu.hidden=!open;menu.classList.toggle("open",open);menu.classList.toggle("hidden",!open);gears.forEach(function(g){g.setAttribute("aria-expanded",open?"true":"false");});}
+  setMenu(false);
+  document.addEventListener("click",function(e){
+    var gear=e.target.closest?e.target.closest("[data-metro-gear]"):null;
+    if(gear){e.preventDefault();e.stopPropagation();setMenu(menu.hidden);return;}
+    if(!menu.hidden && !menu.contains(e.target)){setMenu(false);}
+  },true);
+})();
+</script>
+</body></html>'; return; }
       h=stripBust(h);
       if(ov && h.indexOf('</head>')!==-1) h=h.replace('</head>','<style>'+ov+'</style><style id="praxis-reveal">#drill-frame{opacity:0;transition:opacity .15s ease}#drill-frame.praxis-shown{opacity:1}</style></head>');
       if(bridge){ bridge=bridge.replace(/<\/script/gi,'<\\/script'); var inj='<scr'+'ipt>window.__PRAXIS_COOP=true;console.log("[coop-bridge] injected ok");</scr'+'ipt><scr'+'ipt>'+bridge+'</scr'+'ipt>'; h=(h.indexOf('</body>')!==-1)?h.replace('</body>',inj+'</body>'):h+inj; }
