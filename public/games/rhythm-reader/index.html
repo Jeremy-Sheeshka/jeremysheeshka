@@ -300,7 +300,7 @@ body:not(.on-home) .annotation-tabs,body:not(.on-home) .annotation-panel,body:no
     <section class="screen active" id="screen-1">
       <div class="wrap">
         <p class="eyebrow">The Rhythm Bank</p>
-        <h1>Welcome to the Rhythm Bank</h1>
+        <h1>Think it. Play it. Bank it.</h1>
         <p class="lede">Share a rhythm of your own and explore the bank of rhythms others have submitted.</p>
 
         <div class="status-strip">
@@ -354,7 +354,7 @@ body:not(.on-home) .annotation-tabs,body:not(.on-home) .annotation-panel,body:no
         <button class="btn small" data-nav="screen-1" style="margin-bottom:18px">← Rhythm Bank</button>
         <p class="eyebrow">Gallery · literature and an invitation</p>
         <h2 class="section-head">Read what shaped this, then try it yourself.</h2>
-        <p class="subtle">This studio was built in conversation with a handful of ideas about datasets, feedback, and who a “universal” exercise is designed for. The reading below informed specific decisions inside the app; the prompt at the end is for you.</p>
+        <p class="subtle">We redesigned SRF to focus around three central curricular ideas: <strong>RESIST</strong>, <strong>RELATE</strong>, and <strong>IMAGINE</strong>. Take a minute to read the thinking behind each of these concepts by looking at the tabs to the right.</p>
 
         <div class="gallery-split">
           <div class="action-stack">
@@ -752,10 +752,26 @@ function startRecording(startTime){
   _sched(function(){finishRecording();},Math.max(0,delay2));
   tickRec();
 }
+function simplifyTiles(tiles){
+  var notes=[],i;for(i=0;i<tiles.length;i++){if(tiles[i].type==="note")notes.push(tiles[i]);}
+  notes.sort(function(a,b){return a.onset-b.onset;});
+  var TRACK=32,out=[];
+  for(var k=0;k<notes.length;k++){
+    var nt=notes[k];var nextOnset=(k+1<notes.length)?notes[k+1].onset:TRACK;
+    var gap=nextOnset-nt.onset;if(gap<1)gap=1;
+    var nb=(Math.floor(nt.onset/4)+1)*4;if(nb<=nt.onset)nb=nt.onset+4;
+    var cap=nb-nt.onset;if(cap<1)cap=1;var fill=gap<cap?gap:cap;
+    var ind=nt.dur||1;if(ind>gap)ind=gap;var md=ind>fill?ind:fill;
+    out.push({type:"note",onset:nt.onset,dur:md,tied:nt.tied});
+    var left=nextOnset-(nt.onset+md);if(left>=4){out.push({type:"rest",onset:nt.onset+md,dur:left});}
+  }
+  if(out.length&&out[out.length-1].type==="rest")out.pop();
+  return out;
+}
 function finishRecording(){
   if(activeEvent){activeEvent.end=recAudioStart+windowLen;events.push(activeEvent);activeEvent=null;}
   state="done";if(rafId){cancelAnimationFrame(rafId);rafId=null;}
-  var tiles=computeTiles(events);lastTiles=tiles;
+  var tiles=simplifyTiles(computeTiles(events));lastTiles=tiles;
   var notes=tiles.filter(function(t){return t.type==="note";});
   var svg=$("#rec-staff");if(svg)render(svg,tiles);
   clearPips();
@@ -838,7 +854,7 @@ function wire(){
   setStatus("Tap the pad below to start, then tap along after the 4-beat count-in.");
   var rr=$("#rec-record");if(rr)rr.addEventListener("click",startRec);
   var rd=$("#rec-redo");if(rd)rd.addEventListener("click",startRec);
-  var rc=$("#rec-cancel");if(rc)rc.addEventListener("click",function(){stopPlay();_clearTmrs();var _ph=document.querySelector('line[stroke="#e11d48"]');if(_ph&&_ph.parentNode)_ph.parentNode.removeChild(_ph);var _sl=$("#rec-tempo");if(_sl)_sl.disabled=false;clearPips();if(activeEvent){activeEvent.end=(actx?actx.currentTime:activeEvent.start);events.push(activeEvent);activeEvent=null;}if(events.length===0){renderEmpty();lastTiles=null;state="done";setStatus("");setSubmit(false);}else{var tiles=computeTiles(events);lastTiles=tiles;var notes=tiles.filter(function(t){return t.type==="note";});var svg=$("#rec-staff");if(svg)render(svg,tiles);state="done";setStatus("");if(notes.length>0)setSubmit(true);else setSubmit(false);}setPadLabel();});
+  var rc=$("#rec-cancel");if(rc)rc.addEventListener("click",function(){stopPlay();_clearTmrs();var _ph=document.querySelector('line[stroke="#e11d48"]');if(_ph&&_ph.parentNode)_ph.parentNode.removeChild(_ph);var _sl=$("#rec-tempo");if(_sl)_sl.disabled=false;clearPips();if(activeEvent){activeEvent.end=(actx?actx.currentTime:activeEvent.start);events.push(activeEvent);activeEvent=null;}if(events.length===0){renderEmpty();lastTiles=null;state="done";setStatus("");setSubmit(false);}else{var tiles=simplifyTiles(computeTiles(events));lastTiles=tiles;var notes=tiles.filter(function(t){return t.type==="note";});var svg=$("#rec-staff");if(svg)render(svg,tiles);state="done";setStatus("");if(notes.length>0)setSubmit(true);else setSubmit(false);}setPadLabel();});
   var rp=$("#rec-play");if(rp)rp.addEventListener("click",function(){if(!lastTiles)return;var svg=$("#rec-staff");if(_playing&&_playBtn===rp){stopPlay();}else{play(lastTiles,curBPM,rp,svg);}});
   var rs=$("#rec-submit");if(rs)rs.addEventListener("click",function(){if(!lastTiles)return;stopPlay();var _ni=$("#rec-name");var _nv=_ni?_ni.value.trim():"";if(!_nv){if(_ni){_ni.style.outline="3px solid #dc2626";_ni.style.outlineOffset="2px";_ni.classList.add("rec-name-err");_ni.focus();}toast("Please enter a name to submit your rhythm.");return;}var name=_nv;var tiles=lastTiles.slice();var bpm=curBPM;var _sb=$("#rec-submit");if(_sb)_sb.disabled=true;submitRhythm(name,bpm,tiles).then(function(ok){if(!ok&&_sb)_sb.disabled=false;});});
   var pad=$("#rec-pad");if(pad)pad.addEventListener("pointerdown",onDown);
