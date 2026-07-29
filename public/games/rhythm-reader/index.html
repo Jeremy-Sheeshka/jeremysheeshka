@@ -337,6 +337,7 @@ body:not(.on-home) .annotation-tabs,body:not(.on-home) .annotation-panel,body:no
               <div class="presets">
                 <button class="preset" aria-pressed="false" data-name="Local Rhythm Bank" data-bank="local">Local Rhythm Bank<span id="preset-count-local">Rhythms ETEC 531 has submitted. · 0</span></button>
                 <button class="preset selected" aria-pressed="true" data-name="Cultural Rhythm Bank" data-bank="cultural">Cultural Rhythm Bank<span id="preset-count-cultural">Shared cultural rhythms · 0</span></button>
+            <button type="button" class="preset selected" data-bank="teacher" disabled aria-disabled="true" title="Coming soon">Teacher imported rhythms<span>Rhythms from class repertoire. (coming soon)</span></button>
               </div>
             </article>
           </div>
@@ -682,7 +683,7 @@ var state="idle";
 var KEY_LOCAL="praxis_bank_local";
 var KEY_LEGACY="praxis_bank_v4";
 var API="/api/rhythms";
-var currentBank="cultural";
+var currentBank="local";
   var adminMode=false;
   function ADMIN(){return [82,82,45,67,85,82,65,84,69,45,53,51,49].map(function(c){return String.fromCharCode(c);}).join("");}
 var bank=[]; var remote=false; var _bankStatus="not checked";
