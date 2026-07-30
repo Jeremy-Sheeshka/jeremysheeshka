@@ -785,17 +785,24 @@ function simplifyTiles(tiles){
   var on=[];for(i=0;i<raw.length;i++){var q=S===1?raw[i]:(Math.round(raw[i]/S)*S);if(on.length===0||q!==on[on.length-1])on.push(q);}
   var TRACK=32,out=[];
   function legalNote(o,maxd){if(maxd>=16&&o%16===0)return 16;if(maxd>=8&&o%8===0)return 8;if(maxd>=4&&o%4===0)return 4;return 2;}
-  function rests(o,len,arr){var rem=len,p=o;while(rem>0){var r=(rem>=8&&p%8===0)?8:(rem>=4?4:2);arr.push({type:"rest",onset:p,dur:r});p+=r;rem-=r;}}
+  function addRests(o,len){var rem=len,p=o;while(rem>0){var r=(rem>=8&&p%8===0)?8:(rem>=4?4:2);out.push({type:"rest",onset:p,dur:r});p+=r;rem-=r;}}
   for(var k=0;k<on.length;k++){
     var o=on[k];var barStart=Math.floor(o/16)*16;var barEnd=barStart+16;
     var firstInBar=(k===0)||(Math.floor(on[k-1]/16)!==Math.floor(o/16));
-    if(firstInBar&&o-barStart>=S)rests(barStart,o-barStart,out);
+    if(firstInBar&&o-barStart>=S)addRests(barStart,o-barStart);
     var nextO=(k+1<on.length)?on[k+1]:TRACK;
     var gap=nextO-o;if(gap<S)gap=S;var cap=barEnd-o;if(cap<S)cap=S;var allowed=gap<cap?gap:cap;
     var dur=legalNote(o,allowed);out.push({type:"note",onset:o,dur:dur,tied:false});
-    var leftover=nextO-(o+dur);var be=barEnd-(o+dur);if(leftover>be)leftover=be;if(leftover>=S)rests(o+dur,leftover,out);}
+    var leftover=nextO-(o+dur);var be=barEnd-(o+dur);if(leftover>be)leftover=be;if(leftover>=S)addRests(o+dur,leftover);
+  }
+  var NB=TRACK/16;
+  for(var b=0;b<NB;b++){var bs=b*16,be2=bs+16,sum=0;for(var q2=0;q2<out.length;q2++){if(out[q2].onset>=bs&&out[q2].onset<be2)sum+=out[q2].dur;}
+    if(sum===0){out.push({type:"rest",onset:bs,dur:16});}else if(sum<16){addRests(bs+sum,16-sum);}}
+  out.sort(function(a,b){return a.onset-b.onset;});
   return out;
 }
+
+
 
 function finishRecording(){
   if(activeEvent){activeEvent.end=recAudioStart+windowLen;events.push(activeEvent);activeEvent=null;}
