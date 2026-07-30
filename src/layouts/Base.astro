@@ -24,6 +24,28 @@ const themeClass = `bg-theme-${themeColor}`;
 <html lang={siteConfig.lang} class="scroll-smooth">
 	<head>
 		<BaseHead articleDate={articleDate} description={description} ogImage={ogImage} title={title} />
+
+		<!-- Embed mode: hide site chrome when ?embed=1 is in the URL.
+		     The dashboard iframes blog posts chrome-less. -->
+		<script is:inline>
+			if (new URLSearchParams(window.location.search).has('embed')) {
+				document.documentElement.classList.add('embedded');
+			}
+		</script>
+		<style is:inline>
+			.embedded header#main-header,
+			.embedded footer,
+			.embedded #blog-hero,
+			.embedded #post-nav,
+			.embedded #to-top-btn,
+			.embedded body > theme-toggle,
+			.embedded .prose + .mt-16 {
+				display: none !important;
+			}
+			.embedded {
+				padding-top: 0 !important;
+			}
+		</style>
 	</head>
 	<body class={`flex min-h-screen flex-col ${themeClass} bg-texture`}>
 		<ThemeProvider />
