@@ -712,7 +712,7 @@ var bank=[]; var remote=false; var _bankStatus="not checked";
 function myTokens(){try{var r=localStorage.getItem("praxis_my_tokens");return r?JSON.parse(r):[];}catch(e){return [];}}
 function addMyToken(tk){var a=myTokens();a.push(tk);try{localStorage.setItem("praxis_my_tokens",JSON.stringify(a));}catch(e){}}
 function newToken(){try{if(crypto&&crypto.randomUUID)return crypto.randomUUID();}catch(e){}return "tk-"+Date.now()+"-"+Math.random().toString(36).slice(2);}
-function u16(item){var t=(item&&item.tiles)||[];if(item&&item.unit==="s16")return t;var o=[];for(var i=0;i<t.length;i++){var x=t[i];o.push({type:x.type,onset:(x.onset||0)*2,dur:(x.dur||0)*2,tied:x.tied});}return o;}
+function u16(item){var t=(item&&item.tiles)||[];if(item&&(item.unit==="s16"||Array.isArray(item.unit)))return t;var o=[];for(var i=0;i<t.length;i++){var x=t[i];o.push({type:x.type,onset:(x.onset||0)*2,dur:(x.dur||0)*2,tied:x.tied});}return o;}
 function loadLocal(){var raw=null;try{raw=localStorage.getItem(KEY_LOCAL);}catch(e){}if(raw===null){var leg=null;try{leg=localStorage.getItem(KEY_LEGACY);}catch(e){}if(leg){try{localStorage.setItem(KEY_LOCAL,leg);}catch(e){}raw=leg;}}if(raw===null){var seed=[{id:1,name:"Example",bpm:88,unit:"s16",tiles:[{type:"note",onset:0,dur:4},{type:"note",onset:4,dur:4},{type:"note",onset:8,dur:4},{type:"note",onset:12,dur:4},{type:"note",onset:16,dur:4},{type:"note",onset:20,dur:4},{type:"note",onset:24,dur:4},{type:"note",onset:28,dur:4}],seed:true,ts:Date.now()}];try{localStorage.setItem(KEY_LOCAL,JSON.stringify(seed));}catch(e){}return seed;}try{return JSON.parse(raw)||[];}catch(e){return [];}}
 function saveLocal(a){try{localStorage.setItem(KEY_LOCAL,JSON.stringify(a));}catch(e){}}
 function toast(m){var t=$("#toast");if(!t)return;t.textContent=m;t.classList.remove("hidden");clearTimeout(t._t);t._t=setTimeout(function(){t.classList.add("hidden");},2200);}
@@ -742,7 +742,13 @@ async function deleteRhythm(item){
 }
 function renderEmpty(){var svg=$("#rec-staff");if(svg)render(svg,[]);}
 function setPadLabel(){var p=$("#rec-pad");if(!p)return;if(state==="calibrating"||state==="recording"){p.innerHTML="Tap or hold &mdash; Click or Spacebar";}else{p.innerHTML='<span class="rec-bullet">&#9679;</span> Record a 2-bar rhythm';}}
-function renderPreview(){var evs=events.slice();if(activeEvent)evs.push({start:activeEvent.start,end:actx?actx.currentTime:activeEvent.start});var tiles=computeTiles(evs);var sig="";for(var i=0;i<tiles.length;i++)sig+=tiles[i].type[0]+tiles[i].onset+":"+tiles[i].dur+",";if(sig===_prevSig)return;_prevSig=sig;var svg=$("#rec-staff");if(svg)render(svg,tiles);}
+function renderPreview(){
+  var svg=$("#rec-staff");if(!svg)return;
+  if(state!=="recording"&&state!=="calibrating")return;
+  if(!events||events.length===0){renderEmpty();return;}
+  var tiles=simplifyTiles(computeTiles(events));render(svg,tiles);
+}
+
 var _playing=false,_playBtn=null,_playRaf=null;
 function noteAt(time,freq){if(!actx)return;var o=actx.createOscillator(),g=actx.createGain();_nodes.push(o);o.type="triangle";o.frequency.value=freq;g.gain.setValueAtTime(.0001,time);g.gain.exponentialRampToValueAtTime(.35,time+.005);g.gain.exponentialRampToValueAtTime(.0001,time+.2);o.connect(g).connect(actx.destination);o.start(time);o.stop(time+.22);}
 function stopPlay(){_playing=false;if(_playRaf){cancelAnimationFrame(_playRaf);_playRaf=null;}_clearTmrs();if(_playBtn){try{_playBtn.textContent=">";_playBtn.setAttribute("title","Play");}catch(e){}_playBtn=null;}var phs=document.querySelectorAll('line[stroke="#e11d48"]');for(var i=0;i<phs.length;i++)phs[i].setAttribute("opacity","0");}

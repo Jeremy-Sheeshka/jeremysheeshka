@@ -470,6 +470,11 @@ body{overflow-x:hidden}
   .brand__badge{width:30px !important;height:30px !important;font-size:.72rem !important}
 }
 </style>
+<style id="fp-draw-red">
+#draw-palette .sw{display:none !important}
+#draw-palette [data-clear]{display:none !important}
+#draw-palette{top:auto !important;bottom:16px !important;left:50% !important;transform:translateX(-50%) !important;z-index:61 !important}
+</style>
 </head>
 <body>
 <script>Object.defineProperty(window,"tempo",{get:function(){var e=document.querySelector("[data-metro-bpm-input]")||document.querySelector("[data-metro-tempo]");return e?parseInt(e.value)||88:88;},configurable:true});</script>
@@ -728,10 +733,10 @@ body{overflow-x:hidden}
   /* canvas */
   var canvas=$('#draw-canvas'); if(!canvas){ canvas=document.createElement('canvas'); canvas.id='draw-canvas'; (stage||document.body).appendChild(canvas); }
   var ctx=canvas.getContext('2d'), palette=$('#draw-palette');
-  var strokes=[], current=null, drawing=false, drawColor='#ef4444', eraser=false, cssW=1, cssH=1, PEN=3, ERA=18;
+  var strokes=[], current=null, drawing=false, drawColor='#dc2626', eraser=false, cssW=1, cssH=1, PEN=3, ERA=18;
   function sizeCanvas(){ var r=(stage||document.body).getBoundingClientRect(); var dpr=window.devicePixelRatio||1; cssW=Math.max(1,r.width); cssH=Math.max(1,r.height); canvas.width=Math.round(cssW*dpr); canvas.height=Math.round(cssH*dpr); canvas.style.width=cssW+'px'; canvas.style.height=cssH+'px'; redraw(); }
-  function redraw(){ var dpr=window.devicePixelRatio||1; ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,cssW,cssH); ctx.lineCap='round'; ctx.lineJoin='round'; for(var s=0;s<strokes.length;s++){ var st=strokes[s]; ctx.globalCompositeOperation=st.eraser?'destination-out':'source-over'; ctx.strokeStyle=st.color; ctx.lineWidth=st.size; ctx.beginPath(); var p0=st.points[0]; ctx.moveTo(p0.x*cssW,p0.y*cssH); for(var i=1;i<st.points.length;i++)ctx.lineTo(st.points[i].x*cssW,st.points[i].y*cssH); if(st.points.length===1)ctx.lineTo(p0.x*cssW+0.1,p0.y*cssH+0.1); ctx.stroke(); } ctx.globalCompositeOperation='source-over'; }
-  function segDraw(st,a,b){ var dpr=window.devicePixelRatio||1; ctx.setTransform(dpr,0,0,dpr,0,0); ctx.globalCompositeOperation=st.eraser?'destination-out':'source-over'; ctx.strokeStyle=st.color; ctx.lineWidth=st.size; ctx.lineCap='round'; ctx.lineJoin='round'; ctx.beginPath(); ctx.moveTo(a.x*cssW,a.y*cssH); ctx.lineTo(b.x*cssW,b.y*cssH); ctx.stroke(); ctx.globalCompositeOperation='source-over'; }
+  function redraw(){ var dpr=window.devicePixelRatio||1; ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,cssW,cssH); ctx.lineCap='round'; ctx.lineJoin='round'; for(var s=0;s<strokes.length;s++){ var st=strokes[s]; ctx.globalCompositeOperation='source-over'; ctx.strokeStyle='#dc2626'; ctx.lineWidth=st.size; ctx.beginPath(); var p0=st.points[0]; ctx.moveTo(p0.x*cssW,p0.y*cssH); for(var i=1;i<st.points.length;i++)ctx.lineTo(st.points[i].x*cssW,st.points[i].y*cssH); if(st.points.length===1)ctx.lineTo(p0.x*cssW+0.1,p0.y*cssH+0.1); ctx.stroke(); } ctx.globalCompositeOperation='source-over'; }
+  function segDraw(st,a,b){ var dpr=window.devicePixelRatio||1; ctx.setTransform(dpr,0,0,dpr,0,0); ctx.globalCompositeOperation='source-over'; ctx.strokeStyle='#dc2626'; ctx.lineWidth=st.size; ctx.lineCap='round'; ctx.lineJoin='round'; ctx.beginPath(); ctx.moveTo(a.x*cssW,a.y*cssH); ctx.lineTo(b.x*cssW,b.y*cssH); ctx.stroke(); ctx.globalCompositeOperation='source-over'; }
   function clearDrawing(){ strokes=[]; current=null; redraw(); }
   function pt(e){ var r=canvas.getBoundingClientRect(); return {x:(e.clientX-r.left)/cssW,y:(e.clientY-r.top)/cssH}; }
   canvas.addEventListener('pointerdown',function(e){ if(!drawing)return; e.preventDefault(); try{canvas.setPointerCapture(e.pointerId);}catch(er){} var p=pt(e); current={color:drawColor,size:eraser?ERA:PEN,eraser:eraser,points:[p]}; strokes.push(current); });

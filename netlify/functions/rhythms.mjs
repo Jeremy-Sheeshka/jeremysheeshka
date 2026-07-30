@@ -30,7 +30,7 @@ async function fbDel(path){
 }
 
 const SEED = {
-  "1": { id: "1", name: "Example", bpm: 88, seed: true, ts: 1, tiles: [
+  "1": { id: "1", name: "Example", bpm: 88, unit: "s16", seed: true, ts: 1, tiles: [
     {type:"note",onset:0,dur:2},{type:"note",onset:2,dur:2},{type:"note",onset:4,dur:2},{type:"note",onset:6,dur:2},
     {type:"note",onset:8,dur:2},{type:"note",onset:10,dur:2},{type:"note",onset:12,dur:2},{type:"note",onset:14,dur:2}
   ]}
@@ -65,7 +65,7 @@ export default async (req, context) => {
       const id = String(Date.now()) + "-" + Math.floor(Math.random() * 1000000);
       const token = randomUUID();
       const unit = (body && body.unit==="s16") ? "s16" : "e8";
-    const item = { id: id, name: name, bpm: bpm, tiles, unit: tiles, token: token, ts: Date.now() };
+    const item = { id: id, name: name, bpm: bpm, tiles, unit: unit, token: token, ts: Date.now() };
       await fbPut("/rhythms/" + encodeURIComponent(id), item);
       return json(item, 201);
     }
