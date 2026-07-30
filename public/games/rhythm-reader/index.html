@@ -324,14 +324,12 @@ details.resp .resp-body p.subtle{color:var(--Rhythm-muted,#5b6472)}
         <p class="lede">Share a rhythm of your own and explore the bank of rhythms others have submitted.</p>
 
         <div class="status-strip">
-          <div class="status-item"><span>Current collection</span><strong id="status-dataset">Local Rhythm Bank</strong></div>
-          <div class="status-item"><span>Session state</span><strong>Ready to begin</strong></div>
-        </div>
+          </div>
 
         <div class="dashboard-grid">
           <div>
             <article class="card dataset-card" id="feature-resist">
-              <div class="card-label"><strong>Datasets</strong><span class="doing-wrap"><button class="feature-link" id="weekly-doing-link">The Doing</button><span class="doing-pop" role="tooltip"><strong>The Doing</strong>Tap a two-bar rhythm from a song you are listening to right now and add it to the bank. Then sit with the prompt: <em>what did the app assume about your rhythm that was not true, and what would have to change to fit what you brought in?</em><span class="doing-go">Click to open the full prompt in the Gallery &rarr;</span></span></span></div>
+              <div class="card-label"><strong><span id="bank-section-title">Datasets</span></strong><span class="doing-wrap"><button class="feature-link" id="weekly-doing-link">The Doing</button><span class="doing-pop" role="tooltip"><strong>The Doing</strong>Tap a two-bar rhythm from a song you are listening to right now and add it to the bank. Then sit with the prompt: <em>what did the app assume about your rhythm that was not true, and what would have to change to fit what you brought in?</em><span class="doing-go">Click to open the full prompt in the Gallery &rarr;</span></span></span></div>
               <input class="sr-only" id="file-input" type="file" accept=".pdf,.png,.jpg,.jpeg">
               <div class="rec-panel" id="rec-panel">
                 <div class="rec-head"><strong>Record a 2-Bar Rhythm</strong><small>Tap and share a two bar rhythm the Rhythm Bank.</small></div>
@@ -787,7 +785,34 @@ function startRecording(startTime){
   _sched(function(){finishRecording();},Math.max(0,delay2));
   tickRec();
 }
-function simplifyTiles(tiles){return tiles;}
+function simplifyTiles(tiles){
+  var TRACK=32,i;
+  var ev=[];for(i=0;i<tiles.length;i++){if(tiles[i].type==="note")ev.push({o:tiles[i].onset|0,rd:tiles[i].dur||1,run:false});}
+  ev.sort(function(a,b){return a.o-b.o;});
+  for(i=0;i+1<ev.length;i++){if(ev[i+1].o-ev[i].o===1&&Math.floor(ev[i].o/4)===Math.floor(ev[i+1].o/4)){ev[i].run=ev[i+1].run=true;}}
+  for(i=0;i<ev.length;i++){if(ev[i].run){var j=i;while(j+1<ev.length&&ev[j+1].run&&ev[j+1].o-ev[j].o===1)j++;if(ev[i].o%2===1){for(var g=i;g<=j;g++)ev[g].o=ev[g].o-1;}i=j;}}
+  var on=[];for(i=0;i<ev.length;i++){var o=ev[i].o,rd=ev[i].run?1:ev[i].rd,run=ev[i].run;if(on.length&&on[on.length-1].o===o){if(rd>on[on.length-1].rd)on[on.length-1].rd=rd;on[on.length-1].run=on[on.length-1].run||run;}else on.push({o:o,rd:rd,run:run});}
+  var LEGAL=[16,8,4,2,1];
+  function legal(v){for(var k=0;k<LEGAL.length;k++){if(LEGAL[k]<=v)return LEGAL[k];}return 1;}
+  var out=[],cur=0;
+  function addRest(o,len){var rem=len,p=o;while(rem>=2){var r=rem>=8&&p%8===0?8:(rem>=4?4:2);if(r>rem)r=rem;out.push({type:"rest",onset:p,dur:r,tied:false});p+=r;rem-=r;}}
+  for(var k=0;k<on.length;k++){
+    var o=on[k].o,rd=on[k].rd,run=on[k].run;
+    var next=k+1<on.length?on[k+1].o:TRACK;
+    var barEnd=(Math.floor(o/16)+1)*16;
+    if(o>cur){var sil=o-cur;if(sil%2===1&&!run){o=o-1;sil=o-cur;}if(sil>=2)addRest(cur,sil);cur=o;}
+    var dur;
+    if(run){dur=1;}
+    else if(rd>=2){dur=legal(Math.min(rd,barEnd-o,next-o));}
+    else{var fillcap=Math.min((Math.floor(o/4)+1)*4-o,barEnd-o,next-o);if(fillcap<1)fillcap=1;dur=legal(fillcap);if(dur===1&&next-o>1)dur=2;}
+    if(dur<1)dur=1;if(o+dur>barEnd)dur=barEnd-o;if(o+dur>next)dur=next-o;if(dur<1)dur=1;
+    out.push({type:"note",onset:o,dur:dur,tied:false});cur=o+dur;
+  }
+  for(var b=0;b<TRACK/16;b++){var bs=b*16,be=bs+16,s=0;for(var q=0;q<out.length;q++){if(out[q].onset>=bs&&out[q].onset<be)s+=out[q].dur;}if(s===0)out.push({type:"rest",onset:bs,dur:16,tied:false});else if(s<16)addRest(bs+s,16-s);}
+  out.sort(function(a,b){return a.onset-b.onset;});
+  return out;
+}
+
 
 
 
@@ -911,6 +936,13 @@ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded"
     var t=e.target&&e.target.closest&&e.target.closest('[data-anno],[data-annotation],.annotation-tab');
     if(!t)return;var l=lab(t);setTit(l);setTimeout(function(){setTit(l);},0);
   },true);
+})();
+</script>
+<script id="bank-title-fix">
+(function(){
+  function setT(){var el=document.getElementById("bank-section-title");if(el){el.textContent=(typeof currentBank!=="undefined"&&currentBank==="cultural")?"Cultural Rhythm Bank":"Local Rhythm Bank";}}
+  document.addEventListener("click",function(e){var t=e.target&&e.target.closest&&e.target.closest("[data-bank]");if(!t)return;setTimeout(setT,0);},true);
+  setTimeout(setT,0);setTimeout(setT,80);setTimeout(setT,400);
 })();
 </script>
 </body>
