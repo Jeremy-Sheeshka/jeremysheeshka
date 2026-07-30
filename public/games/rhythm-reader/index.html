@@ -658,7 +658,7 @@ function computeBeams(tiles){
   function flush(){if(cur.length>=2)groups.push(cur.slice());cur=[];}
   for(i=0;i<tiles.length;i++){var t=tiles[i];if(beamable(t)){if(cur.length===0){cur.push(t);}else{var last=cur[cur.length-1];if(beatOf(t.onset)===beatOf(last.onset)&&t.onset===last.onset+last.dur){cur.push(t);}else{flush();cur.push(t);}}}else{flush();}}
   flush();
-  for(var g=0;g<groups.length;g++){var gr=groups[g];for(var j=0;j<gr.length;j++){gr[j]._beam={first:j===0,last:j===gr.length-1,secL:j>0&&gr[j].dur===1&&gr[j-1].dur===2,secR:j<gr.length-1&&gr[j].dur===1&&gr[j+1].dur===2,pairR:j<gr.length-1&&gr[j].dur===1&&gr[j+1].dur===1};}}
+  for(var g=0;g<groups.length;g++){var gr=groups[g];for(var j=0;j<gr.length;j++){var _pR=j<gr.length-1&&gr[j].dur===1&&gr[j+1].dur===1;var _pL=j>0&&gr[j-1].dur===1&&gr[j].dur===1;gr[j]._beam={first:j===0,last:j===gr.length-1,secL:j>0&&gr[j].dur===1&&gr[j-1].dur===2&&!_pR,secR:j<gr.length-1&&gr[j].dur===1&&gr[j+1].dur===2&&!_pL,pairR:_pR};}}
   return groups;
 }
 function drawNote(svg,t){
