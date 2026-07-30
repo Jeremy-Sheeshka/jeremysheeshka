@@ -266,7 +266,7 @@ details.resp .resp-body p.subtle{color:var(--Rhythm-muted,#5b6472)}
 @media(max-width:820px){#screen-gallery .dashboard-grid{column-count:1}}
 </style>
 <style id="hide-rec-status">#hide-rec-status{display:none !important}#status-dataset{display:none !important}</style><style id="anno-tabs-bigger">
-[data-anno],.annotation-tabs,.annotation-tab{font-size:1.12rem !important;padding:11px 20px !important;min-height:46px !important;letter-spacing:.05em !important;}
+.annotation-tab,[data-anno]{font-size:1.08rem !important;padding:10px 18px !important;min-height:44px !important;letter-spacing:.04em !important;line-height:1.2 !important;}
 </style>
 </head>
 <body>
@@ -442,7 +442,7 @@ details.resp .resp-body p.subtle{color:var(--Rhythm-muted,#5b6472)}
   </aside>
   <div class="annotation-overlay" id="annotation-overlay"></div>
   <aside class="annotation-panel" id="annotation-panel" aria-hidden="true">
-    <div class="annotation-head"><span class="annotation-title">ACADEMIC ANNOTATION</span><button class="close" id="annotation-close" aria-label="Close annotation">×</button></div>
+    <div class="annotation-head"><span class="annotation-title">ANNOTATE</span><button class="close" id="annotation-close" aria-label="Close annotation">×</button></div>
     <div class="annotation-content">
       <h2 id="annotation-heading"></h2>
       <p id="annotation-copy"></p>
@@ -896,6 +896,21 @@ function wire(){
   refreshBank();
 }
 if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",wire);}else{wire();}
+})();
+</script>
+<script id="anno-title-dyn">
+(function(){
+  function lab(el){
+    var a=el.getAttribute&&(el.getAttribute('data-anno')||el.getAttribute('data-annotation')||'');
+    if(a){return a.toUpperCase();}
+    var t=(el.textContent||'').replace(/\s+/g,' ').trim();
+    return (t.split(' ')[0]||'').toUpperCase();
+  }
+  function setTit(l){var ti=document.querySelector('.annotation-title');if(ti){ti.textContent='ANNOTATE: '+(l||'ANNOTATE');}}
+  document.addEventListener('click',function(e){
+    var t=e.target&&e.target.closest&&e.target.closest('[data-anno],[data-annotation],.annotation-tab');
+    if(!t)return;var l=lab(t);setTit(l);setTimeout(function(){setTit(l);},0);
+  },true);
 })();
 </script>
 </body>
