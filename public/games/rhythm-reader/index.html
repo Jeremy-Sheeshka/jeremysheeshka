@@ -265,6 +265,9 @@ details.resp .resp-body p.subtle{color:var(--Rhythm-muted,#5b6472)}
 #screen-gallery .dashboard-grid>*{break-inside:avoid;-webkit-column-break-inside:avoid;display:inline-block;width:100%;vertical-align:top;margin:0 0 16px}
 @media(max-width:820px){#screen-gallery .dashboard-grid{column-count:1}}
 </style>
+<style id="hide-rec-status">#hide-rec-status{display:none !important}#status-dataset{display:none !important}</style><style id="anno-tabs-bigger">
+[data-anno],.annotation-tabs,.annotation-tab{font-size:1.12rem !important;padding:11px 20px !important;min-height:46px !important;letter-spacing:.05em !important;}
+</style>
 </head>
 <body>
   <header class="topbar">
@@ -321,7 +324,7 @@ details.resp .resp-body p.subtle{color:var(--Rhythm-muted,#5b6472)}
         <p class="lede">Share a rhythm of your own and explore the bank of rhythms others have submitted.</p>
 
         <div class="status-strip">
-          <div class="status-item"><span>Current collection</span><strong id="status-dataset">Cultural Rhythm Bank</strong></div>
+          <div class="status-item"><span>Current collection</span><strong id="status-dataset">Local Rhythm Bank</strong></div>
           <div class="status-item"><span>Session state</span><strong>Ready to begin</strong></div>
         </div>
 
@@ -331,9 +334,9 @@ details.resp .resp-body p.subtle{color:var(--Rhythm-muted,#5b6472)}
               <div class="card-label"><strong>Datasets</strong><span class="doing-wrap"><button class="feature-link" id="weekly-doing-link">The Doing</button><span class="doing-pop" role="tooltip"><strong>The Doing</strong>Tap a two-bar rhythm from a song you are listening to right now and add it to the bank. Then sit with the prompt: <em>what did the app assume about your rhythm that was not true, and what would have to change to fit what you brought in?</em><span class="doing-go">Click to open the full prompt in the Gallery &rarr;</span></span></span></div>
               <input class="sr-only" id="file-input" type="file" accept=".pdf,.png,.jpg,.jpeg">
               <div class="rec-panel" id="rec-panel">
-                <div class="rec-head"><strong>Record a 2-Bar Rhythm</strong><small>Tap your own two bars &mdash; a quick tap is a 16th note, so tap each 16th for fast rhythms (1&nbsp;e&nbsp;+&nbsp;a, 1&nbsp;e, +&nbsp;a, 1&nbsp;e&nbsp;a). Press &amp; hold a tap to lengthen it into an 8th, quarter, half, or whole note. When finished, submit it to <span id="rec-submit-target">the shared Cultural Rhythm Bank</span>.</small></div>
+                <div class="rec-head"><strong>Record a 2-Bar Rhythm</strong><small>Tap and share a two bar rhythm the Rhythm Bank.</small></div>
                 <div class="rec-stage" id="rec-stage">
-                  <div class="rec-status" id="rec-status">Tap the pad below to start, then tap along after the 4-beat count-in.</div>
+                  
                   <svg class="rec-staff" id="rec-staff" viewBox="0 0 640 120" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Your recorded rhythm"></svg>
                   <div class="rec-pips" id="rec-pips"><i></i><i></i><i></i><i></i></div>
               <div class="rec-pad" id="rec-pad" role="button" tabindex="0" aria-label="Tap pad"><span class="rec-bullet">&#9679;</span> Record a 2-bar rhythm</div>
@@ -455,19 +458,19 @@ details.resp .resp-body p.subtle{color:var(--Rhythm-muted,#5b6472)}
       const state = { dataset: "Local Database", ensemble: null };
       const annotations = {
         resist: {
-          title: "RESIST / Missing datasets",
+          title: "RESIST",
           copy: "Sight Reading Factory (SRF) relies on Western music notation as the only mode for students to sight-read with, which hinders users of this tool who may have learned how to read music with a different notation system or who learn more effectively using other modes. The current model of SRF’s feedback is also problematic as it shows an accuracy percentage with a breakdown of correct notes, wrong notes, missing notes, and notes that were played early or late, but does not indicate exactly which notes or rhythms are incorrect or offer suggestions on how to improve. To resist these limitations and to make our tool widely accessible, we have included options at the top of the screen to help students in other ways, such as numbers that appear below the notation, takadimi (etc. syllables like ta and ti-ti), a playback option for the aural mode, and even a “draw” mode for students who might want to make their own notes. All of these options are toggleable and off by default, giving users the freedom to choose from their preferences without forcing these options onto them or being overwhelming. There is also an accompanying introductory video to our artifact that serves as scaffolding for students to start reading basic rhythms before they use our tool – in case, for example, they have no idea what takadimi is!",
           map: "",
           target: "feature-resist"
         },
         relate: {
-          title: "RELATE / Learning between peers",
+          title: "RELATE",
           copy: "In our critical reading, we found that SRF works best when its users have a steady Internet connection and when they already have a sense of how to read rhythms solely from visually interpreting the symbols. It is also only accessible through accounts with active subscriptions. This reflects a “privilege hazard” in which students who are learning this skill for the first time are left behind. To acknowledge and relate to students who may not own a device or have constant access to the Internet, we have implemented the option to download rhythms with any of the alternate sight reading methods mentioned above. While an initial connection is required, students are ultimately enabled to work “offline” and in their own spaces if they prefer without losing the affordances offered by engaging with our artifact online. Students are not restricted by physical place, and are not “restricted” to requiring Internet access to use our redesigned tool. Finally, our tool is open to the general public and is not bound by any registration or paywall.",
           map: "",
           target: null
         },
         imagine: {
-          title: "IMAGINE / Feedback without failure",
+          title: "IMAGINE",
           copy: "While sets of rhythms can be manually inserted from which to practice into our tool, such as tricky syncopations in a piece that a middle school band is learning, we ultimately imagine a space where our tool can be used with real-world applicability beyond fulfilling a music curriculum. To accomplish this we envision having a living, evolving “Rhythm Bank” that contains rhythms and beats from all over the world such as Afro-Cuban clave rhythms or a reggae drum beat, that users can access separate from our sight-reading generation feature. This bank will give users the opportunity to engage with the music of cultures different from their own where they can see it, hear it, and even clap it back if they wish, and by doing so they may gain a heightened awareness for identifying these styles in the music they consume. We have also reversed this process so users can “identify” a rhythm they may have heard for the first time by inputting it, where it will be searched against our “Rhythm Bank” database. Depending on the results, if it matches a current entry, users will see the notation, be able to hear it played back, and if applicable, the name of the rhythm and the culture it originates from.",
           map: "",
           target: "feature-imagine"
@@ -589,7 +592,7 @@ function _sched(fn,ms){var id=setTimeout(fn,ms);_tmrs.push(id);return id;}
 function _clearTmrs(){for(var i=0;i<_tmrs.length;i++)clearTimeout(_tmrs[i]);_tmrs.length=0;if(rafId){cancelAnimationFrame(rafId);rafId=null;}for(var j=0;j<_nodes.length;j++){try{_nodes[j].disconnect();}catch(e){}}_nodes.length=0;}
 function ensureActx(){var AC=window.AudioContext||window.webkitAudioContext;if(!AC)return null;if(!actx)actx=new AC();return actx;}
 function clickAt(time,freq,vol){if(!actx)return;var o=actx.createOscillator(),g=actx.createGain();_nodes.push(o);o.type="sine";o.frequency.value=freq;g.gain.setValueAtTime(.0001,time);g.gain.exponentialRampToValueAtTime(vol||.3,time+.004);g.gain.exponentialRampToValueAtTime(.0001,time+.09);o.connect(g).connect(actx.destination);o.start(time);o.stop(time+.11);}
-function setStatus(t){var el=$("#rec-status");if(el)el.textContent=t;}
+function setStatus(t){}
 function setSubmit(on){var a=$("#rec-submit"),b=$("#rec-play");if(a)a.disabled=!on;if(b)b.disabled=!on;}
 function mk(svg,t,a){var e=document.createElementNS(NS,t);Object.keys(a).forEach(function(k){e.setAttribute(k,String(a[k]));});svg.appendChild(e);return e;}
 function slotX(s){return LM+(s+0.5)*SW;}
@@ -784,29 +787,7 @@ function startRecording(startTime){
   _sched(function(){finishRecording();},Math.max(0,delay2));
   tickRec();
 }
-function simplifyTiles(tiles){
-  var S=2;
-  var raw=[],i;for(i=0;i<tiles.length;i++){if(tiles[i].type==="note")raw.push(tiles[i].onset|0);}
-  raw.sort(function(a,b){return a-b;});
-  var on=[];for(i=0;i<raw.length;i++){var q=S===1?raw[i]:(Math.round(raw[i]/S)*S);if(on.length===0||q!==on[on.length-1])on.push(q);}
-  var TRACK=32,out=[];
-  function legalNote(o,maxd){if(maxd>=16&&o%16===0)return 16;if(maxd>=8&&o%8===0)return 8;if(maxd>=4&&o%4===0)return 4;return 2;}
-  function addRests(o,len){var rem=len,p=o;while(rem>0){var r=(rem>=8&&p%8===0)?8:(rem>=4?4:2);out.push({type:"rest",onset:p,dur:r});p+=r;rem-=r;}}
-  for(var k=0;k<on.length;k++){
-    var o=on[k];var barStart=Math.floor(o/16)*16;var barEnd=barStart+16;
-    var firstInBar=(k===0)||(Math.floor(on[k-1]/16)!==Math.floor(o/16));
-    if(firstInBar&&o-barStart>=S)addRests(barStart,o-barStart);
-    var nextO=(k+1<on.length)?on[k+1]:TRACK;
-    var gap=nextO-o;if(gap<S)gap=S;var cap=barEnd-o;if(cap<S)cap=S;var allowed=gap<cap?gap:cap;
-    var dur=legalNote(o,allowed);out.push({type:"note",onset:o,dur:dur,tied:false});
-    var leftover=nextO-(o+dur);var be=barEnd-(o+dur);if(leftover>be)leftover=be;if(leftover>=S)addRests(o+dur,leftover);
-  }
-  var NB=TRACK/16;
-  for(var b=0;b<NB;b++){var bs=b*16,be2=bs+16,sum=0;for(var q2=0;q2<out.length;q2++){if(out[q2].onset>=bs&&out[q2].onset<be2)sum+=out[q2].dur;}
-    if(sum===0){out.push({type:"rest",onset:bs,dur:16});}else if(sum<16){addRests(bs+sum,16-sum);}}
-  out.sort(function(a,b){return a.onset-b.onset;});
-  return out;
-}
+function simplifyTiles(tiles){return tiles;}
 
 
 
