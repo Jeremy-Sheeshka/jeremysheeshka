@@ -1,8 +1,7 @@
 [[headers]]
   for = "/*"
   [headers.values]
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://stats.jeremysheeshka.ca https://cdn.jsdelivr.net https://cdn.tailwindcss.com https://www.gstatic.com https://cdnjs.cloudflare.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://iili.io https://images.unsplash.com; worker-src 'self' blob:; connect-src 'self' https://stats.jeremysheeshka.ca; frame-src 'self' https://view.genially.com https://embed.figma.com https://www.figma.com;"
-    X-Frame-Options = "SAMEORIGIN"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://stats.jeremysheeshka.ca https://cdn.jsdelivr.net https://cdn.tailwindcss.com https://www.gstatic.com https://cdnjs.cloudflare.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://iili.io https://images.unsplash.com; worker-src 'self' blob:; connect-src 'self' https://stats.jeremysheeshka.ca; frame-src 'self' https://view.genially.com https://embed.figma.com https://www.figma.com; frame-ancestors 'self' https://met.jeremysheeshka.ca http://localhost:3000;"
     Strict-Transport-Security = "max-age=31536000; includeSubDomains"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
