@@ -57,41 +57,90 @@ These conventions are what every future session should follow; they exist becaus
 - If a single generated rhythm's beaming or a tap window ever feels off on a specific machine, the levers are `WIN` (hit window, seconds) for timing and the `PAT_HARD` weights / `drawBeams` stub caps for notation - change surgically, re-verify.
 
 <!-- SESSION-UPDATE-START -->
-## Session Update — July 29, 2026
+## Session Update — July 30, 2026 (SUPERSEDES any earlier SESSION-UPDATE block)
 
-### Recorder transcription simplify pass (Rhythm Bank recorder, `index.html`)
-- Added `simplifyTiles(tiles)`, inserted before `finishRecording` and wrapping both `computeTiles(events)` call sites (`simplifyTiles(computeTiles(events))`).
-- Algorithm: reconstructs readable note durations from tap **onsets only** (onsets never move, so the rhythm the user played is unchanged). Each note expands to fill the silence up to the next beat line, so a staccato tap with an eighth gap becomes a clean one-tailed eighth; a full beat of silence stays a **quarter rest**; a genuinely held note keeps its length (the pass never shortens a note the recorder already gave a real duration). Net effect: removes sixteenth-rest clutter and lone sixteenths, and turns the "two-tailed eighths" (which were actually mis-drawn sixteenths) into real one-tailed eighths. No separate flag bug — the two-tail appearance was the wrong `dur`, fixed by the pass.
-- Tile schema: `{type:"note"|"rest", onset, dur, tied}` in sixteenth units (`unit:"s16"`; old 8th-grid entries are doubled via `u16`). dur values: 16=whole, 8=half, 4=quarter, 2=eighth, 1=sixteenth.
-- Verified with a Node sim (5 cases): eighth taps → 4 eighths; quarter + quarter-rest + quarter; off-beat 16th kept + quarter rest; held half preserved + half rest; 16th-pair + eighth + final quarter. All PASS.
+> Scope note: this block is the single source of truth for the current state. Earlier
+> SESSION-UPDATE content (old simplify-pass algorithm, old co-op toggle notes) is OUTDATED
+> and replaced by what follows. Read this top-to-bottom before editing anything.
 
-### Rhythm Bank defaults & buttons
-- **Local Rhythm Bank is the sole default-selected collection**: `currentBank="local"`; the Local button carries `class="preset selected"` + `aria-pressed="true"`; Cultural and Teacher have `selected` removed.
-- **Teacher Imported Rhythms** is a disabled teaser button (`data-bank="teacher"`, `disabled`, `aria-disabled="true"`), never highlighted — a coming-soon placeholder.
-- Bank button structure: `<button class="preset" data-bank="cultural|local|teacher">`; the active state is the `selected` class + `aria-pressed`; the `currentBank` JS var sets the default and the bank's own init selects the matching button.
+### 1) Recorder / notation engine — `index.html` (FINAL)
+- `computeTiles(events)` = RAW seam (tap events -> tiles, sixteenth grid, can emit 16ths + 16th-rests + dotted values).
+- `simplifyTiles(tiles)` = SMOOTHING pass (final form). It WRAPS computeTiles at BOTH call sites: `simplifyTiles(computeTiles(events))` (in `finishRecording` and the live `renderPreview`). Rules:
+  - Keep genuine 16th GROUPS (2+ adjacent 16ths inside one beat) as beamed 16ths.
+  - Snap ONLY lone, off-grid taps to the nearest 8th (de-jitter). On-grid taps move ZERO.
+  - Fill each quick tap to an 8th/quarter so the 16th-rest "wall" disappears (no lone 16ths, no 16th rests).
+  - Keep held notes (never shorten a real duration).
+  - Rests emitted are ONLY quarter/8th/half/whole (dur 4/2/8/16); empty bars pad to a whole rest (dur 16).
+  - No dotted values (3/6/12) ever.
+- Tile schema: `{type:"note"|"rest", onset, dur, tied}` in sixteenth units; dur 16=whole,8=half,4=quarter,2=eighth,1=sixteenth. Stored with `unit:"s16"` (old 8th-grid entries doubled by `u16`).
+- `drawNote`: ONE flag for `dur===2` (eighth), TWO flags for `dur===1` (sixteenth). CONFIRMED correct — there is NO flag bug; the old "eighth with two tails" was always a wrong `dur` (a sixteenth), fixed by the pass.
+- `drawRest`: by dur (16=whole rect, 8=half rect, 4=quarter squiggle, 2=eighth, 1=sixteenth).
+- `computeBeams` / `splitCrossings`: beaming + ties. **Beam-overhang fix (last edit):** in the `_beam` assignment, `secL` is suppressed when the 16th STARTS a pair to its right (`!_pR`), and `secR` suppressed when it ENDS a pair on its left (`!_pL`). This stops the secondary (16th) beam from poking past the adjacent stem (the 8th-16th-16th / 16th-16th-8th overhang). Lone 16ths between 8ths keep both flags; a clean 16th run keeps none.
+- DO NOT revert to either failed experiment: the PASS-THROUGH (`return tiles;`) re-introduced the 16th-rest wall; the OVER-QUANTIZE (round every onset to 8th) killed real 16th pairs. The smoothing pass is the intended middle ground.
+- "Feels close but not exact" is the deliberate fill/snap/group trade-off; user parked it ("passed my tests, move on"). If tuning later, the three knobs are: fill length (staccato vs sustained), lone-tap snapping (off-grid shift), and 16th-group threshold (jittery 8th pairs -> 16th pairs).
 
-### Home page / Gallery content
-- Hero title: **"Think it. Play it. Bank it."** (was "Welcome to the Rhythm Bank").
-- RESIST/RELATE/IMAGINE card: "We redesigned SRF to focus around three central curricular ideas: RESIST, RELATE, and IMAGINE. Take a minute to read the thinking behind each of these concepts by looking at the tabs to the right."
-- **References** (`<ul class="lit-list">`, APA-7, alphabetized): added **Musicca. (n.d.). *Rhythms* [Interactive exercise]. https://www.musicca.com/rhythms** (after Kalantzis / before Ọnụọha) and **Sight Reading Factory. (n.d.). *Sight Reading Factory* [Web application]. https://www.sightreadingfactory.com/** (after Reifinger / before Stenberg). Both carry the project's "Behind…" annotation convention. Musicca is cited because the recorder's notation-generation engine was adapted/independently rebuilt after studying Musicca's rhythm exercise.
-- **Draft Proposal card** added to the Gallery grid (before References): links to `/assets/pdf/Curriculum Otherwise - Draft Proposal - June 21 2026.pdf` (filename detected in `public/assets/pdf/` and URL-encoded).
+### 2) Co-Op embed — `co-op.html` (FINAL; the long war)
+- The page embeds the exercise via `f.srcdoc='<html>...</body></html>'` — i.e. HTML INSIDE a JS string. This is the root of every co-op failure.
+- Original bug: `var inj='...'` contained a RAW newline in a single-quoted string -> `Uncaught SyntaxError: '' string literal contains an unescaped line break` at `co-op:168`, which also made the page render as a wall of CSS/code.
+- Why fixes kept failing: (a) a `</script>` that lives INSIDE a JS string still TRUNCATES the `<script>` element in the browser (HTML parsing ignores JS string context) — so escaping newlines alone never helped while the embedded toggle's `</script>` was present; (b) a previous buffer-rebuild edit STRIPPED ALL HTML TAGS and got COMMITTED, so `git show HEAD:co-op.html` returned tag-less garbage and "recover from HEAD" was impossible.
+- FINAL fix method (the one that worked): walk git history newest->oldest with `git -C <repo> log --follow --format=%H -- public/games/rhythm-reader/co-op.html`; for each commit read `git show <h>:<rel>` and accept the first whose content is a real tagged doc AND has no `</script>` inside any JS string (`is_good_page` = has `<head`,`<style`,`<div`,`</body>`,`<script>` and a string-aware scan reports embedded=False). Restore THAT as the base, then apply ONLY a BYTE-LEVEL newline escape via a delimiter-tracking scanner (tracks sq/dq/bt/linec/blockc; splices only the offending newline bytes as `\n`; NEVER rebuilds the document from a buffer). Validate per-script-element as the browser parses.
+- **The settings-gear toggle (`#praxis-cop-settings-toggle`) is currently ABSENT** from co-op — removed deliberately per the user's "don't add anything more, fix the error". If re-adding: insert in REAL HTML context before the LAST `</body>` (the real page close). The FIRST `</body>` in the file is INSIDE the `f.srcdoc` string — a naive `replace('</body>', ...)` inserts the toggle into that string and RE-BREAKS the page (this exact mistake happened and was caught by the raw-newline gate).
+- Console lines that are HARMLESS and unrelated: "autoplay" feature-policy, Cloudflare beacon CORS/integrity, AudioContext "needs a user gesture", favicon.ico 404.
 
-### Co-Op settings toggle (`co-op.html`)
-- Added a capture-phase click handler (`#praxis-cop-settings-toggle`) that toggles `#gear-pop` (the settings menu) open/closed on a gear click, and closes it on a click outside. Wired to both `[data-metro-gear]` buttons (header + footer). Validated by node-checking only the injected snippet (not the page's pre-existing inline JS).
+### 3) Rhythm Bank UI — `index.html` (FINAL)
+- Default collection = LOCAL: `var currentBank="local"`; local button `class="preset selected" aria-pressed="true"`; cultural + teacher NOT selected.
+- Teacher Imported Rhythms = disabled teaser: `data-bank="teacher"`, `disabled`, `aria-disabled="true"`, Title Case label, inline `style="opacity:.55;cursor:not-allowed"`, "(coming soon)" subline. Never highlighted.
+- Title = "Think it. Play it. Bank it." (was "Welcome to the Rhythm Bank").
+- "Current collection" + "Session state" `.status-item` lines = REMOVED. `#status-dataset` hidden via `#hide-rec-status` CSS.
+- "Datasets" heading wrapped in `<span id="bank-section-title">`; `#bank-title-fix` script sets it to "Local Rhythm Bank" by default and "Cultural Rhythm Bank" when the cultural button is clicked (delegated click on `[data-bank]`).
+- Cultural count accurate on load: `#bank-load-fix` does a one-time `fetch("/api/rhythms")` and fills `#preset-count-cultural` with the real count (otherwise it sat at static 0 until clicked).
+- Curator / secret delete: type `curate` (single letters, NO ctrl/cmd/alt, NOT while focused in an input/textarea, within ~1.8s) toggles `adminMode`; `ADMIN()` decodes `RR-CURATE-531`; in curator mode EVERY bank card shows a delete ✕ (server authorizes via the admin token). No visible button/hint.
 
-### Recorder render functions (from probe of `index.html`)
-- `render(svg, tiles)`: draws the staff, barlines, notes (`drawNote`), rests (`drawRest`), beams (`computeBeams`/`splitCrossings`), ties.
-- `drawRest(svg, t)`: draws rests by dur (16=whole rect, 8=half rect, 4=quarter squiggle, 2=eighth, 1=sixteenth).
-- `computeTiles(events)`: converts tap events to tiles — the seam wrapped by `simplifyTiles`.
+### 4) Cultural tempo bug — `netlify/functions/rhythms.mjs` + client `u16`
+- Server POST had `unit: tiles` (stored the tiles ARRAY in the unit field) instead of `unit: unit`. Cultural rhythms came back with `unit:[array]`, client `u16()` didn't see `"s16"` and DOUBLED durations -> half-speed playback + wrong notation. Local server (`rhythms_local.mjs`) was already correct, which is why only cultural broke.
+- Fixed server to `unit: unit`; seed got `unit:"s16"`. Client `u16` got an array-guard: `if(item&&(item.unit==="s16"||Array.isArray(item.unit)))return t;` so already-saved broken cultural rhythms play correctly without re-saving. Server edits need a Netlify deploy (~30s) to take effect.
 
-### Lessons / conventions (important for future edits)
-- **Verbatim-copy rule**: when inserting user-provided text (e.g., the annotate paragraphs), insert it byte-for-byte and match the target paragraph by *content* (a distinctive keyword), not by exact spacing — earlier anchors missed because of stray double-spaces in the source.
-- **Cache-bust / decoupled writes**: validate only the snippet you inject, never the page's pre-existing inline JS (Co-Op's JS legitimately contains the text `</script>` inside a `srcdoc` string, which breaks naive script extraction and produces false `node --check` failures). Decouple file writes so one file's failure doesn't block another's.
-- **Anchor discipline**: prefer content-based anchors over exact-string anchors; make optional edits non-fatal so they can't block the primary change; always read-back and node-check before writing.
-- The free-play "yes" generator (`fp-onboard.js`) and the Rhythm Bank recorder are separate engines: the free-play generator uses `PAT_HARD` (a beat-pattern library favoring quarters/eighths/halves/quarter-rests, no lone sixteenths, no sixteenth rests); the recorder uses `computeTiles` + `simplifyTiles`.
+### 5) Free-Play draw — `free-play.html` + `fp-onboard.js` (FINAL)
+- Red-only: `drawColor='#dc2626'`; redraw forces `ctx.strokeStyle='#dc2626'` and `ctx.globalCompositeOperation='source-over'`. Palette swatches + eraser + clear HIDDEN via `#fp-draw-red` CSS (`#draw-palette .sw{display:none}`, `#draw-palette [data-clear]{display:none}`); palette moved to bottom so it never covers the Draw button.
+- Draw PERSISTS through Listen/Play/tapping: the `clearDrawCanvas()`/`clearNativeDraw()` calls were REMOVED from the tap-start path in `fp-onboard.js`. Draw CLEARS only on exercise switch: `doNextFree` and `buildGuided` programmatically click the `[data-clear]` button (so the in-memory `strokes` array also resets — otherwise a mid-play resize repaints ghosts).
+- `free-play.html` cache-busts the include as `fp-onboard.js?v=<unix-ts>`; bump this whenever `fp-onboard.js` changes.
+- The Free-Play "yes" generator (`fp-onboard.js` / `PAT_HARD`) is a SEPARATE engine from the recorder — do not conflate them.
 
-### Open / optional follow-ups
-- Optional in-text credit where the recorder engine is described, e.g. "the notation-generation logic was adapted from Musicca's rhythm exercise (Musicca, n.d.)."
-- Optional secondary Draft-Proposal link on the home hero / "How to move through it" card for discoverability (currently Gallery-only by design).
-- Free-play "yes" generator could later add bar-level patterns (halves/wholes spanning beats) if desired.
+### 6) Home + Gallery content — `index.html` (FINAL)
+- Hero h1: "Rhythmic literacy skills centered around learners and communities of practice."
+- RESIST/RELATE/IMAGINE card + how-to card reworded (single spacing).
+- Gallery eyebrow "Gallery · Doings · References"; subtitle "Read about what went into our redesign."
+- Annotation panel header: static default "ANNOTATE"; `#anno-title-dyn` sets it dynamically to "ANNOTATE: RESIST/RELATE/IMAGINE" via a delegated capture-phase click on `[data-annotation]`/`[data-anno]`/`.annotation-tab` (reads the `data-annotation` attr, e.g. `resist`).
+- Annotation tabs bigger via `#anno-tabs-bigger` CSS scoped to `.annotation-tab,[data-anno]` ONLY (an earlier version also styled the `.annotation-tabs` fixed container and bloated it — don't).
+- References (`<ul class="lit-list">`, APA-7, alphabetized): added Musicca (n.d.) *Rhythms* [Interactive exercise] (after Kalantzis / before Onuoha) and Sight Reading Factory (n.d.) [Web application] (after Reifinger / before Stenberg). Cite Musicca because the notation engine was adapted from it.
+- Draft Proposal card (before References) links `/assets/pdf/Curriculum Otherwise - Draft Proposal - June 21 2026.pdf` (URL-encoded; PDF confirmed present in `public/assets/pdf/`).
+- Gallery masonry via CSS columns scoped to `#screen-gallery` (`#gallery-layout`); collapses to 1 column under ~820px.
+- Individual Responses = three `<details class="resp">` dropdowns: Chris Perry + Samuel Teo = placeholders; Jeremy Sheeshka = the user's revised 4-paragraph reflection (verbatim; do not paraphrase).
+- AI tooling disclosure card present (verbatim text; "remains the final decisions").
+
+### 7) OPEN / UNFINISHED (next session — do not assume these are done)
+- Annotation TITLE SUFFIXES "/ Missing datasets" (RESIST), "/ Learning between peers" (RELATE), "/ Feedback without failure" (IMAGINE): removal regex matched 0 — the suffix text is NOT in `index.html` in a literal form the regex caught (likely a separate element or runtime-built). Use the dump to find the exact markup, then target it.
+- Recorder INSTRUCTION line reword to "Tap and share a two bar rhythm the Rhythm Bank.": `find_elem("Tap your own two bars")` found nothing in index.html. The actual instruction the user sees is probably the tooltip string "Tap a two-bar rhythm from a song you are listening to right now and add it to the bank." (inside `role="tooltip"`) or a JS-built string — locate and edit that.
+- Local bank BLURB wording: set in JS, not HTML — `#bank-desc` textContent comes from a ternary (cultural = "...shared across the cohort. Tap any rhythm to hear it. Add yours above with a cultural name or title." / local = "Two-bar rhythms saved on this device only. Tap any rhythm to hear it. Add yours above."). The user wanted the LOCAL blurb changed to their prior wording; edit the JS string.
+- Co-op gear toggle is ABSENT (see §2); re-add only on request, via LAST-`</body>` insertion.
+- Recorder "exactness" is parked (user accepted it); see §1 knobs if revisited.
+
+### 8) Editing conventions / hard-won lessons (READ BEFORE EDITING)
+- Verbatim-copy rule: insert user text byte-for-byte; match the target paragraph by a distinctive CONTENT keyword, never by exact spacing (stray double-spaces in pasted source broke exact anchors repeatedly).
+- NEVER gate a write on `node --check` of a whole file that embeds HTML inside JS strings (co-op, and any page with `srcdoc`/template strings). The embedded `</script>` / raw-newline false-fails. Instead use a string-aware raw-newline scan, or validate per-script-element.
+- NEVER rebuild an HTML file from a scanner buffer that consumes tags without re-emitting them (this stripped co-op's tags and got committed). Use BYTE-OFFSET edits only, and add a STRUCTURAL-TAG regression guard (`<head`,`<style`,`<div`,`<body`,`</body>` counts before==after) that aborts BEFORE writing. This guard also catches catastrophic regexes (see next).
+- Catastrophic-regex trap: `(<([a-zA-Z]+)>).*?KEYWORD.*?</\2>` with DOTALL can match from `<html>`/`<head>` and delete the entire head. Use `find_elem` (find the keyword, walk back to its own `<tag>`, find the matching `</tag>`) instead.
+- Decouple file writes: never `sys.exit` mid multi-file write; let each file write on its own merit so one failure doesn't block the others.
+- `re.subn` returns `(newstr, count)` — unpack as `idx, n = re.subn(...)`, NOT `n, _ = ...` (that bug put the HTML string into `n` and crashed on `n >= 1`).
+- Walrus-in-slice (`idx[end:=...]`) is ILLEGAL Python — don't.
+- User workflow quirks: (a) they paste terminal output where the `git commit` line often runs BEFORE the python block, so "nothing to commit" can mean the block hadn't executed yet — judge success by the block's own `WROTE`/`ABORT` lines, not the git line; (b) a `WROTE` to disk is NOT live until `git commit` + `git push` + ~30s Netlify + hard-reload (Cmd/Ctrl+Shift-R) — multiple "it didn't work" reports were un-pushed writes or browser cache; (c) server (`netlify/functions/*.mjs`) edits need a deploy, client edits need push+reload.
+
+### 9) File map / key anchors
+- `public/games/rhythm-reader/index.html`: recorder (`computeTiles`,`simplifyTiles`,`drawNote`,`drawRest`,`computeBeams`,`splitCrossings`,`render`,`renderPreview`,`finishRecording`,`setStatus`,`play`), bank (`currentBank`,`renderBank`,`submitRhythm`,`u16`,`#status-dataset`,`#bank-section-title`,`#preset-count-local/cultural`,`#bank-desc`,`#bank-grid`, buttons `[data-bank="local|cultural|teacher"]`), annotations (`.annotation-tab[data-annotation]`, `.annotation-title`, `.annotation-tabs`), gallery (`#screen-gallery`, `#gallery-layout`, `<details class="resp">`, `<ul class="lit-list">`), curator (`adminMode`,`ADMIN()`). Injected style/script ids: `#hide-rec-status`, `#anno-tabs-bigger`, `#anno-title-dyn`, `#bank-title-fix`, `#bank-load-fix`, `#gallery-layout`.
+- `public/games/rhythm-reader/co-op.html`: embed (`f.srcdoc`, `var inj`), settings menu `#gear-pop`, gear buttons `[data-metro-gear]`. (toggle script currently absent.)
+- `public/games/rhythm-reader/free-play.html`: draw palette `#draw-palette` (`.sw`,`[data-eraser]`,`[data-undo]`,`[data-clear]`), `#draw-canvas`, injected `#fp-draw-red`.
+- `public/games/rhythm-reader/fp-onboard.js`: draw engine (`drawColor`,`strokes`,`redraw`,`clearDrawCanvas`,`clearNativeDraw`), exercise switch (`doNextFree`,`buildGuided`), "yes" generator (`PAT_HARD`).
+- `netlify/functions/rhythms.mjs` (cultural; Firebase `FB`), `netlify/functions/rhythms_local.mjs` (local; Firebase `rhythms_local`).
+- `public/assets/pdf/Curriculum Otherwise - Draft Proposal - June 21 2026.pdf`.
+- Handoff doc: this file (`HANDOFF.md`); the SESSION-UPDATE block is idempotent via the `<!-- SESSION-UPDATE-START -->` marker.
 
