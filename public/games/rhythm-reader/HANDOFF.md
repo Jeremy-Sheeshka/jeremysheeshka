@@ -13,7 +13,7 @@
 A rhythm sight-reading practice tool for an ETEC 531 (curriculum design) course. It wraps a Danish rhythm drill app (NL_rytmer / Musikipedia) inside an iframe and adds a custom UI layer with two practice modes:
 
 - **Free Play** - solo practice. Generates random rhythms, plays them back, student taps along. Includes metronome, counting aids, line cursor, Listen button.
-- **Co-Op (Trade Fours)** - two students share one screen. Rhythm split between Student A and Student B (trade 2s or 4s). Each taps their bars via keyboard (A and L keys). Includes A/B overlay tinting, turn indicators, beat dots.
+- **Co-Op (Trade Fours)** - two students share one screen.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa Rhythm split between Student A and Student B (trade 2s or 4s). Each taps their bars via keyboard (A and L keys). Includes A/B overlay tinting, turn indicators, beat dots.
 
 Also: **Dashboard** page (index.html) with Cultural Datasets card, Ensemble Mode pulse preview, links to both modes. **Gallery** screen with literature references and a doing prompt.
 
