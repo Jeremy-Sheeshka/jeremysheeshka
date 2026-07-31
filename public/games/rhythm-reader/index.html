@@ -373,7 +373,7 @@ details.resp .resp-body p.subtle{color:var(--Rhythm-muted,#5b6472)}
 .bc-tip-body{display:block;font-size:12.5px;line-height:1.52;color:#e8dfd1}
 .has-tip:hover .bc-tip,.has-tip:focus-within .bc-tip{opacity:1;transform:translate(-50%,0) scale(1);pointer-events:auto}
 @media (max-width:560px){.bc-tip{left:6px;right:6px;width:auto;transform:translateY(7px) scale(.96)}.has-tip:hover .bc-tip,.has-tip:focus-within .bc-tip{transform:translateY(0) scale(1)}}
-</style><label id="rec-desc-wrap" class="rec-desc-wrap"><span id="rec-desc-label">Brief description or geographic origin of rhythm</span><input type="text" id="rec-desc" maxlength="160" autocomplete="off" placeholder="e.g. Bolero is a 19th Century Popular music from Eastern Cuba... "></label></div>
+</style><label id="rec-desc-wrap" class="rec-desc-wrap"><span id="rec-desc-label">Brief description or geographic origin:</span><input type="text" id="rec-desc" maxlength="160" autocomplete="off" placeholder="e.g.A 19th Century Popular music from Eastern Cuba... "></label></div>
               
               </div>
               <div class="presets">
@@ -974,7 +974,7 @@ function applyBankUI(){
   var lbl=$("#rec-name-label"),inp=$("#rec-name"),tgt=$("#rec-submit-target");
   if(currentBank==="cultural"){
     if(lbl)lbl.textContent="Cultural name / title";
-    if(inp){inp.value="";inp.placeholder="e.g. Afro-Cuban Clave, a lullaby, a chant";inp.maxLength=40;}
+    if(inp){inp.value="";inp.placeholder="e.g. Afro-Cuban Clave, a lullaby, etc.";inp.maxLength=40;}
     if(tgt)tgt.textContent="the shared Cultural Rhythm Bank";var _dw=document.getElementById("rec-desc-wrap");if(_dw)_dw.style.display="";var _di=document.getElementById("rec-desc");if(_di)_di.value="";
   }else{
     if(lbl)lbl.textContent="Your name";
