@@ -264,6 +264,20 @@ details.resp .resp-body p.subtle{color:var(--Rhythm-muted,#5b6472)}
 #screen-gallery .dashboard-grid{display:block !important;column-count:2;column-gap:16px}
 #screen-gallery .dashboard-grid>*{break-inside:avoid;-webkit-column-break-inside:avoid;display:inline-block;width:100%;vertical-align:top;margin:0 0 16px}
 @media(max-width:820px){#screen-gallery .dashboard-grid{column-count:1}}
+/* Resources page */
+.lesson-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 18px}
+.lesson-tab{font:inherit;font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:10px 18px;border:1px solid var(--Rhythm-line,#d8dee7);border-radius:10px;background:var(--Rhythm-surface,#fff);color:var(--Rhythm-muted,#5b6472);cursor:pointer;transition:all .18s ease}
+.lesson-tab:hover{border-color:color-mix(in srgb,var(--Rhythm-accent,#1d4ed8) 40%,var(--Rhythm-line,#d8dee7));color:var(--Rhythm-ink,#111827)}
+.lesson-tab.active{background:var(--Rhythm-accent,#1d4ed8);border-color:var(--Rhythm-accent,#1d4ed8);color:#fff}
+.lesson-content{background:var(--Rhythm-surface,#fff);border:1px solid var(--Rhythm-line,#d8dee7);border-radius:14px;padding:22px 24px;font-size:14px;line-height:1.72;color:var(--Rhythm-ink,#111827)}
+.lesson-content h3{font-size:17px;margin:0 0 8px;color:var(--Rhythm-accent,#1d4ed8)}
+.lesson-content h4{font-size:14px;margin:16px 0 6px;font-weight:800;letter-spacing:.03em;color:var(--Rhythm-ink,#111827)}
+.lesson-content p{margin:0 0 12px}
+.lesson-content ul,.lesson-content ol{margin:0 0 16px;padding-left:20px}
+.lesson-content li{margin-bottom:5px}
+.lesson-content strong{color:var(--Rhythm-accent,#1d4ed8)}
+.video-placeholder{display:flex;align-items:center;justify-content:center;width:100%;max-width:100%;aspect-ratio:16/9;margin:0 auto 22px;border:2px dashed var(--Rhythm-line,#d8dee7);border-radius:16px;background:color-mix(in srgb,var(--Rhythm-soft,#f0f2f5) 50%,transparent);color:var(--Rhythm-muted,#5b6472);font-size:14px;font-weight:600;letter-spacing:.03em}
+.download-strip{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px}
 </style>
 <style id="hide-rec-status">#hide-rec-status{display:none !important}#status-dataset{display:none !important}</style><style id="anno-tabs-bigger">
 .annotation-tab,[data-anno]{font-size:1.08rem !important;padding:10px 18px !important;min-height:44px !important;letter-spacing:.04em !important;line-height:1.2 !important;}
@@ -284,7 +298,7 @@ details.resp .resp-body p.subtle{color:var(--Rhythm-muted,#5b6472)}
       
       <a href="./free-play.html">Free Play</a>
       <a href="./co-op.html">Co-Op</a><a href="#" data-nav="screen-1" aria-current="page">Rhythm Bank</a>
-      <a href="#" data-nav="screen-gallery">Gallery</a>
+      <a href="#" data-nav="screen-gallery">Gallery</a><a href="#" data-nav="screen-resources">Resources</a>
     </nav>
   </header>
 
@@ -293,7 +307,7 @@ details.resp .resp-body p.subtle{color:var(--Rhythm-muted,#5b6472)}
     
     <button role="menuitem" data-go="./free-play.html">Free Play</button>
     <button role="menuitem" data-go="./co-op.html">Trade Fours · Co-Op</button><button role="menuitem" data-nav="screen-1">Rhythm Bank</button>
-    <button role="menuitem" data-nav="screen-gallery">Gallery · Doing Prompt</button>
+    <button role="menuitem" data-nav="screen-gallery">Gallery · Doing Prompt</button><button role="menuitem" data-nav="screen-resources">Resources · Lessons</button>
   </div>
 
   <main>
@@ -473,6 +487,84 @@ details.resp .resp-body p.subtle{color:var(--Rhythm-muted,#5b6472)}
         </div>
       </div>
     </section>
+
+    <!-- RESOURCES -->
+    <section class="screen" id="screen-resources">
+      <div class="wrap">
+        <button class="btn small" data-nav="screen-1" style="margin-bottom:18px">← Rhythm Bank</button>
+        <p class="eyebrow">Resources</p>
+        <h2 class="section-head">Lesson materials & supplementary resources</h2>
+        <p class="subtle">Download the full lesson PDFs below, or browse each lesson inline. A companion instructional video will be embedded here soon.</p>
+
+        <div class="download-strip">
+          <a class="btn" href="/assets/pdf/Lesson%201_%20Basic%20Rhythms.pdf" target="_blank" rel="noopener">📥 Lesson 1 PDF</a>
+          <a class="btn" href="/assets/pdf/Lesson%202_%20Cultural%20Rhythms.pdf" target="_blank" rel="noopener">📥 Lesson 2 PDF</a>
+          <a class="btn" href="/assets/pdf/Lesson%203_%20Repertoire%20Rhythms.pdf" target="_blank" rel="noopener">📥 Lesson 3 PDF</a>
+        </div>
+
+        <div class="video-placeholder" aria-label="Video placeholder">
+          <span>Video coming soon</span>
+        </div>
+
+        <div class="lesson-tabs" role="tablist" aria-label="Lesson tabs">
+          <button class="lesson-tab active" role="tab" aria-selected="true" data-lesson="1">Lesson 1 — Basic Rhythms</button>
+          <button class="lesson-tab" role="tab" aria-selected="false" data-lesson="2">Lesson 2 — Cultural Rhythms</button>
+          <button class="lesson-tab" role="tab" aria-selected="false" data-lesson="3">Lesson 3 — Repertoire Rhythms</button>
+        </div>
+
+        <article class="lesson-content" id="lesson-content-1">
+          <h3>Lesson 1: Simple Rhythm Understanding</h3>
+          <p><strong>Focus:</strong> Establishing basic rhythmic fluency (pulse, subdivision, and beat) without assuming prior familiarity with standard Western staff notation.</p>
+          <p><strong>Core Feature Used:</strong> Toggleable alternative support modes, introductory video scaffolding, and offline PDF worksheet export.</p>
+          <h4>1) Objective</h4>
+          <p>Students will gain and develop a basic understanding of simple-meter rhythmic patterns (whole notes, half notes, quarter notes) by using Rhythm Reader with toggleable scaffolding to bridge the gap regardless of prior music reading background.</p>
+          <h4>2) Pedagogical Rationale (Resist & Relate)</h4>
+          <p>Traditional sight-reading tools operate on a privilege hazard, assuming all students enter the classroom already fluent in reading Eurocentric staff notation. This lesson resists notation supremacy by treating symbolic reading as something to be scaffolded through aural and physical practices rather than tested as an innate barrier to entry.</p>
+          <h4>3) Lesson Flow</h4>
+          <ul>
+            <li><strong>Step 1: Scaffolding via Introductory Video</strong> — Before touching the software, the class watches the introductory video embedded in the app. This models how to internalize a steady pulse and clap or tap simple rhythms using multiple models (Takadimi syllable, traditional Western 1 and 2 and counting).</li>
+            <li><strong>Step 2: Configure Practice on Rhythm Reader</strong> — Pre-generate an easy 4/4 exercise consisting of quarter and half notes. Students open the app on their devices (their own or one provided to them). Those who need extra support can toggle the Takadimi syllable display or numeric grid options located at the top of the screen (these options are off by default to prevent cognitive overload). Students practice clapping or tapping the generated line along with the app's aural playback mode.</li>
+            <li><strong>Step 3: Offline Equity Check</strong> — For students without reliable home internet or devices, the teacher uses the "Export to Worksheet" feature to generate printable offline practice sheets complete with the same Takadimi and numeric scaffolding, ensuring equity of access outside the classroom walls.</li>
+          </ul>
+          <p class="subtle" style="margin-top:16px"><a href="/assets/pdf/Lesson%201_%20Basic%20Rhythms.pdf" target="_blank" rel="noopener" class="btn small">📥 Download Lesson 1 PDF</a></p>
+        </article>
+
+        <article class="lesson-content" id="lesson-content-2" style="display:none">
+          <h3>Lesson 2: Cultural Rhythms</h3>
+          <p><strong>Focus:</strong> Engaging with global rhythmic traditions (e.g. Afro-Cuban clave, West African bell patterns, reggae syncopation) through active listening, clapping or tapping, and database searching.</p>
+          <p><strong>Core Feature Used:</strong> The global "Rhythm Bank" (browsing, listening, clapping or tapping back) and the reverse "Identify / Search" feature.</p>
+          <h4>1) Objective</h4>
+          <p>Students will explore, perform, and analyze rhythmic frameworks originating outside the Western classical canon, using the interactive Rhythm Bank to understand how rhythm structures cultural identity and cross-genre musical expression.</p>
+          <h4>2) Pedagogical Rationale</h4>
+          <p>This lesson moves beyond the confines of standard European concert band repertoire. Instead of treating music technology as a static machine used for assessment, it transforms the app into an open, living archive of global musical knowledge where students can encounter, identify, and respect diverse sonic lineages.</p>
+          <h4>3) Lesson Flow</h4>
+          <ul>
+            <li><strong>Step 1: Exploring the living Rhythm Bank</strong> — The teacher projects the app and opens the Rhythm Bank module. The class explores pre-loaded cultural rhythms, such as the 3-2 Son Clave pattern or a standard reggae on-drop groove. Students listen to the audio playback, view the notation alongside cultural context notes, and use the Clap or Tap Back interactive verification feature to test their physical groove and timing against the native rhythm.</li>
+            <li><strong>Step 2: Student-Brought Cultural Rhythms</strong> — Students bring in rhythmic patterns from music they consume outside of school (hip-hop beats, Latin pop grooves, folk rhythms from their heritage). Using the Identify / Search input tool, students clap or tap an unfamiliar rhythm they heard in a track. The database searches the Rhythm Bank, returning matching notation, cultural origin information, and audio playback.</li>
+            <li><strong>Step 3: Teacher-Curated Extension</strong> — The teacher pushes the newly indexed teacher-added rhythm into the active sight-reading generator queue, allowing the class to practice sight-reading syncopated patterns drawn directly from global traditions rather than as textbook exercises.</li>
+          </ul>
+          <p class="subtle" style="margin-top:16px"><a href="/assets/pdf/Lesson%202_%20Cultural%20Rhythms.pdf" target="_blank" rel="noopener" class="btn small">📥 Download Lesson 2 PDF</a></p>
+        </article>
+
+        <article class="lesson-content" id="lesson-content-3" style="display:none">
+          <h3>Lesson 3: Teacher-Imported Repertoire</h3>
+          <p><strong>Focus:</strong> Bridging isolated sight-reading drills directly to the music the ensemble is currently rehearsing for performance.</p>
+          <p><strong>Core Feature Used:</strong> Custom repertoire seeding and generative variation parameters.</p>
+          <h4>1) Objective</h4>
+          <p>Students will isolate, deconstruct, and build fluency in tricky syncopated rhythmic passages extracted directly from upcoming concert repertoire, using generated practice variants as practice before encountering the full score.</p>
+          <h4>2) Pedagogical Rationale</h4>
+          <p>Generic educational software often fosters learned passivity by presenting practice in a vacuum, completely disconnected from the actual collaborative work of the ensemble. This lesson resists isolated drill culture by seeding the tool with real ensemble challenges, turning Rhythm Reader into a responsive tool that serves the ensemble's artistic goals. This format also provides flexibility in how practice culture is disseminated, moving away from the traditional teacher-student and allowing for student-student or even student-as-individual practice.</p>
+          <h4>3) Lesson Flow</h4>
+          <ul>
+            <li><strong>Step 1: Repertoire Diagnosis</strong> — During rehearsal of a challenging new piece, the teacher identifies a recurring bottleneck where students struggle with the rhythm.</li>
+            <li><strong>Step 2: Seeding Rhythm Reader</strong> — Instead of using a random factory generator preset, the teacher inputs the core rhythmic cell (measure 34 for example) into the teacher portal. The app generates a customized Practice Playlist consisting of micro-variations of that specific rhythmic cell (changing the tempo, shifting accents, or varying surrounding subdivisions).</li>
+            <li><strong>Step 3: Ensemble Work & Corrective Feedback</strong> — Students open the seeded session on their devices or on devices provided to them. When mistakes occur, the app's redesigned feedback mechanism moves beyond a binary pass/fail grade; it prompts students with strategic suggestions (e.g., "Notice the tied eighth note across beat 3 - try subdividing before playing again"). The ensemble reconvenes to play the passage in the actual piece. The teacher makes sure to connect the practice to any success that occurs during practice of the piece.</li>
+          </ul>
+          <p class="subtle" style="margin-top:16px"><a href="/assets/pdf/Lesson%203_%20Repertoire%20Rhythms.pdf" target="_blank" rel="noopener" class="btn small">📥 Download Lesson 3 PDF</a></p>
+        </article>
+      </div>
+    </section>
+
   </main>
 
   <!-- Annotations -->
@@ -533,6 +625,19 @@ details.resp .resp-body p.subtle{color:var(--Rhythm-muted,#5b6472)}
       $$("[data-nav]").forEach(b=>b.addEventListener("click",e=>{e.preventDefault();showScreen(b.dataset.nav);}));
       $$("[data-go]").forEach(b=>b.addEventListener("click",()=>{window.location.href=b.dataset.go;}));
       $("#enter-studio").addEventListener("click",()=>showScreen("screen-1"));
+
+      // Resources — lesson tab switching
+      $$(".lesson-tab").forEach(function(tab){
+        tab.addEventListener("click",function(){
+          var lesson=this.dataset.lesson;
+          $$(".lesson-tab").forEach(function(t){t.classList.remove("active");t.setAttribute("aria-selected","false");});
+          $$(".lesson-content").forEach(function(c){c.style.display="none";});
+          this.classList.add("active");
+          this.setAttribute("aria-selected","true");
+          var content=document.getElementById("lesson-content-"+lesson);
+          if(content) content.style.display="";
+        });
+      });
 
       // Menu
       function closeMenu(){ $("#nav-menu").classList.add("hidden"); $("#menu-btn").setAttribute("aria-expanded","false"); }
