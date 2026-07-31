@@ -329,7 +329,7 @@ details.resp .resp-body p.subtle{color:var(--Rhythm-muted,#5b6472)}
         <div class="dashboard-grid">
           <div>
             <article class="card dataset-card" id="feature-resist">
-              <div class="card-label"><strong><span id="bank-section-title">Datasets</span></strong><span class="doing-wrap"><button class="feature-link" id="weekly-doing-link">The Doing</button><span class="doing-pop" role="tooltip"><strong>The Doing</strong>Tap a two-bar rhythm from a song you are listening to right now and add it to the bank. Then sit with the prompt: <em>what did the app assume about your rhythm that was not true, and what would have to change to fit what you brought in?</em><span class="doing-go">Click to open the full prompt in the Gallery &rarr;</span></span></span></div>
+              <div class="card-label"><strong><span id="bank-section-title">Datasets</span></strong><span class="doing-wrap"><button class="feature-link" id="weekly-doing-link">The Doing</button><span class="doing-pop" role="tooltip"><strong>The Doing</strong>The Doing this week is a hands-on comparison: sight-read the same rhythms on Sight Reading Factory and on our redesigned Rhythm Reader, then reflect on how the two experiences stack up. Head to the Gallery for the full prompt - and if you're new to reading rhythms, start with the intro video.<span class="doing-go">Click to open the full prompt in the Gallery &rarr;</span></span></span></div>
               <input class="sr-only" id="file-input" type="file" accept=".pdf,.png,.jpg,.jpeg">
               <div class="rec-panel" id="rec-panel">
                 <div class="rec-head"><strong>Record a 2-Bar Rhythm</strong><small>Tap and share a two bar rhythm the Rhythm Bank.</small></div>
@@ -345,7 +345,21 @@ details.resp .resp-body p.subtle{color:var(--Rhythm-muted,#5b6472)}
                     <button type="button" class="btn small" id="rec-cancel">■ Stop</button>
                   </div>
                 </div>
-              <div class="rec-setup"><label>Tempo <input type="range" id="rec-tempo" min="50" max="180" value="100"> <span class="rec-tempo-val" id="rec-tempo-val">100</span> BPM</label><label><span id="rec-name-label">Cultural name / title</span> <input type="text" id="rec-name" maxlength="40" placeholder="e.g. Afro-Cuban Clave, a lullaby, a chant"></label></div>
+              <div class="rec-setup"><label>Tempo <input type="range" id="rec-tempo" min="50" max="180" value="100"> <span class="rec-tempo-val" id="rec-tempo-val">100</span> BPM</label><label><span id="rec-name-label">Cultural name / title</span> <input type="text" id="rec-name" maxlength="40" placeholder="e.g. Afro-Cuban Clave, a lullaby, a chant"></label><style id="rec-desc-style">
+.rec-setup{flex-wrap:wrap}
+.rec-desc-wrap{display:block;flex-basis:100%;grid-column:1 / -1;margin-top:9px}
+.rec-desc-wrap span{display:block;font-size:10.5px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--praxis-muted,#5b6472);margin-bottom:5px}
+.rec-desc-wrap input{width:100%;font:inherit;font-size:13px;line-height:1.4;padding:9px 11px;border:1px solid var(--praxis-line,#d8dee7);border-radius:10px;background:var(--praxis-surface-2,#f0f2f5);color:var(--praxis-ink,#111827)}
+.rec-desc-wrap input::placeholder{color:var(--praxis-muted,#9aa6b5);opacity:.85}
+.rec-desc-wrap input:focus{outline:none;border-color:var(--praxis-gold,#e8a83e);box-shadow:0 0 0 3px rgba(232,168,62,.20)}
+.has-tip{position:relative}
+.bc-tip{position:absolute;left:50%;bottom:calc(100% + 11px);transform:translate(-50%,7px) scale(.96);width:max(222px,min(304px,74vw));background:linear-gradient(180deg,#17120b,#0c0a07);color:#f3ecdf;border:1px solid rgba(232,168,62,.34);border-left:3px solid var(--praxis-gold,#e8a83e);border-radius:13px;padding:11px 13px 12px;box-shadow:0 18px 40px rgba(0,0,0,.44);opacity:0;pointer-events:none;transition:opacity .17s ease,transform .17s cubic-bezier(.2,.8,.2,1);z-index:80;text-align:left}
+.bc-tip::after{content:"";position:absolute;top:100%;left:50%;transform:translateX(-50%);border:7px solid transparent;border-top-color:#0c0a07}
+.bc-tip-ey{display:block;font-size:9.5px;font-weight:900;letter-spacing:.2em;text-transform:uppercase;color:var(--praxis-gold,#e8a83e);margin-bottom:5px}
+.bc-tip-body{display:block;font-size:12.5px;line-height:1.52;color:#e8dfd1}
+.has-tip:hover .bc-tip,.has-tip:focus-within .bc-tip{opacity:1;transform:translate(-50%,0) scale(1);pointer-events:auto}
+@media (max-width:560px){.bc-tip{left:6px;right:6px;width:auto;transform:translateY(7px) scale(.96)}.has-tip:hover .bc-tip,.has-tip:focus-within .bc-tip{transform:translateY(0) scale(1)}}
+</style><label id="rec-desc-wrap" class="rec-desc-wrap"><span id="rec-desc-label">Brief description or geographic origin of rhythm</span><input type="text" id="rec-desc" maxlength="160" autocomplete="off" placeholder="e.g. A West-African bell pattern · from a Havana rumba · a family lullaby"></label></div>
               
               </div>
               <div class="presets">
@@ -379,16 +393,45 @@ details.resp .resp-body p.subtle{color:var(--Rhythm-muted,#5b6472)}
             <article class="card action-card" id="doing-prompt-card">
               <span class="line-icon">✎</span>
               <h3>A doing prompt for the cohort</h3>
-              <p>Take a piece of music you're listening to right now and tap out a two-bar rhythm.</p>
-              <p>Post your two bars and your sequence to the gallery, and answer: <em>What did the app assume about your rhythm that wasn't true — and what would have to change to fit what you brought in?</em></p>
+              <p>Imagine that you are in a middle school choir or band and are practicing a piece of music for a concert - the rhythms in the following sight-reading exercises are part of that repertoire. The steps below offer easier and harder paths, so start wherever you are comfortable.</p>
+              <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px">
+                <details class="resp">
+                  <summary><span class="resp-name">Step 0 (optional) - Intro to Rhythm video</span><span class="resp-chev" aria-hidden="true">&#8250;</span></summary>
+                  <div class="resp-body"><p>If you do not have experience reading rhythms, please familiarize yourself by watching the Intro to Rhythm video: LINK HERE</p></div>
+                </details>
+                <details class="resp">
+                  <summary><span class="resp-name">Step 1 - Log into Sight Reading Factory</span><span class="resp-chev" aria-hidden="true">&#8250;</span></summary>
+                  <div class="resp-body"><p>Link:<br>Username:<br>Password:</p></div>
+                </details>
+                <details class="resp">
+                  <summary><span class="resp-name">Step 2 - Attempt Sight Reading on Sight Reading Factory</span><span class="resp-chev" aria-hidden="true">&#8250;</span></summary>
+                  <div class="resp-body"><p>This will take you to a custom sight reading exercise designed specifically for this Doing. If you are new to reading music, click/choose ________. If you have prior experience with music, click/choose ________.</p><p>Take notes (no pun intended) on what you notice about the layout of Sight Reading Factory. How is the experience of sight reading these rhythms? How helpful (or not) is the feedback? Is there anything else that might be missing?</p></div>
+                </details>
+                <details class="resp">
+                  <summary><span class="resp-name">Step 3 - Log into our reimagined artifact, Rhythm Reader</span><span class="resp-chev" aria-hidden="true">&#8250;</span></summary>
+                  <div class="resp-body"><p>Link: https://jeremysheeshka.ca/games/rhythm-reader/</p></div>
+                </details>
+                <details class="resp">
+                  <summary><span class="resp-name">Step 4 - Attempt Sight Reading on Rhythm Reader</span><span class="resp-chev" aria-hidden="true">&#8250;</span></summary>
+                  <div class="resp-body"><p>Go to the “Free Play” page. You will be prompted to ask if you are new to reading rhythms. Click “No” if you chose the easier levels on Sight Reading Factory - this will give you a quick tutorial on how to navigate our tool and its added features, and will generate exercises using simpler rhythms. Click “Yes” if you chose the harder levels on Sight Reading Factory - this will skip the tutorial and generate exercises using more complex rhythms.</p><p>Take notes (no pun intended) on what you notice about the layout of this redesign. Engage with its features: You can choose to display numbers, takadimi, or draw your own notes. How has the experience of sight reading these rhythms changed? Did you make use of any of the “accessibility options”? How helpful (or not) is the feedback? Is there anything else that might be missing?</p></div>
+                </details>
+                <details class="resp">
+                  <summary><span class="resp-name">Step 5 - Share Your Experience</span><span class="resp-chev" aria-hidden="true">&#8250;</span></summary>
+                  <div class="resp-body"><p>Write a short reflection (200-300 words) on how it felt to use both platforms in sight reading rhythms. Was there anything about Sight Reading Factory that stood out? Did you make use of any of Rhythm Reader’s affordances? In your opinion, how do the design choices of Rhythm Reader relate to RESIST, RELATE, and/or IMAGINE, if at all? Is there anything that you think is still missing from Rhythm Reader?</p></div>
+                </details>
+                <details class="resp">
+                  <summary><span class="resp-name">Optional - Contribute to the Rhythm Bank</span><span class="resp-chev" aria-hidden="true">&#8250;</span></summary>
+                  <div class="resp-body"><p>Go to the “Rhythm Bank” page and contribute your own rhythm to the class’s Local Rhythm Bank!</p></div>
+                </details>
+              </div>
               <button class="btn primary full" data-nav="screen-1">Try the Doing →</button>
             </article>
           </div>
           <article class="card dataset-card">
             <div class="card-label"><strong>Individual Responses</strong></div>
             <div style="display:flex;flex-direction:column;gap:16px;margin-top:6px">
-              <details class="resp"><summary><span class="resp-name">Chris Perry</span><span class="resp-chev" aria-hidden="true">&#8250;</span></summary><div class="resp-body"><p class="subtle">individual reflection. Replace this placeholder.]</p></div></details>
-              <details class="resp"><summary><span class="resp-name">Samuel Teo</span><span class="resp-chev" aria-hidden="true">&#8250;</span></summary><div class="resp-body"><p class="subtle">individual reflection. Replace this placeholder.]</p></div></details>
+              <details class="resp"><summary><span class="resp-name">Chris Perry</span><span class="resp-chev" aria-hidden="true">&#8250;</span></summary><div class="resp-body"><p class="subtle">In Week 6, I looked at Sight Reading Factory through a purely defensive lens. As a jazz and ensemble player, I saw it as an automated gatekeeper that traded real bandstand listening for screen-based compliance, and because its Eurocentric design happened to fit my background, I fell right into the 'privilege hazard' D'Ignazio and Klein describe. But actually brainstorming alternative features with my group changed how I see the software. Discussing things like toggleable counting and subdivision scaffolding, offline worksheets, and a global rhythm bank showed me that critique is only the starting point. Designing forced us to stop just listing what's wrong with edtech and start asking what it takes to make a tool genuinely useful for students who don't fit the classical mold.</p></div></details>
+              <details class="resp"><summary><span class="resp-name">Samuel Teo</span><span class="resp-chev" aria-hidden="true">&#8250;</span></summary><div class="resp-body"><p class="subtle">While the critical reading revealed the limitations and affordances of Sight Reading Factory, it was only through the process of planning our redesigned artifact where I was able to examine the design choices that made using that tool difficult for me in the first place and how I could use them to improve accessibility, starting by removing the paywall. Combined with the course readings, I was able to implement collaboration by opening up our cultural “Rhythm Bank” which is designed in mind for users to contribute any new rhythms they find that may not already belong in the database. I imagine that there would be a panel of human musicians that verify the rhythms before they are added. I also wanted to let users be able to identify unknown rhythms as well – it is easy to look up a song by searching for lyrics or the artist, but very difficult to search for a rhythm using traditional means (e.g. Google), so I thought our artifact would be the perfect place to do it. This also expands our artifact and integrates it more with everyday life, functioning like a Shazam for rhythms when it’s not being used to practice sight reading. Our group also discussed how to provide alternative ways of breaking down the rhythms and the transparent feedback we wanted users to receive. We wanted the user interface to feel familiar but did not want our additional helpful options to be overwhelming, so they became toggleable and I made the suggestion of having them all be “off” by default. The act of redesigning let me envision how to enact accessible changes for our tool.</p></div></details>
               <details class="resp"><summary><span class="resp-name">Jeremy Sheeshka</span><span class="resp-chev" aria-hidden="true">&#8250;</span></summary><div class="resp-body"><p>In Week 6, I was still an outsider to SRF, having never had the budget to bring the technology into my classroom when I was teaching band. My curiosity about, and experiences with, SRF were still largely conceptual at that point. I had wondered whether the algorithm could generate material in the style of real composers, and how (if?) it represented place-based and cultural traditions entangled within various musical styles. Critically examining and engaging in a redesign of SRF brought to my attention the gaps and hidden curriculum it presented users with. Doing this design work made me acutely aware of the responsibility I had over how a user engaged with the app, and made it important for our group to build in solutions that increase accessibility for learners with different backgrounds and relationships to music.</p><p>Building in the toggleable modes during gameplay (numbers, takadimi, aural playback, draw, and my personal favourite: dinosaur mode), as well as imagining how the co-op mode would work, forced me to confront how enactive/symbolic distinctions were being made by the end-user and how to accommodate this through tools that assist with decoding rhythm, whether through notation or multimodal alternatives like a dinosaur runner game. That said, it is clear to me that clicking a mouse or tapping a spacebar does not fuel the same kinesthetic learning and building of muscle memory that clapping a rhythm in a circle or feeling it lock in with other players would.</p><p>Annotating our redesign through RESIST, RELATE, and IMAGINE helped me understand that there is no one-size-fits-all approach, and that a tool which meets someone where they are can accelerate learning without forcing everyone through the same path. In the case of our redesign, simply including an option to listen to a rhythm before trying to read and play it opened up new possibilities for user choice and flow. The Rhythm Bank extends this further by grounding rhythmic reading in place-based and cultural traditions, while offering an option to connect locally through a classroom or community of music learners. While something like this generative rhythm-reading sandbox could have helped me in my own practice, working through 16th note rhythms two bars at a time and reading with my ears rather than my eyes and brain, I only recognized what was missing once I was the one building the listen-first option.</p><p>What I have not figured out yet is whether the generated rhythms are musically sound and worth practicing. Inclusive scaffolding alone does not guarantee compositional quality, and my Week 6 question about whether that quality is there remains open. Even so, while naming SRF's limitations proved straightforward, building around them showed me that these were non-neutral choices made to cater to a particular audience of learners.</p></div></details>
             </div>
           </article>
@@ -457,7 +500,7 @@ details.resp .resp-body p.subtle{color:var(--Rhythm-muted,#5b6472)}
       const annotations = {
         resist: {
           title: "RESIST",
-          copy: "Sight Reading Factory (SRF) relies on Western music notation as the only mode for students to sight-read with, which hinders users of this tool who may have learned how to read music with a different notation system or who learn more effectively using other modes. The current model of SRF’s feedback is also problematic as it shows an accuracy percentage with a breakdown of correct notes, wrong notes, missing notes, and notes that were played early or late, but does not indicate exactly which notes or rhythms are incorrect or offer suggestions on how to improve. To resist these limitations and to make our tool widely accessible, we have included options at the top of the screen to help students in other ways, such as numbers that appear below the notation, takadimi (etc. syllables like ta and ti-ti), a playback option for the aural mode, and even a “draw” mode for students who might want to make their own notes. All of these options are toggleable and off by default, giving users the freedom to choose from their preferences without forcing these options onto them or being overwhelming. There is also an accompanying introductory video to our artifact that serves as scaffolding for students to start reading basic rhythms before they use our tool – in case, for example, they have no idea what takadimi is!",
+          copy: "Sight Reading Factory (SRF) relies on Western music notation as the only mode for students to sight-read with, which hinders users of this tool who may have learned how to read music with a different notation system or who learn more effectively using other modes. The current model of SRF’s feedback is also problematic as it shows an accuracy percentage with a breakdown of correct notes, wrong notes, missing notes, and notes that were played early or late, but does not indicate exactly which notes or rhythms are incorrect or offer suggestions on how to improve. To resist these limitations and to make our tool widely accessible, we have included options at the top of the screen to help students in other ways, such as numbers that appear below the notation, takadimi (etc. syllables like ta and ti-ti), a playback option for the aural mode, and even a “draw” mode for students who might want to make their own notes. All of these options are toggle-able and off by default, giving users the freedom to choose from their preferences without forcing these options onto them or being overwhelming. There is also an accompanying introductory video to our artifact that serves as scaffolding for students to start reading basic rhythms before they use our tool – in case, for example, they have no idea what takadimi is!",
           map: "",
           target: "feature-resist"
         },
@@ -731,9 +774,9 @@ async function refreshBank(){
   var _r;try{_r=await fetch(API,{headers:{accept:"application/json"}});if(_r.ok){var d=await _r.json();if(Array.isArray(d)){bank=d;remote=true;_bankStatus="connected";updateBadge();renderBank();return;}_bankStatus="bad shape";}else{_bankStatus="http "+_r.status;}}catch(e){_bankStatus="network error";}
   remote=false;bank=[];updateBadge();renderBank();
 }
-async function submitRhythm(name,bpm,tiles){
-  if(currentBank==="local"){try{var _r=await fetch("/api/rhythms_local",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({name:name,bpm:bpm,tiles:tiles,unit:"s16"})});if(_r.ok){var _li=await _r.json();if(_li&&_li.token)addMyToken(_li.token);await refreshBank();toast("Saved to your Local Rhythm Bank");return true;}}catch(e){}toast("Couldn\u2019t save to the Local bank.");return false;}
-  try{var r=await fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({name:name,bpm:bpm,tiles:tiles,unit:"s16"})});if(r.ok){var _it=await r.json();if(_it&&_it.token)addMyToken(_it.token);remote=true;_bankStatus="connected";await refreshBank();toast("Saved to the Cultural Rhythm Bank");return true;}_bankStatus="http "+r.status;}catch(e){_bankStatus="network error";}
+async function submitRhythm(name,bpm,tiles){var _descEl=document.getElementById("rec-desc");var _desc=_descEl?String(_descEl.value).trim():"";
+  if(currentBank==="local"){try{var _r=await fetch("/api/rhythms_local",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({name:name,bpm:bpm,tiles:tiles,unit:"s16",desc:_desc})});if(_r.ok){var _li=await _r.json();if(_li&&_li.token)addMyToken(_li.token);if(_desc)__descSet(_li.token,_desc);await refreshBank();toast("Saved to your Local Rhythm Bank");return true;}}catch(e){}toast("Couldn\u2019t save to the Local bank.");return false;}
+  try{var r=await fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({name:name,bpm:bpm,tiles:tiles,unit:"s16",desc:_desc})});if(r.ok){var _it=await r.json();if(_it&&_it.token)addMyToken(_it.token);if(_desc)__descSet(_it.token,_desc);remote=true;_bankStatus="connected";await refreshBank();toast("Saved to the Cultural Rhythm Bank");return true;}_bankStatus="http "+r.status;}catch(e){_bankStatus="network error";}
   remote=false;updateBadge();renderBank();toast("Couldn\u2019t reach the shared bank ("+_bankStatus+").");return false;
 }
 async function deleteRhythm(item){
@@ -835,14 +878,19 @@ function applyBankUI(){
   if(currentBank==="cultural"){
     if(lbl)lbl.textContent="Cultural name / title";
     if(inp){inp.value="";inp.placeholder="e.g. Afro-Cuban Clave, a lullaby, a chant";inp.maxLength=40;}
-    if(tgt)tgt.textContent="the shared Cultural Rhythm Bank";
+    if(tgt)tgt.textContent="the shared Cultural Rhythm Bank";var _dw=document.getElementById("rec-desc-wrap");if(_dw)_dw.style.display="";var _di=document.getElementById("rec-desc");if(_di)_di.value="";
   }else{
     if(lbl)lbl.textContent="Your name";
     if(inp){inp.value="";inp.placeholder="e.g. Jordan";inp.maxLength=24;}
-    if(tgt)tgt.textContent="your Local Rhythm Bank";
+    if(tgt)tgt.textContent="your Local Rhythm Bank";var _dw=document.getElementById("rec-desc-wrap");if(_dw)_dw.style.display="none";var _di=document.getElementById("rec-desc");if(_di)_di.value="";
   }
 }
 function exportBankPDF(){var sheet=document.getElementById("print-sheet");if(!sheet){sheet=document.createElement("div");sheet.id="print-sheet";document.body.appendChild(sheet);}var title=(currentBank==="cultural")?"Cultural Rhythm Bank":"ETEC 531's Rhythms";var html="<h1>"+title+"</h1><p>"+bank.length+" rhythm"+(bank.length===1?"":"s")+" &middot; "+new Date().toLocaleString()+"</p>";var list=bank.slice();if(!list.length){html+="<p>No rhythms in this bank yet.</p>";}list.forEach(function(item,i){var tiles=(typeof u16==="function")?u16(item):(item.tiles||[]);var s=document.createElementNS(NS,"svg");s.setAttribute("xmlns",NS);render(s,tiles);html+='<div class="pr-rhythm"><div class="pr-meta">'+(i+1)+". "+esc(item.name||"Untitled")+" &middot; "+(item.bpm||88)+" BPM</div>"+s.outerHTML+"</div>";});sheet.innerHTML=html;sheet.style.display="block";setTimeout(function(){window.print();setTimeout(function(){sheet.style.display="none";},600);},60);}
+var __DESC_KEY="praxis_rhythm_desc_v1";
+function __descLoad(){try{var r=localStorage.getItem(__DESC_KEY);return r?JSON.parse(r):{};}catch(e){return {};}}
+function __descSave(m){try{localStorage.setItem(__DESC_KEY,JSON.stringify(m));}catch(e){}}
+function __descSet(k,d){if(!k||!d)return;var m=__descLoad();m[String(k)]=d;__descSave(m);}
+function __descGet(it){if(!it)return "";var m=__descLoad();if(it.token&&m[String(it.token)])return m[String(it.token)];if(it.id!=null&&m[String(it.id)])return m[String(it.id)];return "";}
 function renderBank(){
   var grid=$("#bank-grid");if(!grid)return;var a=bank;grid.innerHTML="";var mine=myTokens();updateBadge();
   var pc=document.getElementById("preset-count-"+currentBank);
@@ -866,7 +914,7 @@ function renderBank(){
     var pb=document.createElement("button");pb.type="button";pb.className="btn small";pb.textContent=">";pb.title="Play";
     row.appendChild(pb);
     if(adminMode||(item.token&&mine.indexOf(item.token)>=0)){var db=document.createElement("button");db.type="button";db.className="btn small";db.textContent="x";db.title="Delete your rhythm";db.addEventListener("click",function(ev){ev.stopPropagation();deleteRhythm(item).then(function(){toast("Removed");});});row.appendChild(db);}
-    meta.appendChild(lbl);meta.appendChild(row);card.appendChild(meta);grid.appendChild(card);
+    meta.appendChild(lbl);meta.appendChild(row);card.appendChild(meta);var _dsc=(item.desc&&String(item.desc).trim())||__descGet(item)||"";if(currentBank==="cultural"&&_dsc){card.style.position="relative";card.style.overflow="visible";card.classList.add("has-tip");var _tip=document.createElement("div");_tip.className="bc-tip";_tip.setAttribute("role","note");_tip.innerHTML='<span class="bc-tip-ey">Cultural tip</span><span class="bc-tip-body">'+esc(_dsc)+'</span>';card.appendChild(_tip);}grid.appendChild(card);
     pb.addEventListener("click",function(ev){ev.stopPropagation();if(_playing&&_playBtn===pb){stopPlay();}else{play(tiles,item.bpm,pb,svg);}});
     card.addEventListener("click",function(){if(_playing&&_playBtn===pb){stopPlay();}else{play(tiles,item.bpm,pb,svg);}});
   });
