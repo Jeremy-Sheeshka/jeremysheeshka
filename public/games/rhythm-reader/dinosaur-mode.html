@@ -966,19 +966,30 @@ function drawClef(gx) {
     ctx.fillText('4', tx, gy + 2 * s);
   } catch (e) {}
 }
-function drawRest(x) {
+function drawRest(x, n) {
   var s = M.s;
   var cy = M.gy;
-  ctx.strokeStyle = INK;
-  ctx.lineWidth = Math.max(1.6, 2 * s);
-  ctx.lineCap = 'round';
-  ctx.lineJoin = 'round';
-  ctx.beginPath();
-  ctx.moveTo(x + 2 * s, cy - 13 * s);
-  ctx.quadraticCurveTo(x - 4 * s, cy - 9 * s, x + 1 * s, cy - 4 * s);
-  ctx.quadraticCurveTo(x + 5 * s, cy, x - 1 * s, cy + 5 * s);
-  ctx.quadraticCurveTo(x - 4 * s, cy + 9 * s, x + 1 * s, cy + 12 * s);
-  ctx.stroke();
+  if (n && n.len >= 576) {
+    // whole rest: filled rectangle hanging below the line
+    ctx.fillStyle = INK;
+    ctx.fillRect(Math.round(x - 5 * s), Math.round(cy - 2 * s), Math.ceil(10 * s), Math.ceil(6 * s));
+  } else if (n && n.len >= 288) {
+    // half rest: filled rectangle sitting on the line
+    ctx.fillStyle = INK;
+    ctx.fillRect(Math.round(x - 5 * s), Math.round(cy - 13 * s), Math.ceil(10 * s), Math.ceil(6 * s));
+  } else {
+    // quarter / eighth rest: squiggle
+    ctx.strokeStyle = INK;
+    ctx.lineWidth = Math.max(1.6, 2 * s);
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.beginPath();
+    ctx.moveTo(x + 2 * s, cy - 13 * s);
+    ctx.quadraticCurveTo(x - 4 * s, cy - 9 * s, x + 1 * s, cy - 4 * s);
+    ctx.quadraticCurveTo(x + 5 * s, cy, x - 1 * s, cy + 5 * s);
+    ctx.quadraticCurveTo(x - 4 * s, cy + 9 * s, x + 1 * s, cy + 12 * s);
+    ctx.stroke();
+  }
 }
 function drawNote(x, n) {
   var s = M.s;
@@ -1095,7 +1106,7 @@ function drawWorld(cb) {
     var n = notes[n2];
     var dx = n._dx;
     if (dx < -70 || dx > W + 70) continue;
-    if (n.rest) drawRest(dx);
+    if (n.rest) drawRest(dx, n);
     else drawNote(dx, n);
   }
 }
@@ -1286,6 +1297,8 @@ errBox.addEventListener('pointerdown', function (e) {
 });
 window.addEventListener('keydown', function (e) {
   if (e.repeat) return;
+  var nc = document.getElementById('name-card');
+  if (nc && nc.style.display !== 'none') return;
   if (e.code === 'Space' || e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') {
     e.preventDefault();
     actionPrimary();
