@@ -329,15 +329,76 @@ function levelFromStreak() {
   return 4;
 }
 function weightsFor(level) {
-  if (level <= 0) return { whole: 0.36, half: 0.49, quarter: 0.15, eighth: 0, halfRest: 0, quarterRest: 0 };
-  if (level === 1) return { whole: 0.16, half: 0.34, quarter: 0.26, eighth: 0, halfRest: 0.24, quarterRest: 0 };
-  if (level === 2) return { whole: 0.08, half: 0.22, quarter: 0.34, eighth: 0, halfRest: 0.16, quarterRest: 0.20 };
-  if (level === 3) return { whole: 0.05, half: 0.15, quarter: 0.40, eighth: 0.22, halfRest: 0.08, quarterRest: 0.10 };
-  return { whole: 0.04, half: 0.12, quarter: 0.40, eighth: 0.30, halfRest: 0.06, quarterRest: 0.08 };
+  if (level <= 0) return { whole: 0.22, half: 0.30, quarter: 0.28, eighth: 0.08, halfRest: 0.06, quarterRest: 0.06 };
+  if (level === 1) return { whole: 0.14, half: 0.24, quarter: 0.28, eighth: 0.16, halfRest: 0.10, quarterRest: 0.08 };
+  if (level === 2) return { whole: 0.06, half: 0.16, quarter: 0.30, eighth: 0.24, halfRest: 0.12, quarterRest: 0.12 };
+  if (level === 3) return { whole: 0.03, half: 0.10, quarter: 0.32, eighth: 0.34, halfRest: 0.10, quarterRest: 0.11 };
+  return { whole: 0.02, half: 0.08, quarter: 0.30, eighth: 0.38, halfRest: 0.10, quarterRest: 0.12 };
 }
 var notes = [];
 var genBeat = MUSIC0;
+function patternBar(level) {
+  var patterns;
+  if (level <= 1) {
+    patterns = [
+      ['Q','Q','Q','Q'],
+      ['H','H'],
+      ['W'],
+      ['H','Q','Q'],
+      ['Q','Q','H'],
+      ['QR','QR','QR','QR'],
+      ['HR','HR'],
+      ['Q','Q','HR'],
+      ['HR','Q','Q'],
+    ];
+  } else if (level === 2) {
+    patterns = [
+      ['Q','Q','Q','Q'],
+      ['H','H'],
+      ['H','Q','Q'],
+      ['Q','Q','H'],
+      ['Q','E','E','Q'],
+      ['E','E','Q','Q'],
+      ['Q','Q','E','E'],
+      ['HR','Q','Q'],
+      ['Q','QR','Q','Q'],
+      ['Q','Q','Q','QR'],
+      ['E','E','H'],
+      ['H','E','E'],
+    ];
+  } else {
+    patterns = [
+      ['Q','E','E','Q'],
+      ['E','E','Q','Q'],
+      ['Q','Q','E','E'],
+      ['Q','E','E','H'],
+      ['H','E','E','Q'],
+      ['E','E','H'],
+      ['H','E','E'],
+      ['E','E','E','E','Q'],
+      ['Q','E','E','E','E'],
+      ['QR','E','E','Q'],
+      ['Q','E','E','QR'],
+      ['E','E','E','E','H'],
+      ['H','Q','Q'],
+      ['Q','Q','H'],
+    ];
+  }
+  var chosen = patterns[Math.floor(Math.random() * patterns.length)];
+  var comps = [];
+  for (var pi = 0; pi < chosen.length; pi++) {
+    var k = chosen[pi];
+    if (k === 'W') comps.push({ length: 576, rest: false, beam: null, gid: 0 });
+    else if (k === 'H') comps.push({ length: 288, rest: false, beam: null, gid: 0 });
+    else if (k === 'HR') comps.push({ length: 288, rest: true, beam: null, gid: 0 });
+    else if (k === 'Q') comps.push({ length: 144, rest: false, beam: null, gid: 0 });
+    else if (k === 'QR') comps.push({ length: 144, rest: true, beam: null, gid: 0 });
+    else if (k === 'E') { _gid++; var pg = _gid; comps.push({ length: 72, rest: false, beam: 'beam', gid: pg }); comps.push({ length: 72, rest: false, beam: 'beam', gid: pg }); }
+  }
+  return comps;
+}
 function randBar(level) {
+  if (Math.random() < 0.35) return patternBar(level);
   var w = weightsFor(level);
   var comps = [];
   var rem = 4;
@@ -358,8 +419,9 @@ function randBar(level) {
     add(1, w.quarterRest, 'QR');
     add(1, w.eighth, 'E');
     if (cands.length === 0) {
-      comps.push({ length: 144, rest: false, beam: null, gid: 0 });
-      rem -= 1;
+      var fillLen = Math.max(0.5, rem);
+      if (fillLen >= 1) { comps.push({ length: 144, rest: false, beam: null, gid: 0 }); rem -= 1; }
+      else { _gid++; var fg = _gid; comps.push({ length: 72, rest: false, beam: 'beam', gid: fg }); comps.push({ length: 72, rest: false, beam: 'beam', gid: fg }); rem -= 0.5; }
       continue;
     }
     var r = Math.random() * total;
