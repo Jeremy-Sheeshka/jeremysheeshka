@@ -121,7 +121,7 @@ var MUSIC0 = 6;
 var COUNT_START = 2;
 var CLEF_BEAT = 4.5;
 var RUN_START = 6;
-var HI_KEY = 'rr_hi_v3';
+var HI_KEY = 'rr_hi_v4';
 var MAX_LEVEL = 5;
 var TAP_EARLY = 0.15;
 var TAP_LATE = 0.20;
@@ -1315,7 +1315,7 @@ requestAnimationFrame(frame);
 <script data-intro-hi>
 (function(){
   function readHi(){
-    var raw=null; try{ raw=localStorage.getItem("rr_hi_v3"); }catch(e){}
+    var raw=null; try{ raw=localStorage.getItem("rr_hi_v4"); }catch(e){}
     if(raw===null||raw==="") return 0;
     try{ var p=JSON.parse(raw); if(typeof p==="number") return p; if(p&&typeof p.score==="number") return p.score; }catch(e){}
     var n=parseInt(raw,10); return (isFinite(n)&&n>0)?n:0;
