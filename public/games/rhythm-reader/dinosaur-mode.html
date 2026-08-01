@@ -753,12 +753,14 @@ function saveHiName() {
   document.getElementById('name-card').style.display = 'none';
   readyEl.querySelector('.card').style.display = 'block';
   fillIntroHi();
+  if (document.activeElement) document.activeElement.blur();
 }
 function skipHiName() {
   pendingHiName = false;
   document.getElementById('name-card').style.display = 'none';
   readyEl.querySelector('.card').style.display = 'block';
   fillIntroHi();
+  if (document.activeElement) document.activeElement.blur();
 }
 function registerMiss(n, now, cb) {
   n.resolved = true;
