@@ -276,7 +276,7 @@ details.resp .resp-body p.subtle{color:var(--Rhythm-muted,#5b6472)}
 .lesson-content ul,.lesson-content ol{margin:0 0 16px;padding-left:20px}
 .lesson-content li{margin-bottom:5px}
 .lesson-content strong{color:var(--Rhythm-accent,#1d4ed8)}
-.resources-layout{display:flex;gap:24px;align-items:flex-start}.resources-video{flex:0 0 48%;min-width:0}.resources-video iframe{width:100%;aspect-ratio:16/9;border-radius:16px;border:none}.resources-lessons{flex:1;min-width:0}@media(max-width:780px){.resources-layout{flex-direction:column}.resources-video{flex:0 0 auto}}
+.resources-video{margin:0 auto 22px}.resources-video iframe{width:100%;max-width:100%;aspect-ratio:16/9;border-radius:16px;border:none}
 .download-strip{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px}
 </style>
 <style id="hide-rec-status">#hide-rec-status{display:none !important}#status-dataset{display:none !important}</style><style id="anno-tabs-bigger">
@@ -452,17 +452,17 @@ details.resp .resp-body p.subtle{color:var(--Rhythm-muted,#5b6472)}
         </div>
 
         <div class="dashboard-grid" style="margin-top:20px">
-                    <div class="action-stack">
-            <article class="card dataset-card">
-              <div class="card-label"><strong>AI Tooling Disclosure</strong></div>
-              <p class="subtle">Artificial intelligence (Claude Sonnet 5, NotebookLM and Qwen 3.8 Max Preview) were used as supportive tools to develop and vibecode this artifact through iterative cycles. AI assisted with refining language, guided the process of stitching the code together, and was used to improve the clarity and organization of the website. The decision to design the tool as it has been shared remains the final decisions of the authors.</p>
-            </article>
-          </div>
 <div>
             <article class="card dataset-card">
               <div class="card-label"><strong>Draft Proposal</strong></div>
               <p class="subtle">Curriculum Otherwise Proposal (June 21, 2026). Here is the full rationale and design intent behind our reimagined version of Sight Reading Factory.</p>
               <a class="btn primary full" href="/assets/pdf/Curriculum%20Otherwise%20-%20Draft%20Proposal%20-%20June%2021%202026.pdf" target="_blank" rel="noopener">Read the draft proposal &rarr;</a>
+            </article>
+          </div>
+                    <div class="action-stack">
+            <article class="card dataset-card">
+              <div class="card-label"><strong>AI Tooling Disclosure</strong></div>
+              <p class="subtle">Artificial intelligence (Claude Sonnet 5, NotebookLM and Qwen 3.8 Max Preview) were used as supportive tools to develop and vibecode this artifact through iterative cycles. AI assisted with refining language, guided the process of stitching the code together, and was used to improve the clarity and organization of the website. The decision to design the tool as it has been shared remains the final decisions of the authors.</p>
             </article>
           </div>
           <div>
@@ -495,12 +495,11 @@ details.resp .resp-body p.subtle{color:var(--Rhythm-muted,#5b6472)}
         <h2 class="section-head">Lesson materials & resources</h2>
         <p class="subtle">Watch our instructional video and browse sample lessons below.</p>
 
-        <div class="resources-layout">
-          <div class="resources-video">
+        <div class="resources-video">
             <iframe width="560" height="315" src="https://www.youtube.com/embed/ELGUQwctWpU" title="Intro to Rhythm video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
           </div>
-          <div class="resources-lessons">
-            <div class="lesson-tabs" role="tablist" aria-label="Lesson tabs">
+
+        <div class="lesson-tabs" role="tablist" aria-label="Lesson tabs">
           <button class="lesson-tab active" role="tab" aria-selected="true" data-lesson="1">Lesson 1 — Basic Rhythms</button>
           <button class="lesson-tab" role="tab" aria-selected="false" data-lesson="2">Lesson 2 — Cultural Rhythms</button>
           <button class="lesson-tab" role="tab" aria-selected="false" data-lesson="3">Lesson 3 — Repertoire Rhythms</button>
@@ -556,8 +555,6 @@ details.resp .resp-body p.subtle{color:var(--Rhythm-muted,#5b6472)}
           </ul>
           <p class="subtle" style="margin-top:16px"><a href="/assets/pdf/Lesson%203_%20Repertoire%20Rhythms.pdf" target="_blank" rel="noopener" class="btn small">📥 Download Lesson 3 PDF</a></p>
         </article>
-          </div>
-        </div>
       </div>
     </section>
 
