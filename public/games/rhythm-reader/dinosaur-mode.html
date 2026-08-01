@@ -101,6 +101,13 @@
         <div class="sub">A SRF inspired tribute to chrome://dino</div>
         <div class="sub2">Press Play or Hit Space</div>
       </div>
+      <div class="card" id="name-card" style="display:none">
+        <div class="big" style="font-size:20px;letter-spacing:1px">NEW HIGH SCORE!</div>
+        <div class="sub2" id="name-score" style="margin-top:8px;font-variant-numeric:tabular-nums"></div>
+        <input id="name-input" type="text" maxlength="20" placeholder="Enter your name" style="display:block;width:100%;margin:12px 0 8px;padding:10px 14px;font:inherit;font-size:15px;font-weight:600;border:1px solid var(--line2);border-radius:8px;text-align:center;outline:none" autocomplete="off">
+        <button id="name-save" class="btn" style="margin-top:4px;width:100%">Save &amp; Continue</button>
+        <div class="sub" style="margin-top:8px;cursor:pointer" id="name-skip">skip</div>
+      </div>
     </div>
   </div>
 <script>
@@ -114,7 +121,7 @@ var MUSIC0 = 6;
 var COUNT_START = 2;
 var CLEF_BEAT = 4.5;
 var RUN_START = 6;
-var HI_KEY = 'rr_hi_v1';
+var HI_KEY = 'rr_hi_v2';
 var MAX_LEVEL = 5;
 var TAP_EARLY = 0.15;
 var TAP_LATE = 0.20;
@@ -371,15 +378,15 @@ function patternBar(level) {
       ['Q','E','E','Q'],
       ['E','E','Q','Q'],
       ['Q','Q','E','E'],
-      ['Q','E','E','H'],
-      ['H','E','E','Q'],
+      ['Q','E','H'],
+      ['H','E','Q'],
       ['E','E','H'],
       ['H','E','E'],
-      ['E','E','E','E','Q'],
-      ['Q','E','E','E','E'],
-      ['QR','E','E','Q'],
+      ['E','Q','E','Q'],
+      ['E','Q','Q','E'],
       ['Q','E','E','QR'],
-      ['E','E','E','E','H'],
+      ['QR','E','E','Q'],
+      ['E','E','Q','H'],
       ['H','Q','Q'],
       ['Q','Q','H'],
     ];
@@ -443,6 +450,10 @@ function randBar(level) {
       comps.push({ length: 72, rest: false, beam: 'beam', gid: g });
     }
     rem -= chosen.len;
+  }
+  if (rem > 0.001) {
+    while (rem >= 1) { comps.push({ length: 144, rest: true, beam: null, gid: 0 }); rem -= 1; }
+    if (rem >= 0.5) { comps.push({ length: 72, rest: true, beam: null, gid: 0 }); rem -= 0.5; }
   }
   return comps;
 }
@@ -621,14 +632,29 @@ var streak = 0;
 var milestoneT = -1;
 var hiScore = (function () {
   try {
-    var v = parseInt(localStorage.getItem(HI_KEY), 10);
-    return isFinite(v) ? v : 0;
+    var raw = localStorage.getItem(HI_KEY);
+    if (!raw) return 0;
+    var p = JSON.parse(raw);
+    if (typeof p === 'number') return p;
+    if (p && typeof p.score === 'number') return p.score;
+    return 0;
   } catch (e) { return 0; }
 })();
+var hiName = (function () {
+  try {
+    var raw = localStorage.getItem(HI_KEY);
+    if (!raw) return '';
+    var p = JSON.parse(raw);
+    return (p && p.name) ? p.name : '';
+  } catch (e) { return ''; }
+})();
+var pendingHiName = false;
 function bumpHi(v) {
   if (v > hiScore) {
     hiScore = v;
-    try { localStorage.setItem(HI_KEY, String(hiScore)); } catch (e) {}
+    hiName = '';
+    pendingHiName = true;
+    try { localStorage.setItem(HI_KEY, JSON.stringify({ name: '', score: hiScore })); } catch (e) {}
   }
 }
 var jumping = false;
@@ -696,8 +722,34 @@ function stop() {
   bouncing = false;
   yOff = 0;
   hideErr();
-  readyEl.style.display = 'flex';
+  if (pendingHiName && ended >= hiScore) {
+    readyEl.style.display = 'flex';
+    document.getElementById('name-card').style.display = 'block';
+    readyEl.querySelector('.card').style.display = 'none';
+    document.getElementById('name-score').textContent = 'Score: ' + ended;
+    document.getElementById('name-input').value = '';
+    document.getElementById('name-input').focus();
+  } else {
+    readyEl.style.display = 'flex';
+  }
   updatePlayBtn();
+}
+function saveHiName() {
+  var inp = document.getElementById('name-input');
+  var n = (inp.value || '').trim();
+  if (!n) n = 'Anonymous';
+  hiName = n;
+  pendingHiName = false;
+  try { localStorage.setItem(HI_KEY, JSON.stringify({ name: hiName, score: hiScore })); } catch (e) {}
+  document.getElementById('name-card').style.display = 'none';
+  readyEl.querySelector('.card').style.display = 'block';
+  fillIntroHi();
+}
+function skipHiName() {
+  pendingHiName = false;
+  document.getElementById('name-card').style.display = 'none';
+  readyEl.querySelector('.card').style.display = 'block';
+  fillIntroHi();
 }
 function registerMiss(n, now, cb) {
   n.resolved = true;
@@ -1108,7 +1160,7 @@ function drawHUD(now) {
     ctx.font = '700 ' + fs + 'px "Courier New",monospace';
     ctx.textAlign = 'right';
     ctx.textBaseline = 'top';
-    ctx.fillText('HI ' + pad(hiScore) + ' ' + pad(streak), W - 18, 16);
+    ctx.fillText('HI ' + pad(hiScore) + '  ' + (hiName||'---') + '  ' + pad(streak), W - 18, 16);
   } catch (e) {}
 }
 function pad(n, w) {
@@ -1222,6 +1274,11 @@ window.addEventListener('keydown', function (e) {
 document.getElementById('optAid').addEventListener('change', function () {
   settings.aid = this.value;
 });
+document.getElementById('name-save').addEventListener('click', saveHiName);
+document.getElementById('name-skip').addEventListener('click', skipHiName);
+document.getElementById('name-input').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') { e.preventDefault(); saveHiName(); }
+});
 resize();
 initClouds();
 initSky();
@@ -1238,20 +1295,20 @@ requestAnimationFrame(frame);
     try{ var p=JSON.parse(raw); if(typeof p==="number") return p; if(p&&typeof p.score==="number") return p.score; }catch(e){}
     var n=parseInt(raw,10); return (isFinite(n)&&n>0)?n:0;
   }
-  function fill(){ var el=document.getElementById("intro-hi"); if(!el) return; var v=readHi(); el.textContent="ALL-TIME BEST  "+(v>0?v:"--"); }
+function fillIntroHi(){ var el=document.getElementById("intro-hi"); if(!el) return; var label=hiName?hiName+" · "+hiScore:hiScore>0?String(hiScore):"--"; el.textContent="ALL-TIME BEST  "+label; }
   function hook(){
-    fill();
+    fillIntroHi();
     var ready=document.getElementById("ready");
     if(ready && "MutationObserver" in window){
       var mo=new MutationObserver(function(){
         var cs=getComputedStyle(ready);
         var vis=!ready.hidden && cs.display!=="none" && cs.visibility!=="hidden";
-        if(vis) fill();
+        if(vis) fillIntroHi();
       });
       mo.observe(ready,{attributes:true,attributeFilter:["hidden","style","class"]});
     }
-    window.addEventListener("focus",fill);
-    document.addEventListener("visibilitychange",fill);
+    window.addEventListener("focus",fillIntroHi);
+    document.addEventListener("visibilitychange",fillIntroHi);
   }
   if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",hook); else hook();
 })();
