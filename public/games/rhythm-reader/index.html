@@ -276,7 +276,7 @@ details.resp .resp-body p.subtle{color:var(--Rhythm-muted,#5b6472)}
 .lesson-content ul,.lesson-content ol{margin:0 0 16px;padding-left:20px}
 .lesson-content li{margin-bottom:5px}
 .lesson-content strong{color:var(--Rhythm-accent,#1d4ed8)}
-.video-placeholder{display:flex;align-items:center;justify-content:center;width:100%;max-width:100%;aspect-ratio:16/9;margin:0 auto 22px;border:2px dashed var(--Rhythm-line,#d8dee7);border-radius:16px;background:color-mix(in srgb,var(--Rhythm-soft,#f0f2f5) 50%,transparent);color:var(--Rhythm-muted,#5b6472);font-size:14px;font-weight:600;letter-spacing:.03em}
+.resources-layout{display:flex;gap:24px;align-items:flex-start}.resources-video{flex:0 0 48%;min-width:0}.resources-video iframe{width:100%;aspect-ratio:16/9;border-radius:16px;border:none}.resources-lessons{flex:1;min-width:0}@media(max-width:780px){.resources-layout{flex-direction:column}.resources-video{flex:0 0 auto}}
 .download-strip{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px}
 </style>
 <style id="hide-rec-status">#hide-rec-status{display:none !important}#status-dataset{display:none !important}</style><style id="anno-tabs-bigger">
@@ -343,7 +343,7 @@ details.resp .resp-body p.subtle{color:var(--Rhythm-muted,#5b6472)}
         <div class="dashboard-grid">
           <div>
             <article class="card dataset-card" id="feature-resist">
-              <div class="card-label"><strong><span id="bank-section-title">Datasets</span></strong><span class="doing-wrap"><button class="feature-link" id="weekly-doing-link">The Doing</button><span class="doing-pop" role="tooltip"><strong>The Doing</strong>The Doing this week is a hands-on comparison: sight-read the same rhythms on Sight Reading Factory and on our redesigned Rhythm Reader, then reflect on how the two experiences stack up. Head to the Gallery for the full prompt - and if you're new to reading rhythms, start with the intro video.<span class="doing-go">Click to open the full prompt in the Gallery &rarr;</span></span></span></div>
+              <div class="card-label"><strong><span id="bank-section-title">Datasets</span></strong><span class="doing-wrap"><button class="feature-link" id="weekly-doing-link">The Doing</button><span class="doing-pop" role="tooltip"><strong>The Doing</strong>The Doing this week is a hands-on comparison: sight-read the same rhythms on Sight Reading Factory and on our redesigned Rhythm Reader, then reflect on how the two experiences stack up. Head to the Gallery for the full prompt - and if you&#39;re new to reading rhythms, start with the <a href="#" data-nav="screen-resources">intro video</a>.<span class="doing-go">Click to open the full prompt in the Gallery &rarr;</span></span></span></div>
               <input class="sr-only" id="file-input" type="file" accept=".pdf,.png,.jpg,.jpeg">
               <div class="rec-panel" id="rec-panel">
                 <div class="rec-head"><strong>Record a 2-Bar Rhythm</strong><small>Tap and share a two bar rhythm the Rhythm Bank.</small></div>
@@ -410,7 +410,7 @@ details.resp .resp-body p.subtle{color:var(--Rhythm-muted,#5b6472)}
               <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px">
                 <details class="resp">
                   <summary><span class="resp-name">Step 0 (optional) - Intro to Rhythm video</span><span class="resp-chev" aria-hidden="true">&#8250;</span></summary>
-                  <div class="resp-body"><p>If you do not have experience reading rhythms, please familiarize yourself by watching the Intro to Rhythm video: LINK HERE</p></div>
+                  <div class="resp-body"><p>If you do not have experience reading rhythms, please familiarize yourself by watching the <a href="#" data-nav="screen-resources">Intro to Rhythm video</a></p></div>
                 </details>
                 <details class="resp">
                   <summary><span class="resp-name">Step 1 - Log into Sight Reading Factory</span><span class="resp-chev" aria-hidden="true">&#8250;</span></summary>
@@ -495,11 +495,12 @@ details.resp .resp-body p.subtle{color:var(--Rhythm-muted,#5b6472)}
         <h2 class="section-head">Lesson materials & resources</h2>
         <p class="subtle">Watch our instructional video and browse sample lessons below.</p>
 
-        <div class="video-placeholder" aria-label="Video placeholder">
-          <span>Video coming soon</span>
-        </div>
-
-        <div class="lesson-tabs" role="tablist" aria-label="Lesson tabs">
+        <div class="resources-layout">
+          <div class="resources-video">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/ELGUQwctWpU" title="Intro to Rhythm video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          </div>
+          <div class="resources-lessons">
+            <div class="lesson-tabs" role="tablist" aria-label="Lesson tabs">
           <button class="lesson-tab active" role="tab" aria-selected="true" data-lesson="1">Lesson 1 — Basic Rhythms</button>
           <button class="lesson-tab" role="tab" aria-selected="false" data-lesson="2">Lesson 2 — Cultural Rhythms</button>
           <button class="lesson-tab" role="tab" aria-selected="false" data-lesson="3">Lesson 3 — Repertoire Rhythms</button>
@@ -555,6 +556,8 @@ details.resp .resp-body p.subtle{color:var(--Rhythm-muted,#5b6472)}
           </ul>
           <p class="subtle" style="margin-top:16px"><a href="/assets/pdf/Lesson%203_%20Repertoire%20Rhythms.pdf" target="_blank" rel="noopener" class="btn small">📥 Download Lesson 3 PDF</a></p>
         </article>
+          </div>
+        </div>
       </div>
     </section>
 
