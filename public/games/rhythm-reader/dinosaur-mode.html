@@ -1288,20 +1288,20 @@ errBox.addEventListener('pointerdown', function (e) {
 });
 window.addEventListener('keydown', function (e) {
   if (e.repeat) return;
-  if (pendingHiName) return;
   if (e.code === 'Space' || e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') {
     e.preventDefault();
     actionPrimary();
   } else if (e.key === 'Escape') {
     panel.classList.remove('open');
   }
-}, true);
+}, false);
 document.getElementById('optAid').addEventListener('change', function () {
   settings.aid = this.value;
 });
 document.getElementById('name-save').addEventListener('click', saveHiName);
 document.getElementById('name-skip').addEventListener('click', skipHiName);
 document.getElementById('name-input').addEventListener('keydown', function(e) {
+  e.stopPropagation();
   if (e.key === 'Enter') { e.preventDefault(); saveHiName(); }
 });
 resize();
