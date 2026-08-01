@@ -754,6 +754,7 @@ function saveHiName() {
   readyEl.querySelector('.card').style.display = 'block';
   fillIntroHi();
   if (document.activeElement) document.activeElement.blur();
+  stage.focus();
 }
 function skipHiName() {
   pendingHiName = false;
@@ -761,6 +762,7 @@ function skipHiName() {
   readyEl.querySelector('.card').style.display = 'block';
   fillIntroHi();
   if (document.activeElement) document.activeElement.blur();
+  stage.focus();
 }
 function registerMiss(n, now, cb) {
   n.resolved = true;
@@ -1299,8 +1301,7 @@ errBox.addEventListener('pointerdown', function (e) {
 });
 window.addEventListener('keydown', function (e) {
   if (e.repeat) return;
-  var nc = document.getElementById('name-card');
-  if (nc && nc.style.display !== 'none') return;
+  if (pendingHiName) return;
   if (e.code === 'Space' || e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') {
     e.preventDefault();
     actionPrimary();
