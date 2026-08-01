@@ -336,11 +336,11 @@ function levelFromStreak() {
   return 4;
 }
 function weightsFor(level) {
-  if (level <= 0) return { whole: 0.22, half: 0.30, quarter: 0.28, eighth: 0.08, halfRest: 0.06, quarterRest: 0.06 };
-  if (level === 1) return { whole: 0.14, half: 0.24, quarter: 0.28, eighth: 0.16, halfRest: 0.10, quarterRest: 0.08 };
-  if (level === 2) return { whole: 0.06, half: 0.16, quarter: 0.30, eighth: 0.24, halfRest: 0.12, quarterRest: 0.12 };
-  if (level === 3) return { whole: 0.03, half: 0.10, quarter: 0.32, eighth: 0.34, halfRest: 0.10, quarterRest: 0.11 };
-  return { whole: 0.02, half: 0.08, quarter: 0.30, eighth: 0.38, halfRest: 0.10, quarterRest: 0.12 };
+  if (level <= 0) return { whole: 0.20, half: 0.28, quarter: 0.26, eighth: 0.08, halfRest: 0.06, quarterRest: 0.06, wholeRest: 0.06 };
+  if (level === 1) return { whole: 0.12, half: 0.22, quarter: 0.28, eighth: 0.16, halfRest: 0.10, quarterRest: 0.06, wholeRest: 0.06 };
+  if (level === 2) return { whole: 0.04, half: 0.14, quarter: 0.30, eighth: 0.24, halfRest: 0.12, quarterRest: 0.10, wholeRest: 0.06 };
+  if (level === 3) return { whole: 0.02, half: 0.08, quarter: 0.32, eighth: 0.34, halfRest: 0.10, quarterRest: 0.09, wholeRest: 0.05 };
+  return { whole: 0.01, half: 0.06, quarter: 0.30, eighth: 0.38, halfRest: 0.10, quarterRest: 0.10, wholeRest: 0.05 };
 }
 var notes = [];
 var genBeat = MUSIC0;
@@ -357,6 +357,7 @@ function patternBar(level) {
       ['HR','HR'],
       ['Q','Q','HR'],
       ['HR','Q','Q'],
+      ['WR'],
     ];
   } else if (level === 2) {
     patterns = [
@@ -372,6 +373,8 @@ function patternBar(level) {
       ['Q','Q','Q','QR'],
       ['E','E','H'],
       ['H','E','E'],
+      ['HR','E','E'],
+      ['Q','HR','Q'],
     ];
   } else {
     patterns = [
@@ -389,6 +392,9 @@ function patternBar(level) {
       ['E','E','Q','H'],
       ['H','Q','Q'],
       ['Q','Q','H'],
+      ['HR','E','E'],
+      ['E','E','HR'],
+      ['WR'],
     ];
   }
   var chosen = patterns[Math.floor(Math.random() * patterns.length)];
@@ -396,6 +402,7 @@ function patternBar(level) {
   for (var pi = 0; pi < chosen.length; pi++) {
     var k = chosen[pi];
     if (k === 'W') comps.push({ length: 576, rest: false, beam: null, gid: 0 });
+    else if (k === 'WR') comps.push({ length: 576, rest: true, beam: null, gid: 0 });
     else if (k === 'H') comps.push({ length: 288, rest: false, beam: null, gid: 0 });
     else if (k === 'HR') comps.push({ length: 288, rest: true, beam: null, gid: 0 });
     else if (k === 'Q') comps.push({ length: 144, rest: false, beam: null, gid: 0 });
@@ -420,6 +427,7 @@ function randBar(level) {
       }
     };
     add(4, w.whole, 'W');
+    add(4, w.wholeRest, 'WR');
     add(2, w.half, 'H');
     add(2, w.halfRest, 'HR');
     add(1, w.quarter, 'Q');
@@ -439,6 +447,7 @@ function randBar(level) {
       if (r < acc) { chosen = cands[ci]; break; }
     }
     if (chosen.kind === 'W') comps.push({ length: 576, rest: false, beam: null, gid: 0 });
+    else if (chosen.kind === 'WR') comps.push({ length: 576, rest: true, beam: null, gid: 0 });
     else if (chosen.kind === 'H') comps.push({ length: 288, rest: false, beam: null, gid: 0 });
     else if (chosen.kind === 'HR') comps.push({ length: 288, rest: true, beam: null, gid: 0 });
     else if (chosen.kind === 'Q') comps.push({ length: 144, rest: false, beam: null, gid: 0 });
@@ -760,6 +769,19 @@ function registerMiss(n, now, cb) {
   streak = 0;
   bumpHi(ended);
   pruneRegen(cb);
+  if (pendingHiName && ended >= hiScore) {
+    playing = false;
+    if (schedId) { clearInterval(schedId); schedId = null; }
+    jumping = false; bouncing = false; yOff = 0;
+    hideErr();
+    readyEl.style.display = 'flex';
+    document.getElementById('name-card').style.display = 'block';
+    readyEl.querySelector('.card').style.display = 'none';
+    document.getElementById('name-score').textContent = 'Score: ' + ended;
+    document.getElementById('name-input').value = '';
+    document.getElementById('name-input').focus();
+    updatePlayBtn();
+  }
 }
 function registerClear(n, now) {
   n.resolved = true;
