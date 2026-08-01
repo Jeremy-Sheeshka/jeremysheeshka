@@ -90,7 +90,7 @@
       </div>
     </div>
   </div>
-  <div class="stage" id="stage">
+  <div class="stage" id="stage" tabindex="-1">
     <canvas id="track"></canvas>
     <div id="errbox"></div>
     <button id="jumpBtn" class="jumpbtn" aria-label="jump">▲ JUMP</button>
@@ -773,19 +773,6 @@ function registerMiss(n, now, cb) {
   streak = 0;
   bumpHi(ended);
   pruneRegen(cb);
-  if (pendingHiName && ended >= hiScore) {
-    playing = false;
-    if (schedId) { clearInterval(schedId); schedId = null; }
-    jumping = false; bouncing = false; yOff = 0;
-    hideErr();
-    readyEl.style.display = 'flex';
-    document.getElementById('name-card').style.display = 'block';
-    readyEl.querySelector('.card').style.display = 'none';
-    document.getElementById('name-score').textContent = 'Score: ' + ended;
-    document.getElementById('name-input').value = '';
-    document.getElementById('name-input').focus();
-    updatePlayBtn();
-  }
 }
 function registerClear(n, now) {
   n.resolved = true;
