@@ -1,22 +1,144 @@
-<div class="diagram" role="img" aria-label="Architecture: Cadenza runs on Curator Core, which runs on the Curator Node">
-  <div class="diagram-box">
-    <span class="diagram-box-name">Cadenza</span>
-    <span class="diagram-box-meta">first application</span>
+---
+---
+
+<div class="architecture-section">
+  <p class="eyebrow">The Curator Architecture</p>
+  <h2 class="architecture-title">One Integrated Stack</h2>
+  <p class="architecture-intro">We are not building another generic software wrapper renting cloud intelligence. Curator is an on-premise infrastructure stack owned entirely by the institution:</p>
+
+  <div class="architecture-stack">
+    <div class="stack-item">
+      <span class="stack-name">Cadenza Studio</span>
+      <span class="stack-role">First Application</span>
+      <span class="stack-desc">An AI-native, open-source, offline operating system for private tutors and small studios.</span>
+    </div>
+
+    <div class="stack-connector" aria-hidden="true"></div>
+
+    <div class="stack-item">
+      <span class="stack-name">Curator Core</span>
+      <span class="stack-role">The Intelligence Engine</span>
+      <span class="stack-desc">Local inference and private Retrieval-Augmented Generation (RAG) managing local agents, permissions, and data within vertical SaaS solutions.</span>
+    </div>
+
+    <div class="stack-connector" aria-hidden="true"></div>
+
+    <div class="stack-item">
+      <span class="stack-name">Curator Node</span>
+      <span class="stack-role">The Hardware Appliance</span>
+      <span class="stack-desc">Headless, plug-and-play physical server that non-technical clients can purchase and run locally.</span>
+    </div>
   </div>
 
-  <div class="diagram-connector" aria-hidden="true"></div>
-
-  <div class="diagram-box">
-    <span class="diagram-box-name">CURATOR CORE</span>
-    <span class="diagram-box-meta">local inference · private RAG · agents · permissions · provenance</span>
+  <div class="ownership-grid">
+    <div class="ownership-item">
+      <span class="ownership-label">Host</span>
+      <span class="ownership-desc">Run the engine on hardware you own, from a personal laptop to a dedicated Curator Node.</span>
+    </div>
+    <div class="ownership-item">
+      <span class="ownership-label">Store</span>
+      <span class="ownership-desc">Keep lesson records, student files, and community archives in a private library only you can reach.</span>
+    </div>
+    <div class="ownership-item">
+      <span class="ownership-label">Share</span>
+      <span class="ownership-desc">Open what you choose, to whom you choose, over encrypted private tunnels and permissioned APIs.</span>
+    </div>
+    <div class="ownership-item">
+      <span class="ownership-label">Own</span>
+      <span class="ownership-desc">Your knowledge, your computer, your terms. Forever. Our SaaS solutions offer individuals independence from centralized cloud servers and other privately owned tech solutions.</span>
+    </div>
   </div>
-
-  <div class="diagram-connector" aria-hidden="true"></div>
-
-  <div class="diagram-box">
-    <span class="diagram-box-name">CURATOR NODE</span>
-    <span class="diagram-box-meta">local appliance</span>
-  </div>
-
-  <p class="diagram-annotation">Pre-configured on off-the-shelf hardware. No custom silicon.</p>
 </div>
+
+<style>
+  .architecture-section {
+    padding: var(--space-4xl) 0;
+    text-align: center;
+  }
+  .architecture-title {
+    margin-bottom: var(--space-md);
+  }
+  .architecture-intro {
+    max-width: 700px;
+    margin: 0 auto var(--space-3xl);
+    color: var(--ink-muted);
+  }
+  .architecture-stack {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    margin-bottom: var(--space-3xl);
+  }
+  .stack-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: var(--space-lg) var(--space-2xl);
+    background: #fff;
+    border: 2px solid var(--border);
+    border-radius: var(--radius-lg);
+    min-width: 300px;
+    max-width: 500px;
+    text-align: center;
+  }
+  .stack-name {
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 0.03em;
+  }
+  .stack-role {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent-orange);
+  }
+  .stack-desc {
+    font-size: 0.85rem;
+    color: var(--ink-muted);
+    max-width: 360px;
+  }
+  .stack-connector {
+    width: 2px;
+    height: 20px;
+    background: var(--border);
+  }
+  .ownership-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-lg);
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: left;
+  }
+  .ownership-item {
+    padding: var(--space-lg);
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+  .ownership-label {
+    display: block;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: var(--space-sm);
+    color: var(--accent-orange);
+  }
+  .ownership-desc {
+    font-size: 0.85rem;
+    color: var(--ink-muted);
+    line-height: 1.5;
+  }
+  @media (max-width: 768px) {
+    .ownership-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  @media (max-width: 480px) {
+    .ownership-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

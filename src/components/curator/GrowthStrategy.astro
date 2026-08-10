@@ -1,0 +1,84 @@
+---
+---
+
+<section class="section section--surface" id="growth">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">Our Growth Strategy</p>
+      <h2>Land → Prove → Expand</h2>
+      <p class="growth-intro">Most EdTech startups try to sell to a district first and get stuck in 12-to-18-month procurement cycles. Curator skips that trap entirely.</p>
+    </div>
+
+    <div class="growth-steps">
+      <div class="growth-step">
+        <span class="growth-step-num">01</span>
+        <h3 class="growth-step-title">Land</h3>
+        <p class="growth-step-desc">Cadenza is free, open-source, and self-hosted. A single teacher is able to set up and learn our offline-first infrastructure in an hour via our GitHub repository.</p>
+      </div>
+
+      <div class="growth-step">
+        <span class="growth-step-num">02</span>
+        <h3 class="growth-step-title">Prove</h3>
+        <p class="growth-step-desc">Our first pilot of 8–10 independent studios utilizing Cadenza will validate real usage: how many minutes are saved per lesson, per administrative task, etc. Draft approval rates will be tracked and analyzed along with willingness to pay or host the SaaS solution.</p>
+      </div>
+
+      <div class="growth-step">
+        <span class="growth-step-num">03</span>
+        <h3 class="growth-step-title">Expand</h3>
+        <p class="growth-step-desc">Upon successful implementation and growing numbers, the potential for vertical industry expansion towards school district administrative tooling, asset intelligence, and sovereign community archives opportunities will be gauged.</p>
+      </div>
+    </div>
+
+    <div class="growth-cta">
+      <a class="btn btn--primary" href="/cadenza">Ready to get your time back from running a music studio?</a>
+      <a class="btn btn--ghost" href="mailto:jeremy@jeremysheeshka.ca">Talk to us about a pilot</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .growth-intro {
+    max-width: 600px;
+    margin: 0 auto;
+    color: var(--ink-muted);
+  }
+  .growth-steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-xl);
+    margin-bottom: var(--space-3xl);
+  }
+  .growth-step {
+    padding: var(--space-xl);
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    text-align: center;
+  }
+  .growth-step-num {
+    display: block;
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--accent-orange);
+    margin-bottom: var(--space-sm);
+  }
+  .growth-step-title {
+    margin-bottom: var(--space-md);
+  }
+  .growth-step-desc {
+    font-size: 0.9rem;
+    color: var(--ink-muted);
+    line-height: 1.6;
+  }
+  .growth-cta {
+    display: flex;
+    gap: var(--space-md);
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  @media (max-width: 768px) {
+    .growth-steps {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

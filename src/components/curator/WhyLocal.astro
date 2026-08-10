@@ -1,30 +1,137 @@
-<section class="section" id="company">
+---
+---
+
+<section class="section" id="about">
   <div class="container">
     <div class="section-head">
-      <p class="eyebrow">Principles</p>
-      <h2>Why local?</h2>
+      <p class="eyebrow">Page 4 — About</p>
+      <h2>Why offline?</h2>
+      <div class="values-tagline">
+        <span>01 Ownership</span>
+        <span>·</span>
+        <span>02 Context</span>
+        <span>·</span>
+        <span>03 Control</span>
+      </div>
+      <p class="brand-line">Open-Source by design. Offline by default. Human when it matters.</p>
     </div>
 
-    <div class="grid grid-3">
-      <article class="principle-card">
-        <p class="principle-index">01</p>
-        <h3>Ownership</h3>
-        <p class="principle-text">Your institutional knowledge remains yours.</p>
+    <div class="values-intro">
+      <p>We believe the era of cloud-first, hyper-centralized EdTech is leading to a crisis of control, privacy, and pedagogical integrity. Curator is designed around three foundational values:</p>
+    </div>
+
+    <div class="values-grid">
+      <article class="value-card">
+        <p class="value-num">01</p>
+        <h3>Independent Ownership</h3>
+        <p>An institution's knowledge must remain its own. It should not be uploaded to a third-party server, analyzed by a tech company, or used to train commercial models. Your business, your data, on hardware you control.</p>
       </article>
 
-      <article class="principle-card">
-        <p class="principle-index">02</p>
-        <h3>Context</h3>
-        <p class="principle-text">AI works against the knowledge that actually matters to your organization.</p>
+      <article class="value-card">
+        <p class="value-num">02</p>
+        <h3>Context-Aware Learning</h3>
+        <p>General-purpose cloud AI models are trained on generic web crawls; they don't understand your specific culture, curriculum, or clients. Curator allows offline AI to generate responses from your own set of stored data, thereby optimizing your workflow, communications, and learning context for each client's individual needs.</p>
       </article>
 
-      <article class="principle-card">
-        <p class="principle-index">03</p>
-        <h3>Control</h3>
-        <p class="principle-text">People remain responsible for what the system sends, changes, or recommends.</p>
+      <article class="value-card">
+        <p class="value-num">03</p>
+        <h3>Human Responsibility</h3>
+        <p>We at Curator agree that AI should never make a final decision, issue a grade, or send an unreviewed message by itself. In our architecture, the end-user is always the ultimate authority over the output and access of information and localized data. We strive to make the review-and-approval process easy, keeping a human in the loop. Unlike other companies, student data is never monetized or shared.</p>
       </article>
     </div>
 
-    <p class="brand-line">Open by design. Local by default. Human when it matters.</p>
+    <div class="enshittification-section">
+      <h3>Resisting the Enshittification of EdTech</h3>
+      <p>Proprietary cloud platforms often follow predictable lifecycles where users are served well, then later exploited for profit as platforms claw back value. Institutions that become dependent on a handful of cloud technologies have the potential to lose academic autonomy, suffer locked-in pricing schemes, and often end up surrendering their data to private companies. Curator strives to be the opposite of that, in its "what you see is what you get" approach to open-source ownership of B2B tooling.</p>
+    </div>
+
+    <div class="founder-section">
+      <h3>Meet the Founder</h3>
+      <div class="founder-card">
+        <p><strong>Jeremy Sheeshka — CEO & Founder.</strong> Jeremy is a K-12 music educator and MET student who is passionate about jazz guitar and technology. He is fascinated by building software and open-source technologies, which led him to build his first SaaS solution: Cadenza. In the role of music teacher, he has lost many evenings to inefficient paperwork and administrative tasks: chasing invoices, scheduling students, preparing lessons.</p>
+      </div>
+    </div>
   </div>
 </section>
+
+<style>
+  .values-tagline {
+    display: flex;
+    gap: var(--space-sm);
+    justify-content: center;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--ink-muted);
+    margin: var(--space-md) 0;
+  }
+  .brand-line {
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin-top: var(--space-sm);
+  }
+  .values-intro {
+    max-width: 700px;
+    margin: 0 auto var(--space-3xl);
+    text-align: center;
+  }
+  .values-intro p {
+    font-size: 1rem;
+    color: var(--ink-muted);
+    line-height: 1.7;
+  }
+  .values-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-xl);
+    margin-bottom: var(--space-3xl);
+  }
+  .value-card {
+    padding: var(--space-xl);
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+  }
+  .value-num {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--accent-orange);
+    margin-bottom: var(--space-sm);
+  }
+  .value-card h3 {
+    margin-bottom: var(--space-sm);
+  }
+  .value-card p {
+    font-size: 0.85rem;
+    color: var(--ink-muted);
+    line-height: 1.6;
+  }
+  .enshittification-section, .founder-section {
+    max-width: 700px;
+    margin: 0 auto var(--space-3xl);
+  }
+  .enshittification-section h3, .founder-section h3 {
+    margin-bottom: var(--space-lg);
+  }
+  .enshittification-section p {
+    font-size: 0.95rem;
+    color: var(--ink-muted);
+    line-height: 1.7;
+  }
+  .founder-card {
+    padding: var(--space-xl);
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+  }
+  .founder-card p {
+    font-size: 0.9rem;
+    color: var(--ink-muted);
+    line-height: 1.7;
+  }
+  @media (max-width: 768px) {
+    .values-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

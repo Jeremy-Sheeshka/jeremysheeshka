@@ -1,32 +1,144 @@
+---
+---
+
 <section class="section section--dark" id="platform">
-  <div class="container split">
-    <div class="engine-copy">
-      <p class="eyebrow">The engine</p>
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">Page 1 — Platform</p>
       <h2>One engine. Every context.</h2>
       <p class="lede">
-        Local inference. Private retrieval. Agentic workflows that act on what they retrieve.
-        The core doesn't know it's being used for music — it runs against whatever knowledge
-        an institution feeds it.
+        Curator Core doesn't know it's being used for music specifically. It runs against whatever knowledge an institution feeds it and whatever vertical tech stack and solution it focuses on. In the case of Cadenza, a lesson ends, and it automates a workflow: lesson → local voice-to-text summary → lesson summary drafted and communicated with student/family → sent via a secure tunnel.
       </p>
-      <a class="btn btn--primary" href="/posts/introducing-curator">Read the platform overview</a>
     </div>
 
-    <div class="engine-panels" aria-label="Example engine pipeline">
-      <div class="engine-panel">
-        <span class="engine-panel-key">lesson</span>
-        <span class="engine-panel-arrow" aria-hidden="true">→</span>
-        <span class="engine-panel-value">local transcription</span>
+    <div class="byoe-section">
+      <h3>Bring Your Own Environment — Three Ways to Run It</h3>
+      <div class="byoe-grid">
+        <div class="byoe-card">
+          <h4>Self-Host (Free & Open-Source)</h4>
+          <p>Install on any computer you already own. Entirely offline, self-managed, free forever.</p>
+        </div>
+        <div class="byoe-card">
+          <h4>Curator Node (Managed Hardware)</h4>
+          <p>A pre-configured, headless local server. Plug it in, connect your library, and manage your studio from any device over a local network. Zero technical overhead.</p>
+        </div>
+        <div class="byoe-card">
+          <h4>Private Tunnel (Secure Remote Access)</h4>
+          <p>An encrypted tunnel links your device directly to your offline Curator Node, without ever routing your documents or data through a centralized cloud or server.</p>
+        </div>
       </div>
-      <div class="engine-panel">
-        <span class="engine-panel-key">RAG</span>
-        <span class="engine-panel-arrow" aria-hidden="true">→</span>
-        <span class="engine-panel-value">"Clarinet 3 found · transposed −1"</span>
-      </div>
-      <div class="engine-panel">
-        <span class="engine-panel-key">drafts</span>
-        <span class="engine-panel-arrow" aria-hidden="true">→</span>
-        <span class="engine-panel-value">teacher approves → send</span>
+    </div>
+
+    <div class="core-section">
+      <h3>The Core</h3>
+      <div class="core-grid">
+        <div class="core-item">
+          <span class="core-num">1</span>
+          <h4>Local AI Core</h4>
+          <p>Features on-device inference using Ollama-capable offline models: voice-to-text, semantic search, summarization, document retrieval, and modification — all without any data being sent to external servers.</p>
+        </div>
+        <div class="core-item">
+          <span class="core-num">2</span>
+          <h4>Private Library</h4>
+          <p>A locally AI-powered, indexed repository of your files, sheet music, lesson notes, method books, and admin documents. The AI reads only what you feed it — your own curated set of resources.</p>
+        </div>
+        <div class="core-item">
+          <span class="core-num">3</span>
+          <h4>Event-Driven Workflow Engine</h4>
+          <p>When a transcription completes, Curator generates the practice plan, drafts the update, queues the invoice, and prompts confirmation for the next scheduled lesson.</p>
+        </div>
+        <div class="core-item">
+          <span class="core-num">4</span>
+          <h4>Secure Interoperability Gateway</h4>
+          <p>Exposes your library through SFTP, S3-compatible storage, and MCP, so existing tools, integrations, and student devices can easily connect and integrate the Curator Engine.</p>
+        </div>
+        <div class="core-item">
+          <span class="core-num">5</span>
+          <h4>Identity You Already Trust</h4>
+          <p>Automated login and account management mean the user never has to set up, reset, or deactivate Curator accounts for clients.</p>
+        </div>
+        <div class="core-item">
+          <span class="core-num">6</span>
+          <h4>Compliance-Grade Audit Trail</h4>
+          <p>Every draft, approval, and access is logged immutably on the host system.</p>
+        </div>
+        <div class="core-item">
+          <span class="core-num">7</span>
+          <h4>Your Name on It</h4>
+          <p>Institutions and resellers can deploy Curator under their own branding and white-labeling.</p>
+        </div>
       </div>
     </div>
   </div>
 </section>
+
+<style>
+  .byoe-section, .core-section {
+    margin-bottom: var(--space-3xl);
+  }
+  .byoe-section h3, .core-section h3 {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+    color: #fff;
+  }
+  .byoe-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-lg);
+  }
+  .byoe-card {
+    padding: var(--space-xl);
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius-lg);
+  }
+  .byoe-card h4 {
+    color: #fff;
+    margin-bottom: var(--space-sm);
+    font-size: 1rem;
+  }
+  .byoe-card p {
+    font-size: 0.85rem;
+    color: #9ca3af;
+    line-height: 1.6;
+  }
+  .core-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-lg);
+  }
+  .core-item {
+    padding: var(--space-xl);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius);
+  }
+  .core-num {
+    display: inline-block;
+    width: 28px;
+    height: 28px;
+    line-height: 28px;
+    text-align: center;
+    background: var(--accent-orange);
+    color: #fff;
+    border-radius: 50%;
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-bottom: var(--space-sm);
+  }
+  .core-item h4 {
+    color: #fff;
+    margin-bottom: var(--space-sm);
+    font-size: 0.95rem;
+  }
+  .core-item p {
+    font-size: 0.85rem;
+    color: #9ca3af;
+    line-height: 1.6;
+  }
+  @media (max-width: 768px) {
+    .byoe-grid, .core-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

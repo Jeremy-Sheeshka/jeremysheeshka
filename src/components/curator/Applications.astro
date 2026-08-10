@@ -1,46 +1,149 @@
-<section class="section section--surface" id="applications">
+---
+---
+
+<section class="section section--surface" id="solutions">
   <div class="container">
     <div class="section-head">
-      <p class="eyebrow">Roadmap</p>
-      <h2>One engine, many applications</h2>
+      <p class="eyebrow">Page 2 — Solutions</p>
+      <h2>One engine, many applications.</h2>
+      <p class="solutions-intro">Curator Core packages the same secure local infrastructure into focused vertical stacks and distinct products tailored to individual clients' use cases and workflows.</p>
     </div>
 
-    <div class="app-grid">
-      <div class="app-group">
-        <p class="app-group-label">First application</p>
-        <a class="app-card" href="/cadenza">
-          <span class="app-card-name">Cadenza</span>
-          <span class="app-card-line">The AI operating system for music educators.</span>
-          <span class="chip chip--lilac chip--status">Prototype in testing</span>
-        </a>
+    <div class="solutions-grid">
+      <div class="solution-card solution-card--primary">
+        <div class="solution-header">
+          <span class="solution-num">01</span>
+          <span class="chip chip--lilac chip--status">First application · Prototype in testing</span>
+        </div>
+        <h3>Cadenza — For Private Music Studios & Tutors</h3>
+        <div class="solution-roles">
+          <div class="role">
+            <span class="role-label">The Buyer (studio owner)</span>
+            <p>pays because scheduling, recurring billing, invoices, and practice tracking collapse into one secure, offline-first administrative dashboard.</p>
+          </div>
+          <div class="role">
+            <span class="role-label">The End-User (teacher)</span>
+            <p>stays because of private, AI-powered capability: lesson summaries and transcriptions, practice plans and modifications, automated parent invoicing, and scheduling.</p>
+          </div>
+          <div class="role">
+            <span class="role-label">The Learner (student)</span>
+            <p>engages through a simple login portal, gamification-capable interface, access to teacher-curated resources, and lesson summaries.</p>
+          </div>
+        </div>
+        <p class="solution-footer">Free, open-source, entirely offline on hardware a teacher already owns. The flagship proof that the platform works.</p>
+        <a class="btn btn--primary btn--sm" href="/cadenza">See Cadenza in depth</a>
       </div>
 
-      <div class="app-group">
-        <p class="app-group-label">In development</p>
-        <div class="app-card">
-          <span class="app-card-name">PrivateEdu</span>
-          <span class="app-card-line">Administrative workflows for schools, run on institutional knowledge.</span>
+      <div class="solution-card">
+        <div class="solution-header">
+          <span class="solution-num">02</span>
           <span class="chip chip--status">In development</span>
         </div>
+        <h3>PrivateEdutech — For School Administration</h3>
+        <p>The same secure draft-and-approve model, aimed at solutions that target administrative workflows: policy questions answered from the district's own documents; LOAs submitted and other forms prepared via offline chat interfaces hosted by the institution.</p>
       </div>
 
-      <div class="app-group">
-        <p class="app-group-label">Exploring</p>
-        <div class="app-card">
-          <span class="app-card-name">InstrumentOps</span>
-          <span class="app-card-line">Asset intelligence for instruments, labs, and equipment.</span>
+      <div class="solution-card">
+        <div class="solution-header">
+          <span class="solution-num">03</span>
           <span class="chip chip--status">Exploration</span>
         </div>
+        <h3>InstrumentOps — For Instruments, Labs, Equipment & Asset Organization</h3>
+        <p>Which instruments need repair, what's due for replacement, what have we already spent money on. Create an offline, department-specific inventory management system to share with administrators or other teachers.</p>
       </div>
 
-      <div class="app-group">
-        <p class="app-group-label">Partnership / research</p>
-        <div class="app-card">
-          <span class="app-card-name">Curator Knowledge</span>
-          <span class="app-card-line">Institutional and place-based knowledge, owned by the community.</span>
-          <span class="chip chip--status">Partnership / research</span>
+      <div class="solution-card">
+        <div class="solution-header">
+          <span class="solution-num">04</span>
+          <span class="chip chip--status">Partnership · future</span>
         </div>
+        <h3>Curate Knowledge Sets — For Independent Archives & Museums</h3>
+        <p>Empower museums, archives, and other community infrastructures to host digitized collections of place-based materials securely while retaining absolute ownership and control of who accesses it and how. Publish permissioned, queryable Knowledge APIs to school districts, researchers, and other user groups to enable them to access your curated set of documents. Terms of engagement and priced access to information are set by the organization that owns the knowledge, not by the Curator engine.</p>
       </div>
     </div>
+
+    <p class="growth-note">By landing with a small group of 8–10 music studios as part of our initial pilot, we will be able to prove market value through real data and insights rather than projections. Further market expansion can be analyzed afterward.</p>
   </div>
 </section>
+
+<style>
+  .solutions-intro {
+    max-width: 600px;
+    margin: 0 auto;
+    color: var(--ink-muted);
+  }
+  .solutions-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+    margin-bottom: var(--space-2xl);
+  }
+  .solution-card {
+    padding: var(--space-xl);
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+  }
+  .solution-card--primary {
+    border-color: var(--accent-lilac);
+    border-width: 2px;
+  }
+  .solution-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    margin-bottom: var(--space-md);
+  }
+  .solution-num {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--accent-orange);
+  }
+  .solution-card h3 {
+    margin-bottom: var(--space-md);
+    font-size: 1.25rem;
+  }
+  .solution-card p {
+    font-size: 0.9rem;
+    color: var(--ink-muted);
+    line-height: 1.6;
+  }
+  .solution-roles {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-lg);
+    margin: var(--space-lg) 0;
+  }
+  .role {
+    padding: var(--space-md);
+    background: var(--surface);
+    border-radius: var(--radius);
+  }
+  .role-label {
+    display: block;
+    font-weight: 700;
+    font-size: 0.85rem;
+    margin-bottom: var(--space-xs);
+    color: var(--ink);
+  }
+  .role p {
+    font-size: 0.8rem;
+  }
+  .solution-footer {
+    font-style: italic;
+    margin-bottom: var(--space-md);
+  }
+  .growth-note {
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--ink-muted);
+    max-width: 600px;
+    margin: 0 auto;
+    font-style: italic;
+  }
+  @media (max-width: 768px) {
+    .solution-roles {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
