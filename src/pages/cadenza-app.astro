@@ -1,0 +1,16 @@
+---
+// Redirect /cadenza-app to the live Railway app
+const appUrl = 'https://cadenza-studio-app-production.up.railway.app'
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="refresh" content={`0;url=${appUrl}`} />
+  <link rel="canonical" href={appUrl} />
+  <title>Cadenza Studio</title>
+</head>
+<body>
+  <p>Redirecting to <a href={appUrl}>Cadenza Studio</a>…</p>
+</body>
+</html>
