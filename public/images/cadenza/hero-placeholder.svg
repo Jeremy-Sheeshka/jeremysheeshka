@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="500" viewBox="0 0 900 500">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6366f1;stop-opacity:0.1" />
+      <stop offset="100%" style="stop-color:#0ea5e9;stop-opacity:0.1" />
+    </linearGradient>
+  </defs>
+  <rect width="900" height="500" rx="16" fill="url(#bg)" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="450" y="230" font-family="Arial, sans-serif" font-size="48" font-weight="bold" fill="#6366f1" text-anchor="middle">Cadenza Studio</text>
+  <text x="450" y="280" font-family="Arial, sans-serif" font-size="18" fill="#64748b" text-anchor="middle">Dashboard Preview</text>
+  <rect x="100" y="320" width="200" height="120" rx="8" fill="white" stroke="#e2e8f0"/>
+  <rect x="350" y="320" width="200" height="120" rx="8" fill="white" stroke="#e2e8f0"/>
+  <rect x="600" y="320" width="200" height="120" rx="8" fill="white" stroke="#e2e8f0"/>
+</svg>

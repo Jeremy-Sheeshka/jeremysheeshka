@@ -1,0 +1,36 @@
+---
+import LandingLayout from '../../layouts/LandingLayout.astro';
+import Header from '../../components/curator/Header.astro';
+import Hero from '../../components/curator/Hero.astro';
+import Outcomes from '../../components/curator/Outcomes.astro';
+import Engine from '../../components/curator/Engine.astro';
+import WhyLocal from '../../components/curator/WhyLocal.astro';
+import Applications from '../../components/curator/Applications.astro';
+import Testing from '../../components/curator/Testing.astro';
+import FieldNotes from '../../components/curator/FieldNotes.astro';
+import Faq from '../../components/curator/Faq.astro';
+import FinalCta from '../../components/curator/FinalCta.astro';
+import Footer from '../../components/curator/Footer.astro';
+---
+
+<LandingLayout
+  title="Curator — Local-first AI infrastructure for education"
+  description="Curator builds open, local-first AI infrastructure that lets schools and studios run intelligent workflows on their own knowledge. Proving it first in music education."
+  noindex
+>
+  <Header />
+
+  <main id="top">
+    <Hero />
+    <Outcomes />
+    <Engine />
+    <WhyLocal />
+    <Applications />
+    <Testing />
+    <FieldNotes />
+    <Faq />
+    <FinalCta />
+  </main>
+
+  <Footer />
+</LandingLayout>

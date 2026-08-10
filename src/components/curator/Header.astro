@@ -1,0 +1,30 @@
+---
+const navLinks = [
+  { label: 'Platform', href: '#platform' },
+  { label: 'Applications', href: '#applications' },
+  { label: 'Company', href: '#company' },
+  { label: 'Updates', href: '#updates' },
+];
+const contactHref = 'mailto:jeremy@jeremysheeshka.ca';
+---
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="wordmark" href="/curator" aria-label="Curator">
+      <svg class="wordmark-mark" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+        <rect x="0.5" y="0.5" width="8.5" height="8.5" rx="2" fill="var(--accent-orange)" />
+        <circle cx="10" cy="10" r="3.5" fill="var(--accent-coral)" />
+      </svg>
+      <span class="wordmark-text">CURATOR</span>
+    </a>
+
+    <nav class="site-nav" aria-label="Primary">
+      {navLinks.map((link) => <a class="nav-link" href={link.href}>{link.label}</a>)}
+      <a class="nav-link" href={contactHref}>Contact</a>
+    </nav>
+
+    <div class="header-cta">
+      <a class="btn btn--primary btn--sm" href="/cadenza">See Cadenza</a>
+    </div>
+  </div>
+</header>
