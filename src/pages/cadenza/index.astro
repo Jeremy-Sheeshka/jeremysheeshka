@@ -21,7 +21,6 @@ import LandingLayout from "../../layouts/LandingLayout.astro";
         <a href="/cadenza/about" class="nav-link">About</a>
       </div>
       <div class="nav-cta">
-        
         <a href="http://localhost:5173" class="btn btn-primary">Get Started</a>
       </div>
       <button class="mobile-menu-btn" aria-label="Toggle menu">
@@ -49,9 +48,9 @@ import LandingLayout from "../../layouts/LandingLayout.astro";
   <!-- Hero Section -->
   <section class="hero">
     <div class="container">
-      <div class="hero-badge">Free & open source · Local AI included · No credit card required</div>
+      <div class="hero-badge">Free & open source · Local AI included</div>
       <h1>Run your studio from one app. Starting this week.</h1>
-      <p>Scheduling, invoicing, parent messages, practice tracking, student records, and local AI that listens to lessons and does the paperwork, all running on your own computer, free. Your students and families connect from anywhere, always free. Only linking your studio to another teacher's requires Premium.</p>
+      <p>Scheduling, invoicing, parent messages, practice tracking, student records, and local AI that listens to lessons and does the paperwork, all running on your own computer, free. Your students and families connect from anywhere, always free.</p>
       <div class="hero-cta">
         <a href="http://localhost:5173" class="btn btn-primary btn-lg">Start Free</a>
         <a href="/cadenza/features" class="btn btn-secondary btn-lg">See How It Works</a>
@@ -69,18 +68,13 @@ import LandingLayout from "../../layouts/LandingLayout.astro";
       <div class="section-header">
         <div class="badge">What you get</div>
         <h2>Everything your studio needs, without the patchwork.</h2>
-        <p>Cadenza runs entirely on your own computer, including the AI. Nothing here is a teaser for a paid tier; it's the whole studio, free.</p>
+        <p>Cadenza runs entirely on your own computer, including the AI.</p>
       </div>
       <div class="grid grid-4">
         <div class="feature-card">
           <div class="feature-card-icon">👥</div>
           <h4>Student & Family Profiles</h4>
           <p>Every student's contact info, notes, instrument, and lesson history in one place, not scattered across three apps.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-card-icon">📅</div>
-          <h4>Recurring Lesson Scheduling</h4>
-          <p>Set weekly lessons once. Cadenza catches double-bookings before they happen.</p>
         </div>
         <div class="feature-card">
           <div class="feature-card-icon">✓</div>
@@ -126,7 +120,7 @@ import LandingLayout from "../../layouts/LandingLayout.astro";
     <div class="container">
       <div class="section-header">
         <div class="badge">Before Cadenza Studio. After Cadenza Studio.</div>
-        <h2>The same studio work, with fewer places to check.</h2>
+        <h2>Organize your music lessons with less moving parts</h2>
       </div>
       <div class="before-after">
         <div class="before-after-card before-card">
@@ -182,57 +176,21 @@ import LandingLayout from "../../layouts/LandingLayout.astro";
     </div>
   </section>
 
-  <!-- Five Headaches Section -->
+  <!-- Auto-Scribe Section -->
   <section class="section section-alt">
     <div class="container">
       <div class="section-header">
-        <div class="badge">Five studio headaches, finally connected.</div>
-        <h2>Built around the real weekly loop of a private studio.</h2>
-      </div>
-      <div class="grid grid-2">
-        <div class="feature-card">
-          <h3>Student records stop living in a spreadsheet.</h3>
-          <p>Families, notes, attendance, history, and resources, tied to the right student, not a tab you have to remember to update.</p>
-        </div>
-        <div class="feature-card">
-          <h3>Cancellations stop wrecking your calendar.</h3>
-          <p>Recurring lessons, drag-and-drop rescheduling, and makeup credits that track themselves.</p>
-        </div>
-        <div class="feature-card">
-          <h3>Payment follow-up stops feeling personal.</h3>
-          <p>Send an invoice and take a payment without it turning into an awkward conversation.</p>
-        </div>
-        <div class="feature-card">
-          <h3>Parent communication stops scattering everywhere.</h3>
-          <p>Messages, announcements, and files in one thread, off your personal phone.</p>
-        </div>
-        <div class="feature-card">
-          <h3>Practice stops disappearing between lessons.</h3>
-          <p>Students see what to practice, log it, and build a streak they actually want to keep.</p>
-        </div>
-      </div>
-      <p class="text-center" style="margin-top: 2rem;">
-        See how Cadenza Studio compares to <a href="/cadenza/compare" style="color: var(--color-primary); font-weight: 500;">other platforms</a>, or explore solutions for <a href="/cadenza/solutions" style="color: var(--color-primary); font-weight: 500;">your instrument</a>.
-      </p>
-    </div>
-  </section>
-
-  <!-- Auto-Scribe Section -->
-  <section class="section">
-    <div class="container">
-      <div class="section-header">
-        <div class="badge">Coming to Cadenza Studio, free, like everything else here</div>
-        <h2>Auto-Scribe: the lesson writes its own paperwork.</h2>
+        <div class="badge">Coming soon to Cadenza Studio</div>
+        <h2>Auto-Scribe: Generative Lesson Summaries and Practice Plans</h2>
       </div>
       <div style="max-width: 800px; margin: 0 auto; text-align: center;">
-        <p style="font-size: 1.125rem; line-height: 1.8; margin-bottom: 1.5rem;">During a lesson, Auto-Scribe listens locally, with your permission, on your own machine and turns what was actually covered into three things: a practice plan built from the lesson, the exact sheet music transposed to what your student needs, and a parent update drafted in your voice. One click sends it. Nothing leaves your device, and nothing about this requires a subscription.</p>
-        <div style="display: inline-block; padding: 0.5rem 1.5rem; background: rgba(99,102,241,0.1); color: var(--color-primary); border-radius: 9999px; font-size: 0.875rem; font-weight: 600;">In development, part of the free, open-source core.</div>
+        <p style="font-size: 1.125rem; line-height: 1.8; margin-bottom: 1.5rem;">During a lesson, if Auto-Scribe is enabled, it listens to the lesson and turns what was actually taught into a practice plan built around the lesson and a text based summary that is stored on the students account after it is teacher approved.</p>
       </div>
     </div>
   </section>
 
   <!-- Studio Network Section -->
-  <section class="section section-alt">
+  <section class="section">
     <div class="container">
       <div class="section-header">
         <div class="badge">For studios with more than one teacher</div>
@@ -241,96 +199,6 @@ import LandingLayout from "../../layouts/LandingLayout.astro";
       <div style="max-width: 800px; margin: 0 auto; text-align: center;">
         <p style="font-size: 1.125rem; line-height: 1.8; margin-bottom: 1.5rem;">Everything above runs free, forever, for one teacher and as many students and families as you have. They connect from home, from anywhere, at no cost. If you want to link your studio to a second teacher who isn't standing in your building, that's Cadenza Studio Premium: a secure, private tunnel between your local database and theirs, so a co-teacher, a substitute, or a partner studio can see what they need without either of you touching the cloud.</p>
         <a href="/cadenza/pricing" class="btn btn-primary btn-lg">See Premium →</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Testimonials Section -->
-  <section class="section">
-    <div class="container">
-      <div class="section-header">
-        <div class="badge">Loved by music teachers</div>
-        <h2>See what other teachers are saying.</h2>
-      </div>
-      <div class="grid grid-3">
-        <div class="testimonial-card">
-          <blockquote>"I used to spend Sunday nights rebuilding my week in a spreadsheet. Now it takes ten minutes."</blockquote>
-          <div class="author">
-            <div class="avatar">SM</div>
-            <div class="author-info">
-              <h4>Sarah M.</h4>
-              <p>Piano Teacher — Austin, TX</p>
-            </div>
-          </div>
-        </div>
-        <div class="testimonial-card">
-          <blockquote>"My students actually check their practice streak. I've never seen that happen with a paper log."</blockquote>
-          <div class="author">
-            <div class="avatar">MR</div>
-            <div class="author-info">
-              <h4>Michael R.</h4>
-              <p>Guitar Instructor — Portland, OR</p>
-            </div>
-          </div>
-        </div>
-        <div class="testimonial-card">
-          <blockquote>"Scheduling, billing, and messaging finally live in the same place. I stopped dreading Mondays."</blockquote>
-          <div class="author">
-            <div class="avatar">JL</div>
-            <div class="author-info">
-              <h4>Jennifer L.</h4>
-              <p>Voice Coach — Nashville, TN</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FAQ Section -->
-  <section class="section section-alt">
-    <div class="container">
-      <div class="section-header">
-        <div class="badge">Common questions</div>
-        <h2>Quick answers for music teachers.</h2>
-      </div>
-      <div style="max-width: 700px; margin: 0 auto;">
-        <div class="faq-item">
-          <button class="faq-question">
-            Is Cadenza Studio really free?
-            <span class="faq-icon">+</span>
-          </button>
-          <div class="faq-answer">
-            <p>Yes. Free covers your whole studio, unlimited students if self-hosted, up to 10 on Cadenza's hosted free tier, plus scheduling, attendance, messaging, the student/family portal, and local AI, all at no cost. Premium is only for linking your studio to another teacher's beyond your own network.</p>
-          </div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-question">
-            I'm not very technical. Is this hard to set up?
-            <span class="faq-icon">+</span>
-          </button>
-          <div class="faq-answer">
-            <p>Most teachers are running their first lesson through Cadenza the same day they sign up. If you can send an email, you can set this up.</p>
-          </div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-question">
-            Can parents see their child's schedule?
-            <span class="faq-icon">+</span>
-          </button>
-          <div class="faq-answer">
-            <p>Yes. The student portal lets families view schedules, track practice, and receive updates.</p>
-          </div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-question">
-            What if I want to switch from another tool?
-            <span class="faq-icon">+</span>
-          </button>
-          <div class="faq-answer">
-            <p>You can import your student roster and start fresh. <a href="/cadenza/contact" style="color: var(--color-primary);">Contact us</a> if you need help migrating.</p>
-          </div>
-        </div>
       </div>
     </div>
   </section>
@@ -384,7 +252,5 @@ import LandingLayout from "../../layouts/LandingLayout.astro";
       </div>
     </div>
   </footer>
-
-  
 
 </LandingLayout>
