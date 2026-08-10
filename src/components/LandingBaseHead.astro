@@ -1,0 +1,16 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "" } = Astro.props;
+---
+
+<meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+<title>{title}</title>
+{description && <meta content={description} name="description" />}
+<meta name="robots" content="noindex, nofollow" />
+<link rel="stylesheet" href="/styles/landing.css" />
+<link rel="stylesheet" href="/styles/curator.css" />

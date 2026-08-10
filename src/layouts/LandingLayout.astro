@@ -1,5 +1,5 @@
 ---
-import BaseHead from "@/components/BaseHead.astro";
+import LandingBaseHead from "@/components/LandingBaseHead.astro";
 
 interface Props {
   title: string;
@@ -11,10 +11,7 @@ const { title, description = "" } = Astro.props;
 
 <html lang="en" class="scroll-smooth">
   <head>
-    <BaseHead articleDate={undefined} description={description} ogImage={undefined} title={title} />
-    <meta name="robots" content="noindex, nofollow" />
-    <link rel="stylesheet" href="/styles/landing.css" />
-    <link rel="stylesheet" href="/styles/curator.css" />
+    <LandingBaseHead title={title} description={description} />
   </head>
   <body class="flex min-h-screen flex-col bg-white">
     <main class="flex-grow w-full">
