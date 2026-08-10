@@ -1,0 +1,256 @@
+---
+import LandingLayout from "../../layouts/LandingLayout.astro";
+---
+
+<LandingLayout title="Solutions for Music Teachers | Cadenza Studio" description="Studio management built for music teachers. Spend your evenings teaching, not rebuilding your week in a spreadsheet.">
+
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="container">
+      <a href="/cadenza" class="nav-logo">
+        <img src="/images/cadenza/logo-placeholder.svg" alt="Cadenza Studio Logo">
+        Cadenza Studio
+      </a>
+      <div class="nav-links">
+        <a href="/cadenza/features" class="nav-link">Features</a>
+        <a href="/cadenza/pricing" class="nav-link">Pricing</a>
+        <a href="/cadenza/solutions" class="nav-link">Solutions</a>
+        <a href="/cadenza/blog" class="nav-link">Blog</a>
+        <a href="/cadenza/compare" class="nav-link">Compare</a>
+        <a href="/cadenza/about" class="nav-link">About</a>
+      </div>
+      <div class="nav-cta">
+        
+        <a href="/cadenza-app" class="btn btn-primary">Get Started</a>
+      </div>
+      <button class="mobile-menu-btn" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="mobile-menu">
+    <a href="/cadenza/features" class="nav-link">Features</a>
+    <a href="/cadenza/pricing" class="nav-link">Pricing</a>
+    <a href="/cadenza/solutions" class="nav-link">Solutions</a>
+    <a href="/cadenza/blog" class="nav-link">Blog</a>
+    <a href="/cadenza/compare" class="nav-link">Compare</a>
+    <a href="/cadenza/about" class="nav-link">About</a>
+    <a href="/cadenza/contact" class="nav-link">Contact</a>
+  </div>
+
+  <!-- Solutions Hero -->
+  <section class="solutions-hero">
+    <div class="container">
+      <h1>Studio management built for music teachers</h1>
+      <p>Spend your evenings teaching, not rebuilding your week in a spreadsheet.</p>
+      <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+        <a href="/cadenza-app" class="btn btn-secondary btn-lg">Get Started Free</a>
+        <a href="/cadenza/features" class="btn btn-ghost btn-lg" style="color: white; border: 1px solid rgba(255,255,255,0.3);">See All Features</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Common Challenges -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <div class="badge">Common challenges for music teachers</div>
+        <h2>Sound familiar? You are not alone.</h2>
+        <p>These are the problems Cadenza Studio was built to solve.</p>
+      </div>
+      <div class="challenge-list" style="background: var(--color-bg-alt); padding: 2rem; border-radius: 1rem;">
+        <div class="challenge-item" style="background: white;">
+          Juggling dozens of weekly recurring students across time slots that never quite line up.
+        </div>
+        <div class="challenge-item" style="background: white;">
+          Losing track of who's owed a makeup lesson after last week's cancellation.
+        </div>
+        <div class="challenge-item" style="background: white;">
+          Managing families with two or three siblings, each on a different schedule.
+        </div>
+        <div class="challenge-item" style="background: white;">
+          Repeating the same recital-prep update to twelve different parents.
+        </div>
+        <div class="challenge-item" style="background: white;">
+          Watching practice motivation disappear the moment a student walks out your door.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How Cadenza Helps -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-header">
+        <div class="badge">How Cadenza Studio helps</div>
+        <h2>Purpose-built tools that make managing your studio effortless.</h2>
+      </div>
+      <div class="grid grid-2">
+        <div class="feature-card">
+          <div class="feature-card-icon">📅</div>
+          <h4>Smart Scheduling</h4>
+          <p>Recurring lessons, conflict detection, and a calendar built for back-to-back time slots.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-icon">🔄</div>
+          <h4>Automatic Makeup Tracking</h4>
+          <p>Every owed lesson tracked automatically, nothing lives in your memory anymore.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-icon">👨‍👩‍👧</div>
+          <h4>Family Grouping</h4>
+          <p>Siblings under one account, one shared bill, no duplicate entries.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-icon">💬</div>
+          <h4>Built-In Messaging</h4>
+          <p>Practice reminders, recital updates, and progress reports sent directly, not repeated five times.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-icon">🎯</div>
+          <h4>Gamified Practice Tracking</h4>
+          <p>Streaks and achievements that make a student want to open the app.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- By Instrument -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <div class="badge">By Instrument</div>
+        <h2>Solutions for every type of music teacher</h2>
+        <p>Cadenza Studio works for every instrument. See how it helps studios like yours.</p>
+      </div>
+      <div class="grid grid-3">
+        <a href="#" class="feature-card" style="text-align: center;">
+          <div class="feature-card-icon" style="margin: 0 auto 1rem;">🎹</div>
+          <h4>Piano Teachers</h4>
+          <p>Built for piano studios</p>
+        </a>
+        <a href="#" class="feature-card" style="text-align: center;">
+          <div class="feature-card-icon" style="margin: 0 auto 1rem;">🎸</div>
+          <h4>Guitar Teachers</h4>
+          <p>Manage guitar students</p>
+        </a>
+        <a href="#" class="feature-card" style="text-align: center;">
+          <div class="feature-card-icon" style="margin: 0 auto 1rem;">🎤</div>
+          <h4>Voice Teachers</h4>
+          <p>Track vocal progress</p>
+        </a>
+        <a href="#" class="feature-card" style="text-align: center;">
+          <div class="feature-card-icon" style="margin: 0 auto 1rem;">🎻</div>
+          <h4>Violin Teachers</h4>
+          <p>Tools for string studios</p>
+        </a>
+        <a href="#" class="feature-card" style="text-align: center;">
+          <div class="feature-card-icon" style="margin: 0 auto 1rem;">🥁</div>
+          <h4>Drums Teachers</h4>
+          <p>Percussion studio tools</p>
+        </a>
+        <a href="#" class="feature-card" style="text-align: center;">
+          <div class="feature-card-icon" style="margin: 0 auto 1rem;">🎵</div>
+          <h4>All Instruments</h4>
+          <p>See every instrument we support</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-header">
+        <div class="badge">Frequently asked questions</div>
+        <h2>Common questions from music teachers</h2>
+      </div>
+      <div style="max-width: 700px; margin: 0 auto;">
+        <div class="faq-item">
+          <button class="faq-question">
+            What is the best software for music teachers?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Cadenza Studio is a studio management platform built specifically for music teachers, scheduling, student management, billing, messaging, portals, local AI, and gamified practice tracking, in one place.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            How do music teachers manage their students?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>With software built for the job: student profiles, recurring scheduling, practice reminders, billing, and family communication, all from one platform instead of four.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            Is there a free app for music teachers?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Yes. Full scheduling, messaging, portals, practice tracking, and local AI, free, unlimited if self-hosted. No credit card required.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="container">
+      <h2>Ready to simplify your music studio?</h2>
+      <p>Join teachers saving hours every week with Cadenza Studio. Free to start, no credit card required.</p>
+      <a href="/cadenza-app" class="btn btn-secondary btn-lg">Get Started Free</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="/cadenza" class="nav-logo">
+            <img src="/images/cadenza/logo-placeholder.svg" alt="Cadenza Studio Logo">
+            Cadenza Studio
+          </a>
+          <p>The complete studio management platform for music teachers.</p>
+          <p style="font-size: 0.8rem; color: var(--color-text-muted); margin-top: 0.5rem;"><a href="/curator" style="color: inherit; text-decoration: underline;">Built on Curator</a>, open, local-first AI for education.</p>
+        </div>
+        <div class="footer-column">
+          <h4>Product</h4>
+          <a href="/cadenza/features">Features</a>
+          <a href="/cadenza/pricing">Pricing</a>
+          <a href="/cadenza/blog">Blog</a>
+          <a href="/cadenza/compare">Compare</a>
+        </div>
+        <div class="footer-column">
+          <h4>Company</h4>
+          <a href="/cadenza/about">About</a>
+          <a href="/cadenza/contact">Contact</a>
+        </div>
+        <div class="footer-column">
+          <h4>Legal</h4>
+          <a href="/cadenza/privacy">Privacy Policy</a>
+          <a href="/cadenza/terms">Terms of Service</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Cadenza Studio. All rights reserved.</p>
+        <div class="social-links">
+          <a href="https://github.com/jeremysheeshka/Cadenza-Studio-App" class="social-link" aria-label="GitHub">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  
+
+</LandingLayout>

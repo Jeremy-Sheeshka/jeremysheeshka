@@ -1,0 +1,274 @@
+---
+import LandingLayout from "../../layouts/LandingLayout.astro";
+---
+
+<LandingLayout title="Pricing | Cadenza Studio" description="Simple, transparent pricing. Start free. Upgrade only when you actually need to.">
+
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="container">
+      <a href="/cadenza" class="nav-logo">
+        <img src="/images/cadenza/logo-placeholder.svg" alt="Cadenza Studio Logo">
+        Cadenza Studio
+      </a>
+      <div class="nav-links">
+        <a href="/cadenza/features" class="nav-link">Features</a>
+        <a href="/cadenza/pricing" class="nav-link">Pricing</a>
+        <a href="/cadenza/solutions" class="nav-link">Solutions</a>
+        <a href="/cadenza/blog" class="nav-link">Blog</a>
+        <a href="/cadenza/compare" class="nav-link">Compare</a>
+        <a href="/cadenza/about" class="nav-link">About</a>
+      </div>
+      <div class="nav-cta">
+        
+        <a href="/cadenza-app" class="btn btn-primary">Get Started</a>
+      </div>
+      <button class="mobile-menu-btn" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="mobile-menu">
+    <a href="/cadenza/features" class="nav-link">Features</a>
+    <a href="/cadenza/pricing" class="nav-link">Pricing</a>
+    <a href="/cadenza/solutions" class="nav-link">Solutions</a>
+    <a href="/cadenza/blog" class="nav-link">Blog</a>
+    <a href="/cadenza/compare" class="nav-link">Compare</a>
+    <a href="/cadenza/about" class="nav-link">About</a>
+    <a href="/cadenza/contact" class="nav-link">Contact</a>
+  </div>
+
+  <!-- Page Header -->
+  <section class="page-header">
+    <div class="container">
+      <h1>Simple, transparent pricing</h1>
+      <p>Start free. Upgrade only when you actually need to.</p>
+    </div>
+  </section>
+
+  <!-- Standing Clarifier -->
+  <section class="section" style="padding-bottom: 0;">
+    <div class="container">
+      <div style="max-width: 700px; margin: 0 auto; text-align: center; padding: 1.5rem; background: var(--color-bg-alt); border-radius: 0.75rem;">
+        <p style="margin-bottom: 0.75rem;"><strong>Free, always:</strong> you and your studio, plus every student and family you connect, on-site or remote, no limit, no subscription.</p>
+        <p style="margin: 0;"><strong>Premium:</strong> linking or sharing your studio's local database with other teachers or studios beyond your own local network.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing Cards -->
+  <section class="section">
+    <div class="container">
+      <div class="pricing-grid">
+        <!-- Free Plan -->
+        <div class="pricing-card">
+          <h3>Free</h3>
+          <p style="font-size: 0.875rem; color: var(--color-text-muted);">Everything a studio needs, including local AI. Free forever.</p>
+          <div class="price">$0 <span>/ forever</span></div>
+          <ul>
+            <li>Up to 10 students on hosted tier, unlimited if self-hosted</li>
+            <li>Scheduling & calendar</li>
+            <li>Group lessons</li>
+            <li>Attendance</li>
+            <li>Direct messaging</li>
+            <li>Student & family portals, remote access always included</li>
+            <li>Practice logging & gamification</li>
+            <li>Lesson notes & assignments</li>
+            <li><strong>Local AI: lesson transcription, RAG-powered resource search, on-demand transposition</strong></li>
+            <li>CSV export</li>
+          </ul>
+          <p style="font-size: 0.8rem; color: var(--color-text-muted); margin: 1rem 0;">Self-host it and there's no student limit, no subscription, and no dependency on Cadenza staying in business. That's the whole point of open source.</p>
+          <a href="/cadenza-app" class="btn btn-secondary btn-lg">Sign Up Free</a>
+        </div>
+
+        <!-- Premium Plan -->
+        <div class="pricing-card popular">
+          <h3>Premium</h3>
+          <p style="font-size: 0.875rem; color: var(--color-text-muted);">For studios linking more than one teacher's local instance together.</p>
+          <div class="price">$10 <span>/ per month</span></div>
+          <p class="price-note">$100/year, save $20/year</p>
+          <ul>
+            <li>Everything in Free, plus:</li>
+            <li><strong>Secure tunnel between your studio and another teacher's</strong>, co-teaching, substitutes, or partner studios, without either side using the cloud</li>
+            <li>Online payments for lessons</li>
+            <li>Multi-teacher shared calendar</li>
+            <li>Custom portal branding</li>
+            <li>Priority support</li>
+            <li>API access for custom integrations</li>
+          </ul>
+          <p style="font-size: 0.8rem; color: var(--color-text-muted); margin: 1rem 0;">If it's just you and your students, you may never need this tier, and that's by design.</p>
+          <a href="/cadenza-app" class="btn btn-primary btn-lg">Get Started</a>
+        </div>
+
+        <!-- Studio Plan -->
+        <div class="pricing-card">
+          <h3>Studio</h3>
+          <p style="font-size: 0.875rem; color: var(--color-text-muted);">For schools and multi-teacher institutions running Cadenza across a whole building.</p>
+          <div class="price" style="color: var(--color-text-muted);">Coming Soon</div>
+          <ul>
+            <li>Everything in Premium, plus:</li>
+            <li>Centralized admin across teacher instances</li>
+            <li>Unlimited storage</li>
+            <li>Dedicated support</li>
+          </ul>
+          <a href="#" class="btn btn-secondary btn-lg">Join Waitlist</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-header">
+        <div class="badge">Frequently asked questions</div>
+        <h2>Have questions? We have answers.</h2>
+      </div>
+      <div style="max-width: 700px; margin: 0 auto;">
+        <div class="faq-item">
+          <button class="faq-question">
+            Can I try Cadenza Studio before paying?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Yes! The free plan includes up to 10 students (unlimited if self-hosted), scheduling, messaging, local AI, and more. Upgrade to Premium when you need to link your studio to another teacher's.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            What is Cadenza Studio Studio?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Studio is our upcoming plan for schools and multi-teacher institutions. It includes everything in Premium plus centralized admin, unlimited storage, and dedicated support. Join the waitlist to be notified when it launches.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            What payment methods do you accept?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>We accept all major credit cards for monthly and annual Premium subscriptions.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            Can I cancel anytime?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Absolutely. You can cancel your subscription at any time. Your data will remain accessible until the end of your billing period.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            Is my data secure?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Yes. We use industry-standard encryption and security practices. Your data is stored on your own machine unless you choose Cadenza's hosted free tier, and Premium's teacher-to-teacher tunnel is encrypted end to end.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            Can I switch between plans?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Yes! You can upgrade to Premium anytime and switch between monthly and annual billing from your account. If you downgrade, you'll keep Premium features until the end of your billing period.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            If AI and self-hosting are free, what am I actually paying for with Premium?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>One thing: linking or sharing your studio's local database with another teacher or studio beyond your own local network. Cadenza's core, scheduling, billing, portals, local AI, and remote access for your own students and families, runs entirely on your machine and costs us nothing to provide, so we don't charge for it. The moment two separate studios need to securely connect to each other, that requires infrastructure we maintain: the tunnel, its uptime, and its security, which is what Premium funds.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Help Section -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Not sure yet?</h2>
+      </div>
+      <div class="grid grid-3" style="max-width: 800px; margin: 0 auto;">
+        <a href="/cadenza/features" class="feature-card" style="text-align: center;">
+          <h4>See all features</h4>
+          <p>Included in each plan.</p>
+        </a>
+        <a href="/cadenza/compare" class="feature-card" style="text-align: center;">
+          <h4>Compare tools</h4>
+          <p>See how Cadenza Studio stacks up.</p>
+        </a>
+        <a href="/cadenza/contact" class="feature-card" style="text-align: center;">
+          <h4>Have questions?</h4>
+          <p>Contact us.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="container">
+      <h2>Ready to get started?</h2>
+      <p>Join music teachers using Cadenza Studio to grow their studios.</p>
+      <a href="/cadenza-app" class="btn btn-secondary btn-lg">Get Started Free</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="/cadenza" class="nav-logo">
+            <img src="/images/cadenza/logo-placeholder.svg" alt="Cadenza Studio Logo">
+            Cadenza Studio
+          </a>
+          <p>The complete studio management platform for music teachers.</p>
+          <p style="font-size: 0.8rem; color: var(--color-text-muted); margin-top: 0.5rem;"><a href="/curator" style="color: inherit; text-decoration: underline;">Built on Curator</a>, open, local-first AI for education.</p>
+        </div>
+        <div class="footer-column">
+          <h4>Product</h4>
+          <a href="/cadenza/features">Features</a>
+          <a href="/cadenza/pricing">Pricing</a>
+          <a href="/cadenza/blog">Blog</a>
+          <a href="/cadenza/compare">Compare</a>
+        </div>
+        <div class="footer-column">
+          <h4>Company</h4>
+          <a href="/cadenza/about">About</a>
+          <a href="/cadenza/contact">Contact</a>
+        </div>
+        <div class="footer-column">
+          <h4>Legal</h4>
+          <a href="/cadenza/privacy">Privacy Policy</a>
+          <a href="/cadenza/terms">Terms of Service</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Cadenza Studio. All rights reserved.</p>
+        <div class="social-links">
+          <a href="https://github.com/jeremysheeshka/Cadenza-Studio-App" class="social-link" aria-label="GitHub">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  
+
+</LandingLayout>

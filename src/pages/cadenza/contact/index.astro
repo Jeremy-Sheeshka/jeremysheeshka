@@ -1,0 +1,172 @@
+---
+import LandingLayout from "../../layouts/LandingLayout.astro";
+---
+
+<LandingLayout title="Contact | Cadenza Studio" description="Questions about Cadenza Studio? Get in touch.">
+
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="container">
+      <a href="/cadenza" class="nav-logo">
+        <img src="/images/cadenza/logo-placeholder.svg" alt="Cadenza Studio Logo">
+        Cadenza Studio
+      </a>
+      <div class="nav-links">
+        <a href="/cadenza/features" class="nav-link">Features</a>
+        <a href="/cadenza/pricing" class="nav-link">Pricing</a>
+        <a href="/cadenza/solutions" class="nav-link">Solutions</a>
+        <a href="/cadenza/blog" class="nav-link">Blog</a>
+        <a href="/cadenza/compare" class="nav-link">Compare</a>
+        <a href="/cadenza/about" class="nav-link">About</a>
+      </div>
+      <div class="nav-cta">
+        
+        <a href="/cadenza-app" class="btn btn-primary">Get Started</a>
+      </div>
+      <button class="mobile-menu-btn" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="mobile-menu">
+    <a href="/cadenza/features" class="nav-link">Features</a>
+    <a href="/cadenza/pricing" class="nav-link">Pricing</a>
+    <a href="/cadenza/solutions" class="nav-link">Solutions</a>
+    <a href="/cadenza/blog" class="nav-link">Blog</a>
+    <a href="/cadenza/compare" class="nav-link">Compare</a>
+    <a href="/cadenza/about" class="nav-link">About</a>
+    <a href="/cadenza/contact" class="nav-link">Contact</a>
+  </div>
+
+  <!-- Page Header -->
+  <section class="page-header">
+    <div class="container">
+      <h1>Get in touch</h1>
+      <p>Questions about Cadenza Studio, a feature you wish existed, or thinking about switching from another tool? Tell us.</p>
+    </div>
+  </section>
+
+  <!-- Contact Form & Info -->
+  <section class="section">
+    <div class="container">
+      <div class="grid grid-2" style="gap: 4rem;">
+        <!-- Contact Form -->
+        <div>
+          <h2 style="margin-bottom: 1.5rem;">Send us a message</h2>
+          <form class="contact-form" style="max-width: 100%;">
+            <div class="form-group">
+              <label for="website">Website</label>
+              <input type="url" id="website" name="website" placeholder="https://yourwebsite.com">
+            </div>
+            <div class="grid grid-2">
+              <div class="form-group">
+                <label for="firstName">First Name *</label>
+                <input type="text" id="firstName" name="firstName" required>
+              </div>
+              <div class="form-group">
+                <label for="lastName">Last Name *</label>
+                <input type="text" id="lastName" name="lastName" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="email">Email *</label>
+              <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+              <label for="subject">Subject</label>
+              <select id="subject" name="subject">
+                <option value="">Select a subject</option>
+                <option value="general">General question</option>
+                <option value="features">Feature request</option>
+                <option value="support">Support</option>
+                <option value="billing">Billing</option>
+                <option value="partnership">Partnership</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="message">Message *</label>
+              <textarea id="message" name="message" required placeholder="How can we help?"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">Send Message</button>
+            <p style="font-size: 0.75rem; color: var(--color-text-muted); margin-top: 1rem;">By submitting this form, you agree to our <a href="/cadenza/privacy" style="color: var(--color-primary);">Privacy Policy</a>.</p>
+          </form>
+        </div>
+
+        <!-- Contact Info -->
+        <div>
+          <h2 style="margin-bottom: 1.5rem;">Other ways to reach us</h2>
+          <div style="display: flex; flex-direction: column; gap: 2rem;">
+            <div class="feature-card">
+              <h4>Email</h4>
+              <p style="margin-bottom: 0.5rem;">Send us an email anytime</p>
+              <a href="mailto:hello@cadenzastudio.com" style="color: var(--color-primary); font-weight: 500;">hello@cadenzastudio.com</a>
+            </div>
+            <div class="feature-card">
+              <h4>Live Chat</h4>
+              <p style="margin-bottom: 0.5rem;">Chat with our support team</p>
+              <a href="#" style="color: var(--color-primary); font-weight: 500;">Available in app</a>
+            </div>
+            <div class="feature-card">
+              <h4>Response Time</h4>
+              <p style="margin-bottom: 0.5rem;">We aim to respond within</p>
+              <span style="font-size: 1.5rem; font-weight: 700; color: var(--color-text);">24 hours</span>
+            </div>
+          </div>
+
+          <div style="margin-top: 2rem; padding: 1.5rem; background: var(--color-bg-alt); border-radius: 0.75rem;">
+            <h4 style="margin-bottom: 0.75rem;">Looking for quick answers?</h4>
+            <p style="font-size: 0.875rem;">Check out our <a href="pricing.html#faq" style="color: var(--color-primary);">FAQ section</a> for answers to common questions about pricing, features, and getting started. Or explore our <a href="/cadenza/features" style="color: var(--color-primary);">features</a> and <a href="/cadenza/blog" style="color: var(--color-primary);">blog</a> for music teachers.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="/cadenza" class="nav-logo">
+            <img src="/images/cadenza/logo-placeholder.svg" alt="Cadenza Studio Logo">
+            Cadenza Studio
+          </a>
+          <p>The complete studio management platform for music teachers.</p>
+        </div>
+        <div class="footer-column">
+          <h4>Product</h4>
+          <a href="/cadenza/features">Features</a>
+          <a href="/cadenza/pricing">Pricing</a>
+          <a href="/cadenza/blog">Blog</a>
+          <a href="/cadenza/compare">Compare</a>
+        </div>
+        <div class="footer-column">
+          <h4>Company</h4>
+          <a href="/cadenza/about">About</a>
+          <a href="/cadenza/contact">Contact</a>
+        </div>
+        <div class="footer-column">
+          <h4>Legal</h4>
+          <a href="/cadenza/privacy">Privacy Policy</a>
+          <a href="/cadenza/terms">Terms of Service</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Cadenza Studio. All rights reserved.</p>
+        <div class="social-links">
+          <a href="https://github.com/jeremysheeshka/Cadenza-Studio-App" class="social-link" aria-label="GitHub">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  
+
+</LandingLayout>
