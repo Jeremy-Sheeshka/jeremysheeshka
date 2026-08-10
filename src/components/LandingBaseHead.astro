@@ -12,6 +12,7 @@ const { title, description = "" } = Astro.props;
 <title>{title}</title>
 {description && <meta content={description} name="description" />}
 <meta name="robots" content="noindex, nofollow" />
+<link rel="icon" type="image/png" href="/images/cadenza/logo.png" />
 <link rel="stylesheet" href="/styles/landing.css" />
 <link rel="stylesheet" href="/styles/curator.css" />
 <script is:inline src="/js/cadenza.js"></script>
