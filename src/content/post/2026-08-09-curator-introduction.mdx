@@ -1,0 +1,105 @@
+---
+title: "Introducing Curator: Local-First AI Infrastructure for Schools and Studios"
+description: "Open-source, local-first AI that runs on hardware a school or studio already owns, so knowledge never has to leave the building to be useful."
+publishDate: "2026-08-09"
+tags: ["curator", "cadenza", "ai", "education"]
+---
+
+import Prose from "../../components/blocks/Prose.astro";
+import Figure from "../../components/blocks/Figure.astro";
+import SparklyText from "../../components/SparklyText.astro";
+
+<Prose>
+
+# Introducing Curator: Local-First AI Infrastructure for Schools and Studios
+
+<details class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 mb-8 bg-gray-50 hover:bg-gray-100 dark:bg-gray-800/50 dark:hover:bg-gray-800 open:bg-white dark:open:bg-gray-900 transition-colors">
+<summary class="font-bold cursor-pointer flex items-center gap-2 select-none text-gray-900 dark:text-gray-100">
+<span class="text-lg">Project Context</span>
+</summary>
+<div class="mt-4 space-y-4 text-sm">
+<p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+This post introduces Curator, an open-source local-first AI infrastructure project, and Cadenza, its flagship application for music education. Both are designed to keep sensitive institutional data on-premises while still leveraging the power of AI.
+</p>
+</div>
+</details>
+
+---
+
+## The Problem
+
+<div class="md:float-left md:w-1/4 md:mr-6 w-2/3 sm:w-1/2 mx-auto md:mx-0 flex flex-col items-center justify-center">
+  <img
+    src="/assets/images/blog/cadenza-placeholder.png"
+    alt="Cadenza Studio App"
+    class="w-full h-auto rounded-xl"
+  />
+  <a href="/cadenza-app" target="_blank" rel="noopener noreferrer" class="group mt-4 flex items-center justify-center gap-3 px-6 py-3 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-full font-bold text-base shadow-md hover:bg-[#D4A96A] dark:hover:bg-[#D4A96A] hover:text-gray-900 transition-colors duration-300 no-underline">
+    <SparklyText class="text-inherit" numberOfSparkles={5} color="currentColor">
+      Try Cadenza
+    </SparklyText>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="group-hover:translate-x-1 transition-transform duration-300"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+  </a>
+</div>
+
+Institutions sit on knowledge they can't safely hand to cloud AI: lesson recordings, student records, parent notes, billing information. In BC, privacy considerations make it a real liability to hand student or client data to a public cloud AI. No major AI product was built with that liability in mind, or with a way to integrate into the offline tech stacks these institutions already run.
+
+<div class="clear-both"></div>
+
+---
+
+## Curator: The Infrastructure
+
+Curator is open-source, local-first AI infrastructure that runs on hardware a school or studio already owns, so that knowledge never has to leave the building to be useful.
+
+<div class="md:float-right md:w-1/4 md:ml-6 md:mb-4 w-3/4 sm:w-1/2 mx-auto md:mx-0 mb-6 mt-2">
+  <Figure
+    src="/assets/images/blog/curator-architecture.png"
+    alt="Curator local-first architecture diagram"
+  />
+  <p class="text-xs text-center text-gray-500 dark:text-gray-400 mt-2">Curator runs entirely on local hardware</p>
+</div>
+
+Rather than sending data to the cloud for processing, Curator brings the AI to the data. It is designed to be deployed on the existing hardware a school or studio already has, keeping sensitive information like student records, lesson content, and billing data within the institution's physical control.
+
+This is not a cloud product with a privacy policy that promises not to look at your data. It is infrastructure that makes it structurally impossible for your data to leave the building unless you explicitly choose to share it.
+
+<div class="clear-both"></div>
+
+---
+
+## Cadenza: The Flagship Application
+
+Cadenza, our first application of this technology, shows what that looks like in practice: it listens to a lesson locally, drafts a summary, retrieves and transposes the right sheet music, answers voice questions against your own uploaded documents, and shares curated information with clients securely.
+
+<div class="md:float-left md:w-1/4 md:mr-6 md:mb-4 w-3/4 sm:w-1/2 mx-auto md:mx-0 mb-6">
+  <Figure
+    src="/assets/images/blog/cadenza-lesson.png"
+    alt="Cadenza lesson interface"
+  />
+</div>
+
+For example, you might ask it to find the Clarinet 3 part in a concert band arrangement and email it to two of your students. It's that easy. No digging through a filing cabinet. No drafting any emails. No trip to the photocopier!
+
+Cadenza is our flagship application and technological wedge, which we are bringing to market, of Curator. It demonstrates that local-first AI is not a compromise or a stepping stone toward something cloud-based. It is the destination: a model where institutions own their data, own their infrastructure, and still get the full power of AI.
+
+<div class="clear-both"></div>
+
+---
+
+## What's Next
+
+Cadenza is currently available as a self-hosted application. You can explore the code, run it on your own hardware, and see what local-first AI looks like in practice.
+
+<div class="flex flex-wrap gap-4 mt-8">
+  <a href="/cadenza-app" class="group flex items-center gap-3 px-6 py-3 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-full font-bold text-base shadow-md hover:bg-[#D4A96A] dark:hover:bg-[#D4A96A] hover:text-gray-900 transition-colors duration-300 no-underline">
+    Try Cadenza Live
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="group-hover:translate-x-1 transition-transform duration-300"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+  </a>
+  <a href="https://github.com/jeremysheeshka/Cadenza-Studio-App" target="_blank" rel="noopener noreferrer" class="group flex items-center gap-3 px-6 py-3 border-2 border-gray-900 dark:border-gray-100 text-gray-900 dark:text-gray-100 rounded-full font-bold text-base shadow-md hover:bg-gray-900 hover:text-white dark:hover:bg-gray-100 dark:hover:text-gray-900 transition-colors duration-300 no-underline">
+    View on GitHub
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="group-hover:translate-x-1 transition-transform duration-300"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+  </a>
+</div>
+
+</Prose>
