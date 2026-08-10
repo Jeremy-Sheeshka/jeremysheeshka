@@ -16,13 +16,10 @@ import LandingLayout from "../../../layouts/LandingLayout.astro";
         <a href="/cadenza/features" class="nav-link">Features</a>
         <a href="/cadenza/pricing" class="nav-link">Pricing</a>
         <a href="/cadenza/solutions" class="nav-link">Solutions</a>
-        
-        
         <a href="/cadenza/about" class="nav-link">About</a>
         <a href="/cadenza/contact" class="nav-link">Contact</a>
       </div>
       <div class="nav-cta">
-        
         <a href="/cadenza-app" class="btn btn-primary">Get Started</a>
       </div>
       <button class="mobile-menu-btn" aria-label="Toggle menu">
@@ -37,10 +34,7 @@ import LandingLayout from "../../../layouts/LandingLayout.astro";
     <a href="/cadenza/features" class="nav-link">Features</a>
     <a href="/cadenza/pricing" class="nav-link">Pricing</a>
     <a href="/cadenza/solutions" class="nav-link">Solutions</a>
-    
-    
     <a href="/cadenza/about" class="nav-link">About</a>
-        <a href="/cadenza/contact" class="nav-link">Contact</a>
     <a href="/cadenza/contact" class="nav-link">Contact</a>
   </div>
 
@@ -52,236 +46,81 @@ import LandingLayout from "../../../layouts/LandingLayout.astro";
     </div>
   </section>
 
-  <!-- Student & Family Management -->
+  <!-- Features Grid -->
   <section class="section">
     <div class="container">
-      <div class="grid grid-2" style="align-items: center;">
+      <div class="grid grid-2" style="gap: 3rem;">
+        <!-- Student & Family Management -->
         <div>
           <div class="badge" style="display: inline-block; padding: 0.25rem 1rem; background: rgba(99,102,241,0.1); color: var(--color-primary); border-radius: 9999px; font-size: 0.875rem; font-weight: 500; margin-bottom: 1rem;">Student & Family Management</div>
-          <h2>Keep every student's information where you'll actually look for it.</h2>
-          <ul style="margin: 1.5rem 0;">
-            <li style="padding: 0.5rem 0; font-size: 0.875rem; color: var(--color-text-secondary); display: flex; align-items: flex-start; gap: 0.5rem;">
-              <span style="color: var(--color-success); font-weight: 700;">✓</span>
-              Full profiles: contact info, notes, and history in one card, not three tabs.
-            </li>
-            <li style="padding: 0.5rem 0; font-size: 0.875rem; color: var(--color-text-secondary); display: flex; align-items: flex-start; gap: 0.5rem;">
-              <span style="color: var(--color-success); font-weight: 700;">✓</span>
-              Family grouping, so siblings share a household without duplicate entries.
-            </li>
-            <li style="padding: 0.5rem 0; font-size: 0.875rem; color: var(--color-text-secondary); display: flex; align-items: flex-start; gap: 0.5rem;">
-              <span style="color: var(--color-success); font-weight: 700;">✓</span>
-              Custom tags for however you actually organize your roster.
-            </li>
-            <li style="padding: 0.5rem 0; font-size: 0.875rem; color: var(--color-text-secondary); display: flex; align-items: flex-start; gap: 0.5rem;">
-              <span style="color: var(--color-success); font-weight: 700;">✓</span>
-              Status tracking (active, inactive, waitlist) so nobody falls through the cracks.
-            </li>
-            <li style="padding: 0.5rem 0; font-size: 0.875rem; color: var(--color-text-secondary); display: flex; align-items: flex-start; gap: 0.5rem;">
-              <span style="color: var(--color-success); font-weight: 700;">✓</span>
-              Lesson history and attendance, automatically tied to the right student.
-            </li>
+          <h2 style="margin-bottom: 1rem;">Keep every student's information where you'll actually look for it.</h2>
+          <ul style="margin: 0;">
+            <li style="padding: 0.4rem 0; font-size: 0.875rem; color: var(--color-text-secondary);">✓ Full profiles with contact info, notes, and history</li>
+            <li style="padding: 0.4rem 0; font-size: 0.875rem; color: var(--color-text-secondary);">✓ Family grouping for siblings without duplicate entries</li>
+            <li style="padding: 0.4rem 0; font-size: 0.875rem; color: var(--color-text-secondary);">✓ Status tracking so nobody falls through the cracks</li>
           </ul>
-          <a href="#" class="btn btn-primary">See how student profiles work →</a>
         </div>
-        <div style="background: linear-gradient(135deg, var(--color-primary), var(--color-secondary)); border-radius: 1rem; height: 400px; display: flex; align-items: center; justify-content: center; color: white; font-size: 4rem;">
-          👥
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- Smart Scheduling -->
-  <section class="section section-alt">
-    <div class="container">
-      <div class="grid grid-2" style="align-items: center;">
-        <div style="background: linear-gradient(135deg, var(--color-primary), var(--color-secondary)); border-radius: 1rem; height: 400px; display: flex; align-items: center; justify-content: center; color: white; font-size: 4rem; order: -1;">
-          📅
-        </div>
+        <!-- Smart Scheduling -->
         <div>
           <div class="badge" style="display: inline-block; padding: 0.25rem 1rem; background: rgba(99,102,241,0.1); color: var(--color-primary); border-radius: 9999px; font-size: 0.875rem; font-weight: 500; margin-bottom: 1rem;">Smart Scheduling</div>
-          <h2>Calendar tools that catch problems before you do.</h2>
-          <ul style="margin: 1.5rem 0;">
-            <li style="padding: 0.5rem 0; font-size: 0.875rem; color: var(--color-text-secondary); display: flex; align-items: flex-start; gap: 0.5rem;">
-              <span style="color: var(--color-success); font-weight: 700;">✓</span>
-              Recurring lessons with patterns flexible enough for a real week, not just "every Monday."
-            </li>
-            <li style="padding: 0.5rem 0; font-size: 0.875rem; color: var(--color-text-secondary); display: flex; align-items: flex-start; gap: 0.5rem;">
-              <span style="color: var(--color-success); font-weight: 700;">✓</span>
-              Month, week, day, and agenda views, however you think about your week.
-            </li>
-            <li style="padding: 0.5rem 0; font-size: 0.875rem; color: var(--color-text-secondary); display: flex; align-items: flex-start; gap: 0.5rem;">
-              <span style="color: var(--color-success); font-weight: 700;">✓</span>
-              Makeup credit tracking, so a cancellation doesn't become a mental note you forget.
-            </li>
-            <li style="padding: 0.5rem 0; font-size: 0.875rem; color: var(--color-text-secondary); display: flex; align-items: flex-start; gap: 0.5rem;">
-              <span style="color: var(--color-success); font-weight: 700;">✓</span>
-              Conflict detection before you accidentally double-book a slot.
-            </li>
-            <li style="padding: 0.5rem 0; font-size: 0.875rem; color: var(--color-text-secondary); display: flex; align-items: flex-start; gap: 0.5rem;">
-              <span style="color: var(--color-success); font-weight: 700;">✓</span>
-              Organize by location and category when you teach in more than one place.
-            </li>
+          <h2 style="margin-bottom: 1rem;">Calendar tools that catch problems before you do.</h2>
+          <ul style="margin: 0;">
+            <li style="padding: 0.4rem 0; font-size: 0.875rem; color: var(--color-text-secondary);">✓ Recurring lessons with flexible patterns</li>
+            <li style="padding: 0.4rem 0; font-size: 0.875rem; color: var(--color-text-secondary);">✓ Month, week, day, and agenda views</li>
+            <li style="padding: 0.4rem 0; font-size: 0.875rem; color: var(--color-text-secondary);">✓ Conflict detection and makeup credit tracking</li>
           </ul>
-          <a href="#" class="btn btn-primary">See scheduling in action →</a>
         </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- Billing & Invoicing -->
-  <section class="section">
-    <div class="container">
-      <div class="grid grid-2" style="align-items: center;">
+        <!-- Billing & Invoicing -->
         <div>
           <div class="badge" style="display: inline-block; padding: 0.25rem 1rem; background: rgba(99,102,241,0.1); color: var(--color-primary); border-radius: 9999px; font-size: 0.875rem; font-weight: 500; margin-bottom: 1rem;">Billing & Invoicing</div>
-          <h2>Get paid without the awkward follow-up text.</h2>
-          <ul style="margin: 1.5rem 0;">
-            <li style="padding: 0.5rem 0; font-size: 0.875rem; color: var(--color-text-secondary); display: flex; align-items: flex-start; gap: 0.5rem;">
-              <span style="color: var(--color-success); font-weight: 700;">✓</span>
-              Generate invoices automatically, tied to lessons that already happened.
-            </li>
-            <li style="padding: 0.5rem 0; font-size: 0.875rem; color: var(--color-text-secondary); display: flex; align-items: flex-start; gap: 0.5rem;">
-              <span style="color: var(--color-success); font-weight: 700;">✓</span>
-              Take online payments (Premium), no chasing checks.
-            </li>
-            <li style="padding: 0.5rem 0; font-size: 0.875rem; color: var(--color-text-secondary); display: flex; align-items: flex-start; gap: 0.5rem;">
-              <span style="color: var(--color-success); font-weight: 700;">✓</span>
-              Track cash, check, Venmo, or card payments side by side either way.
-            </li>
-            <li style="padding: 0.5rem 0; font-size: 0.875rem; color: var(--color-text-secondary); display: flex; align-items: flex-start; gap: 0.5rem;">
-              <span style="color: var(--color-success); font-weight: 700;">✓</span>
-              See invoice and payment status at a glance, not by scrolling a group chat.
-            </li>
-            <li style="padding: 0.5rem 0; font-size: 0.875rem; color: var(--color-text-secondary); display: flex; align-items: flex-start; gap: 0.5rem;">
-              <span style="color: var(--color-success); font-weight: 700;">✓</span>
-              Set your own tax rates and late fees once, not every time.
-            </li>
+          <h2 style="margin-bottom: 1rem;">Get paid without the awkward follow-up text.</h2>
+          <ul style="margin: 0;">
+            <li style="padding: 0.4rem 0; font-size: 0.875rem; color: var(--color-text-secondary);">✓ Auto-generate invoices tied to lessons</li>
+            <li style="padding: 0.4rem 0; font-size: 0.875rem; color: var(--color-text-secondary);">✓ Online payments via Premium</li>
+            <li style="padding: 0.4rem 0; font-size: 0.875rem; color: var(--color-text-secondary);">✓ Track cash, card, or Venmo at a glance</li>
           </ul>
-          <a href="#" class="btn btn-primary">See how billing works →</a>
         </div>
-        <div style="background: linear-gradient(135deg, var(--color-primary), var(--color-secondary)); border-radius: 1rem; height: 400px; display: flex; align-items: center; justify-content: center; color: white; font-size: 4rem;">
-          💳
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- Messaging & Communication -->
-  <section class="section section-alt">
-    <div class="container">
-      <div class="grid grid-2" style="align-items: center;">
-        <div style="background: linear-gradient(135deg, var(--color-primary), var(--color-secondary)); border-radius: 1rem; height: 400px; display: flex; align-items: center; justify-content: center; color: white; font-size: 4rem; order: -1;">
-          💬
-        </div>
+        <!-- Messaging -->
         <div>
           <div class="badge" style="display: inline-block; padding: 0.25rem 1rem; background: rgba(99,102,241,0.1); color: var(--color-primary); border-radius: 9999px; font-size: 0.875rem; font-weight: 500; margin-bottom: 1rem;">Messaging & Communication</div>
-          <h2>One thread per family. Not five apps.</h2>
-          <ul style="margin: 1.5rem 0;">
-            <li style="padding: 0.5rem 0; font-size: 0.875rem; color: var(--color-text-secondary); display: flex; align-items: flex-start; gap: 0.5rem;">
-              <span style="color: var(--color-success); font-weight: 700;">✓</span>
-              Direct messages with individual families, off your personal number.
-            </li>
-            <li style="padding: 0.5rem 0; font-size: 0.875rem; color: var(--color-text-secondary); display: flex; align-items: flex-start; gap: 0.5rem;">
-              <span style="color: var(--color-success); font-weight: 700;">✓</span>
-              Broadcast announcements to everyone, or just the families who need it.
-            </li>
-            <li style="padding: 0.5rem 0; font-size: 0.875rem; color: var(--color-text-secondary); display: flex; align-items: flex-start; gap: 0.5rem;">
-              <span style="color: var(--color-success); font-weight: 700;">✓</span>
-              Email notifications so nothing gets missed in an app nobody opens daily.
-            </li>
-            <li style="padding: 0.5rem 0; font-size: 0.875rem; color: var(--color-text-secondary); display: flex; align-items: flex-start; gap: 0.5rem;">
-              <span style="color: var(--color-success); font-weight: 700;">✓</span>
-              Share files and attachments directly in the conversation.
-            </li>
-            <li style="padding: 0.5rem 0; font-size: 0.875rem; color: var(--color-text-secondary); display: flex; align-items: flex-start; gap: 0.5rem;">
-              <span style="color: var(--color-success); font-weight: 700;">✓</span>
-              Read receipts, so "I never got that" stops being a guessing game.
-            </li>
+          <h2 style="margin-bottom: 1rem;">One thread per family. Not five apps.</h2>
+          <ul style="margin: 0;">
+            <li style="padding: 0.4rem 0; font-size: 0.875rem; color: var(--color-text-secondary);">✓ Direct messages off your personal number</li>
+            <li style="padding: 0.4rem 0; font-size: 0.875rem; color: var(--color-text-secondary);">✓ Broadcast announcements to select families</li>
+            <li style="padding: 0.4rem 0; font-size: 0.875rem; color: var(--color-text-secondary);">✓ File sharing and read receipts</li>
           </ul>
-          <a href="#" class="btn btn-primary">See messaging in action →</a>
         </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- Student Portal -->
-  <section class="section">
-    <div class="container">
-      <div class="grid grid-2" style="align-items: center;">
+        <!-- Student Portal -->
         <div>
           <div class="badge" style="display: inline-block; padding: 0.25rem 1rem; background: rgba(99,102,241,0.1); color: var(--color-primary); border-radius: 9999px; font-size: 0.875rem; font-weight: 500; margin-bottom: 1rem;">Student Portal</div>
-          <h2>Give students a reason to check in between lessons.</h2>
-          <ul style="margin: 1.5rem 0;">
-            <li style="padding: 0.5rem 0; font-size: 0.875rem; color: var(--color-text-secondary); display: flex; align-items: flex-start; gap: 0.5rem;">
-              <span style="color: var(--color-success); font-weight: 700;">✓</span>
-              Secure PIN login built for a 9-year-old to use without help.
-            </li>
-            <li style="padding: 0.5rem 0; font-size: 0.875rem; color: var(--color-text-secondary); display: flex; align-items: flex-start; gap: 0.5rem;">
-              <span style="color: var(--color-success); font-weight: 700;">✓</span>
-              Upcoming lessons and schedule, visible without a text to you.
-            </li>
-            <li style="padding: 0.5rem 0; font-size: 0.875rem; color: var(--color-text-secondary); display: flex; align-items: flex-start; gap: 0.5rem;">
-              <span style="color: var(--color-success); font-weight: 700;">✓</span>
-              Assignment submission and progress tracking in the same place they practice from.
-            </li>
-            <li style="padding: 0.5rem 0; font-size: 0.875rem; color: var(--color-text-secondary); display: flex; align-items: flex-start; gap: 0.5rem;">
-              <span style="color: var(--color-success); font-weight: 700;">✓</span>
-              Shared resources (sheet music, recordings, notes), always where they left it.
-            </li>
-            <li style="padding: 0.5rem 0; font-size: 0.875rem; color: var(--color-text-secondary); display: flex; align-items: flex-start; gap: 0.5rem;">
-              <span style="color: var(--color-success); font-weight: 700;">✓</span>
-              Direct messages to their teacher, without needing a parent's phone.
-            </li>
+          <h2 style="margin-bottom: 1rem;">Give students a reason to check in between lessons.</h2>
+          <ul style="margin: 0;">
+            <li style="padding: 0.4rem 0; font-size: 0.875rem; color: var(--color-text-secondary);">✓ Simple PIN login for young students</li>
+            <li style="padding: 0.4rem 0; font-size: 0.875rem; color: var(--color-text-secondary);">✓ View schedule and assignments without texting you</li>
+            <li style="padding: 0.4rem 0; font-size: 0.875rem; color: var(--color-text-secondary);">✓ Access shared resources and message their teacher</li>
           </ul>
-          <a href="#" class="btn btn-primary">See the student experience →</a>
         </div>
-        <div style="background: linear-gradient(135deg, var(--color-primary), var(--color-secondary)); border-radius: 1rem; height: 400px; display: flex; align-items: center; justify-content: center; color: white; font-size: 4rem;">
-          🎓
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- Practice Tracking -->
-  <section class="section section-alt">
-    <div class="container">
-      <div class="grid grid-2" style="align-items: center;">
-        <div style="background: linear-gradient(135deg, var(--color-primary), var(--color-secondary)); border-radius: 1rem; height: 400px; display: flex; align-items: center; justify-content: center; color: white; font-size: 4rem; order: -1;">
-          🎯
-        </div>
+        <!-- Practice Tracking -->
         <div>
           <div class="badge" style="display: inline-block; padding: 0.25rem 1rem; background: rgba(99,102,241,0.1); color: var(--color-primary); border-radius: 9999px; font-size: 0.875rem; font-weight: 500; margin-bottom: 1rem;">Practice Tracking</div>
-          <h2>Turn practice into something students want to keep up.</h2>
-          <ul style="margin: 1.5rem 0;">
-            <li style="padding: 0.5rem 0; font-size: 0.875rem; color: var(--color-text-secondary); display: flex; align-items: flex-start; gap: 0.5rem;">
-              <span style="color: var(--color-success); font-weight: 700;">✓</span>
-              Daily logging with notes, not just a checkbox.
-            </li>
-            <li style="padding: 0.5rem 0; font-size: 0.875rem; color: var(--color-text-secondary); display: flex; align-items: flex-start; gap: 0.5rem;">
-              <span style="color: var(--color-success); font-weight: 700;">✓</span>
-              Streaks that make five days in a row feel like something.
-            </li>
-            <li style="padding: 0.5rem 0; font-size: 0.875rem; color: var(--color-text-secondary); display: flex; align-items: flex-start; gap: 0.5rem;">
-              <span style="color: var(--color-success); font-weight: 700;">✓</span>
-              Points and levels that turn practice into progress you can see.
-            </li>
-            <li style="padding: 0.5rem 0; font-size: 0.875rem; color: var(--color-text-secondary); display: flex; align-items: flex-start; gap: 0.5rem;">
-              <span style="color: var(--color-success); font-weight: 700;">✓</span>
-              Achievements for real milestones, not participation trophies.
-            </li>
-            <li style="padding: 0.5rem 0; font-size: 0.875rem; color: var(--color-text-secondary); display: flex; align-items: flex-start; gap: 0.5rem;">
-              <span style="color: var(--color-success); font-weight: 700;">✓</span>
-              Goals students set and actually track, instead of a vague "practice more."
-            </li>
+          <h2 style="margin-bottom: 1rem;">Turn practice into something students want to keep up.</h2>
+          <ul style="margin: 0;">
+            <li style="padding: 0.4rem 0; font-size: 0.875rem; color: var(--color-text-secondary);">✓ Daily logging with notes and streaks</li>
+            <li style="padding: 0.4rem 0; font-size: 0.875rem; color: var(--color-text-secondary);">✓ Points, levels, and achievements</li>
+            <li style="padding: 0.4rem 0; font-size: 0.875rem; color: var(--color-text-secondary);">✓ Goals students set and actually track</li>
           </ul>
-          <a href="#" class="btn btn-primary">See practice tracking in action →</a>
         </div>
       </div>
     </div>
   </section>
 
   <!-- Local AI Section -->
-  <section class="section">
+  <section class="section section-alt">
     <div class="container">
       <div class="section-header">
         <div class="badge">Local AI, Not a Bolt-On</div>
@@ -302,7 +141,7 @@ import LandingLayout from "../../../layouts/LandingLayout.astro";
         <div class="feature-card" style="text-align: center;">
           <div class="feature-card-icon" style="margin: 0 auto 1rem;">🎵</div>
           <h4>On-Demand Transposition</h4>
-          <p>Request a key change and get the part, not a search result.</p>
+          <p>Find a chart in your library and have it transposed automatically.</p>
         </div>
       </div>
       <p class="text-center" style="margin-top: 1.5rem; font-size: 0.875rem; color: var(--color-text-muted);">Transcription and RAG search: in development. Core scheduling, billing, and portal features: live today.</p>
@@ -310,7 +149,7 @@ import LandingLayout from "../../../layouts/LandingLayout.astro";
   </section>
 
   <!-- Studio Network (Premium) -->
-  <section class="section section-alt">
+  <section class="section">
     <div class="container">
       <div class="section-header">
         <div class="badge">Studio Network (Premium)</div>
@@ -324,7 +163,7 @@ import LandingLayout from "../../../layouts/LandingLayout.astro";
   </section>
 
   <!-- And So Much More -->
-  <section class="section">
+  <section class="section section-alt">
     <div class="container">
       <div class="section-header">
         <h2>And so much more</h2>
@@ -395,7 +234,7 @@ import LandingLayout from "../../../layouts/LandingLayout.astro";
           <a href="/cadenza/about">About</a>
           <a href="/cadenza/contact">Contact</a>
         </div>
-        </div>
+      </div>
       <div class="footer-bottom">
         <p>&copy; 2026 Cadenza Studio. All rights reserved.</p>
         <div class="social-links">
@@ -406,7 +245,5 @@ import LandingLayout from "../../../layouts/LandingLayout.astro";
       </div>
     </div>
   </footer>
-
-  
 
 </LandingLayout>

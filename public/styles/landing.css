@@ -410,10 +410,13 @@ p {
 }
 
 .hero-image img {
+  width: 100%;
   max-width: 900px;
+  height: auto;
   margin: 0 auto;
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-xl);
+  display: block;
 }
 
 /* ---------- Sections ---------- */
@@ -1141,12 +1144,6 @@ p {
   .grid-4 {
     grid-template-columns: repeat(2, 1fr);
   }
-}
-
-@media (max-width: 768px) {
-  :root {
-    --nav-height: 64px;
-  }
 
   .nav-links {
     display: none;
@@ -1158,6 +1155,12 @@ p {
 
   .mobile-menu-btn {
     display: block;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --nav-height: 64px;
   }
 
   h1 { font-size: var(--text-3xl); }
