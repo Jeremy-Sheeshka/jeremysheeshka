@@ -52,29 +52,20 @@ import LandingLayout from "../../../layouts/LandingLayout.astro";
     </div>
   </section>
 
-  <!-- App Screenshots -->
+  <!-- Video -->
   <section class="section" style="padding-bottom: 0;">
-    <div class="container">
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; max-width: 1000px; margin: 0 auto;">
-        <a href="/images/cadenza/cascaderesources.png" class="blog-lightbox" style="display: block; cursor: zoom-in;">
-          <img
-            src="/images/cadenza/cascaderesources.png"
-            alt="Cadenza Studio resources and files interface"
-            style="width: 100%; height: auto; border-radius: 0.75rem; box-shadow: 0 2px 16px rgba(0,0,0,0.08); display: block;"
-          />
-        </a>
-        <a href="/images/cadenza/cascadecalendar.png" class="blog-lightbox" style="display: block; cursor: zoom-in;">
-          <img
-            src="/images/cadenza/cascadecalendar.png"
-            alt="Cadenza Studio calendar and scheduling interface"
-            style="width: 100%; height: auto; border-radius: 0.75rem; box-shadow: 0 2px 16px rgba(0,0,0,0.08); display: block;"
-          />
-        </a>
-      </div>
+    <div class="container" style="max-width: 800px; margin: 0 auto;">
+      <video
+        controls
+        preload="metadata"
+        style="width: 100%; border-radius: 1rem; box-shadow: 0 4px 24px rgba(0,0,0,0.1);"
+      >
+        <source src="/videos/skeptics-checklist.mp4" type="video/mp4" />
+      </video>
     </div>
   </section>
 
-  <!-- How Cadenza Helps -->
+  <!-- FAQ -->
   <section class="section section-alt">
     <div class="container">
       <div class="section-header">
@@ -108,19 +99,6 @@ import LandingLayout from "../../../layouts/LandingLayout.astro";
           <p>Streaks and achievements that make a student want to open the app.</p>
         </div>
       </div>
-    </div>
-  </section>
-
-  <!-- Video -->
-  <section class="section" style="padding-bottom: 0;">
-    <div class="container" style="max-width: 800px; margin: 0 auto;">
-      <video
-        controls
-        preload="metadata"
-        style="width: 100%; border-radius: 1rem; box-shadow: 0 4px 24px rgba(0,0,0,0.1);"
-      >
-        <source src="/videos/skeptics-checklist.mp4" type="video/mp4" />
-      </video>
     </div>
   </section>
 
