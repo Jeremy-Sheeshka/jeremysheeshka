@@ -178,7 +178,7 @@ button, input, textarea, select {
 }
 
 .nav-logo img {
-  width: 38px;
+  width: auto;
   height: 38px;
 }
 
