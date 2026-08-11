@@ -563,9 +563,22 @@ a.app-card:hover {
 }
 
 @media (max-width: 768px) and (min-width: 641px) {
+  .header-inner {
+    gap: 0.5rem;
+  }
+  .site-nav {
+    gap: 0.6rem;
+  }
   .site-nav .nav-link {
+    font-size: 0.7rem;
+    padding: 0 0.2rem;
+  }
+  .header-cta .btn {
+    font-size: 0.7rem;
+    padding: 0.3rem 0.7rem;
+  }
+  .wordmark-text {
     font-size: 0.75rem;
-    padding: 0 0.35rem;
   }
 }
 
