@@ -560,6 +560,16 @@ a.app-card:hover {
   .footer-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+}
+
+@media (max-width: 768px) and (min-width: 641px) {
+  .site-nav .nav-link {
+    font-size: 0.75rem;
+    padding: 0 0.35rem;
+  }
+}
+
+@media (max-width: 640px) {
   .site-nav { display: none; }
   .header-cta { display: none; }
 }
