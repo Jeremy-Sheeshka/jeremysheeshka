@@ -1,58 +1,33 @@
 ---
 ---
 
-<section class="hero-wave">
-  <div class="hero-wave-bg">
-    <img
-      src="/images/curator/subtle-wave-header.svg"
-      alt=""
-      aria-hidden="true"
-      class="hero-wave-svg"
-    />
-  </div>
-  <div class="hero-wave-content">
-    <div class="container">
-      <p class="eyebrow">Open-source, local-first AI infrastructure for education</p>
-      <h1>Knowledge, engineered for the people who own it.</h1>
-      <p class="hero-lede">
-        Curator builds open-source, local-first AI infrastructure for schools, studios, and the organizations that serve them, designed so institutional knowledge never has to leave the building. We're proving it first in music education, where the pain is easiest to see and the yes is fastest.
-      </p>
-      <p class="hero-tagline">Open source. No spyware. No telemetry. Runs on hardware you already own.</p>
-      <div class="hero-actions">
-        <a class="btn btn--primary" href="/cadenza">See Cadenza</a>
-        <a class="btn btn--ghost" href="#platform">Explore the Platform</a>
-      </div>
-      <div class="hero-links">
-        <a class="link-arrow" href="/cadenza">For educators → Cadenza <span class="arrow" aria-hidden="true">→</span></a>
-        <a class="link-arrow" href="#partners">For institutions &amp; investors → For Partners <span class="arrow" aria-hidden="true">→</span></a>
-      </div>
+<section class="hero-content">
+  <div class="container">
+    <p class="eyebrow">Open-source, local-first AI infrastructure for education</p>
+    <h1>Knowledge, engineered for the people who own it.</h1>
+    <p class="hero-lede">
+      Curator builds open-source, local-first AI infrastructure for schools, studios, and the organizations that serve them, designed so institutional knowledge never has to leave the building. We're proving it first in music education, where the pain is easiest to see and the yes is fastest.
+    </p>
+    <p class="hero-tagline">Open source. No spyware. No telemetry. Runs on hardware you already own.</p>
+    <div class="hero-actions">
+      <a class="btn btn--primary" href="/cadenza">See Cadenza</a>
+      <a class="btn btn--ghost" href="#platform">Explore the Platform</a>
+    </div>
+    <div class="hero-links">
+      <a class="link-arrow" href="/cadenza">For educators → Cadenza <span class="arrow" aria-hidden="true">→</span></a>
+      <a class="link-arrow" href="#partners">For institutions &amp; investors → For Partners <span class="arrow" aria-hidden="true">→</span></a>
     </div>
   </div>
 </section>
 
 <style>
-  .hero-wave {
-    position: relative;
-    overflow: hidden;
-    padding: var(--space-4xl) 0 var(--space-3xl);
-  }
-  .hero-wave-bg {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-  }
-  .hero-wave-svg {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-  .hero-wave-content {
+  .hero-content {
+    text-align: center;
+    padding: var(--space-2xl) 0 var(--space-3xl);
     position: relative;
     z-index: 1;
-    text-align: center;
   }
-  .hero-wave-content h1 {
+  .hero-content h1 {
     font-size: 2.75rem;
     font-weight: 800;
     line-height: 1.15;
@@ -60,7 +35,7 @@
     margin: 0 auto var(--space-lg);
     color: var(--ink);
   }
-  .hero-wave-content .hero-lede {
+  .hero-content .hero-lede {
     max-width: 650px;
     margin: 0 auto var(--space-xl);
     font-size: 1.05rem;
@@ -87,10 +62,10 @@
     flex-wrap: wrap;
   }
   @media (max-width: 768px) {
-    .hero-wave-content h1 {
+    .hero-content h1 {
       font-size: 2rem;
     }
-    .hero-wave-content .hero-lede {
+    .hero-content .hero-lede {
       font-size: 0.95rem;
     }
     .hero-links {
