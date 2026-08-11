@@ -17,26 +17,16 @@ import Footer from '../../components/curator/Footer.astro';
   title="Curator — Local-first AI infrastructure for education"
   description="Curator builds open-source, local-first AI infrastructure that lets schools and studios run intelligent workflows on their own knowledge."
 >
-  <!-- Wave header background (behind nav) -->
-  <div style="position: relative; width: 100%; overflow: hidden; line-height: 0;">
-    <img
-      src="/images/curator/subtle-wave-header.svg"
-      alt=""
-      aria-hidden="true"
-      style="width: 100%; height: auto; display: block;"
-    />
+  <Header />
+
+  <!-- Orange wave SVG beneath nav bar -->
+  <div aria-hidden="true" style="width: 100%; overflow: hidden; line-height: 0; margin-top: -1px;">
     <img
       src="/images/curator/signal-wave-header.svg"
       alt=""
-      aria-hidden="true"
-      style="width: 100%; height: auto; display: block; margin-top: -1px; opacity: 0.7;"
+      style="width: 100%; height: auto; display: block; opacity: 0.6;"
     />
   </div>
-
-  <div style="position: relative;">
-    <div style="position: absolute; top: 0; left: 0; right: 0; z-index: 10;">
-      <Header />
-    </div>
 
   <main id="top" style="position: relative; overflow: hidden;">
     <!-- Decorative background orbs -->
@@ -57,7 +47,6 @@ import Footer from '../../components/curator/Footer.astro';
     <Contact />
     <FinalCta />
   </main>
-  </div>
 
 <style>
   #top > section,
