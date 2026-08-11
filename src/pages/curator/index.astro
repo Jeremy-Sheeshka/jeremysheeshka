@@ -29,13 +29,19 @@ import Footer from '../../components/curator/Footer.astro';
   </div>
 
   <main id="top" style="position: relative; overflow: hidden;">
-    <!-- Decorative background orbs -->
-    <div aria-hidden="true" style="position: absolute; top: 15%; left: 5%; width: 200px; height: 200px; background: rgba(232,115,47,0.06); border-radius: 24px; z-index: 0; pointer-events: none;"></div>
-    <div aria-hidden="true" style="position: absolute; top: 40%; right: 8%; width: 300px; height: 300px; background: rgba(232,115,47,0.04); border-radius: 50%; z-index: 0; pointer-events: none;"></div>
-    <div aria-hidden="true" style="position: absolute; top: 60%; left: 12%; width: 160px; height: 160px; background: rgba(220,100,80,0.05); border-radius: 20px; z-index: 0; pointer-events: none;"></div>
-    <div aria-hidden="true" style="position: absolute; top: 25%; right: 20%; width: 120px; height: 120px; background: rgba(232,115,47,0.05); border-radius: 50%; z-index: 0; pointer-events: none;"></div>
-    <div aria-hidden="true" style="position: absolute; bottom: 20%; left: 40%; width: 240px; height: 240px; background: rgba(232,115,47,0.04); border-radius: 28px; z-index: 0; pointer-events: none;"></div>
-    <div aria-hidden="true" style="position: absolute; top: 75%; right: 5%; width: 180px; height: 180px; background: rgba(220,100,80,0.05); border-radius: 50%; z-index: 0; pointer-events: none;"></div>
+    <!-- Decorative orbs — one per section, behind content -->
+    <!-- Architecture stack -->
+    <div aria-hidden="true" style="position: absolute; top: 8%; left: 8%; width: 300px; height: 300px; background: rgba(232,115,47,0.04); border-radius: 32px; z-index: 0; pointer-events: none;"></div>
+    <!-- Growth strategy -->
+    <div aria-hidden="true" style="position: absolute; top: 22%; right: 6%; width: 240px; height: 240px; background: rgba(220,100,80,0.04); border-radius: 50%; z-index: 0; pointer-events: none;"></div>
+    <!-- Engine / Platform -->
+    <div aria-hidden="true" style="position: absolute; top: 42%; left: 5%; width: 360px; height: 360px; background: rgba(232,115,47,0.03); border-radius: 28px; z-index: 0; pointer-events: none;"></div>
+    <!-- Applications -->
+    <div aria-hidden="true" style="position: absolute; top: 58%; right: 10%; width: 200px; height: 200px; background: rgba(220,100,80,0.04); border-radius: 50%; z-index: 0; pointer-events: none;"></div>
+    <!-- Partners / Page 3 -->
+    <div aria-hidden="true" style="position: absolute; top: 72%; left: 50%; transform: translateX(-50%); width: 340px; height: 340px; background: rgba(232,115,47,0.03); border-radius: 36px; z-index: 0; pointer-events: none;"></div>
+    <!-- WhyLocal / About -->
+    <div aria-hidden="true" style="position: absolute; top: 88%; right: 8%; width: 220px; height: 220px; background: rgba(220,100,80,0.04); border-radius: 50%; z-index: 0; pointer-events: none;"></div>
 
     <Hero />
     <ArchitectureDiagram />
