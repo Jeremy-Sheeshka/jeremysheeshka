@@ -18,14 +18,16 @@ import SparklyText from "../../components/SparklyText.astro";
 <div class="grid md:grid-cols-[1fr_2fr] gap-6 mb-8">
 
 <div>
-  <video
-    controls
-    preload="metadata"
-    style="width: 100%; border-radius: 0.75rem; box-shadow: 0 2px 12px rgba(0,0,0,0.1);"
-  >
-    <source src="/videos/why-local-first.mp4" type="video/mp4" />
-  </video>
-  <p class="text-xs text-center text-gray-500 dark:text-gray-400 mt-1.5">Why Local-First AI Is EdTech's Future</p>
+  <div style="max-width: 70%; margin: 0 auto;">
+    <video
+      controls
+      preload="metadata"
+      style="width: 100%; border-radius: 0.75rem; box-shadow: 0 2px 12px rgba(0,0,0,0.1);"
+    >
+      <source src="/videos/why-local-first.mp4" type="video/mp4" />
+    </video>
+    <p class="text-xs text-center text-gray-500 dark:text-gray-400 mt-1.5">Why Local-First AI Is EdTech's Future</p>
+  </div>
 
   <div class="mt-6">
     <a href="/assets/images/blog/curatorengine.png" class="blog-lightbox block cursor-zoom-in" target="_blank">
