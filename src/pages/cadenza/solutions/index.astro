@@ -38,43 +38,17 @@ import LandingLayout from "../../../layouts/LandingLayout.astro";
     <a href="/cadenza/contact" class="nav-link">Contact</a>
   </div>
 
-  <!-- Solutions Hero -->
-  <section class="solutions-hero">
-    <div class="container">
-      <h1>Studio management built for music teachers</h1>
-      <p>Spend your evenings teaching, not rebuilding your week in a spreadsheet.</p>
-      <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-        <a href="/cadenza-app" class="btn btn-secondary btn-lg">Get Started Free</a>
-        <a href="/cadenza/features" class="btn btn-ghost btn-lg" style="color: white; border: 1px solid rgba(255,255,255,0.3);">See All Features</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Common Challenges -->
-  <section class="section">
-    <div class="container">
-      <div class="section-header">
-        <div class="badge">Common challenges for music teachers</div>
-        <h2>Sound familiar? You are not alone.</h2>
-        <p>These are the problems Cadenza Studio was built to solve.</p>
-      </div>
-      <div class="challenge-list" style="background: var(--color-bg-alt); padding: 2rem; border-radius: 1rem;">
-        <div class="challenge-item" style="background: white; color: #1a1a1a;">
-          Juggling dozens of weekly recurring students across time slots that never quite line up.
-        </div>
-        <div class="challenge-item" style="background: white; color: #1a1a1a;">
-          Losing track of who's owed a makeup lesson after last week's cancellation.
-        </div>
-        <div class="challenge-item" style="background: white; color: #1a1a1a;">
-          Managing families with two or three siblings, each on a different schedule.
-        </div>
-        <div class="challenge-item" style="background: white; color: #1a1a1a;">
-          Repeating the same recital-prep update to twelve different parents.
-        </div>
-        <div class="challenge-item" style="background: white; color: #1a1a1a;">
-          Watching practice motivation disappear the moment a student walks out your door.
-        </div>
-      </div>
+  <!-- Video Hero -->
+  <section style="position: relative; overflow: hidden; min-height: 400px; display: flex; align-items: center; justify-content: center;">
+    <video
+      autoplay loop muted playsinline
+      style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; z-index: 0;"
+    >
+      <source src="/videos/herobannervideopiano.mp4" type="video/mp4" />
+    </video>
+    <div style="position: absolute; inset: 0; background: rgba(0,0,0,0.55); z-index: 1;"></div>
+    <div class="container" style="position: relative; z-index: 2; text-align: center; padding: 4rem 1rem;">
+      <h1 style="color: #fff; font-size: 2.5rem; font-weight: 800;">Studio management built for music teachers</h1>
     </div>
   </section>
 
@@ -137,14 +111,16 @@ import LandingLayout from "../../../layouts/LandingLayout.astro";
     </div>
   </section>
 
-  <!-- Image -->
+  <!-- Video -->
   <section class="section" style="padding-bottom: 0;">
-    <div class="container" style="text-align: center;">
-      <img
-        src="/images/cadenza/guitarlessons.png"
-        alt="Guitar lessons in progress"
-        style="max-width: 600px; width: 100%; height: auto; display: block; margin: 0 auto; border-radius: 1rem; box-shadow: 0 4px 24px rgba(0,0,0,0.08);"
-      />
+    <div class="container" style="max-width: 800px; margin: 0 auto;">
+      <video
+        controls
+        preload="metadata"
+        style="width: 100%; border-radius: 1rem; box-shadow: 0 4px 24px rgba(0,0,0,0.1);"
+      >
+        <source src="/videos/skeptics-checklist.mp4" type="video/mp4" />
+      </video>
     </div>
   </section>
 
