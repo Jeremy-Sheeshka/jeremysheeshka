@@ -48,6 +48,14 @@
       <span class="ownership-desc">Your knowledge, your computer, your terms. Forever. Our SaaS solutions offer individuals independence from centralized cloud servers and other privately owned tech solutions.</span>
     </div>
   </div>
+
+  <div class="architecture-image">
+    <img
+      src="/images/cadenza/curatorengine.png"
+      alt="Curator Engine architecture — local AI infrastructure stack"
+      style="max-width: 800px; width: 100%; height: auto; display: block; margin: 0 auto; border-radius: var(--radius-lg);"
+    />
+  </div>
 </div>
 
 <style>
@@ -109,12 +117,12 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: var(--space-lg);
-    max-width: 900px;
-    margin: 0 auto;
+    max-width: 960px;
+    margin: 0 auto var(--space-2xl);
     text-align: left;
   }
   .ownership-item {
-    padding: var(--space-lg);
+    padding: var(--space-xl) var(--space-lg);
     background: #fff;
     border: 1px solid var(--border);
     border-radius: var(--radius);
@@ -129,7 +137,10 @@
   .ownership-desc {
     font-size: 0.85rem;
     color: var(--ink-muted);
-    line-height: 1.5;
+    line-height: 1.6;
+  }
+  .architecture-image {
+    margin-top: var(--space-2xl);
   }
   @media (max-width: 768px) {
     .ownership-grid {

@@ -47,8 +47,17 @@
 
     <div class="founder-section">
       <h3>Meet the Founder</h3>
-      <div class="founder-card">
-        <p><strong>Jeremy Sheeshka — CEO & Founder.</strong> Jeremy is a K-12 music educator and MET student who is passionate about jazz guitar and technology. He is fascinated by building software and open-source technologies, which led him to build his first SaaS solution: Cadenza. In the role of music teacher, he has lost many evenings to inefficient paperwork and administrative tasks: chasing invoices, scheduling students, preparing lessons.</p>
+      <div class="founder-layout">
+        <div class="founder-card">
+          <p><strong>Jeremy Sheeshka — CEO & Founder.</strong> Jeremy is a K-12 music educator and MET student who is passionate about jazz guitar and technology. He is fascinated by building software and open-source technologies, which led him to build his first SaaS solution: Cadenza. In the role of music teacher, he has lost many evenings to inefficient paperwork and administrative tasks: chasing invoices, scheduling students, preparing lessons.</p>
+        </div>
+        <div class="founder-image">
+          <img
+            src="/images/cadenza/headshot.jpg"
+            alt="Jeremy Sheeshka — CEO & Founder of Cadenza Studio"
+            style="width: 160px; height: 160px; border-radius: 50%; object-fit: cover; box-shadow: 0 4px 20px rgba(0,0,0,0.12);"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -108,7 +117,7 @@
     line-height: 1.6;
   }
   .enshittification-section, .founder-section {
-    max-width: 700px;
+    max-width: 800px;
     margin: 0 auto var(--space-3xl);
   }
   .enshittification-section h3, .founder-section h3 {
@@ -119,7 +128,13 @@
     color: var(--ink-muted);
     line-height: 1.7;
   }
+  .founder-layout {
+    display: flex;
+    gap: var(--space-xl);
+    align-items: center;
+  }
   .founder-card {
+    flex: 1;
     padding: var(--space-xl);
     background: var(--surface);
     border-radius: var(--radius-lg);
@@ -129,9 +144,20 @@
     color: var(--ink-muted);
     line-height: 1.7;
   }
+  .founder-image {
+    flex-shrink: 0;
+  }
   @media (max-width: 768px) {
     .values-grid {
       grid-template-columns: 1fr;
+    }
+    .founder-layout {
+      flex-direction: column;
+      text-align: center;
+    }
+    .founder-image {
+      order: -1;
+      margin-bottom: var(--space-lg);
     }
   }
 </style>

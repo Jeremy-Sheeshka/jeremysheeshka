@@ -10,8 +10,22 @@
     </div>
 
     <div class="pitch-section">
-      <h3>The Pitch in Sixty Seconds</h3>
-      <p>Every school and studio sits on knowledge it owns but can't safely hand to cloud AI — lesson records, student files, policies, community archives. Curator is open, local-first AI infrastructure that lets those organizations run intelligent workflows on their own knowledge, on hardware they own. Our first application, Cadenza, gives music teachers back the hours they lose to administrative overhead after every lesson. Cadenza is the wedge; Curator is the platform every studio, school, and archive will need next.</p>
+      <div class="pitch-layout">
+        <div class="pitch-text">
+          <h3>The Pitch in Sixty Seconds</h3>
+          <p>Every school and studio sits on knowledge it owns but can't safely hand to cloud AI — lesson records, student files, policies, community archives. Curator is open, local-first AI infrastructure that lets those organizations run intelligent workflows on their own knowledge, on hardware they own. Our first application, Cadenza, gives music teachers back the hours they lose to administrative overhead after every lesson. Cadenza is the wedge; Curator is the platform every studio, school, and archive will need next.</p>
+        </div>
+        <div class="pitch-video">
+          <video
+            controls
+            preload="metadata"
+            style="width: 100%; border-radius: var(--radius-lg); box-shadow: 0 2px 16px rgba(0,0,0,0.1);"
+          >
+            <source src="/videos/why-local-first.mp4" type="video/mp4" />
+          </video>
+          <p style="text-align: center; font-size: 0.8rem; color: var(--ink-muted); margin-top: 0.5rem;">Why Local-First AI Is EdTech's Future</p>
+        </div>
+      </div>
     </div>
 
     <div class="investor-section">
@@ -129,11 +143,19 @@
   .pitch-section h3, .investor-section h3, .market-section h3, .business-section h3, .pilot-section h3, .pushback-section h3 {
     margin-bottom: var(--space-lg);
   }
-  .pitch-section p, .business-section p, .pilot-section p {
+  .pitch-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2xl);
+    align-items: start;
+  }
+  .pitch-text p {
     font-size: 0.95rem;
     color: var(--ink-muted);
     line-height: 1.7;
-    max-width: 700px;
+  }
+  .pitch-video video {
+    width: 100%;
   }
   .investor-grid {
     display: grid;
@@ -216,6 +238,9 @@
   }
   @media (max-width: 768px) {
     .investor-grid, .pushback-grid {
+      grid-template-columns: 1fr;
+    }
+    .pitch-layout {
       grid-template-columns: 1fr;
     }
     .market-row {
