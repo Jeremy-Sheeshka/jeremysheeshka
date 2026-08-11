@@ -38,11 +38,18 @@ import LandingLayout from "../../../layouts/LandingLayout.astro";
     <a href="/cadenza/contact" class="nav-link">Contact</a>
   </div>
 
-  <!-- Page Header -->
-  <section class="page-header">
-    <div class="container">
-      <h1>Powerful features for modern music teachers</h1>
-      <p>Everything you need to run a studio, without needing a manual to use it.</p>
+  <!-- Video Hero -->
+  <section style="position: relative; overflow: hidden; min-height: 400px; display: flex; align-items: center; justify-content: center;">
+    <video
+      autoplay loop muted playsinline
+      style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;"
+    >
+      <source src="/videos/herobannervideo.mp4" type="video/mp4" />
+    </video>
+    <div style="position: absolute; inset: 0; background: rgba(0,0,0,0.55); z-index: 1;"></div>
+    <div class="container" style="position: relative; z-index: 2; text-align: center; padding: 4rem 1rem;">
+      <h1 style="color: #fff; font-size: 2.5rem; font-weight: 800; margin-bottom: 0.75rem;">Powerful features for modern music teachers</h1>
+      <p style="color: rgba(255,255,255,0.85); font-size: 1.2rem;">Everything you need to run a studio.</p>
     </div>
   </section>
 
