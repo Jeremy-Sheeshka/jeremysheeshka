@@ -107,6 +107,43 @@
       <p>The first pilot cohort will consist of 8–10 independent music studios or private music teachers, running Cadenza free for six months in exchange for an honest testimonial.</p>
     </div>
 
+    <div class="ask-section">
+      <h3>The Ask</h3>
+      <p class="ask-line">$90,000 CAD pre-seed (15% equity) buys the pilot: a validated Cadenza pilot of 8–10 paying studios, with retention and hours-saved metrics by month 12. This will form the evidence base for the next seed round.</p>
+      <div class="ask-table">
+        <div class="ask-row ask-row--header">
+          <span class="ask-cell">Use of funds</span>
+          <span class="ask-cell">Share</span>
+          <span class="ask-cell">Amount</span>
+        </div>
+        <div class="ask-row">
+          <span class="ask-cell">Engineering (Cadenza + local RAG core)</span>
+          <span class="ask-cell">55%</span>
+          <span class="ask-cell">$49,500</span>
+        </div>
+        <div class="ask-row">
+          <span class="ask-cell">Pilot hardware and onboarding</span>
+          <span class="ask-cell">15%</span>
+          <span class="ask-cell">$13,500</span>
+        </div>
+        <div class="ask-row">
+          <span class="ask-cell">Privacy and legal review</span>
+          <span class="ask-cell">10%</span>
+          <span class="ask-cell">$9,000</span>
+        </div>
+        <div class="ask-row">
+          <span class="ask-cell">Founder runway, 12 months</span>
+          <span class="ask-cell">20%</span>
+          <span class="ask-cell">$18,000</span>
+        </div>
+        <div class="ask-row ask-row--total">
+          <span class="ask-cell">Total</span>
+          <span class="ask-cell">100%</span>
+          <span class="ask-cell">$90,000</span>
+        </div>
+      </div>
+    </div>
+
     <div class="pushback-section">
       <h3>Where We Expect Pushback</h3>
       <div class="pushback-grid">
@@ -216,6 +253,49 @@
     font-size: 0.75rem;
     color: var(--ink-light);
     font-style: italic;
+  }
+  .ask-section {
+    margin-bottom: var(--space-3xl);
+  }
+  .ask-line {
+    font-size: 0.95rem;
+    color: var(--ink-muted);
+    line-height: 1.7;
+    margin-bottom: var(--space-lg);
+    max-width: 640px;
+  }
+  .ask-table {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    font-size: 0.85rem;
+    max-width: 640px;
+  }
+  .ask-row {
+    display: grid;
+    grid-template-columns: 1fr 90px 110px;
+    border-bottom: 1px solid var(--border);
+  }
+  .ask-row:last-child { border-bottom: none; }
+  .ask-row--header {
+    background: var(--surface);
+    font-weight: 700;
+  }
+  .ask-row--total {
+    background: rgba(232, 115, 47, 0.06);
+    font-weight: 700;
+    color: var(--accent-orange);
+  }
+  .ask-cell {
+    padding: var(--space-md);
+    border-right: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+  }
+  .ask-cell:last-child { border-right: none; }
+  @media (max-width: 768px) {
+    .ask-row { grid-template-columns: 1fr; }
+    .ask-cell { border-right: none; border-bottom: 1px solid var(--border); }
   }
   .pushback-grid {
     display: grid;
