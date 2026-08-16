@@ -2,6 +2,7 @@
   "name": "jeremy-sheeshka2",
   "type": "module",
   "version": "6.11.0",
+  "packageManager": "pnpm@11.7.0",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
@@ -76,15 +77,5 @@
   },
   "overrides": {
     "sharp": "^0.34.5"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "@biomejs/biome",
-      "@firebase/util",
-      "@resvg/resvg-js",
-      "esbuild",
-      "protobufjs",
-      "sharp"
-    ]
   }
 }
