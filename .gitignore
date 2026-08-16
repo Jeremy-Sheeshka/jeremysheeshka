@@ -32,3 +32,10 @@ pnpm-debug.log*
 .env
 .env.*
 .astro/.astro/
+
+# local working artifacts (redundant copies from tooling; safe to ignore)
+.pnpm-store/
+node_modules.prev/
+dist.pre-restore-20260815/
+.git.broken.20260815/
+pitch-update/
