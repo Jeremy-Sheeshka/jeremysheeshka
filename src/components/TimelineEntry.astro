@@ -1,0 +1,91 @@
+---
+import type { PortfolioEntry } from "@/data/portfolioData";
+import { entryTypeLabels, getPhaseMeta } from "@/data/portfolioData";
+import RubricBadge from "./RubricBadge.astro";
+
+interface Props {
+  entry: PortfolioEntry;
+}
+
+const { entry } = Astro.props;
+const phaseMeta = getPhaseMeta(entry.phase);
+const dateLabel = new Date(entry.date).toLocaleDateString("en-CA", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+const typeLabel = entryTypeLabels[entry.type];
+---
+
+<article
+  class="timeline-card relative rounded-2xl border border-stone-200 bg-white/90 p-6 shadow-sm backdrop-blur transition-shadow hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900/80"
+>
+  {/* Phase-coloured accent rail */}
+  <span
+    class="absolute inset-y-0 left-0 w-1 rounded-l-2xl"
+    style={`background-color: ${phaseMeta?.color ?? "#999"};`}
+    aria-hidden="true"
+  ></span>
+
+  <div class="flex flex-wrap items-center gap-x-3 gap-y-2 pl-2">
+    <time datetime={entry.date} class="text-sm font-medium text-stone-500 dark:text-zinc-400">
+      {dateLabel}
+    </time>
+    <span
+      class="rounded-full border border-stone-300 px-2.5 py-0.5 text-[0.7rem] font-bold uppercase tracking-wider text-stone-600 dark:border-zinc-700 dark:text-zinc-300"
+    >
+      {typeLabel}
+    </span>
+  </div>
+
+  <h3 class="mt-3 pl-2 text-xl font-bold leading-snug text-stone-900 dark:text-zinc-50">
+    {entry.title}
+  </h3>
+
+  <blockquote
+    class="mt-4 border-l-4 pl-4 text-base italic leading-relaxed text-stone-700 dark:text-zinc-300"
+    style={`border-color: ${phaseMeta?.color ?? "#999"};`}
+  >
+    <p>“{entry.quote}”</p>
+  </blockquote>
+
+  <div class="mt-5 space-y-3 pl-2 text-sm leading-relaxed text-stone-700 dark:text-zinc-300">
+    <p>
+      <span class="font-semibold text-stone-900 dark:text-zinc-100">My role:</span>{" "}
+      {entry.role}
+    </p>
+    <p>
+      <span class="font-semibold text-stone-900 dark:text-zinc-100">The “So What?”:</span>{" "}
+      {entry.summary}
+    </p>
+  </div>
+
+  <div class="mt-5 flex flex-wrap gap-2 pl-2" aria-label="Rubric criteria evidenced">
+    {entry.rubricTags.map((tag) => <RubricBadge tag={tag} />)}
+  </div>
+
+  <div class="mt-5 pl-2">
+    <a
+      href={entry.url}
+      class="inline-flex items-center gap-2 text-sm font-semibold text-stone-900 underline decoration-stone-400 underline-offset-4 transition-colors hover:decoration-[var(--color-link)] dark:text-zinc-100 dark:decoration-zinc-600"
+      {...(entry.url.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+    >
+      Read the original
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <line x1="5" y1="12" x2="19" y2="12" />
+        <polyline points="12 5 19 12 12 19" />
+      </svg>
+    </a>
+  </div>
+</article>

@@ -1,0 +1,44 @@
+---
+import type { RubricTag } from "@/data/portfolioData";
+import { rubricCriteria } from "@/data/portfolioData";
+
+interface Props {
+  tag: RubricTag;
+  showPoints?: boolean;
+}
+
+const { tag, showPoints = true } = Astro.props;
+const meta = rubricCriteria.find((c) => c.name === tag);
+const points = meta?.points ?? 0;
+
+const toneClasses: Record<RubricTag, string> = {
+  Presence:
+    "border-sky-300 bg-sky-50 text-sky-800 dark:border-sky-700 dark:bg-sky-950 dark:text-sky-200",
+  "Original Voice":
+    "border-rose-300 bg-rose-50 text-rose-800 dark:border-rose-700 dark:bg-rose-950 dark:text-rose-200",
+  "Constructive Response":
+    "border-emerald-300 bg-emerald-50 text-emerald-800 dark:border-emerald-700 dark:bg-emerald-950 dark:text-emerald-200",
+  "Demonstrated Knowledge":
+    "border-amber-300 bg-amber-50 text-amber-800 dark:border-amber-700 dark:bg-amber-950 dark:text-amber-200",
+};
+---
+
+<span
+  class:list={[
+    "inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold tracking-wide",
+    toneClasses[tag],
+  ]}
+  title={meta?.description}
+>
+  <span aria-hidden="true">{tag}</span>
+  {
+    showPoints && (
+      <span
+        class="rounded-full bg-white/70 px-1.5 text-[0.7rem] font-bold tabular-nums dark:bg-black/20"
+        aria-label={`${points} points`}
+      >
+        {points} pts
+      </span>
+    )
+  }
+</span>
