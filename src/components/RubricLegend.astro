@@ -1,0 +1,27 @@
+---
+import { rubricCriteria } from "@/data/portfolioData";
+import RubricBadge from "./RubricBadge.astro";
+---
+
+<h2 class="text-xl font-bold text-stone-900 dark:text-zinc-50">How this portfolio is graded</h2>
+<p class="mt-2 max-w-2xl text-stone-600 dark:text-zinc-400">
+  The A4 rubric awards 25 points across four criteria. Every entry below is tagged with the criteria it evidences.
+</p>
+
+<dl class="mt-6 grid gap-4 sm:grid-cols-2">
+  {
+    rubricCriteria.map((criterion) => (
+      <div class="rounded-2xl border border-stone-200 bg-white/80 p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/60">
+        <dt class="flex items-center justify-between gap-2">
+          <RubricBadge tag={criterion.name} showPoints={false} />
+          <span class="text-sm font-black tabular-nums text-stone-900 dark:text-zinc-50">
+            {criterion.points}<span class="text-stone-400">/25</span>
+          </span>
+        </dt>
+        <dd class="mt-3 text-sm leading-relaxed text-stone-600 dark:text-zinc-400">
+          {criterion.description}
+        </dd>
+      </div>
+    ))
+  }
+</dl>
