@@ -38,9 +38,7 @@ jobs:
           node-version: 22
 
       - name: Install dependencies
-        run: |
-          rm -f pnpm-lock.yaml
-          pnpm install
+        run: pnpm install --frozen-lockfile
         env:
           WEBMENTION_API_KEY: ${{ secrets.WEBMENTION_API_KEY }}
           WEBMENTION_URL: ${{ secrets.WEBMENTION_URL }}
