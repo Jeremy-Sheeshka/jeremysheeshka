@@ -6,6 +6,13 @@ tags: ["etec542"]
 draft: true
 ---
 
+import { Image } from "astro:assets";
+
+import bananocitizens from "@/assets/images/blog/bananocitizens.png";
+import bananodiscord from "@/assets/images/blog/bananodiscord.png";
+import bananoreacts from "@/assets/images/blog/bananoreacts.png";
+import rugpullsimulator from "@/assets/images/blog/rugpullsimulator.png";
+
 import Prose from "../../components/blocks/Prose.astro";
 import Callout from "../../components/blocks/Callout.astro";
 import Card from "../../components/ui/Card.astro";
@@ -37,11 +44,10 @@ import Figure from "../../components/blocks/Figure.astro";
 
 <div class="grid grid-cols-1 md:grid-cols-2 gap-1 my-8 items-start">
   <div>
-    <img
-      src="/assets/images/blog/bananodiscord.png"
+    <Image 
+      src={bananodiscord}
       alt="Banano Discord Server"
-      style="width: 55%; display: block; margin: 0 auto; border-radius: 0.5rem;"
-    />
+      style="width: 55%; display: block; margin: 0 auto; border-radius: 0.5rem;" />
     <p class="text-center text-xs text-gray-500 mt-2 italic">
       The Banano Discord server <Cite n={2} title="Banano Discord (2026)" />
     </p>
@@ -53,7 +59,7 @@ import Figure from "../../components/blocks/Figure.astro";
     </p>
     <div style="margin-top: -2rem;">
       <Figure
-        src="/assets/images/blog/bananocitizens.png"
+        src={bananocitizens}
         alt="visually depictive roles and identities given to Banano Citizens"
       />
       <p class="text-center text-sm text-gray-500 mt-2 italic">
@@ -78,7 +84,7 @@ As Wellman (2011) <Cite n={7} title="Wellman (2011)" /> argues, the Third Age of
 <div class="my-8">
   <div style="float: right; margin: 0 0 1rem 1.5rem; max-width: 280px;">
     <Figure
-      src="/assets/images/blog/rugpullsimulator.png"
+      src={rugpullsimulator}
       alt="BananoBot"
       style="width: 100%; height: 160px; object-fit: cover; border-radius: 0.5rem;"
     />
@@ -108,7 +114,7 @@ As Wellman (2011) <Cite n={7} title="Wellman (2011)" /> argues, the Third Age of
 <div class="my-8">
   <div style="float: left; margin: 0 1.5rem 1rem 0; max-width: 240px;">
     <Figure
-      src="/assets/images/blog/bananoreacts.png"
+      src={bananoreacts}
       alt="Banano Server Reactions"
     />
     <p class="text-xs text-gray-500 italic leading-snug mt-2 text-center">

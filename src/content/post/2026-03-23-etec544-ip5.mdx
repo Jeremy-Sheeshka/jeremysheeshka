@@ -5,6 +5,10 @@ publishDate: "2026-03-26"
 tags: ["etec544"]
 ---
 
+import { Image } from "astro:assets";
+
+import malegamerchatgpt from "@/assets/images/blog/malegamerchatgpt.png";
+
 import Prose from "../../components/blocks/Prose.astro";
 import Callout from "../../components/blocks/Callout.astro";
 import Cite from "../../components/widgets/Cite.astro";
@@ -120,11 +124,10 @@ As a test, I decided to investigate similar prompts of "male/female gamer" and "
     </div>
 
 <div style="flex: 1; max-width: 420px; position: relative; border-radius: 0.75rem; overflow: hidden; background: rgba(0,0,0,0.05);">
-      <img id="selector-img"
-        src="/assets/images/blog/malegamerchatgpt.png"
+      <Image  id="selector-img"
+        src={malegamerchatgpt}
         alt="AI-generated gamer image"
-        style="display: block; margin: 0 auto; max-width: 100%; width: 100%; height: auto; object-fit: contain; border-radius: 0.75rem; transition: opacity 0.2s ease;"
-      />
+        style="display: block; margin: 0 auto; max-width: 100%; width: 100%; height: auto; object-fit: contain; border-radius: 0.75rem; transition: opacity 0.2s ease;" />
     </div>
 
   </div>

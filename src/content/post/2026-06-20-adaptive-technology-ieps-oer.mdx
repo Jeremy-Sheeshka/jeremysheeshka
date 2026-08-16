@@ -4,6 +4,10 @@ description: "An open educational resource exploring adaptive learning technolog
 publishDate: 2026-06-20
 tags: ["etec522"]
 ---
+
+import { Image } from "astro:assets";
+
+import assistiveTech from "@/assets/images/blog/assistive-tech.png";
 import Prose from "../../components/blocks/Prose.astro";
 
 <Prose>
@@ -18,11 +22,10 @@ The OER is published under a Creative Commons license. If you teach, design inst
 
 <div class="not-prose my-10">
   <a href="https://sites.google.com/view/adaptive-technology-and-ieps/home" target="_blank" rel="noopener noreferrer" class="block border border-stone-300 dark:border-zinc-700 rounded-xl overflow-hidden no-underline shadow-md hover:shadow-lg transition-shadow">
-    <img 
-      src="/assets/images/blog/assistive-tech.png" 
+    <Image  
+      src={assistiveTech} 
       alt="Adaptive Technology and IEPs — Open Educational Resource preview"
-      class="block w-full h-auto"
-    />
+      class="block w-full h-auto" />
     <div class="flex items-center justify-between px-6 py-4 bg-stone-50 dark:bg-zinc-800 border-t border-stone-200 dark:border-zinc-700 gap-4 flex-wrap">
       <span class="font-bold text-base text-stone-900 dark:text-zinc-100">Adaptive Technology &amp; IEPs</span>
       <span class="inline-flex items-center gap-1.5 font-semibold text-sm text-amber-600 dark:text-amber-400">

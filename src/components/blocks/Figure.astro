@@ -1,5 +1,16 @@
 ---
-const { src, alt, caption, size = "full", class: className = "" } = Astro.props;
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+
+interface Props {
+  src: ImageMetadata | string;
+  alt?: string;
+  caption?: string;
+  size?: "xs" | "sm" | "md" | "lg" | "full";
+  class?: string;
+}
+
+const { src, alt = "", caption, size = "full", class: className = "" } = Astro.props;
 const sizeClasses = {
   xs: "max-w-xs mx-auto",
   sm: "max-w-sm mx-auto",
@@ -8,15 +19,25 @@ const sizeClasses = {
   full: "w-full"
 };
 const selectedSize = sizeClasses[size] || sizeClasses.full;
+const isImage = typeof src !== "string";
 ---
 <figure class={`my-8 ${selectedSize} ${className}`}>
   <div class="overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm">
-    <img
-      src={src}
-      alt={alt}
-      loading="lazy"
-      class="block w-full h-auto"
-    />
+    {isImage ? (
+      <Image
+        src={src}
+        alt={alt}
+        loading="lazy"
+        class="block w-full h-auto"
+      />
+    ) : (
+      <img
+        src={src}
+        alt={alt}
+        loading="lazy"
+        class="block w-full h-auto"
+      />
+    )}
   </div>
   {caption && (
     <figcaption class="mt-3 text-center text-sm italic text-gray-600 dark:text-gray-400 leading-relaxed px-4">

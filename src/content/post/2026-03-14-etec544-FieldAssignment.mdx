@@ -5,6 +5,28 @@ publishDate: "2026-03-14"
 tags: ["etec544"]
 ---
 
+import { Image } from "astro:assets";
+
+import ddrainsim1 from "@/assets/images/blog/ddrainsim1.jpg";
+import ddrainsim2 from "@/assets/images/blog/ddrainsim2.jpg";
+import ddrainsim3 from "@/assets/images/blog/ddrainsim3.jpg";
+import ddrainsim4 from "@/assets/images/blog/ddrainsim4.jpg";
+import ddrainsim5 from "@/assets/images/blog/ddrainsim5.jpg";
+import ddrainsim6 from "@/assets/images/blog/ddrainsim6.jpg";
+import ddrainsim7 from "@/assets/images/blog/ddrainsim7.jpg";
+import ddrainsim8 from "@/assets/images/blog/ddrainsim8.jpg";
+import drainsim1 from "@/assets/images/blog/drainsim1.jpg";
+import drainsim2 from "@/assets/images/blog/drainsim2.jpg";
+import drainsim3 from "@/assets/images/blog/drainsim3.jpg";
+import drainsim4 from "@/assets/images/blog/drainsim4.jpg";
+import drainsim5 from "@/assets/images/blog/drainsim5.jpg";
+import drainsim6 from "@/assets/images/blog/drainsim6.jpg";
+import drainsim7 from "@/assets/images/blog/drainsim7.jpg";
+import drainsim8 from "@/assets/images/blog/drainsim8.jpg";
+import drainsimmenu2 from "@/assets/images/blog/drainsimmenu2.jpg";
+import princerupertdrain from "@/assets/images/blog/princerupertdrain.jpg";
+import twitchstreamer from "@/assets/images/blog/twitchstreamer.jpg";
+
 import EmblaCarousel from "../../components/ui/EmblaCarousel.jsx";
 import Prose from "../../components/blocks/Prose.astro";
 import Callout from "../../components/blocks/Callout.astro";
@@ -49,11 +71,10 @@ import Figure from "../../components/blocks/Figure.astro";
 
 <div class="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-6 my-8 items-start">
   <div>
-    <img
-      src="/assets/images/blog/princerupertdrain.jpg"
+    <Image 
+      src={princerupertdrain}
       alt="Prince Rupert context image"
-      style="width: 100%; display: block; border-radius: 0.5rem;"
-    />
+      style="width: 100%; display: block; border-radius: 0.5rem;" />
     <div style="margin-top: -1rem;">
       <a href="https://www.facebook.com" target="_blank" rel="noreferrer noopener" style="font-size: 0.8rem; color: #9ca3af; font-style: italic; text-decoration: none; line-height: 1.5; display: block;">
         Living in Prince Rupert, a game about drains felt oddly close to home. Source: Facebook.com ↗
@@ -365,7 +386,7 @@ import Figure from "../../components/blocks/Figure.astro";
         >
           <a href="https://www.twitch.tv/videos/2718187653" target="_blank" rel="noreferrer noopener" style="font-size: 0.7rem; color: #7c3aed; text-decoration: none; font-weight: 500; letter-spacing: 0.01em;">Screenshots taken from Nikez ↗</a>
           <span style="position: absolute; bottom: calc(100% + 8px); right: 0; width: 220px; border-radius: 0.5rem; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.2); opacity: 0; pointer-events: none; transition: opacity 0.2s ease; z-index: 50;" class="nikez-preview">
-            <img src="/assets/images/blog/twitchstreamer.jpg" alt="Nikez on Twitch" style="width: 100%; display: block; object-fit: cover;" />
+            <Image  src={twitchstreamer} alt="Nikez on Twitch" style="width: 100%; display: block; object-fit: cover;" />
           </span>
         </span>
       </div>

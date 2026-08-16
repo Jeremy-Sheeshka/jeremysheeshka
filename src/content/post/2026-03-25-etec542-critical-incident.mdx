@@ -5,6 +5,9 @@ publishDate: "2026-03-25"
 tags: ["etec542"]
 ---
 
+import neuliep from "@/assets/images/blog/Neuliep.jpg";
+import communicationsuccess from "@/assets/images/blog/communicationsuccess.png";
+
 import Prose from "../../components/blocks/Prose.astro";
 import Callout from "../../components/blocks/Callout.astro";
 import Figure from "../../components/blocks/Figure.astro";
@@ -129,7 +132,7 @@ From Jordan's perspective, his inquiry was intended to seek clarity on communica
 
 <div class="max-w-md mx-auto my-6">
 <Figure
-src="/assets/images/blog/Neuliep.jpg"
+src={neuliep}
 alt="Diagram of Neuliep's Contextualized Model showing Perceptual Cultural Context, Environmental Context, and Socio-Relational Context layers surrounding the communication process"
 caption="Neuliep's Contextualized Model of Intercultural Communication (adapted from Neuliep, 2015)"
 />
@@ -190,7 +193,7 @@ The email format played a crucial role in the escalation. As Reeder et al. (2004
 
 <div class="max-w-md mx-auto my-6">
 <Figure
-  src="/assets/images/blog/communicationsuccess.png"
+  src={communicationsuccess}
   alt="A model of components and relations contributing to the success of online communication, showing Communicative Style, Participant Structure, and Genre as factors determining Degree of Communicative Success"
   caption="Reeder et al.'s model of communicative success. When communicative style, participant structure, and genre are misaligned, the degree of communicative success decreases."
 />

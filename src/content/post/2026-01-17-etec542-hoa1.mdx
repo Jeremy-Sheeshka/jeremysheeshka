@@ -5,6 +5,9 @@ publishDate: "2026-01-18"
 tags: ["etec542"]
 ---
 
+import hardwarestoreElbowGrease from "@/assets/images/blog/hardwarestoreElbowGrease.png";
+import onionculturegraph from "@/assets/images/blog/onionculturegraph.jpg";
+
 import Prose from "../../components/blocks/Prose.astro";
 import Callout from "../../components/blocks/Callout.astro";
 import Figure from "../../components/blocks/Figure.astro";
@@ -13,7 +16,6 @@ import Steps from "../../components/widgets/Steps.astro";
 import Step from "../../components/widgets/Step.astro";
 import Cite from "../../components/widgets/Cite.astro";
 
-import onionculturegraph from "@/assets/images/blog/onionculturegraph.jpg";
 
 <Prose>
 
@@ -35,7 +37,7 @@ import onionculturegraph from "@/assets/images/blog/onionculturegraph.jpg";
 
 <div class="max-w-sm mx-auto my-6">
 <Figure
-src="/assets/images/blog/hardwarestoreElbowGrease.png"
+src={hardwarestoreElbowGrease}
 alt="Comic strip illustrating the confusing nature of hardware store jargon"
 caption="Shopping at the Hardware store without a plan"
 />
@@ -110,7 +112,7 @@ Here is a step by step breakdown of how to purchase and pick out lumber from the
 
 <div class="max-w-xs mx-auto my-6">
 <Figure
-src="/assets/images/blog/onionculturegraph.jpg"
+src={onionculturegraph}
 alt="Diagram of the onion model of culture showing values at the core and layers of rituals, heroes, and data extending outward"
 caption="The ‘onion’ model of culture (Hofstede, 1991 and others)."
 />

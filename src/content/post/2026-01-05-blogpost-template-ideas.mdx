@@ -7,6 +7,12 @@ showToc: true
 draft: true
 ---
 
+import fogust from "@/assets/images/blog/fogust.jpg";
+import hardwarestoreElbowGrease from "@/assets/images/blog/hardwarestoreElbowGrease.png";
+import mathologyfig1 from "@/assets/images/blog/mathologyfig1.png";
+import mathologyfig2 from "@/assets/images/blog/mathologyfig2.png";
+import mathologylogo from "@/assets/images/blog/mathologylogo.png";
+
 import Prose from "../../components/blocks/Prose.astro";
 import Callout from "../../components/blocks/Callout.astro";
 import Quote from "../../components/blocks/Quote.astro";
@@ -44,7 +50,7 @@ This is a mashup of different imports and UI components - astro and react - to u
 {/* ADD AN IMAGE EVENTUALLY
 <div class="max-w-sm mx-auto my-6">
 <Figure
-src="/assets/images/blog/hardwarestoreElbowGrease.png"
+src={hardwarestoreElbowGrease}
 alt="Comic strip illustrating the confusing nature of hardware store jargon"
 caption="Shopping at the Hardware store without a plan"
 />
@@ -130,7 +136,7 @@ Blocks reduce repetition. You stop reinventing HTML+CSS every time you want the 
 ## 5) Figures (blocks)
 
 <Figure
-  src="/assets/images/blog/mathologylogo.png"
+  src={mathologylogo}
   alt="Mathology logo"
   caption="Example Figure: a single image + caption, styled consistently."
 />
@@ -398,7 +404,7 @@ This study's goal was "to describe 'the meaning, structure, and essence of the l
 
 ## 16) Image & References
 
-<Figure src="/assets/images/blog/fogust.jpg" alt="Fogust on the Skeena River" caption="A foggy day on the Skeena River" />
+<Figure src={fogust} alt="Fogust on the Skeena River" caption="A foggy day on the Skeena River" />
 
 
    {/* Reference 3 */}

@@ -5,6 +5,12 @@ publishDate: "2026-07-09"
 tags: ["etec531"]
 ---
 
+import { Image } from "astro:assets";
+
+import cottontailSheet from "@/assets/images/blog/cottontail-sheet.png";
+import cottontaillogo from "@/assets/images/blog/cottontaillogo.jpg";
+import dukeAndBen from "@/assets/images/blog/duke-and-ben.jpg";
+
 import Prose from "../../components/blocks/Prose.astro";
 import Figure from "../../components/blocks/Figure.astro";
 import Cite from "../../components/widgets/Cite.astro";
@@ -39,11 +45,10 @@ Move it into a different mode: writing into image, text into gesture, linear doc
 ## The Artifact & Translation
 
 <div class="md:float-left md:w-1/4 md:mr-6 w-2/3 sm:w-1/2 mx-auto md:mx-0 flex flex-col items-center justify-center">
-  <img
-    src="/assets/images/blog/cottontaillogo.jpg"
+  <Image 
+    src={cottontaillogo}
     alt="Cotton Tail Game App Icon"
-    class="w-full h-auto rounded-xl"
-  />
+    class="w-full h-auto rounded-xl" />
   <a href="/games/cotton-tail.html" target="_blank" rel="noopener noreferrer" class="group mt-4 flex items-center justify-center gap-3 px-6 py-3 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-full font-bold text-base shadow-md hover:bg-[#D4A96A] dark:hover:bg-[#D4A96A] hover:text-gray-900 transition-colors duration-300 no-underline">
     <SparklyText class="text-inherit" numberOfSparkles={5} color="currentColor">
       Hop To It!
@@ -66,7 +71,7 @@ The idea behind translating this song into another modality began as a pun, but 
 
 <div class="md:float-left md:w-1/4 md:mr-6 md:mb-4 w-3/4 sm:w-1/2 mx-auto md:mx-0 mb-6">
   <Figure
-    src="/assets/images/blog/cottontail-sheet.png"
+    src={cottontailSheet}
     alt="Lead sheet excerpt of Duke Ellington's Cotton Tail"
   />
 </div>
@@ -77,7 +82,7 @@ The idea behind translating this song into another modality began as a pun, but 
 
 <div class="md:float-right md:w-1/4 md:ml-6 md:mb-4 w-3/4 sm:w-1/2 mx-auto md:mx-0 mb-6 mt-2">
   <Figure
-    src="/assets/images/blog/duke-and-ben.jpg"
+    src={dukeAndBen}
     alt="Duke Ellington (left) and Ben Webster (right)"
   />
   <p class="text-xs text-center text-gray-500 dark:text-gray-400 mt-2">Duke Ellington (left) and Ben Webster (right) <Cite n={6} title="Duke Ellington and Ben Webster" /></p>
