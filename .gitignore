@@ -2,6 +2,9 @@
 dist/
 .output/
 
+# runtime caches
+.data/
+
 # dependencies
 node_modules/
 
