@@ -3,7 +3,7 @@
  *
  * Each entry maps to a real posting or peer comment from the course weblog.
  * Quotes are extracted verbatim from the author's own published work and
- * comment history (see the assignment source files).
+ * comment history.
  */
 
 export type Phase = 1 | 2 | 3;
@@ -16,12 +16,6 @@ export type EntryType =
   | "mvp"
   | "comment";
 
-export type RubricTag =
-  | "Presence"
-  | "Original Voice"
-  | "Constructive Response"
-  | "Demonstrated Knowledge";
-
 export interface PortfolioEntry {
   /** Stable slug for the entry. */
   id: string;
@@ -30,8 +24,6 @@ export interface PortfolioEntry {
   title: string;
   phase: Phase;
   type: EntryType;
-  /** Rubric criteria this entry evidences. */
-  rubricTags: RubricTag[];
   /** "My Role" — what I actually did. */
   role: string;
   /** The "So What?" — why it mattered. */
@@ -42,19 +34,11 @@ export interface PortfolioEntry {
   url: string;
 }
 
-export interface RubricCriterion {
-  name: RubricTag;
-  points: number;
-  description: string;
-  /** Tailwind-free tone key used by the badge component. */
-  tone: "blue" | "rose" | "emerald" | "amber";
-}
-
 export interface PhaseMeta {
   phase: Phase;
   /** Short header label. */
   title: string;
-  /** Full label used in the legend / aria. */
+  /** Full label used in the timeline. */
   label: string;
   /** One-line description of the stage. */
   description: string;
@@ -63,41 +47,6 @@ export interface PhaseMeta {
   /** Soft tint used behind phase markers. */
   tint: string;
 }
-
-/* ------------------------------------------------------------------ */
-/* Rubric criteria (A4 rubric — 25 points total)                        */
-/* ------------------------------------------------------------------ */
-
-export const rubricCriteria: RubricCriterion[] = [
-  {
-    name: "Presence",
-    points: 7,
-    description:
-      "Establishes and maintains a consistent, valuable presence in the conversational flow.",
-    tone: "blue",
-  },
-  {
-    name: "Original Voice",
-    points: 6,
-    description:
-      "Raises discussion to new levels with creative, original interventions that carry the discourse.",
-    tone: "rose",
-  },
-  {
-    name: "Constructive Response",
-    points: 6,
-    description:
-      "Follows threads to celebrate, elaborate, and encourage the contributions of peers.",
-    tone: "emerald",
-  },
-  {
-    name: "Demonstrated Knowledge",
-    points: 6,
-    description:
-      "On-topic, well-researched, and well-reflected concerning the questions and broader objectives of the course.",
-    tone: "amber",
-  },
-];
 
 /* ------------------------------------------------------------------ */
 /* Course phases                                                       */
@@ -144,7 +93,6 @@ export const portfolioEntries: PortfolioEntry[] = [
     title: "Adrian Holovaty – Co-Founder of Soundslice",
     phase: 1,
     type: "blog-post",
-    rubricTags: ["Presence", "Original Voice", "Demonstrated Knowledge"],
     role: "Founder analyst — profiled the inventor-entrepreneur behind Soundslice (and co-creator of Django), tracing how passion, technical skill, and firsthand experience converge in a viable music-tech venture.",
     summary:
       "Held an educator-musician's mirror up against a founder who solved his own lived problem. It set the frame for my whole term: understanding where I sit on the inventor–entrepreneur–innovator spectrum, and which market-building instincts I would need to develop.",
@@ -158,7 +106,6 @@ export const portfolioEntries: PortfolioEntry[] = [
     title: "Freedrum 3.0 — The VR Barrier",
     phase: 1,
     type: "comment",
-    rubricTags: ["Original Voice", "Demonstrated Knowledge"],
     role: "Peer investor — pushed back on an affordability pitch where a required VR headset quietly undermined the whole value proposition.",
     summary:
       "Spotted that the 'accessibility' framing collapsed the moment the user needed a several-hundred-dollar VR headset before even subscribing, and that the first-to-market claim didn't survive a look at competitors already moving into the space.",
@@ -171,7 +118,6 @@ export const portfolioEntries: PortfolioEntry[] = [
     title: "Adaptive Technology & IEPs — An OER",
     phase: 2,
     type: "oer",
-    rubricTags: ["Presence", "Constructive Response", "Demonstrated Knowledge"],
     role: "Co-developer and discussion facilitator — built the OER with my team and hosted the cohort's week-long assistive-tech conversation.",
     summary:
       "Co-created an open educational resource on how adaptive learning technology intersects with IEPs, forecasting 'Integrated Adaptive Learning Ecosystems' that centre student agency, then led the cohort discussion on the venture landscape around assistive tech.",
@@ -184,7 +130,6 @@ export const portfolioEntries: PortfolioEntry[] = [
     title: "Opportunity Audit — Sight Reading Factory",
     phase: 2,
     type: "audit",
-    rubricTags: ["Demonstrated Knowledge", "Original Voice"],
     role: "Educational Venture Analyst — produced a structured EVA of Sight Reading Factory across team, concept, marketability, and plan, with an explicit score.",
     summary:
       "Applied the EVA lens to a tool I had never used, asking whether a genuinely useful educational technology also holds up as a long-term investment — separating pedagogical merit from market durability.",
@@ -197,7 +142,6 @@ export const portfolioEntries: PortfolioEntry[] = [
     title: "Microlearning — The Timbit of Microknowledge",
     phase: 2,
     type: "comment",
-    rubricTags: ["Original Voice", "Demonstrated Knowledge"],
     role: "Thread contributor — reframed the microlearning debate from 'does it work' to 'what are we actually measuring when we call it successful.'",
     summary:
       "Introduced a memorable metaphor for microlearning's limits — a 'Timbit of microknowledge' versus the 'full holistic donut of understanding' — while acknowledging its genuine value as a market entry point for learners and investors.",
@@ -211,7 +155,6 @@ export const portfolioEntries: PortfolioEntry[] = [
     title: "AI & Critical Thinking — Calibrated Doubt",
     phase: 2,
     type: "comment",
-    rubricTags: ["Constructive Response", "Demonstrated Knowledge"],
     role: "Respondent — engaged the Week 11 OER's two-axis framework and connected it to my own teaching practice.",
     summary:
       "Argued the AI conversation should shift from 'should AI belong in education' to 'is the actual thinking still landing with the learner,' and championed Calibrated Doubt as a way to reward questioning the system rather than punish error.",
@@ -225,7 +168,6 @@ export const portfolioEntries: PortfolioEntry[] = [
     title: "Venture Pitch — Introducing Curator",
     phase: 3,
     type: "pitch",
-    rubricTags: ["Presence", "Original Voice", "Demonstrated Knowledge"],
     role: "Founder — wrote and delivered a formal venture pitch for Curator, a local-first AI infrastructure play, with a $90,000 pre-seed ask.",
     summary:
       "Pitched open-source, local-first AI that runs on hardware a school or studio already owns, so sensitive student and client data never has to leave the building — a direct answer to the privacy liabilities I had flagged all term.",
@@ -239,7 +181,6 @@ export const portfolioEntries: PortfolioEntry[] = [
     title: "Cadenza Studio — The Builder's Showcase",
     phase: 3,
     type: "mvp",
-    rubricTags: ["Original Voice", "Demonstrated Knowledge"],
     role: "Solo builder — designed and shipped a working minimum viable product to stress-test Curator's thesis against reality.",
     summary:
       "Moved from theorizing to building: a self-hosted, local-first application that handles scheduling, invoicing, family messaging, practice tracking, and student records, with AI that listens to lessons and does the paperwork. The tangible leap from commenting to shipping.",
@@ -253,7 +194,6 @@ export const portfolioEntries: PortfolioEntry[] = [
     title: "CISP Esports Academy — Marketability & Hardware",
     phase: 3,
     type: "comment",
-    rubricTags: ["Presence", "Constructive Response", "Demonstrated Knowledge"],
     role: "Peer investor — leveraged a former pro-gamer background to give the esports pitch a credibility-checked EVA read.",
     summary:
       "Validated the pitch's intrinsic-motivation insight, then pressure-tested its two biggest risks: local marketability in Phnom Penh, and the hidden recurring costs of games and hardware required to keep the experience meaningful year after year.",

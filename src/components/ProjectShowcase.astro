@@ -1,7 +1,6 @@
 ---
 import type { PortfolioEntry } from "@/data/portfolioData";
 import { getPhaseMeta } from "@/data/portfolioData";
-import RubricBadge from "./RubricBadge.astro";
 
 interface Props {
   entry: PortfolioEntry;
@@ -75,10 +74,6 @@ const features = [
           </li>
         ))}
       </ul>
-
-      <div class="mt-6 flex flex-wrap gap-2" aria-label="Rubric criteria evidenced">
-        {entry.rubricTags.map((tag) => <RubricBadge tag={tag} />)}
-      </div>
 
       <div class="mt-7 flex flex-wrap gap-3">
         <a
