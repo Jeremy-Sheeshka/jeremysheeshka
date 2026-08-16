@@ -1,58 +1,44 @@
 ---
-import { phases, getEntriesByPhase } from "@/data/portfolioData";
+import { phases, getPostingsByPhase } from "@/data/portfolioData";
 import TimelineEntry from "./TimelineEntry.astro";
-import ProjectShowcase from "./ProjectShowcase.astro";
 
 const phaseData = phases.map((phase) => ({
   ...phase,
-  entries: getEntriesByPhase(phase.phase),
+  entries: getPostingsByPhase(phase.phase),
 }));
 ---
 
-<h2 class="text-xl font-bold text-stone-900 dark:text-zinc-50">List of Postings</h2>
+<h2 class="text-xl font-bold text-stone-900 dark:text-zinc-50">List of Postings &amp; Reviews</h2>
 <p class="mt-2 max-w-2xl text-stone-600 dark:text-zinc-400">
-  A colour-coded spine across the three stages of the course. The Cadenza Studio MVP breaks the rhythm as a Builder's Showcase.
+  Ten contributions across every stage of the course — weekly discussion posts and peer reviews.
 </p>
 
-<div class="mt-8 space-y-14">
+<div class="mt-8 space-y-12">
   {
     phaseData.map((phase) => (
       <section>
-        <header class="flex flex-wrap items-center gap-4">
+        <header class="flex flex-wrap items-center gap-3">
           <span
-            class="flex h-10 w-10 items-center justify-center rounded-full text-lg font-black text-white"
+            class="flex h-9 w-9 items-center justify-center rounded-full text-base font-black text-white"
             style={`background-color: ${phase.color};`}
             aria-hidden="true"
           >
             {phase.phase}
           </span>
           <div>
-            <h3 class="text-lg font-bold text-stone-900 dark:text-zinc-50">{phase.label}</h3>
+            <h3 class="text-base font-bold text-stone-900 dark:text-zinc-50">{phase.label}</h3>
             <p class="text-sm text-stone-500 dark:text-zinc-400">{phase.description}</p>
           </div>
         </header>
 
-        <div class="relative">
+        <div class="relative mt-6">
           <span
-            class="absolute bottom-4 left-[7px] top-4 w-0.5 rounded-full"
+            class="absolute bottom-3 left-[7px] top-3 w-0.5 rounded-full"
             style={`background-color: ${phase.color};`}
             aria-hidden="true"
           ></span>
-          <ol class="mt-8 space-y-10">
-            {
-              phase.entries.map((entry) => (
-                <li class="relative pl-8 sm:pl-10">
-                  <span
-                    class="absolute left-0 top-7 flex h-4 w-4 items-center justify-center rounded-full border-2 bg-white dark:bg-zinc-900"
-                    style={`border-color: ${phase.color};`}
-                    aria-hidden="true"
-                  >
-                    <span class="h-1.5 w-1.5 rounded-full" style={`background-color: ${phase.color};`}></span>
-                  </span>
-                  {entry.type === "mvp" ? <ProjectShowcase entry={entry} /> : <TimelineEntry entry={entry} />}
-                </li>
-              ))
-            }
+          <ol class="space-y-6">
+            {phase.entries.map((entry) => <TimelineEntry entry={entry} />)}
           </ol>
         </div>
       </section>

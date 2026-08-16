@@ -1,0 +1,55 @@
+---
+import { works } from "@/data/portfolioData";
+
+const dateFmt = (iso: string) =>
+  new Date(iso).toLocaleDateString("en-CA", { month: "short", day: "numeric", year: "numeric" });
+---
+
+<h2 class="text-xl font-bold text-stone-900 dark:text-zinc-50">In Addition — Major Works</h2>
+<p class="mt-2 max-w-2xl text-stone-600 dark:text-zinc-400">
+  The assignments and a working prototype produced alongside the discussion above.
+</p>
+
+<ol class="mt-6 grid gap-4 sm:grid-cols-2">
+  {
+    works.map((work) => (
+      <li class="group relative flex flex-col rounded-2xl border p-5 shadow-sm transition-shadow hover:shadow-md dark:border-zinc-800"
+        class:list={[
+          work.featured
+            ? "border-[var(--theme-cinnabar)]/60 bg-white/90 dark:border-zinc-700 dark:bg-zinc-900/80"
+            : "border-stone-200 bg-white/80 dark:bg-zinc-900/60",
+        ]}
+      >
+        <div class="flex items-center justify-between gap-2">
+          <time datetime={work.date} class="text-xs tabular-nums text-stone-400 dark:text-zinc-500">
+            {dateFmt(work.date)}
+          </time>
+          {
+            work.featured && (
+              <span class="rounded-full bg-[var(--theme-cinnabar)] px-2.5 py-0.5 text-[0.65rem] font-bold uppercase tracking-wider text-white">
+                Builder's Showcase
+              </span>
+            )
+          }
+        </div>
+        <h3 class="mt-2 text-base font-bold leading-snug text-stone-900 dark:text-zinc-50">
+          {work.title}
+        </h3>
+        <p class="mt-1.5 flex-1 text-sm leading-relaxed text-stone-600 dark:text-zinc-400">
+          {work.description}
+        </p>
+        <a
+          href={work.url}
+          class="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-stone-800 underline decoration-stone-300 underline-offset-4 transition-colors hover:decoration-[var(--color-link)] dark:text-zinc-100 dark:decoration-zinc-600"
+          {...(work.url.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+        >
+          {work.featured ? "Read the pitch" : "View the work"}
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="5" y1="12" x2="19" y2="12" />
+            <polyline points="12 5 19 12 12 19" />
+          </svg>
+        </a>
+      </li>
+    ))
+  }
+</ol>
