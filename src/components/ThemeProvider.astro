@@ -26,7 +26,20 @@
         return "light";
     }
 
-    function setTheme(newTheme) {
+    function applyTheme(newTheme) {
+        const root = document.documentElement;
+
+        // 1. Set the Data Attribute (keeps CSS variables / theme selectors working)
+        root.setAttribute("data-theme", newTheme);
+
+        // 2. TOGGLE CLASSES (fixes Tailwind dark: modifiers + raw brutalist mode)
+        root.classList.toggle("dark", newTheme === "dark");
+        root.classList.toggle("raw", newTheme === "raw");
+
+        writeStore(THEME_KEY, newTheme);
+    }
+
+    function setTheme(newTheme, animate) {
         if (!THEMES.includes(newTheme)) {
             return console.warn(
                 `Invalid theme value '${newTheme}' received. Expected 'light', 'dark' or 'raw'.`,
@@ -40,17 +53,22 @@
             return;
         }
 
-        // 1. Set the Data Attribute (keeps CSS variables / theme selectors working)
-        root.setAttribute("data-theme", newTheme);
+        // Crossfade the whole page on user toggles (View Transitions API).
+        // Falls back to an instant swap in browsers that don't support it,
+        // and skips the animation for users who prefer reduced motion.
+        const canAnimate =
+            animate &&
+            typeof document.startViewTransition === "function" &&
+            !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-        // 2. TOGGLE CLASSES (fixes Tailwind dark: modifiers + raw brutalist mode)
-        root.classList.toggle("dark", newTheme === "dark");
-        root.classList.toggle("raw", newTheme === "raw");
-
-        writeStore(THEME_KEY, newTheme);
+        if (canAnimate) {
+            document.startViewTransition(() => applyTheme(newTheme));
+        } else {
+            applyTheme(newTheme);
+        }
     }
 
-    // initial setup
+    // initial setup (instant, to avoid a flash on load)
     setTheme(getUserPref());
 
     // View Transitions hook to restore theme
@@ -58,7 +76,7 @@
 
     // listen for theme-change custom event, fired in src/components/ThemeToggle.astro
     document.addEventListener("theme-change", (e) => {
-        setTheme(e.detail.theme);
+        setTheme(e.detail.theme, true);
     });
 
     // Only follow the OS preference when the visitor hasn't made an explicit choice.

@@ -1,7 +1,6 @@
 ---
-// ThemeToggle.astro — the Cadenza bulb as one SVG with three smoothly-crossfading states:
-// light (lit) → dark (ember) → raw/brutalist (broken, smoke) → light.
-// Two illustrations merged: cadenza-lightbulb-v2.svg + cadenza-broken-lightbulb-v2.svg.
+// ThemeToggle.astro — a smaller hanging Cadenza bulb with a visible string.
+// Three smoothly-crossfading states: light (lit) → dark (ember) → raw (broken) → light.
 ---
 
 <theme-toggle>
@@ -13,8 +12,8 @@
 	>
 		<svg
 			width="500"
-			height="760"
-			viewBox="0 0 500 760"
+			height="900"
+			viewBox="0 0 500 900"
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"
 			aria-hidden="true"
@@ -43,60 +42,62 @@
 				</linearGradient>
 			</defs>
 
-			{/* Everything that hangs and swings, pivoting from the top of the string */}
+			{/* Everything swings from the top of the string */}
 			<g class="bulb-assembly">
-				<path class="cord" d="M250 0V145" fill="none" stroke="var(--line)" stroke-width="11" stroke-linecap="round" />
+				<path class="cord" d="M250 0V320" fill="none" stroke="var(--line)" stroke-width="11" stroke-linecap="round" />
 
-				<circle class="glow" cx="250" cy="410" r="190" fill="url(#tt-ambient)" />
+				<g transform="translate(0, 175)">
+					<circle class="glow" cx="250" cy="410" r="190" fill="url(#tt-ambient)" />
 
-				<path class="socket" d="M157 158Q250 128 343 158L337 250Q250 271 163 250Z" fill="var(--socket)" stroke="var(--line)" stroke-width="8" />
-				<path class="socket-rim" d="M146 241Q250 216 354 241L365 267Q250 297 135 267Z" fill="var(--socket)" stroke="var(--line)" stroke-width="8" />
-				<g class="socket-grooves" fill="none" stroke="var(--line)" stroke-width="9" stroke-linecap="round">
-					<path d="M185 183Q250 164 315 183" />
-					<path d="M183 206Q250 187 317 206" />
-					<path d="M181 229Q250 210 319 229" />
-				</g>
-
-				<g class="rays" fill="none" stroke="#f5cf38" stroke-width="8" stroke-linecap="round">
-					<path d="M60 320L118 342" />
-					<path d="M40 410L104 410" />
-					<path d="M60 500L118 478" />
-					<path d="M440 320L382 342" />
-					<path d="M460 410L396 410" />
-					<path d="M440 500L382 478" />
-				</g>
-
-				<path class="bulb-glass" d="M170 267C167 317 130 348 107 402C73 484 108 582 185 622C225 643 275 643 315 622C392 582 427 484 393 402C370 348 333 317 330 267Z" fill="url(#tt-glass)" stroke="var(--glass-line)" stroke-width="9" stroke-linejoin="round" />
-				<path class="glass-tint" d="M170 267C167 317 130 348 107 402C73 484 108 582 185 622C225 643 275 643 315 622C392 582 427 484 393 402C370 348 333 317 330 267Z" fill="#16130f" />
-				<path class="highlight" d="M143 397C116 473 139 535 188 569C208 583 229 592 252 597C212 563 181 520 166 469C157 438 155 414 165 385Z" fill="#fff3ad" />
-
-				<g class="filament-group">
-					<g class="filament-supports" fill="none" stroke="var(--filament)" stroke-width="8" stroke-linecap="round">
-						<path d="M190 269V366" />
-						<path d="M310 269V366" />
+					<path class="socket" d="M157 158Q250 128 343 158L337 250Q250 271 163 250Z" fill="var(--socket)" stroke="var(--line)" stroke-width="8" />
+					<path class="socket-rim" d="M146 241Q250 216 354 241L365 267Q250 297 135 267Z" fill="var(--socket)" stroke="var(--line)" stroke-width="8" />
+					<g class="socket-grooves" fill="none" stroke="var(--line)" stroke-width="9" stroke-linecap="round">
+						<path d="M185 183Q250 164 315 183" />
+						<path d="M183 206Q250 187 317 206" />
+						<path d="M181 229Q250 210 319 229" />
 					</g>
-					<path class="filament" d="M190 366C180 345 158 348 157 379C156 410 177 425 194 403C207 386 207 359 224 354C239 350 239 375 250 375C261 375 261 350 276 354C293 359 293 386 306 403C323 425 344 410 343 379C342 348 320 345 310 366" fill="none" stroke="var(--filament)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" />
-				</g>
 
-				<path class="broken-glass" d="M170 267C167 317 130 348 107 402C82 463 94 529 137 576L178 548L201 574L225 548L250 577L275 548L299 574L323 547C371 509 407 456 393 402C370 348 333 317 330 267Z" fill="url(#tt-broken)" stroke="#8c9196" stroke-width="8" stroke-linejoin="round" />
+					<g class="rays" fill="none" stroke="#f5cf38" stroke-width="8" stroke-linecap="round">
+						<path d="M60 320L118 342" />
+						<path d="M40 410L104 410" />
+						<path d="M60 500L118 478" />
+						<path d="M440 320L382 342" />
+						<path d="M460 410L396 410" />
+						<path d="M440 500L382 478" />
+					</g>
 
-				<g class="cracks" fill="none" stroke="#777d83" stroke-width="6" stroke-linecap="round">
-					<path d="M178 548L198 521L192 496" />
-					<path d="M225 548L243 522L237 497" />
-					<path d="M275 548L258 522L264 497" />
-					<path d="M323 547L302 521L308 496" />
-				</g>
+					<path class="bulb-glass" d="M170 267C167 317 130 348 107 402C73 484 108 582 185 622C225 643 275 643 315 622C392 582 427 484 393 402C370 348 333 317 330 267Z" fill="url(#tt-glass)" stroke="var(--glass-line)" stroke-width="9" stroke-linejoin="round" />
+					<path class="glass-tint" d="M170 267C167 317 130 348 107 402C73 484 108 582 185 622C225 643 275 643 315 622C392 582 427 484 393 402C370 348 333 317 330 267Z" fill="#16130f" stroke="var(--glass-line)" stroke-width="9" stroke-linejoin="round" />
+					<path class="highlight" d="M143 397C116 473 139 535 188 569C208 583 229 592 252 597C212 563 181 520 166 469C157 438 155 414 165 385Z" fill="#fff3ad" />
 
-				<g class="smoke">
-					<path d="M177 570C143 591 143 625 171 644C200 663 228 647 223 622C219 601 193 601 204 583C212 570 197 565 177 570Z" fill="url(#tt-smoke)" />
-					<path d="M250 606C224 627 231 658 257 668C286 679 304 655 291 635C280 618 263 625 271 606C276 594 263 598 250 606Z" fill="url(#tt-smoke)" />
-					<path d="M316 570C291 589 300 616 325 623C351 630 368 607 354 589C342 574 329 584 337 567C343 554 328 558 316 570Z" fill="url(#tt-smoke)" />
+					<g class="filament-group">
+						<g class="filament-supports" fill="none" stroke="var(--filament)" stroke-width="8" stroke-linecap="round">
+							<path d="M190 269V366" />
+							<path d="M310 269V366" />
+						</g>
+						<path class="filament" d="M190 366C180 345 158 348 157 379C156 410 177 425 194 403C207 386 207 359 224 354C239 350 239 375 250 375C261 375 261 350 276 354C293 359 293 386 306 403C323 425 344 410 343 379C342 348 320 345 310 366" fill="none" stroke="var(--filament)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" />
+					</g>
+
+					<path class="broken-glass" d="M170 267C167 317 130 348 107 402C82 463 94 529 137 576L178 548L201 574L225 548L250 577L275 548L299 574L323 547C371 509 407 456 393 402C370 348 333 317 330 267Z" fill="url(#tt-broken)" stroke="#8c9196" stroke-width="8" stroke-linejoin="round" />
+
+					<g class="cracks" fill="none" stroke="#777d83" stroke-width="6" stroke-linecap="round">
+						<path d="M178 548L198 521L192 496" />
+						<path d="M225 548L243 522L237 497" />
+						<path d="M275 548L258 522L264 497" />
+						<path d="M323 547L302 521L308 496" />
+					</g>
+
+					<g class="smoke">
+						<path d="M177 570C143 591 143 625 171 644C200 663 228 647 223 622C219 601 193 601 204 583C212 570 197 565 177 570Z" fill="url(#tt-smoke)" />
+						<path d="M250 606C224 627 231 658 257 668C286 679 304 655 291 635C280 618 263 625 271 606C276 594 263 598 250 606Z" fill="url(#tt-smoke)" />
+						<path d="M316 570C291 589 300 616 325 623C351 630 368 607 354 589C342 574 329 584 337 567C343 554 328 558 316 570Z" fill="url(#tt-smoke)" />
+					</g>
 				</g>
 			</g>
 
 			{/* one-shot burnout flash */}
 			<g class="bulb-fx" aria-hidden="true">
-				<circle class="fx-flash" cx="250" cy="400" r="42" />
+				<circle class="fx-flash" cx="250" cy="560" r="42" />
 			</g>
 		</svg>
 	</button>
@@ -116,7 +117,7 @@
 		--socket: #3f444b;
 		--line: #c6cbd0;
 		--filament: #f5cf38;
-		--glass-line: #3f3d3a;
+		--glass-line: #9a9a9a;
 	}
 
 	:global([data-theme="raw"]) theme-toggle {
@@ -130,14 +131,14 @@
 
 	.theme-toggle-btn {
 		position: absolute;
-		top: -30px;
-		right: 1.5rem;
+		top: 0;
+		right: 1.25rem;
 		z-index: 60;
-		width: 120px;
-		height: 195px;
+		width: 80px;
+		height: 144px;
 		display: flex;
 		justify-content: center;
-		align-items: flex-end;
+		align-items: flex-start;
 		background: none;
 		border: none;
 		padding: 0;
@@ -153,7 +154,7 @@
 	}
 
 	.lightbulb {
-		width: 120px;
+		width: 80px;
 		height: auto;
 		display: block;
 		pointer-events: none;
@@ -222,7 +223,7 @@
 			transform 0.55s ease;
 	}
 
-	/* --- DARK STATE: near-black glass + warm ember filament --- */
+	/* --- DARK STATE: near-black glass + warm ember filament + visible outline --- */
 
 	:global([data-theme="dark"]) .glass-tint {
 		opacity: 1;
@@ -295,11 +296,10 @@
 
 	:global([data-anim="off"]) .bulb-assembly,
 	:global([data-anim="reform"]) .bulb-assembly {
-		animation: tt-swing 0.6s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+		animation: tt-swing 0.7s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
 	}
 
 	:global([data-anim="break"]) .bulb-assembly {
-		transform-origin: 250px 410px;
 		animation: tt-shake 0.7s ease both;
 	}
 
@@ -335,22 +335,25 @@
 
 	@keyframes tt-swing {
 		0% {
-			transform: translateY(0) rotate(0deg);
+			transform: rotate(0deg);
 		}
-		15% {
-			transform: translateY(-20px) rotate(3.5deg);
+		18% {
+			transform: rotate(5deg);
 		}
 		40% {
-			transform: translateY(0) rotate(-4deg);
+			transform: rotate(-3.8deg);
 		}
-		65% {
-			transform: translateY(0) rotate(2.2deg);
+		60% {
+			transform: rotate(2.4deg);
 		}
-		85% {
-			transform: translateY(0) rotate(-1deg);
+		78% {
+			transform: rotate(-1.2deg);
+		}
+		92% {
+			transform: rotate(0.5deg);
 		}
 		100% {
-			transform: translateY(0) rotate(0deg);
+			transform: rotate(0deg);
 		}
 	}
 
@@ -360,16 +363,16 @@
 			transform: rotate(0deg);
 		}
 		20% {
-			transform: rotate(-2.5deg);
+			transform: rotate(-2.6deg);
 		}
 		40% {
-			transform: rotate(2.2deg);
+			transform: rotate(2.3deg);
 		}
 		60% {
-			transform: rotate(-1.8deg);
+			transform: rotate(-1.9deg);
 		}
 		80% {
-			transform: rotate(1deg);
+			transform: rotate(1.1deg);
 		}
 	}
 
@@ -463,23 +466,22 @@
 	@media (max-width: 1024px) {
 		.theme-toggle-btn {
 			right: 0.5rem;
-			width: 100px;
-			height: 160px;
+			width: 66px;
+			height: 119px;
 		}
 		.lightbulb {
-			width: 100px;
+			width: 66px;
 		}
 	}
 
 	@media (max-width: 768px) {
 		.theme-toggle-btn {
 			right: 0rem;
-			top: -40px;
-			width: 72px;
-			height: 116px;
+			width: 52px;
+			height: 94px;
 		}
 		.lightbulb {
-			width: 72px;
+			width: 52px;
 		}
 	}
 
