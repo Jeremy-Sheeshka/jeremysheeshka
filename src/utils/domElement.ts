@@ -9,3 +9,8 @@ export function elementHasClass(element: HTMLElement, className: string) {
 export function rootInDarkMode() {
 	return document.documentElement.getAttribute("data-theme") === "dark";
 }
+
+export function rootTheme(): "light" | "dark" | "raw" {
+	const theme = document.documentElement.getAttribute("data-theme");
+	return theme === "dark" || theme === "raw" ? theme : "light";
+}

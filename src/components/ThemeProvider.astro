@@ -1,16 +1,35 @@
 {/* Inlined to avoid FOUC. This is a parser blocking script. */}
 <script is:inline>
-    const lightModePref = window.matchMedia("(prefers-color-scheme: light)");
+    const THEME_KEY = "theme";
+    const THEMES = ["light", "dark", "raw"];
+
+    function readStore(key) {
+        try {
+            return localStorage.getItem(key);
+        } catch {
+            return null;
+        }
+    }
+
+    function writeStore(key, value) {
+        try {
+            localStorage.setItem(key, value);
+        } catch {
+            /* private mode / storage disabled — theme still works for this session */
+        }
+    }
 
     function getUserPref() {
-        const storedTheme = typeof localStorage !== "undefined" && localStorage.getItem("theme");
-        return storedTheme || (lightModePref.matches ? "light" : "dark");
+        const storedTheme = readStore(THEME_KEY);
+        if (THEMES.includes(storedTheme)) return storedTheme;
+        // Light on by default: the bulb starts lit unless the visitor chose otherwise.
+        return "light";
     }
 
     function setTheme(newTheme) {
-        if (newTheme !== "light" && newTheme !== "dark") {
+        if (!THEMES.includes(newTheme)) {
             return console.warn(
-                `Invalid theme value '${newTheme}' received. Expected 'light' or 'dark'.`,
+                `Invalid theme value '${newTheme}' received. Expected 'light', 'dark' or 'raw'.`,
             );
         }
 
@@ -21,19 +40,14 @@
             return;
         }
 
-        // 1. Set the Data Attribute (Keep this for your CSS variables/themes)
+        // 1. Set the Data Attribute (keeps CSS variables / theme selectors working)
         root.setAttribute("data-theme", newTheme);
 
-        // 2. TOGGLE THE CLASS (This fixes the Tailwind dark: modifiers)
-        if (newTheme === "dark") {
-            root.classList.add("dark");
-        } else {
-            root.classList.remove("dark");
-        }
+        // 2. TOGGLE CLASSES (fixes Tailwind dark: modifiers + raw brutalist mode)
+        root.classList.toggle("dark", newTheme === "dark");
+        root.classList.toggle("raw", newTheme === "raw");
 
-        if (typeof localStorage !== "undefined") {
-            localStorage.setItem("theme", newTheme);
-        }
+        writeStore(THEME_KEY, newTheme);
     }
 
     // initial setup
@@ -47,6 +61,11 @@
         setTheme(e.detail.theme);
     });
 
-    // listen for prefers-color-scheme change.
-    lightModePref.addEventListener("change", (e) => setTheme(e.matches ? "light" : "dark"));
+    // Only follow the OS preference when the visitor hasn't made an explicit choice.
+    const lightModePref = window.matchMedia("(prefers-color-scheme: light)");
+    lightModePref.addEventListener("change", (e) => {
+        if (!readStore(THEME_KEY)) {
+            setTheme(e.matches ? "light" : "dark");
+        }
+    });
 </script>

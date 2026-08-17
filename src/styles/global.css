@@ -290,3 +290,65 @@ body.bg-theme-green {
 		@apply bg-background text-foreground;
 	}
 }
+
+/* --- RAW / BRUTALIST MODE (black text on white) --- */
+/* The whole page desaturates into a stark monochrome design. */
+
+[data-theme="raw"] {
+	filter: grayscale(1) contrast(1.08);
+	color-scheme: light;
+
+	/* Neutralise every accent/theme token to black. */
+	--color-link: #000000;
+	--color-accent: #000000;
+	--color-accent-2: #000000;
+	--color-quote: #000000;
+	--theme-text: #000000;
+	--header-text: #000000;
+	--theme-cream-bg: #ffffff;
+	--theme-bright-sun: #000000;
+	--theme-cinnabar: #000000;
+	--theme-royal-blue: #000000;
+	--theme-green: #000000;
+	--rb-1: #000000;
+	--rb-2: #000000;
+	--rb-3: #000000;
+	--rb-4: #000000;
+	--rb-5: #000000;
+	--rb-6: #000000;
+}
+
+[data-theme="raw"] body {
+	background-color: #ffffff !important;
+	background-image: none !important;
+	color: #000000 !important;
+	font-family:
+		ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+		"Courier New", monospace;
+}
+
+/* Ditch the paper grain for a flat, raw surface. */
+[data-theme="raw"] .bg-texture::before {
+	display: none !important;
+}
+
+/* Kill the rainbow header shimmer — brutalist is stark and static. */
+[data-theme="raw"] #name span {
+	animation: none !important;
+	color: #000000 !important;
+}
+
+[data-theme="raw"] .homemade-apple-regular {
+	font-family:
+		ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+		"Courier New", monospace !important;
+}
+
+/* Sharp corners, no shadows — the deliberate "unfinished" brutalist look. */
+[data-theme="raw"] *,
+[data-theme="raw"] *::before,
+[data-theme="raw"] *::after {
+	border-radius: 0 !important;
+	box-shadow: none !important;
+	text-shadow: none !important;
+}
