@@ -172,6 +172,7 @@ export const postings: PostingEntry[] = [
     kind: "canvas-discussion",
     quote:
       "I believe the future of learning is temporarily owned by those who are able to identify and navigate that very space of institutional and marketplace frictions.",
+    url: "https://canvas.ubc.ca/courses/188570/discussion_topics/2945999",
   },
 ];
 
