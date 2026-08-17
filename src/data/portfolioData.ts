@@ -152,14 +152,14 @@ export const postings: PostingEntry[] = [
     url: "https://blogs.ubc.ca/etec522/2026/08/12/cisp-esports-academy/#comment-6756",
   },
   {
-    id: "whmis-safety-training",
-    date: "2026-08-15",
-    title: "WHMIS Training Platform",
+    id: "convia",
+    date: "2026-08-16",
+    title: "Convia",
     phase: 3,
     kind: "venture-review",
     quote:
-      "Through an EVA lens, the concept is strong because it applies active learning to a topic that is usually just a passive slideshow.",
-    url: "https://blogs.ubc.ca/etec522/2026/08/12/app-based-whmis-training-platform/#comment-6754",
+      "The concept is strong because it shifts technology from an individual activity to a shared physical space.",
+    url: "https://blogs.ubc.ca/etec522/2026/08/09/convia-turning-the-classroom-into-a-shared-digital-experience/#comment-6770",
   },
   {
     id: "who-owns-the-future",
