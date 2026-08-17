@@ -52,8 +52,8 @@ export interface PhaseMeta {
 export const phases: PhaseMeta[] = [
   {
     phase: 1,
-    title: "Early-Stage Exploration",
-    label: "Phase 1 · Early-Stage Exploration",
+    title: "Budding an EVA",
+    label: "Phase 1 · Budding an EVA",
     description:
       "Weeks 1–4: the Canvas discussions on changemaking, investing, and choosing a ride.",
     color: "#4862e5", // royal-blue
@@ -61,8 +61,8 @@ export const phases: PhaseMeta[] = [
   },
   {
     phase: 2,
-    title: "Mid-Stage Deepening",
-    label: "Phase 2 · Mid-Stage Deepening",
+    title: "Exploring Technology Markets",
+    label: "Phase 2 · Exploring Technology Markets",
     description:
       "Weeks 5–11: OER discussions on microlearning, immersive experiences, and AI & critical thinking.",
     color: "#2f9e4f", // green
@@ -70,8 +70,8 @@ export const phases: PhaseMeta[] = [
   },
   {
     phase: 3,
-    title: "Late-Stage Ventures",
-    label: "Phase 3 · Late-Stage Ventures",
+    title: "Developing Analytical Vigor and Envisioning the Future",
+    label: "Phase 3 · Developing Analytical Vigor and Envisioning the Future",
     description:
       "Weeks 12–13: venture-pitch reviews and the closing question of who owns the future of learning.",
     color: "#e54848", // cinnabar
