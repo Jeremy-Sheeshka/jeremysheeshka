@@ -148,7 +148,7 @@ export const postings: PostingEntry[] = [
     phase: 3,
     kind: "venture-review",
     quote:
-      "Convincing external families to pay for Esports coaching instead of traditional tutoring, music lessons, or established sports like soccer/basketball might be a tough sell initially.",
+      "Building a program to capture students already scrimmaging and studying match replays of videogames is a brilliant way to validate their competitive drive intrinsically.",
     url: "https://blogs.ubc.ca/etec522/2026/08/12/cisp-esports-academy/#comment-6756",
   },
   {
@@ -158,7 +158,7 @@ export const postings: PostingEntry[] = [
     phase: 3,
     kind: "venture-review",
     quote:
-      "I admire your pitch and conceptualization of this idea and see potential. Fund with conditions is my decision.",
+      "I went as far as trying to vibe-code a PvP(vP) math game of my own to experiment and find alternative methods and solutions towards engaging more than one student with just a single smart board.",
     url: "https://blogs.ubc.ca/etec522/2026/08/09/convia-turning-the-classroom-into-a-shared-digital-experience/#comment-6770",
   },
   {
