@@ -152,14 +152,14 @@ export const postings: PostingEntry[] = [
     url: "https://blogs.ubc.ca/etec522/2026/08/12/cisp-esports-academy/#comment-6756",
   },
   {
-    id: "convia",
-    date: "2026-08-16",
-    title: "Convia",
+    id: "whmis-safety-training",
+    date: "2026-08-15",
+    title: "WHMIS Training Platform",
     phase: 3,
     kind: "venture-review",
     quote:
-      "I went as far as trying to vibe-code a PvP(vP) math game of my own to experiment and find alternative methods and solutions towards engaging more than one student with just a single smart board.",
-    url: "https://blogs.ubc.ca/etec522/2026/08/09/convia-turning-the-classroom-into-a-shared-digital-experience/#comment-6770",
+      "Having both taught Careers Education and worked on construction sites as an apprentice carpenter before, I know safety training can sometimes be a hard buy-in for learners.",
+    url: "https://blogs.ubc.ca/etec522/2026/08/12/app-based-whmis-training-platform/#comment-6754",
   },
   {
     id: "who-owns-the-future",
