@@ -92,6 +92,7 @@ export const postings: PostingEntry[] = [
     kind: "canvas-discussion",
     quote:
       "I would define myself as a changemaker who picks and chooses which tide to ride and which to swim against.",
+    url: "https://canvas.ubc.ca/courses/188570/discussion_topics/2946000",
   },
   {
     id: "how-do-you-invest",
@@ -101,6 +102,7 @@ export const postings: PostingEntry[] = [
     kind: "canvas-discussion",
     quote:
       "Where I put real effort is into deliberately building a chosen set of skills, honing a toolbox of well-worn, reliable tools.",
+    url: "https://canvas.ubc.ca/courses/188570/discussion_topics/2946004",
   },
   {
     id: "whats-your-ride",
@@ -110,6 +112,7 @@ export const postings: PostingEntry[] = [
     kind: "canvas-discussion",
     quote:
       "You do not always need to create original ideas to create original value.",
+    url: "https://canvas.ubc.ca/courses/188570/discussion_topics/2946005",
   },
   {
     id: "microlearning",
