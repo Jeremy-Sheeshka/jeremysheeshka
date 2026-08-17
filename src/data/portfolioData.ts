@@ -158,7 +158,7 @@ export const postings: PostingEntry[] = [
     phase: 3,
     kind: "venture-review",
     quote:
-      "Having both taught Careers Education and worked on construction sites as an apprentice carpenter before, I know safety training can sometimes be a hard buy-in for learners.",
+      "Through an EVA lens, the concept is strong because it applies active learning to a topic that is usually just a passive slideshow.",
     url: "https://blogs.ubc.ca/etec522/2026/08/12/app-based-whmis-training-platform/#comment-6754",
   },
   {
