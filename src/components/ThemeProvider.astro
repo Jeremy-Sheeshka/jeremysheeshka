@@ -62,10 +62,26 @@
             !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
         if (canAnimate) {
-            document.startViewTransition(() => applyTheme(newTheme));
-        } else {
-            applyTheme(newTheme);
+            // Wrap the swap in a View Transition for a smooth crossfade, but
+            // never let the animation break the toggle: if the browser skips or
+            // defers the callback (some environments do), apply the theme directly.
+            let applied = false;
+            try {
+                const transition = document.startViewTransition(() => {
+                    applyTheme(newTheme);
+                    applied = true;
+                });
+                // Swallow "Transition was skipped" rejections so they don't
+                // surface as unhandled errors.
+                transition?.finished?.catch(() => {});
+            } catch {
+                /* fall through to the safe path below */
+            }
+            if (!applied) applyTheme(newTheme);
+            return;
         }
+
+        applyTheme(newTheme);
     }
 
     // initial setup (instant, to avoid a flash on load)
