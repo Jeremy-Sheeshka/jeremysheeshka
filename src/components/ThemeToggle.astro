@@ -1,7 +1,7 @@
 ---
-// ThemeToggle.astro — Cadenza bulb silhouette with premium hand-drawn finishing.
-// Brass socket, warm yellow glass, a dense centered filament, radial glow + light rays.
-// Three states: light (lit) → dark (ember) → raw (broken) → light.
+// ThemeToggle.astro — a hand-drawn line-art incandescent bulb (light_bulb_line_art_v2 style).
+// Curved cord, coiled screw base (stacked ellipses), looping filament, sunburst rays,
+// and a warm amber interior glow. Three states: light → dark (ember) → raw (broken) → light.
 ---
 
 <theme-toggle>
@@ -12,25 +12,20 @@
 		aria-pressed="true"
 	>
 		<svg
-			width="500"
-			height="900"
-			viewBox="0 0 500 900"
+			width="690"
+			height="930"
+			viewBox="0 0 690 930"
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"
 			aria-hidden="true"
 			class="lightbulb"
 		>
 			<defs>
-				<radialGradient id="tt-ambient" cx="50%" cy="50%" r="50%">
-					<stop offset="0%" stop-color="#fff8d1" stop-opacity=".95" />
-					<stop offset="42%" stop-color="#f5cf38" stop-opacity=".5" />
-					<stop offset="100%" stop-color="#f5cf38" stop-opacity="0" />
+				<radialGradient id="tt-glow" cx="50%" cy="50%" r="50%">
+					<stop offset="0%" stop-color="#f2a93d" stop-opacity=".9" />
+					<stop offset="55%" stop-color="#eea75e" stop-opacity=".5" />
+					<stop offset="100%" stop-color="#eea75e" stop-opacity="0" />
 				</radialGradient>
-				<linearGradient id="tt-glass" x1="22%" y1="10%" x2="78%" y2="95%">
-					<stop offset="0%" stop-color="#fff1b3" />
-					<stop offset="48%" stop-color="#f5cf38" />
-					<stop offset="100%" stop-color="#e0b023" />
-				</linearGradient>
 				<linearGradient id="tt-broken" x1="20%" y1="10%" x2="80%" y2="95%">
 					<stop offset="0%" stop-color="#f8f8f8" stop-opacity=".82" />
 					<stop offset="55%" stop-color="#d9dde1" stop-opacity=".72" />
@@ -44,58 +39,58 @@
 			</defs>
 
 			<g class="bulb-assembly">
-				<path class="cord" d="M250 0V320" fill="none" stroke="var(--line)" stroke-width="11" stroke-linecap="round" />
+				<path class="cord" d="M340,0 C340,120 304,200 318,262 C326,300 340,360 340,428" fill="none" stroke="var(--line)" stroke-width="9" stroke-linecap="round" />
 
-				<g transform="translate(0, 175)">
-					<circle class="glow" cx="250" cy="410" r="205" fill="url(#tt-ambient)" />
-
-					<path class="socket" d="M157 158Q250 128 343 158L337 250Q250 271 163 250Z" fill="var(--socket)" stroke="var(--line)" stroke-width="8" stroke-linejoin="round" />
-					<path class="socket-rim" d="M146 241Q250 216 354 241L365 267Q250 297 135 267Z" fill="var(--rim)" stroke="var(--line)" stroke-width="8" stroke-linejoin="round" />
-					<g class="socket-grooves" fill="none" stroke="var(--line)" stroke-width="9" stroke-linecap="round" opacity="0.6">
-						<path d="M185 183Q250 164 315 183" />
-						<path d="M183 206Q250 187 317 206" />
-						<path d="M181 229Q250 210 319 229" />
+				<g transform="translate(0, 170)">
+					<g class="rays" fill="none" stroke="var(--line)" stroke-width="9" stroke-linecap="round">
+						<path d="M427.5 368.4L446.5 335.5" />
+						<path d="M491.6 432.5L519.3 416.5" />
+						<path d="M515 520L563 520" />
+						<path d="M491.6 607.5L519.3 623.5" />
+						<path d="M427.5 671.6L446.5 704.5" />
+						<path d="M340 695L340 727" />
+						<path d="M252.5 671.6L233.5 704.5" />
+						<path d="M188.4 607.5L160.7 623.5" />
+						<path d="M165 520L117 520" />
+						<path d="M188.4 432.5L160.7 416.5" />
+						<path d="M252.5 368.4L233.5 335.5" />
 					</g>
 
-					<g class="rays" fill="none" stroke="#f5cf38" stroke-width="8" stroke-linecap="round">
-						<path d="M60 350L120 372" />
-						<path d="M42 410L106 410" />
-						<path d="M60 470L120 448" />
-						<path d="M440 350L380 372" />
-						<path d="M458 410L394 410" />
-						<path d="M440 470L380 448" />
+					<circle class="glow" cx="340" cy="520" r="130" fill="url(#tt-glow)" />
+
+					<g class="socket" fill="none" stroke="var(--line)" stroke-width="9" stroke-linecap="round">
+						<ellipse cx="340" cy="280" rx="48" ry="22" />
+						<ellipse cx="340" cy="310" rx="52" ry="24" />
+						<ellipse cx="340" cy="340" rx="55" ry="25" />
 					</g>
 
-					<path class="bulb-glass" d="M170 267C167 317 130 348 107 402C73 484 108 582 185 622C225 643 275 643 315 622C392 582 427 484 393 402C370 348 333 317 330 267Z" fill="url(#tt-glass)" stroke="var(--glass-line)" stroke-width="9" stroke-linejoin="round" />
-					<path class="glass-tint" d="M170 267C167 317 130 348 107 402C73 484 108 582 185 622C225 643 275 643 315 622C392 582 427 484 393 402C370 348 333 317 330 267Z" fill="#16130f" stroke="var(--glass-line)" stroke-width="9" stroke-linejoin="round" />
-					<path class="highlight" d="M143 397C116 473 139 535 188 569C208 583 229 592 252 597C212 563 181 520 166 469C157 438 155 414 165 385Z" fill="#fff6d6" />
+					<path class="bulb-glass" d="M288,365 C220,377 197,420 197,488 C197,590 260,680 340,680 C420,680 483,590 483,488 C483,420 460,377 392,365" fill="none" stroke="var(--glass-line)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" />
+					<path class="glass-tint" d="M288,365 C220,377 197,420 197,488 C197,590 260,680 340,680 C420,680 483,590 483,488 C483,420 460,377 392,365" fill="#16130f" stroke="var(--glass-line)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" />
 
 					<g class="filament-group">
-						<path class="filament-stem" d="M240 280V372M260 280V372" fill="none" stroke="var(--filament)" stroke-width="8" stroke-linecap="round" />
-						<path class="filament-supports" d="M240 372L216 428M260 372L284 428" fill="none" stroke="var(--filament)" stroke-width="8" stroke-linecap="round" />
-						<path class="filament-halo" d="M216 428L284 432L216 436L284 440L216 444L284 448L216 452L284 456L216 460L284 464L216 468" fill="none" stroke="#fff3bf" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" />
-						<path class="filament" d="M216 428L284 432L216 436L284 440L216 444L284 448L216 452L284 456L216 460L284 464L216 468" fill="none" stroke="var(--filament)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" />
+						<path class="filament-halo" d="M320,368 C310,400 285,420 270,460 C332.7,415 254,415 316.7,460 C379.3,415 300.7,415 363.3,460 C426,415 347.3,415 410,460 C395,420 370,400 360,368" fill="none" stroke="#f2a93d" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+						<path class="filament" d="M320,368 C310,400 285,420 270,460 C332.7,415 254,415 316.7,460 C379.3,415 300.7,415 363.3,460 C426,415 347.3,415 410,460 C395,420 370,400 360,368" fill="none" stroke="var(--filament)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
 					</g>
 
-					<path class="broken-glass" d="M170 267C167 317 130 348 107 402C82 463 94 529 137 576L178 548L201 574L225 548L250 577L275 548L299 574L323 547C371 509 407 456 393 402C370 348 333 317 330 267Z" fill="url(#tt-broken)" stroke="#8c9196" stroke-width="8" stroke-linejoin="round" />
+					<path class="broken-glass" d="M288,365 C220,377 197,420 197,488 C197,560 222,614 256,634 L276,616 L290,642 L308,622 L328,646 L344,622 L362,644 L380,622 L396,640 L414,616 L432,632 C460,604 483,560 483,488 C483,420 460,377 392,365 Z" fill="url(#tt-broken)" stroke="#8c9196" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
 
 					<g class="cracks" fill="none" stroke="#777d83" stroke-width="6" stroke-linecap="round">
-						<path d="M178 548L198 521L192 496" />
-						<path d="M225 548L243 522L237 497" />
-						<path d="M275 548L258 522L264 497" />
-						<path d="M323 547L302 521L308 496" />
+						<path d="M262,596 L280,584 L276,568" />
+						<path d="M312,614 L328,600 L324,584" />
+						<path d="M368,614 L352,600 L356,584" />
+						<path d="M418,596 L400,584 L404,568" />
 					</g>
 
 					<g class="smoke">
-						<path d="M177 570C143 591 143 625 171 644C200 663 228 647 223 622C219 601 193 601 204 583C212 570 197 565 177 570Z" fill="url(#tt-smoke)" />
-						<path d="M250 606C224 627 231 658 257 668C286 679 304 655 291 635C280 618 263 625 271 606C276 594 263 598 250 606Z" fill="url(#tt-smoke)" />
-						<path d="M316 570C291 589 300 616 325 623C351 630 368 607 354 589C342 574 329 584 337 567C343 554 328 558 316 570Z" fill="url(#tt-smoke)" />
+						<ellipse cx="290" cy="670" rx="20" ry="13" fill="url(#tt-smoke)" />
+						<ellipse cx="340" cy="692" rx="24" ry="15" fill="url(#tt-smoke)" />
+						<ellipse cx="390" cy="668" rx="19" ry="12" fill="url(#tt-smoke)" />
 					</g>
 				</g>
 			</g>
 
 			<g class="bulb-fx" aria-hidden="true">
-				<circle class="fx-flash" cx="250" cy="623" r="40" />
+				<circle class="fx-flash" cx="340" cy="584" r="42" />
 			</g>
 		</svg>
 	</button>
@@ -105,24 +100,18 @@
 	/* --- STATE PALETTE --- */
 
 	theme-toggle {
-		--socket: #b9802f;
-		--rim: #9c6a20;
 		--line: #2e2a24;
 		--filament: #2e2a24;
 		--glass-line: #2e2a24;
 	}
 
 	:global([data-theme="dark"]) theme-toggle {
-		--socket: #3a3a3a;
-		--rim: #2e2e2e;
 		--line: #c6cbd0;
-		--filament: #f5cf38;
+		--filament: #f2a93d;
 		--glass-line: #9a9a9a;
 	}
 
 	:global([data-theme="raw"]) theme-toggle {
-		--socket: #8a8f95;
-		--rim: #7a7f85;
 		--line: #3a3a3a;
 		--filament: #f8f9fa;
 		--glass-line: #8c9196;
@@ -135,8 +124,8 @@
 		top: 0;
 		right: 1.25rem;
 		z-index: 60;
-		width: 80px;
-		height: 145px;
+		width: 90px;
+		height: 122px;
 		display: flex;
 		justify-content: center;
 		align-items: flex-start;
@@ -149,13 +138,13 @@
 	}
 
 	.theme-toggle-btn:focus-visible {
-		outline: 2px solid #f5cf38;
+		outline: 2px solid #f2a93d;
 		outline-offset: 4px;
 		border-radius: 9999px;
 	}
 
 	.lightbulb {
-		width: 80px;
+		width: 90px;
 		height: auto;
 		display: block;
 		pointer-events: none;
@@ -166,16 +155,11 @@
 
 	.cord,
 	.socket,
-	.socket-rim,
-	.socket-grooves {
-		transition:
-			stroke 0.5s ease,
-			fill 0.5s ease;
+	.rays {
+		transition: stroke 0.5s ease;
 	}
 
-	.filament,
-	.filament-stem,
-	.filament-supports {
+	.filament {
 		transition: stroke 0.5s ease;
 	}
 
@@ -195,18 +179,8 @@
 		transition: opacity 0.6s ease;
 	}
 
-	.rays {
-		opacity: 0.55;
-		transition: opacity 0.45s ease;
-	}
-
-	.highlight {
-		opacity: 0.72;
-		transition: opacity 0.45s ease;
-	}
-
 	.filament-halo {
-		opacity: 0.6;
+		opacity: 0.5;
 		transition: opacity 0.45s ease;
 	}
 
@@ -220,9 +194,9 @@
 		transition: opacity 0.4s ease;
 	}
 
-	.smoke path {
+	.smoke ellipse {
 		opacity: 0;
-		transform: translateY(20px) scale(0.8);
+		transform: translateY(18px) scale(0.75);
 		transform-box: fill-box;
 		transform-origin: 50% 100%;
 		transition:
@@ -238,7 +212,6 @@
 
 	:global([data-theme="dark"]) .glow,
 	:global([data-theme="dark"]) .rays,
-	:global([data-theme="dark"]) .highlight,
 	:global([data-theme="dark"]) .filament-halo {
 		opacity: 0;
 	}
@@ -247,7 +220,6 @@
 
 	:global([data-theme="raw"]) .glow,
 	:global([data-theme="raw"]) .rays,
-	:global([data-theme="raw"]) .highlight,
 	:global([data-theme="raw"]) .filament-halo {
 		opacity: 0;
 	}
@@ -268,7 +240,7 @@
 		opacity: 1;
 	}
 
-	:global([data-theme="raw"]) .smoke path {
+	:global([data-theme="raw"]) .smoke ellipse {
 		opacity: 1;
 		transform: translateY(0) scale(1);
 	}
@@ -286,13 +258,13 @@
 		transition-delay: 0.49s;
 	}
 
-	:global([data-theme="raw"]) .smoke path:nth-child(1) {
+	:global([data-theme="raw"]) .smoke ellipse:nth-child(1) {
 		transition-delay: 0.2s;
 	}
-	:global([data-theme="raw"]) .smoke path:nth-child(2) {
+	:global([data-theme="raw"]) .smoke ellipse:nth-child(2) {
 		transition-delay: 0.36s;
 	}
-	:global([data-theme="raw"]) .smoke path:nth-child(3) {
+	:global([data-theme="raw"]) .smoke ellipse:nth-child(3) {
 		transition-delay: 0.52s;
 	}
 
@@ -300,7 +272,7 @@
 
 	.bulb-assembly {
 		transform-box: view-box;
-		transform-origin: 250px 0px;
+		transform-origin: 340px 0px;
 	}
 
 	:global([data-anim="off"]) .bulb-assembly,
@@ -473,22 +445,22 @@
 	@media (max-width: 1024px) {
 		.theme-toggle-btn {
 			right: 0.5rem;
-			width: 66px;
-			height: 120px;
+			width: 74px;
+			height: 100px;
 		}
 		.lightbulb {
-			width: 66px;
+			width: 74px;
 		}
 	}
 
 	@media (max-width: 768px) {
 		.theme-toggle-btn {
 			right: 0rem;
-			width: 52px;
-			height: 94px;
+			width: 58px;
+			height: 78px;
 		}
 		.lightbulb {
-			width: 52px;
+			width: 58px;
 		}
 	}
 
@@ -500,19 +472,14 @@
 		.fx-flash,
 		.cord,
 		.socket,
-		.socket-rim,
-		.socket-grooves,
 		.rays,
 		.filament,
-		.filament-stem,
-		.filament-supports,
 		.filament-halo,
 		.bulb-glass,
 		.glass-tint,
-		.highlight,
 		.broken-glass,
 		.cracks path,
-		.smoke path {
+		.smoke ellipse {
 			animation: none !important;
 			transition: none !important;
 		}
