@@ -5,6 +5,17 @@
 @custom-variant dark (&:is(.dark *));
 @config "../../tailwind.config.ts";
 
+/* Self-hosted, subsetted Homemade Apple (logo). Subset to the characters of
+   "Jeremy Sheeshka"; other characters fall back to cursive/system fonts. */
+@font-face {
+	font-family: "Homemade Apple";
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+	src: url("/fonts/homemade-apple.woff2") format("woff2");
+	unicode-range: U+4a, U+53, U+61, U+65, U+68, U+6b, U+6d, U+72-73, U+79;
+}
+
 /* Base Theme Config */
 @theme {
 	--color-global-bg: oklch(98.48% 0 0);

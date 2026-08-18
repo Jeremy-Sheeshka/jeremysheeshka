@@ -29,7 +29,9 @@
 				</linearGradient>
 			</defs>
 
+			<g class="bulb-hang">
 			<g class="bulb-assembly">
+				<circle class="cord-ring" cx="340" cy="13" r="7.5" fill="none" stroke="var(--line)" stroke-width="9" />
 				<path class="cord" d="M340,0 C340,110 304,200 318,262 C326,300 340,360 340,428" fill="none" stroke="var(--line)" stroke-width="9" stroke-linecap="round" />
 
 				<g transform="translate(0, 170)">
@@ -83,6 +85,7 @@
 					</g>
 				</g>
 			</g>
+			</g>
 
 			<g class="bulb-fx" aria-hidden="true">
 				<circle class="fx-flash" cx="340" cy="584" r="42" />
@@ -128,8 +131,12 @@
 		border: none;
 		padding: 0;
 		margin: 0;
-		cursor: pointer;
+		cursor: grab;
 		pointer-events: auto;
+	}
+
+	.theme-toggle-btn:active {
+		cursor: grabbing;
 	}
 
 	.theme-toggle-btn:focus-visible {
@@ -149,6 +156,7 @@
 	/* --- STATIC ART --- */
 
 	.cord,
+	.cord-ring,
 	.socket,
 	.rays {
 		transition: stroke 0.5s ease;
@@ -268,9 +276,52 @@
 
 	/* --- SWING / MOTION --- */
 
+	.bulb-hang {
+		transform-box: view-box;
+		transform-origin: 340px 0px;
+		animation: tt-idle 9s ease-in-out infinite;
+	}
+
 	.bulb-assembly {
 		transform-box: view-box;
 		transform-origin: 340px 0px;
+	}
+
+	.theme-toggle-btn:hover .bulb-hang {
+		animation: tt-nudge 0.5s ease both;
+	}
+
+	.theme-toggle-btn:hover .glow {
+		opacity: 1;
+	}
+
+	:global([data-anim]) .bulb-hang {
+		animation: none;
+	}
+
+	@keyframes tt-idle {
+		0%,
+		100% {
+			transform: rotate(0deg);
+		}
+		25% {
+			transform: rotate(2.5deg);
+		}
+		75% {
+			transform: rotate(-2.5deg);
+		}
+	}
+
+	@keyframes tt-nudge {
+		0% {
+			transform: rotate(0deg);
+		}
+		50% {
+			transform: rotate(5deg);
+		}
+		100% {
+			transform: rotate(3deg);
+		}
 	}
 
 	:global([data-anim="off"]) .bulb-assembly,
@@ -464,12 +515,14 @@
 
 	/* Respect users who'd rather not see motion */
 	@media (prefers-reduced-motion: reduce) {
+		.bulb-hang,
 		.bulb-assembly,
 		.filament,
 		.filament-broken,
 		.glow,
 		.fx-flash,
 		.cord,
+		.cord-ring,
 		.socket,
 		.rays,
 		.bulb-glass,
@@ -485,6 +538,64 @@
 
 <script>
 	import { rootTheme } from "@/utils/domElement";
+
+	let audioCtx = null;
+
+	function ensureAudio() {
+		if (typeof window === "undefined") return null;
+		const Ctx = window.AudioContext || window.webkitAudioContext;
+		if (!Ctx) return null;
+		if (!audioCtx) audioCtx = new Ctx();
+		if (audioCtx.state === "suspended") audioCtx.resume();
+		return audioCtx;
+	}
+
+	function playClick() {
+		try {
+			const ctx = ensureAudio();
+			if (!ctx) return;
+			const t = ctx.currentTime;
+			const osc = ctx.createOscillator();
+			const gain = ctx.createGain();
+			osc.type = "square";
+			osc.frequency.setValueAtTime(220, t);
+			osc.frequency.exponentialRampToValueAtTime(70, t + 0.07);
+			gain.gain.setValueAtTime(0.1, t);
+			gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.09);
+			osc.connect(gain).connect(ctx.destination);
+			osc.start(t);
+			osc.stop(t + 0.1);
+		} catch {
+			/* sound is non-critical */
+		}
+	}
+
+	function playFizzle() {
+		try {
+			const ctx = ensureAudio();
+			if (!ctx) return;
+			const t = ctx.currentTime;
+			const len = Math.floor(ctx.sampleRate * 0.5);
+			const buffer = ctx.createBuffer(1, len, ctx.sampleRate);
+			const data = buffer.getChannelData(0);
+			for (let i = 0; i < len; i++) data[i] = Math.random() * 2 - 1;
+			const noise = ctx.createBufferSource();
+			noise.buffer = buffer;
+			const filter = ctx.createBiquadFilter();
+			filter.type = "highpass";
+			filter.frequency.setValueAtTime(3500, t);
+			filter.frequency.exponentialRampToValueAtTime(900, t + 0.4);
+			const gain = ctx.createGain();
+			gain.gain.setValueAtTime(0.0001, t);
+			gain.gain.exponentialRampToValueAtTime(0.09, t + 0.05);
+			gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.45);
+			noise.connect(filter).connect(gain).connect(ctx.destination);
+			noise.start(t);
+			noise.stop(t + 0.5);
+		} catch {
+			/* sound is non-critical */
+		}
+	}
 
 	class ThemeToggle extends HTMLElement {
 		connectedCallback() {
@@ -522,13 +633,24 @@
 			this._locked = true;
 			this.setAttribute("data-anim", anim);
 
+			const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+			let soundOn = true;
+			try {
+				soundOn = localStorage.getItem("theme-sound") !== "off";
+			} catch {
+				/* storage unavailable */
+			}
+			if (!reducedMotion && soundOn) {
+				if (anim === "break") playFizzle();
+				else playClick();
+			}
+
 			document.dispatchEvent(
 				new CustomEvent("theme-change", {
 					detail: { theme: to },
 				}),
 			);
 
-			const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 			const duration = reducedMotion ? 0 : anim === "break" ? 1700 : 900;
 			this._timer = window.setTimeout(() => {
 				this.removeAttribute("data-anim");

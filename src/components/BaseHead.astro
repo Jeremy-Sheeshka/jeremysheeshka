@@ -18,12 +18,13 @@ const socialImageURL = new URL(ogImage ? ogImage : "/social-card.png", Astro.url
 <meta content="width=device-width, initial-scale=1.0" name="viewport" />
 <title>{siteTitle}</title>
 
-{/* --- NEW: Google Fonts (Homemade Apple) --- */}
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+{/* Self-hosted, subsetted Homemade Apple (see @font-face in global.css) */}
 <link
-	href="https://fonts.googleapis.com/css2?family=Homemade+Apple&display=swap"
-	rel="stylesheet"
+	rel="preload"
+	href="/fonts/homemade-apple.woff2"
+	as="font"
+	type="font/woff2"
+	crossorigin
 />
 
 {/* Icons */}
