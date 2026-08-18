@@ -279,7 +279,6 @@
 	.bulb-hang {
 		transform-box: view-box;
 		transform-origin: 340px 0px;
-		animation: tt-idle 9s ease-in-out infinite;
 	}
 
 	.bulb-assembly {
@@ -293,23 +292,6 @@
 
 	.theme-toggle-btn:hover .glow {
 		opacity: 1;
-	}
-
-	:global([data-anim]) .bulb-hang {
-		animation: none;
-	}
-
-	@keyframes tt-idle {
-		0%,
-		100% {
-			transform: rotate(0deg);
-		}
-		25% {
-			transform: rotate(2.5deg);
-		}
-		75% {
-			transform: rotate(-2.5deg);
-		}
 	}
 
 	@keyframes tt-nudge {
@@ -550,48 +532,75 @@
 		return audioCtx;
 	}
 
-	function playClick() {
+	function playLightswitch() {
 		try {
 			const ctx = ensureAudio();
 			if (!ctx) return;
 			const t = ctx.currentTime;
+
+			// sharp "tick" — mechanical snap of the switch contact
+			const tick = ctx.createBufferSource();
+			const tickBuf = ctx.createBuffer(1, Math.floor(ctx.sampleRate * 0.03), ctx.sampleRate);
+			const td = tickBuf.getChannelData(0);
+			for (let i = 0; i < td.length; i++) td[i] = Math.random() * 2 - 1;
+			tick.buffer = tickBuf;
+			const hp = ctx.createBiquadFilter();
+			hp.type = "highpass";
+			hp.frequency.value = 3000;
+			const tickGain = ctx.createGain();
+			tickGain.gain.setValueAtTime(0.22, t);
+			tickGain.gain.exponentialRampToValueAtTime(0.0001, t + 0.04);
+			tick.connect(hp).connect(tickGain).connect(ctx.destination);
+			tick.start(t);
+			tick.stop(t + 0.05);
+
+			// low "clack" — the mechanism settling into place
 			const osc = ctx.createOscillator();
-			const gain = ctx.createGain();
-			osc.type = "square";
-			osc.frequency.setValueAtTime(220, t);
-			osc.frequency.exponentialRampToValueAtTime(70, t + 0.07);
-			gain.gain.setValueAtTime(0.1, t);
-			gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.09);
-			osc.connect(gain).connect(ctx.destination);
-			osc.start(t);
-			osc.stop(t + 0.1);
+			osc.type = "sine";
+			osc.frequency.setValueAtTime(180, t + 0.02);
+			osc.frequency.exponentialRampToValueAtTime(70, t + 0.1);
+			const clackGain = ctx.createGain();
+			clackGain.gain.setValueAtTime(0.0001, t + 0.02);
+			clackGain.gain.exponentialRampToValueAtTime(0.16, t + 0.03);
+			clackGain.gain.exponentialRampToValueAtTime(0.0001, t + 0.12);
+			osc.connect(clackGain).connect(ctx.destination);
+			osc.start(t + 0.02);
+			osc.stop(t + 0.14);
 		} catch {
 			/* sound is non-critical */
 		}
 	}
 
-	function playFizzle() {
+	function playFizz() {
 		try {
 			const ctx = ensureAudio();
 			if (!ctx) return;
 			const t = ctx.currentTime;
-			const len = Math.floor(ctx.sampleRate * 0.5);
+			const dur = 0.7;
+			const len = Math.floor(ctx.sampleRate * dur);
 			const buffer = ctx.createBuffer(1, len, ctx.sampleRate);
 			const data = buffer.getChannelData(0);
 			for (let i = 0; i < len; i++) data[i] = Math.random() * 2 - 1;
 			const noise = ctx.createBufferSource();
 			noise.buffer = buffer;
-			const filter = ctx.createBiquadFilter();
-			filter.type = "highpass";
-			filter.frequency.setValueAtTime(3500, t);
-			filter.frequency.exponentialRampToValueAtTime(900, t + 0.4);
+			const bp = ctx.createBiquadFilter();
+			bp.type = "bandpass";
+			bp.Q.value = 0.8;
+			bp.frequency.setValueAtTime(2600, t);
+			bp.frequency.exponentialRampToValueAtTime(1200, t + dur);
 			const gain = ctx.createGain();
 			gain.gain.setValueAtTime(0.0001, t);
-			gain.gain.exponentialRampToValueAtTime(0.09, t + 0.05);
-			gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.45);
-			noise.connect(filter).connect(gain).connect(ctx.destination);
+			gain.gain.exponentialRampToValueAtTime(0.14, t + 0.04);
+			// sputter: a few quick dips like a filament crackling out
+			gain.gain.setValueAtTime(0.14, t + 0.15);
+			gain.gain.linearRampToValueAtTime(0.05, t + 0.18);
+			gain.gain.linearRampToValueAtTime(0.13, t + 0.2);
+			gain.gain.linearRampToValueAtTime(0.06, t + 0.32);
+			gain.gain.linearRampToValueAtTime(0.12, t + 0.35);
+			gain.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+			noise.connect(bp).connect(gain).connect(ctx.destination);
 			noise.start(t);
-			noise.stop(t + 0.5);
+			noise.stop(t + dur + 0.05);
 		} catch {
 			/* sound is non-critical */
 		}
@@ -641,8 +650,8 @@
 				/* storage unavailable */
 			}
 			if (!reducedMotion && soundOn) {
-				if (anim === "break") playFizzle();
-				else playClick();
+				if (anim === "break") playFizz();
+				else playLightswitch();
 			}
 
 			document.dispatchEvent(
