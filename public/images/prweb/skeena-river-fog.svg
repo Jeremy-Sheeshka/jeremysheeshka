@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Abstracted Skeena River in morning fog">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#33485a"/>
+      <stop offset="0.55" stop-color="#4a6375"/>
+      <stop offset="1" stop-color="#6b8a94"/>
+    </linearGradient>
+    <linearGradient id="river" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#35677a"/>
+      <stop offset="0.4" stop-color="#4a94a0"/>
+      <stop offset="0.7" stop-color="#66b3a6"/>
+      <stop offset="1" stop-color="#9ad4c0"/>
+    </linearGradient>
+    <linearGradient id="riverDeep" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#2c5364"/>
+      <stop offset="0.5" stop-color="#3d7f8c"/>
+      <stop offset="1" stop-color="#55a89c"/>
+    </linearGradient>
+    <linearGradient id="mtn" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#42576a"/>
+      <stop offset="1" stop-color="#2b3d4e"/>
+    </linearGradient>
+    <linearGradient id="mtn2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#52697c"/>
+      <stop offset="1" stop-color="#3a5061"/>
+    </linearGradient>
+    <linearGradient id="fogL" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#e8f0f2" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#e8f0f2" stop-opacity="0.75"/>
+      <stop offset="1" stop-color="#e8f0f2" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="blur"><feGaussianBlur stdDeviation="18"/></filter>
+    <filter id="blurSm"><feGaussianBlur stdDeviation="6"/></filter>
+  </defs>
+
+  <rect width="1600" height="900" fill="url(#sky)"/>
+
+  <path d="M0 560 L140 400 L260 470 L400 330 L520 440 L680 300 L820 430 L980 340 L1140 450 L1280 360 L1440 440 L1600 380 L1600 900 L0 900 Z" fill="url(#mtn2)" opacity="0.5"/>
+  <path d="M0 610 L180 480 L340 560 L500 430 L660 545 L820 420 L980 540 L1140 460 L1300 555 L1460 470 L1600 540 L1600 900 L0 900 Z" fill="url(#mtn)" opacity="0.45"/>
+
+  <!-- Thick fog band -->
+  <rect x="0" y="400" width="1600" height="300" fill="url(#fogL)"/>
+
+  <path d="M0 640 C 220 600, 420 690, 660 660 C 900 630, 1120 700, 1360 665 C 1460 650, 1530 655, 1600 640 L1600 900 L0 900 Z" fill="url(#riverDeep)" opacity="0.9"/>
+  <path d="M0 680 C 240 645, 460 720, 700 695 C 950 668, 1180 730, 1420 700 C 1500 692, 1560 698, 1600 690 L1600 900 L0 900 Z" fill="url(#river)" opacity="0.95"/>
+
+  <path d="M0 720 C 260 690, 520 760, 780 730 C 1020 702, 1260 760, 1600 730" fill="none" stroke="#8fcbb9" stroke-width="26" stroke-linecap="round" opacity="0.7" filter="url(#blurSm)"/>
+  <path d="M0 770 C 300 745, 560 810, 820 785 C 1080 760, 1320 810, 1600 785" fill="none" stroke="#b8e2d2" stroke-width="12" stroke-linecap="round" opacity="0.5" filter="url(#blurSm)"/>
+  <path d="M0 820 C 340 800, 600 858, 860 838 C 1120 818, 1360 860, 1600 840" fill="none" stroke="#ddf3e9" stroke-width="6" stroke-linecap="round" opacity="0.4"/>
+
+  <!-- Fog wisps -->
+  <ellipse cx="400" cy="520" rx="420" ry="60" fill="#e8f0f2" opacity="0.5" filter="url(#blur)"/>
+  <ellipse cx="1150" cy="560" rx="500" ry="70" fill="#e8f0f2" opacity="0.45" filter="url(#blur)"/>
+
+  <rect x="0" y="0" width="1600" height="900" fill="#1a2833" opacity="0.15"/>
+</svg>
