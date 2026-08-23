@@ -36,7 +36,14 @@ Forced to ONE row on desktop via injected CSS; the gear button's `⚙` glyph is 
 The Dinosaur game (`dinosaur-mode.html`) and the vendored Danish drill under `public/games/rhythm-app/` (minified, license-unknown, Danish asset paths `ovelser/grafik/ikoner`) are integrated by reference only. Do not rewrite their internals or rename their minified identifiers. The Free-Play drill iframe is hidden, not deleted, so its load handlers never throw.
 
 ### Deployment
-Static deploy on Netlify; server logic = the two `netlify/functions/*.mjs` talking to Firebase Realtime Database (`rhythm-studio-39713`). After editing, `git push` triggers a deploy (~30s). Test the live site, not localhost, for anything touching `/api/*` (functions don't run under the plain dev server).
+Static deploy on Netlify; server logic = the three `netlify/functions/*.mjs` (`rhythms`, `rhythms_local`, `hi`) talking to Firebase Realtime Database (`rhythm-studio-39713`). After editing, `git push` triggers a deploy (~30s). Test the live site, not localhost, for anything touching `/api/*` (functions don't run under the plain dev server).
+
+### Firebase security (RTDB rules are locked - do NOT reopen them)
+The `rhythm-studio-39713-default-rtdb` rules are deny-all (see `database.rules.json`). The functions authenticate as the Firebase service account: they mint an OAuth2 access token (RS256 JWT → `oauth2.googleapis.com/token`, cached ~1h) and append `?access_token=` to every REST call. Service-account tokens bypass RTDB rules, so the app keeps working while the public internet gets "Permission denied" on the DB URL.
+
+- The credential comes from the env var `FIREBASE_SERVICE_ACCOUNT` (Netlify → Site → Environment variables) = the full JSON of the Firebase service-account key (Firebase console → Project settings → Service accounts → Generate new private key).
+- **Fallback safety**: if that env var is missing, the functions make unauthenticated calls exactly like before. So a code deploy can never break the live site - but the DB stays open until BOTH the env var is set AND the rules are locked. Safe order: (1) push this code, (2) set `FIREBASE_SERVICE_ACCOUNT` + redeploy, (3) paste `database.rules.json` into Firebase console → Realtime Database → Rules → Publish.
+- Do not commit the service-account JSON to the repo; keep it only as the Netlify env var.
 
 ---
 
