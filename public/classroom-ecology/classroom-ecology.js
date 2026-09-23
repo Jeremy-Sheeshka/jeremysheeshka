@@ -363,7 +363,12 @@ class ClassroomEcology extends HTMLElement {
     const named = new Set();
     for (const rel of list) {
       if (!rel.path) continue;
+      // The arc is always drawn: the surface really is joined to that one, and
+      // hiding the link would misreport the room.
       rel.path.classList.toggle('is-live', on);
+      // The name is not.  Two different links can carry the same words — the
+      // desk and the door both end the room at the same window — and saying it
+      // twice on one hover only reads as a stutter.
       const text = rel.label.textContent;
       if (named.has(text)) {
         rel.label.classList.remove('is-on');
@@ -811,14 +816,13 @@ const ZONES = [
  */
 const RELATIONS = [
   { a: 'lights', b: 'vent', label: "The building's environmental conditions" },
-  { a: 'vent', b: 'windows', label: "the building's own weather" },
   { a: 'speaker', b: 'birthday', label: "Two ways of keeping track of time with two different meanings" },
-  { a: 'desk', b: 'windows', label: "two windows out of this room" },
+  { a: 'desk', b: 'windows', label: "A place where the room ends" },
   { a: 'rainbow', b: 'carpet', label: "Physical objects creating social structures" },
   { a: 'halloween', b: 'ceiling', label: "the counter-environment" },
   { a: 'nametables', b: 'carpet', label: "Physical objects creating social structures" },
-  { a: 'rainbow', b: 'nametables', label: "the table you share, the table that is yours" },
-  { a: 'door', b: 'windows', label: "the two places this room ends" },
+  { a: 'door', b: 'windows', label: "A place where the room ends" },
+  { a: 'guitar', b: 'tubs', label: "A container of cultural and social meanings" },
 ];
 
 /** Shown in the subtitle slot once every zone has been listened to. */
