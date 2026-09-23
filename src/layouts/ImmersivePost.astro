@@ -1,0 +1,267 @@
+---
+/**
+ * ImmersivePost — for posts where the interactive piece IS the page.
+ *
+ * The piece is a custom element with an open shadow root holding all of its own
+ * CSS, so it is inlined rather than framed: nothing inside it can leak into the
+ * blog and nothing in the blog's Tailwind can reach in. That removes the iframe
+ * entirely — no nested scrollbars, no postMessage height dance.
+ *
+ * The order is the ordinary one for a post — title, then picture, then writing.
+ * The picture gets whatever vertical room is left below the title, which is why
+ * the section is a size container rather than a viewport-height box: the title
+ * is two lines on a wide screen and five on a phone, and nothing in CSS can
+ * predict which.
+ *
+ * The section deliberately paints no background of its own. It is transparent,
+ * so whatever theme the page is wearing (cream, sun, cinnabar, royal blue,
+ * green, dark, raw) shows around the photograph exactly as it does everywhere
+ * else. Nothing here is hard-coded to a colour.
+ *
+ * Opt in per post with `immersive: true` in the frontmatter.
+ */
+import { createHash } from "node:crypto";
+import { readFileSync } from "node:fs";
+import { type CollectionEntry, render } from "astro:content";
+import Masthead from "@/components/blog/Masthead.astro";
+import WebMentions from "@/components/blog/webmentions/index.astro";
+import BaseLayout from "./Base.astro";
+
+interface Props {
+    post: CollectionEntry<"post">;
+}
+
+const { post } = Astro.props;
+const { ogImage, title, description, updatedDate, publishDate } = post.data;
+const socialImage = ogImage ?? `/og-image/${post.id}.png`;
+const articleDate = updatedDate?.toISOString() ?? publishDate.toISOString();
+
+const { remarkPluginFrontmatter } = await render(post);
+const readingTime: string = remarkPluginFrontmatter.readingTime;
+
+/*
+ * The bundle is served straight out of public/, so Astro never fingerprints it
+ * and nothing in the filename changes when the piece is rebuilt. Hashing it here
+ * means a returning visitor picks up the new build the moment it changes instead
+ * of holding the old one until the host's cache happens to expire.
+ */
+let bundleVersion = "";
+try {
+    bundleVersion =
+        "?v=" +
+        createHash("sha1")
+            .update(readFileSync("public/classroom-ecology/classroom-ecology.js"))
+            .digest("hex")
+            .slice(0, 8);
+} catch {
+    // Not staged yet; the unversioned path still resolves.
+}
+---
+
+<BaseLayout
+    meta={{
+        articleDate,
+        description,
+        ogImage: socialImage,
+        title,
+    }}
+>
+    <article class="grow break-words overflow-hidden" data-pagefind-body>
+        <div class="me-top">
+            <div id="blog-hero" class="me-masthead">
+                <Masthead content={post} readingTime={readingTime} />
+            </div>
+
+            <section class="me-full">
+                <classroom-ecology
+                    hero
+                    image-base="/classroom-ecology/img/classroom"
+                    audio-base="/classroom-ecology/audio"
+                    lqip="/classroom-ecology/img/classroom-lqip.webp"></classroom-ecology>
+            </section>
+        </div>
+
+        <div class="w-full overflow-hidden">
+            <div class="mx-auto max-w-7xl px-6 pt-12 sm:px-8 sm:pt-16 lg:px-12">
+                <div class="prose dark:prose-invert prose-sm prose-headings:font-semibold me-post max-w-none">
+                    <slot />
+                </div>
+                <div class="mt-16">
+                    <WebMentions />
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <script is:inline src={`/classroom-ecology/classroom-ecology.js${bundleVersion}`}></script>
+</BaseLayout>
+
+<style is:global>
+    /*
+     * Astro does not stamp its scope attribute onto slotted MDX content, so
+     * every rule below that reaches the post's own prose has to be global and
+     * anchored on `.me-post`, which only this layout renders.
+     *
+     * The wrapper is a max-w-7xl box and the prose carries `max-w-none`, so the
+     * writing and the floated diagram both fill it edge to edge. That class is
+     * load-bearing rather than decorative: the typography plugin gives `.prose`
+     * its own `max-width: 65ch` default, and `max-w-none` is what suppresses
+     * it. Drop the class and the column silently collapses to ~520px while the
+     * wrapper stays 1280px wide, leaving a band of empty background down one
+     * side of the post.
+     *
+     * Because there is no column cap, the floated figure is sized as a
+     * percentage of the full width, so the diagram grows with a big screen
+     * instead of sitting at a fixed size inside a much wider page.
+     */
+
+    /*
+     * A floated figure is only a two-column layout if the prose actually wraps
+     * around it. Current typography-plugin output spaces paragraphs with
+     * margin-top/margin-bottom rather than the `margin` shorthand, and a
+     * block-level box with a non-zero *bottom* margin that follows a float only
+     * wraps when that margin is the one the browser uses to keep it clear of the
+     * float. Pinning the shorthand here makes the wrapping unconditional
+     * instead of dependent on that detail of a generated stylesheet.
+     */
+    .me-post > p {
+        margin: 1.14286em 0;
+    }
+
+    /*
+     * Which headings are allowed beside the figure, and which are not.
+     *
+     * `clear: right` is a blunt instrument: applied to every heading it forces
+     * the whole following section below the picture, because a heading cannot
+     * fit in the narrow strip beside it and so the browser drops it clear. The
+     * section that belongs next to the diagram therefore has to be allowed to
+     * wrap, and only the heading the author explicitly opts out with
+     * `.me-post-clear` is pushed to full width.
+     *
+     * `clear: left` rather than `none` on the rest: the figure floats right, so
+     * this changes nothing about today's layout while keeping every heading
+     * clear of any left-floated figure that might be added later.
+     */
+    .me-post > h2,
+    .me-post > h3,
+    .me-post > h4,
+    .me-post > hr,
+    .me-post > table,
+    .me-post > pre {
+        clear: left;
+    }
+
+    /*
+     * Opt out of wrapping: this block always takes the full column and starts
+     * below any floated figure. Use it when a section title beside the picture
+     * would wrap to an unreadable two or three words per line. Wrap the heading
+     * in `<div className="me-post-clear">` in the post to mark it.
+     */
+    .me-post > .me-post-clear,
+    .me-post > .me-post-clear > h2,
+    .me-post > .me-post-clear > h3 {
+        clear: right;
+    }
+</style>
+
+<style>
+    .me-top {
+        /* The site header, measured at 80px. Guessing high here leaves a band
+           of background showing under the picture instead of the picture
+           reaching the fold. */
+        --me-header: 5rem;
+        /* The photograph's own ratio. The stage is never cropped, so this is
+           what converts a height into the width that fits it. */
+        --me-aspect: 1.3334;
+
+        display: flex;
+        flex-direction: column;
+        /*
+         * A definite height, not a min-height. Container query units only
+         * resolve against a box whose size is definite, and a box held open by
+         * min-height is not one: with min-height here, 100cqh inside .me-full
+         * collapsed to zero and the picture vanished entirely.
+         */
+        height: calc(100svh - var(--me-header));
+    }
+
+    /*
+     * The post's title and metadata are normally three stacked rows — title,
+     * then date and reading time, then tags.  On a wide screen all three fit
+     * beside one another, and each row that stops being a row gives its height
+     * back to the picture.  Because the photograph is 4:3 and a laptop screen
+     * is 16:9, height is the binding constraint: reclaiming ~90px here is worth
+     * ~120px of width, which is the difference between the room filling the
+     * screen and merely sitting on it.
+     *
+     * It wraps back to stacked rows on anything narrow, where the picture is
+     * limited by width anyway and the space costs nothing.
+     */
+    .me-masthead {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        column-gap: clamp(0.75rem, 1.6vw, 1.75rem);
+        row-gap: 0.2rem;
+        padding: clamp(0.5rem, 1.1vw, 0.9rem) 1.5rem;
+    }
+
+    /* The tags row carries its own top margin for the stacked layout. */
+    .me-masthead :global(div) {
+        margin-top: 0;
+    }
+
+    .me-full {
+        position: relative;
+        flex: 1;
+        /* A floor, so a tall title can never squash the picture to nothing. */
+        min-height: 16rem;
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+        /*
+         * A size container. This is the whole trick: 100cqh is the height that
+         * is actually left below the title, whatever the title turned out to
+         * be, so the piece is measured against the real space rather than
+         * against an assumption about the viewport.
+         */
+        container-type: size;
+        /* No background: the page's own themed background shows through. */
+    }
+
+    /*
+     * The stage is a fixed 1448:1086 and is never cropped — cropping would cut
+     * most of the carpet, which is the piece's central argument. So instead of
+     * stretching it, take the smaller of the width on offer and the width that
+     * fills the height on offer. The photograph ends up as large as it can be
+     * while still showing the whole room.
+     */
+    .me-full :global(classroom-ecology) {
+        /* The chrome rides on the picture behind a scrim, so it reads light. */
+        --me-hero-ink: #ece7dd;
+        width: min(100cqw, calc(100cqh * var(--me-aspect)));
+    }
+
+    @media (max-width: 700px) {
+        /* On a phone the width is the binding constraint and the title runs to
+           several lines, so let the two simply stack and hug their contents
+           rather than holding open a tall empty band. */
+        .me-top {
+            height: auto;
+        }
+        .me-full {
+            flex: none;
+            min-height: 0;
+            /* Sizing the picture from this box's own height would be circular
+               once the box is allowed to be content-sized. */
+            container-type: normal;
+        }
+        .me-full :global(classroom-ecology) {
+            /* The piece moves its chrome off the picture at this size, so it
+               lands on the page's background and should follow the theme's text
+               colour rather than staying light. */
+            --me-hero-ink: var(--theme-text, #2e2e2e);
+            width: 100%;
+        }
+    }
+</style>

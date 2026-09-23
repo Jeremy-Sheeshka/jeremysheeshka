@@ -28,6 +28,8 @@ const post = defineCollection({
 			publishDate: z.coerce.date(),
 			updatedDate: z.coerce.date().optional(),
 			pinned: z.boolean().default(false),
+			// Render the piece as the page itself instead of a post with chrome.
+			immersive: z.boolean().default(false),
 		}),
 });
 

@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Classroom media ecology</title>
+<meta name="description" content="Sixteen surfaces of one classroom, ten of them with a recording, a line from media ecology and a question — and the relations that make them one environment.">
+<meta name="color-scheme" content="dark">
+<!--
+  Portable host for <classroom-ecology> — the whole piece in one folder.
+
+  The Astro blog no longer frames this: the piece's shadow root isolates its CSS,
+  so the blog inlines the element directly and sizes it to the viewport. This
+  page remains as a standalone copy you can open or drop anywhere, with paths
+  relative to itself. Keep it beside classroom-ecology.js and the img/ and
+  audio/ folders.
+
+  The height report at the bottom is for any host that does frame it.
+-->
+<style>
+  html, body { margin: 0; padding: 0; background: #0b0c0e; }
+  body {
+    /* No min-height here on purpose: the page must report its natural content
+       height, not the height of whatever box it has been put in. */
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: clamp(12px, 2.4vw, 26px) clamp(10px, 2.4vw, 22px) clamp(16px, 3vw, 30px);
+    color: #ece7dd;
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  classroom-ecology { width: 100%; min-width: 0; }
+  @media (prefers-color-scheme: light) {
+    /* The piece is an evening instrument; it does not follow the host theme. */
+    html, body { background: #0b0c0e; }
+  }
+</style>
+</head>
+<body>
+<classroom-ecology
+  image-base="img/classroom"
+  audio-base="audio"
+  lqip="img/classroom-lqip.webp"></classroom-ecology>
+<script src="classroom-ecology.js"></script>
+<script>
+  (function () {
+    var last = 0;
+    function report() {
+      var h = Math.ceil(document.documentElement.getBoundingClientRect().height);
+      if (h <= 0 || Math.abs(h - last) < 2) return;
+      last = h;
+      parent.postMessage({ type: 'ce:height', height: h }, '*');
+    }
+    if (window.ResizeObserver) new ResizeObserver(report).observe(document.body);
+    window.addEventListener('resize', report);
+    window.addEventListener('load', report);
+    report();
+  })();
+</script>
+</body>
+</html>

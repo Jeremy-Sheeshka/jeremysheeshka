@@ -1,0 +1,16 @@
+{
+  "source": "assets/classroom-source.png",
+  "sourceWidth": 1448,
+  "sourceHeight": 1086,
+  "widths": [
+    800,
+    1280,
+    1448
+  ],
+  "formats": [
+    "avif",
+    "webp",
+    "jpg"
+  ],
+  "lqip": "classroom-lqip.webp"
+}

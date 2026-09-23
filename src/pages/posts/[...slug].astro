@@ -3,6 +3,7 @@ import { render } from "astro:content";
 import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 import { getAllPosts } from "@/data/post";
 import BlogPost from "@/layouts/BlogPost.astro";
+import ImmersivePost from "@/layouts/ImmersivePost.astro";
 // Notice the capital M here
 import WebMentions from "@/components/blog/webmentions/index.astro";
 
@@ -20,11 +21,20 @@ const { post } = Astro.props;
 const { Content } = await render(post);
 ---
 
-<BlogPost post={post}>
-    <div class="prose-base dark:prose-invert max-w-none">
-        <Content />
-    </div>
-    
-    {/* Use the capital M here to match the import above */}
-    <WebMentions />
-</BlogPost>
+{
+    post.data.immersive ? (
+        /* The piece is the page; the writing lives below it. */
+        <ImmersivePost post={post}>
+            <Content />
+        </ImmersivePost>
+    ) : (
+        <BlogPost post={post}>
+            <div class="prose-base dark:prose-invert max-w-none">
+                <Content />
+            </div>
+
+            {/* Use the capital M here to match the import above */}
+            <WebMentions />
+        </BlogPost>
+    )
+}

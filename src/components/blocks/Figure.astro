@@ -7,27 +7,70 @@ interface Props {
   alt?: string;
   caption?: string;
   size?: "xs" | "sm" | "md" | "lg" | "full";
+  /**
+   * Opt in to a floating "two-column" layout: the figure sits to one side and
+   * the surrounding prose wraps around it. The figure takes a percentage of the
+   * text column, capped by a max-width, so its share stays constant as the
+   * column flexes. Below 900px the float is abandoned for a full-width stacked
+   * block, because a split column there leaves too little text to read.
+   */
+  float?: "left" | "right" | "none";
+  /**
+   * Which float share to apply on wide screens, mapping to the `me-float-*`
+   * rules below. Defaults to `lg`.
+   */
+  "float-at"?: "md" | "lg" | "xl";
   class?: string;
 }
 
-const { src, alt = "", caption, size = "full", class: className = "" } = Astro.props;
+const {
+  src,
+  alt = "",
+  caption,
+  size = "full",
+  float = "none",
+  "float-at": floatAt = "lg",
+  class: className = "",
+} = Astro.props;
+
+/*
+ * The geometry for a floated figure comes entirely from the stylesheet, so a
+ * floated figure asks for no width class of its own. `w-full` would also break
+ * it: a percentage width on a float resolves against the whole containing
+ * block, not against the space left beside it.
+ */
 const sizeClasses = {
-  xs: "max-w-xs mx-auto",
-  sm: "max-w-sm mx-auto",
-  md: "max-w-md mx-auto",
-  lg: "max-w-2xl mx-auto",
-  full: "w-full"
+  xs: "mx-auto max-w-xs",
+  sm: "mx-auto max-w-sm",
+  md: "mx-auto max-w-md",
+  lg: "mx-auto max-w-2xl",
+  full: "w-full",
 };
-const selectedSize = sizeClasses[size] || sizeClasses.full;
+const floatAtClasses = { md: "me-float-md", lg: "me-float-lg", xl: "me-float-xl" };
+const isFloated = float === "left" || float === "right";
+const selectedSize = isFloated ? "" : sizeClasses[size] || sizeClasses.full;
+const floatClasses = isFloated
+  ? `me-float me-float-${float} ${floatAtClasses[floatAt]}`
+  : "";
 const isImage = typeof src !== "string";
+
+/*
+ * The figure's rendered width is decided in CSS, so the browser cannot infer it
+ * from the layout to pick a source. Stating it here keeps Astro from shipping a
+ * full-column-width candidate at 1x to a figure that will draw at 38% of it.
+ */
+const imageSizes = isFloated
+  ? "(min-width: 901px) 38vw, 100vw"
+  : "(min-width: 768px) 52rem, 100vw";
 ---
-<figure class={`my-8 ${selectedSize} ${className}`}>
+<figure class={`my-8 ${selectedSize} ${floatClasses} ${className}`}>
   <div class="overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm">
     {isImage ? (
       <Image
         src={src}
         alt={alt}
         loading="lazy"
+        sizes={imageSizes}
         class="block w-full h-auto"
       />
     ) : (
@@ -45,3 +88,78 @@ const isImage = typeof src !== "string";
     </figcaption>
   )}
 </figure>
+
+<style>
+  /*
+   * Floated figures. Astro scopes these to this component, and the `me-float`
+   * class is only present when the caller asked for a float, so the base rule
+   * carries no layout of its own beyond the float declaration.
+   *
+   * The width is a percentage of the *column* rather than a `vw`-based clamp.
+   * A viewport-relative width is wrong here twice over: once the column is
+   * capped, a vw-based figure keeps growing after the column has stopped, so
+   * the figure steals a larger and larger share of an unchanged column; and it
+   * cannot see the column's own breakpoints, so it jumps at the wrong widths.
+   * A percentage keeps the figure's share constant, and `max-width` caps it so
+   * a wide screen gets a bigger diagram without it crowding the text.
+   */
+  .me-float {
+    margin-top: 0.5rem;
+    width: 38%;
+    max-width: 26rem;
+  }
+
+  .me-float-right {
+    float: right;
+    margin-left: clamp(1.25rem, 2.5vw, 2.25rem);
+    margin-bottom: 1.25rem;
+  }
+
+  .me-float-left {
+    float: left;
+    margin-right: clamp(1.25rem, 2.5vw, 2.25rem);
+    margin-bottom: 1.25rem;
+  }
+
+  /* The float is a single unit: the picture never gets separated from its
+     caption by a column break. */
+  .me-float figcaption {
+    break-inside: avoid;
+  }
+
+  /*
+   * Below this the column is too narrow to survive being split: a 38% figure
+   * would leave a ~30-character gutter of text, which is not a column anyone
+   * can read. The figure goes back to a full-width stacked block instead, so
+   * the picture stays large and the text keeps the whole column.
+   */
+  @media (max-width: 900px) {
+    .me-float {
+      float: none;
+      width: 100%;
+      max-width: 100%;
+      margin-inline: 0;
+    }
+  }
+
+  @media (min-width: 901px) {
+    .me-float-md {
+      width: 40%;
+      max-width: 22rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .me-float-lg {
+      width: 38%;
+      max-width: 26rem;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .me-float-xl {
+      width: 40%;
+      max-width: 30rem;
+    }
+  }
+</style>

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Empty Room Is Not Empty — A Triptych Probe of an Educational Media Ecology</title>
+<!--
+  HOW TO USE
+  1. Save the classroom photo you uploaded next to this file as:  classroom.jpg
+     (or change --room below to any URL / data-URI).
+  2. Open in a browser. The three panels are the SAME photo, cropped left/centre/right
+     via object-position; the moving "probes" are CSS light-traces layered on top.
+  3. Accessibility: with "reduce motion" turned on in the OS, all probes stop and you
+     get a clean STATIC triptych. That is intentional (see the relational/ecological note).
+  4. To upgrade to photoreal loops later: replace each <div class="panel-img"> with a
+     <video muted autoplay loop playsinline> of a locked-off clip, keep the same crop,
+     and delete (or keep) the .probe overlays. Mark in your caption which panels are
+     real footage vs. synthetic trace. Search for [SWAP] below.
+-->
+<style>
+  :root{
+    --room: url('classroom.jpg');      /* [SWAP] your photo here */
+    --ink:#1a1714; --paper:#f4efe6; --rule:#cdbfa6;
+    --accent:#7a1f2b;                  /* the maroon board's red */
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font:clamp(16px,1.05vw+12px,19px)/1.62 "Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1180px;margin:0 auto;padding:0 clamp(18px,4vw,56px)}
+  header.masthead{padding:clamp(40px,7vw,90px) 0 clamp(20px,3vw,34px);border-bottom:2px solid var(--ink)}
+  .kicker{font:600 .72rem/1 ui-sans-serif,system-ui,sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin:0 0 .9rem}
+  h1{font:700 clamp(1.9rem,4.4vw,3.3rem)/1.04 "Iowan Old Style",Palatino,Georgia,serif;margin:0 0 .5rem;letter-spacing:-.01em}
+  .sub{font:italic 400 clamp(1.05rem,1.7vw,1.35rem)/1.4 Palatino,Georgia,serif;color:#4a4036;margin:0;max-width:62ch}
+  .byline{font:600 .74rem/1.4 ui-sans-serif,system-ui,sans-serif;letter-spacing:.04em;color:#6b6052;margin:1.1rem 0 0}
+
+  /* ---------- THE TRIPTYCH (the working cinemagraph) ---------- */
+  .triptych{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(8px,1.4vw,18px);
+    margin:clamp(26px,4vw,46px) 0 clamp(10px,2vw,18px);
+  }
+  @media (max-width:760px){ .triptych{grid-template-columns:1fr} }   /* stack on mobile */
+
+  .panel{position:relative;aspect-ratio:4/5;overflow:hidden;background:#0c0a08;
+         border:1px solid var(--rule);box-shadow:0 10px 30px -18px rgba(0,0,0,.5)}
+  .panel-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+             background:var(--room) center/cover no-repeat;} /* [SWAP] -> <video> */
+  /* the three crops, from one photo, no overlap-distortion: */
+  .p1 .panel-img{object-position: 0% 50%}
+  .p2 .panel-img{object-position:50% 50%}
+  .p3 .panel-img{object-position:100% 50%}
+  .panel::after{content:"";position:absolute;inset:0;pointer-events:none;          /* altar vignette */
+    background:radial-gradient(120% 90% at 50% 42%,transparent 52%,rgba(8,6,4,.42) 100%);
+    mix-blend-mode:multiply}
+  .tag{position:absolute;left:0;top:0;z-index:6;font:700 .62rem/1 ui-sans-serif,system-ui,sans-serif;
+       letter-spacing:.16em;text-transform:uppercase;color:#fff;background:rgba(122,31,43,.92);
+       padding:.5em .7em;border-bottom-right-radius:8px}
+  .fam{position:absolute;right:.6em;top:.55em;z-index:6;font:600 .6rem/1 ui-sans-serif,system-ui,sans-serif;
+       letter-spacing:.14em;text-transform:uppercase;color:#f4efe6;opacity:.85;text-shadow:0 1px 3px #000}
+  figcaption.q{font:400 .92rem/1.45 Palatino,Georgia,serif;color:#3a322a;margin:.7rem .2rem 0;max-width:46ch}
+  figcaption.q b{color:var(--accent);font-weight:700}
+  figure.panel-fig{margin:0;display:flex;flex-direction:column}
+
+  /* ---------- THE PROBES (motion = the counter-environment) ----------
+     All traces are soft light/air, positioned as % of each panel.
+     Tunable: edit the left/top/width/height in each rule.                */
+  .probe{position:absolute;inset:0;z-index:4;pointer-events:none;overflow:hidden}
+  .probe > *{position:absolute}
+
+  /* P1 — PHYSICAL: the draft in the curtain + a drifting mote in the light */
+  .curtain{left:24%;top:0;width:11%;height:100%;
+    background:linear-gradient(90deg,transparent,rgba(255,250,235,.0) 35%,rgba(255,250,235,.16) 50%,rgba(255,250,235,0) 65%,transparent);
+    mix-blend-mode:screen;filter:blur(.4px)}
+  .mote{left:30%;top:62%;width:5px;height:5px;border-radius:50%;
+    background:radial-gradient(circle,rgba(255,248,225,.95),rgba(255,248,225,0) 70%);filter:blur(.5px)}
+
+  /* P2 — INSTITUTIONAL: the bell made visible as fluorescent pulse + monitor + string */
+  .lamp{height:7%;border-radius:2px;background:rgba(232,244,255,.0);mix-blend-mode:screen;filter:blur(1px)}
+  .lamp.a{left:30%;top:9%;width:14%}
+  .lamp.b{left:50%;top:6%;width:13%}
+  .lamp.c{left:69%;top:11%;width:12%}
+  .monitor{left:74%;top:42%;width:7%;height:5%;border-radius:2px;
+    background:radial-gradient(circle,rgba(120,200,255,.9),rgba(120,200,255,0) 72%);mix-blend-mode:screen;filter:blur(.6px)}
+  .string{left:68.5%;top:30%;width:2px;height:13%;background:rgba(255,238,200,.55);filter:blur(.3px)}
+
+  /* P3 — PRACTICAL/RELATIONAL: the code glowing underfoot + the threshold breathing + the unseen child */
+  .glyph{width:9%;height:7%;border-radius:50%;mix-blend-mode:screen;filter:blur(2px);
+    background:radial-gradient(circle,rgba(255,224,150,.0),rgba(255,224,150,0) 70%)}
+  .glyph.g1{left:46%;bottom:14%} .glyph.g2{left:58%;bottom:11%}
+  .glyph.g3{left:70%;bottom:9%}  .glyph.g4{left:82%;bottom:7%}
+  .door{right:0;top:0;width:13%;height:100%;
+    background:linear-gradient(270deg,rgba(255,247,228,.0),rgba(255,247,228,.22));mix-blend-mode:screen}
+  .child{left:64%;top:50%;width:13%;height:11%;border-radius:50%;
+    background:radial-gradient(circle,rgba(255,214,120,.0),rgba(255,214,120,0) 72%);mix-blend-mode:screen;filter:blur(3px)}
+
+  /* ---- the loops: three DIFFERENT tempos = three different timescales pressing on one room ---- */
+  @media (prefers-reduced-motion: no-preference){
+    .curtain{animation:draft 7s ease-in-out infinite alternate}
+    .mote   {animation:drift 11s linear infinite}
+    .lamp   {animation:tick 1.6s steps(1,end) infinite}      /* metronome = the clock */
+    .lamp.b {animation-delay:.0s} .lamp.a{animation-delay:.53s} .lamp.c{animation-delay:1.06s}
+    .monitor{animation:glow 3.5s ease-in-out infinite}
+    .string {animation:tremble .16s linear infinite}
+    .glyph  {animation:wave 4s linear infinite}
+    .glyph.g2{animation-delay:.5s}.glyph.g3{animation-delay:1s}.glyph.g4{animation-delay:1.5s}
+    .door   {animation:breathe 9s ease-in-out infinite alternate}
+    .child  {animation:shift 5s ease-in-out infinite alternate}
+  }
+  @keyframes draft  {from{transform:translateX(-3px) scaleX(.98);opacity:.5}to{transform:translateX(4px) scaleX(1.03);opacity:1}}
+  @keyframes drift  {0%{transform:translate(0,0);opacity:0}12%{opacity:.9}88%{opacity:.9}100%{transform:translate(26px,-40px);opacity:0}}
+  @keyframes tick   {0%,49%{opacity:.05;background:rgba(232,244,255,.05)}50%,100%{opacity:.95;background:rgba(232,244,255,.85)}}
+  @keyframes glow   {0%,100%{opacity:.25}50%{opacity:.85}}
+  @keyframes tremble{0%{transform:translateY(-1px)}50%{transform:translateY(1px)}100%{transform:translateY(-1px)}}
+  @keyframes wave   {0%,100%{opacity:0;background:radial-gradient(circle,rgba(255,224,150,0),rgba(255,224,150,0) 70%)}
+                     45%,55%{opacity:1;background:radial-gradient(circle,rgba(255,224,150,.85),rgba(255,224,150,0) 72%)}}
+  @keyframes breathe{from{opacity:.15;transform:translateX(6px)}to{opacity:.6;transform:translateX(0)}}
+  @keyframes shift  {from{opacity:.1;transform:scale(1)}to{opacity:.55;transform:scale(1.07)}}
+
+  /* ---------- THE ESSAY ---------- */
+  article{padding:clamp(34px,5vw,64px) 0 10px;columns:1}
+  article h2{font:700 clamp(1.3rem,2.3vw,1.7rem)/1.2 Palatino,Georgia,serif;margin:2.2rem 0 .6rem;
+             letter-spacing:-.01em;border-top:1px solid var(--rule);padding-top:1.2rem}
+  article h2:first-of-type{border-top:0;padding-top:0}
+  article h3{font:700 1.02rem/1.3 ui-sans-serif,system-ui,sans-serif;letter-spacing:.02em;margin:1.5rem 0 .3rem;color:var(--accent)}
+  article p{margin:0 0 1rem;max-width:74ch}
+  article p.lead{font-size:1.12em;color:#332b22}
+  article blockquote{margin:1.2rem 0;padding:.2rem 0 .2rem 1.1rem;border-left:3px solid var(--accent);
+    font:italic 1.04em/1.5 Palatino,Georgia,serif;color:#3a322a;max-width:66ch}
+  article ul.elements{margin:.4rem 0 1.1rem;padding-left:1.1rem;max-width:74ch}
+  article ul.elements li{margin:.18rem 0}
+  .fam-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:1rem 0 1.4rem}
+  @media(max-width:760px){.fam-grid{grid-template-columns:1fr}}
+  .fam-card{border:1px solid var(--rule);border-radius:10px;padding:14px 16px;background:#fbf8f1}
+  .fam-card h4{margin:0 0 .35rem;font:700 .8rem/1.2 ui-sans-serif,system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+  .fam-card p{margin:0;font-size:.92rem;line-height:1.45;max-width:none}
+  cite, .cite{font-style:normal;color:#6b6052;font-size:.86em}
+  .note{font-size:.86rem;color:#5a5044;background:#efe7d6;border:1px dashed var(--rule);border-radius:8px;padding:.8rem 1rem;max-width:74ch;margin:1.2rem 0}
+  footer.refs{border-top:2px solid var(--ink);margin-top:clamp(30px,5vw,56px);padding:1.4rem 0 4rem;font-size:.86rem;line-height:1.5;color:#4a4036}
+  footer.refs h2{font:700 .8rem/1 ui-sans-serif,system-ui,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:var(--ink);margin:0 0 .8rem;border:0;padding:0}
+  footer.refs ol{margin:0;padding-left:1.2rem} footer.refs li{margin:.3rem 0;max-width:80ch}
+  .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="masthead">
+    <p class="kicker">Media Ecology · Week 1 · A Visual Summary in Three Probes</p>
+    <h1>The Empty Room Is Not Empty</h1>
+    <p class="sub">A triptych cinemagraph of one classroom, read through Strate &amp; Lum’s ecology of technics and de Castell, Droumeva &amp; Jenson’s “building as interface.” The still frame is the environment you cannot see; the single looping trace in each panel is the probe that wakes you to it.</p>
+    <p class="byline">Form of the piece = its argument. A cinemagraph freezes everything but one motion; that asymmetry <em>is</em> McLuhan’s problem and remedy. The room is photographed empty on purpose: with no bodies in it, the roles the building “assigns to us and insists on our playing them” stand exposed as pure form (Postman 1970, 162, qtd in de Castell et&nbsp;al. 2014, 77).</p>
+  </header>
+
+  <!-- ===================== THE WORKING TRIPTYCH ===================== -->
+  <section class="triptych" aria-label="Triptych cinemagraph: three probes of one empty classroom">
+
+    <figure class="panel-fig">
+      <div class="panel p1" role="img"
+           aria-label="Left panel, the PHYSICAL container: a dusk window with power lines and a parked car beyond it, a black curtain trembling in a draft, a pale-blue bulletin board, orange tubs of manipulatives on a low shelf, a grey radiator, and water-stained ceiling tiles. A faint mote of light drifts upward.">
+        <div class="panel-img"></div>
+        <div class="probe"><span class="curtain"></span><span class="mote"></span></div>
+        <span class="tag">I · Physical</span><span class="fam">the leaking vessel</span>
+      </div>
+      <figcaption class="q"><b>The right question:</b> what does this building teach — or <em>foreclose</em> — apart from its official curriculum, and can a new pedagogy take root inside a container engineered for an obsolete, industrial-era child?</figcaption>
+    </figure>
+
+    <figure class="panel-fig">
+      <div class="panel p2" role="img"
+           aria-label="Centre panel, the INSTITUTIONAL clock: tall grey storage cabinets, a purple bin, a blue 'Science Center' cupboard, a guitar hung on the wall, the teacher's desk with a glowing monitor and an empty black chair, and a grid of fluorescent ceiling panels pulsing on a strict metronome like a bell.">
+        <div class="panel-img"></div>
+        <div class="probe"><span class="lamp a"></span><span class="lamp b"></span><span class="lamp c"></span><span class="monitor"></span><span class="string"></span></div>
+        <span class="tag">II · Institutional</span><span class="fam">the monastic clock</span>
+      </div>
+      <figcaption class="q"><b>The right question:</b> what forms of attention and docility does the schedule of bells and blocks, and the regime of pinned visibility, produce — <em>regardless</em> of what is “taught” inside them?</figcaption>
+    </figure>
+
+    <figure class="panel-fig">
+      <div class="panel p3" role="img"
+           aria-label="Right panel, the PRACTICAL and relational: a maroon board with a 'Happy Birthday' cupcake poster and loose pinned papers, a yellow student chair, low group tables, a small piano, a door breathing light at the threshold, and a blue alphabet rug whose letter-squares glow in sequence, as if under an unseen child's feet.">
+        <div class="panel-img"></div>
+        <div class="probe"><span class="glyph g1"></span><span class="glyph g2"></span><span class="glyph g3"></span><span class="glyph g4"></span><span class="child"></span><span class="door"></span></div>
+        <span class="tag">III · Practical</span><span class="fam">the co-evolving body</span>
+      </div>
+      <figcaption class="q"><b>The right question:</b> who is permitted to <em>build</em> the tools and spaces of learning, and who is only permitted to occupy them — and what leaks back (play, art, the fidgeting body) that the machine cannot fully suppress?</figcaption>
+    </figure>
+
+  </section>
+  <p class="note">Motion note (disclosure, because media ecology cares about the conditions of its own making): the traces above are <em>synthetic light-probes</em> rendered in CSS on a single still, not recorded footage. They are deliberately abstract — a sign of the invisible, the way a cinemagraph’s loop is a trace rather than a story. To make them empirical instead, lock a tripod on a real room and capture a genuine draft, a real fluorescent flicker, a nudged chair, then mask everything but that region (see the <code>[SWAP]</code> comments). Either way the logic is identical: freeze the environment, move one element, watch the water appear.</p>
+
+  <!-- ===================== THE ESSAY ===================== -->
+  <article>
+
+    <h2>1. How media ecology “asks the right questions”</h2>
+    <p class="lead">Strate and Lum’s media ecology is less a fixed theory than an <em>orientation</em>: the study of media as environments, and — reciprocally, and this is the move that matters for a classroom — of environments as media (Lum 2000, 1–2; de Castell et&nbsp;al. 2014, 77). Its founding conviction, running from Geddes through Mumford, Innis, McLuhan and Postman, is that the <strong>form</strong> of a technology or symbolic system, not merely its content, organizes cognition, social relations, and the very sense of what is real, largely below the threshold of conscious notice (Lum 2000, 2).</p>
+
+    <p>That is why the field refuses the question that dominates the rest of communication research. Against the “administrative school” with its roots in behaviourist, short-range <em>effects</em> studies (Gerbner, qtd in Lum 2000, 2–3), media ecology does not ask <em>does medium X cause effect Y?</em> It asks instead: <em>what kind of world does this medium presuppose and cultivate? What does it make visible or invisible? What does it discipline? Whose time and attention does it organize? What persists beneath the surface change?</em> The form of the inquiry is encoded in Nystrom’s generalizations, which Lum reproduces as the discipline’s compass: because media differ in <em>symbolic</em> form (the code, e.g. analogic vs. digital; prepositional vs. presentational) they carry different intellectual and emotional biases; because they differ in <em>physical</em> form (the technology that carries, stores, transmits the code) they carry different temporal, spatial and sensory biases; and from these follow political, social, metaphysical, content and finally <em>epistemological</em> biases (Nystrom, qtd in Lum 2000, 2). Bias-of-form, in other words, is the unit of analysis — never the isolated effect.</p>
+
+    <blockquote>“Media ecology is the Toronto School, and the New York School. It is technological determinism, hard and soft… It is grammar and rhetoric, semiotics and systems theory… Media ecology is all of these things, and quite a bit more.” — Lance Strate, 1999, qtd in Lum 2000, 1</blockquote>
+
+    <p>Strate’s deliberately capacious definition is not vagueness; it is a <em>methodological</em> stance. It signals that the field is constitutionally interdisciplinary and will not collapse into one dogma or one instrument. And the field’s own status is left unresolved <em>on purpose</em>. Postman’s question — is this a science, a branch of philosophy, or a form of social criticism? “Where, in short, do we place it in the catalogue?” (Postman 1988, qtd in Lum 2000, 2) — is not a weakness to be repaired but a discipline to be kept: a refusal of the administrative impulse to settle a question before it has been properly asked. Media ecology asks the right questions precisely because it will not close them prematurely. Its intellectual family shares, above all, the conviction that technics and culture <em>co-evolve</em> rather than one simply causing the other (Strate &amp; Lum 2000, 60; Kuhns 1971, qtd therein).</p>
+
+    <p>Mumford is the keystone, and he is the reason a <em>building</em> can be a medium at all. Nystrom’s 1973 dissertation names <em>Technics and Civilization</em> (1934) as the field’s founding work (Strate &amp; Lum 2000, 56), and Mumford as the first of the New York School. Three of his ideas do the heavy lifting here. His <strong>epochal historiography</strong> divides history not by dynasties but by the energy–matter complex of its technics — eotechnic (water-and-wood), paleotechnic (coal-and-iron), neotechnic (electricity-and-alloy) — each phase, in his words, “bring[ing] into existence particular types of workers, train[ing] them in particular ways, develop[ing] certain aptitudes and discourag[ing] others” (Mumford 1934, 109–110, qtd in Strate &amp; Lum 2000, 58–59). His <strong>techno-organicism</strong> insists technology and biology are continuous, not opposed: “there was nothing uniquely human in tool-making until it was modified by linguistic symbols, esthetic designs, and socially transmitted knowledge” — what makes us human is language, art and <em>play</em>, not labour (Mumford 1967, 5, qtd in Strate &amp; Lum 2000, 62–63). And his <strong>critique of the megamachine</strong> delivers the insight that reframes the entire photograph: the first machine was not made of iron but of <em>human bodies</em>, assembled by a “single mind… at the head of the organization,” disciplined by writing (whose earliest use was not ideas but temple <em>records</em> of grain and cattle — accountability) and, decisively, by time — the monastery bell and then the mechanical clock, which “is not merely a means of keeping track of the hours, but of synchronizing the actions of men” (Mumford 1967, 191–192; 1934, 13–14, qtd in Strate &amp; Lum 2000, 67–71). The empty classroom in Panel II <em>is</em> that clock, still ticking, with the workers removed.</p>
+
+    <h2>2. What an educational media ecology must involve</h2>
+    <p class="lead">If the school is itself a medium — and Postman, recalling his undergraduate days, held exactly this: “the school was just one medium through which a culture communicated some of its important ideas” (Postman, qtd in Lum 2000, 2) — then an educational media ecology cannot stop at the laptops and learning-management systems <em>inside</em> the room. Following de Castell, Droumeva and Jenson’s “Building as Interface,” it must treat the <strong>school itself</strong> as a medium with real biases. A building “structures what we can see and say and, therefore, do… it assigns roles to us and insists on our playing them; it specifies what we are permitted to do and what we are not” (Postman 1970, 162, qtd in de Castell et&nbsp;al. 2014, 77). Concretely, such an ecology has to encompass the following specific elements, which fall into three families — physical, institutional, practical — mapped onto the three panels above.</p>
+
+    <div class="fam-grid">
+      <div class="fam-card"><h4>Physical · the vessel</h4><p>Architecture and material infrastructure as an energy–matter complex: ceiling tiles and their water-stains, fluorescent light and its flicker, the radiator/HVAC, window orientation and the dusk beyond, acoustics, air quality, mold, asbestos, leaks, draft, dust — the “aversive and dysfunctional interface” that does not merely house learning but <em>forecloses</em> it (de Castell et&nbsp;al. 2014, 78–79). Plus furniture and layout: the rows, the collaborative kidney table, the manipulatives in their tubs, the labelled “Science Center,” the alphabet rug as a literal grid imposed on the floor, the door as threshold, even the guitar pinned to the wall.</p></div>
+      <div class="fam-card"><h4>Institutional · the clock</h4><p>Time and its discipline — bells, semesters, credit hours, the period block — as direct descendants of Mumford’s monastic and mechanical clock, turning pupils into interchangeable human parts of the megamachine (Strate &amp; Lum 2000, 67–71). The hidden curriculum and the regime of pinned visibility (what gets displayed is what counts); the partitioning of knowledge into “centers”; the front-facing desk that places a single “mind at the head of the organization”; and the political economy of who funds, owns and <em>builds</em> the tools of learning versus who is merely permitted to consume them.</p></div>
+      <div class="fam-card"><h4>Practical · the body</h4><p>The gap between objective and <em>felt</em> conditions — the SEE project found that measured sound did not predict experienced distraction, so environment is experiential and cultural, not only physical (de Castell et&nbsp;al. 2014, 82). The social life of hallways; sense of place or “home”; student satisfaction; play and art as the organic the machine cannot digest (Mumford’s techno-organicism); place as itself pedagogical, the Reggio “third teacher” (Gandini 1998, qtd in de Castell et&nbsp;al. 2014, 80); and sustainability in its fullest sense — financial and institutional, but also literally ecological.</p></div>
+    </div>
+
+    <p>Read together, these are not a checklist but a <em>convergent</em> method — the same interdisciplinary, multi-sensory stacking (light readings + sound readings + photography + narrative “talk-bubbles”) that let de Castell’s team see a building as an interface rather than a container (de Castell et&nbsp;al. 2014, 80–82). No single panel “is” media ecology; the ecology is the <em>relation</em> among the three, which is exactly what Strate’s capacious definition demands.</p>
+
+    <h3>The “right questions” this theory lets us ask</h3>
+    <ul class="elements">
+      <li><strong>What does a building teach apart from its official curriculum?</strong> (Panel I) The stained ceiling and the failing plant are not background; they are a lesson in neglect, a material argument about whose comfort the institution values.</li>
+      <li><strong>What forms of attention or docility does a schedule of bells and blocks produce, regardless of content?</strong> (Panel II) The metronomic light asks you to feel time-as-regulation in your body, the way the canonical hours once did.</li>
+      <li><strong>Who is permitted to build the tools of learning, and who is only permitted to use them?</strong> (Panel III) The door and the glowing rug ask who stands at the threshold of <em>production</em> versus mere <em>consumption</em>.</li>
+      <li><strong>Can new pedagogies take root inside containers engineered for an obsolete, industrial-era conception of the student — or must the container itself become an interface, something built and rebuilt rather than simply inhabited?</strong> (all three)</li>
+    </ul>
+
+    <h2>3. What education has been, is, and should become</h2>
+    <p class="lead">To ask those questions honestly is to take a position on education itself. <em>Has been:</em> schooling, in Mumford’s terms, is the paleotechnic inheritance of the megamachine — “seat-warming” that buys years of credentialing, the era of “sitting day after day in one after another small classroom with one teacher and the same group of students, year after year,” now “as obsolete as its coercive attentional economy” (de Castell et&nbsp;al. 2014, 88; cf. Mumford 1934, 14). <em>Is:</em> a contested present in which we eagerly embrace “21st-century learning” even as “prospects for a 22nd century are so rapidly receding from view” (de Castell et&nbsp;al. 2014, 75) — the dusk in Panel I, the outside going dark while the fluorescent clock keeps time indoors. <em>Should become:</em> not a better-consumed product but a <em>built</em> one.</p>
+
+    <p>De Castell’s turn from building-as-noun to building-as-verb — Fuller’s “I seem to be a verb,” Franklin’s contrast between technology’s artifactual and its social-practice sense (de Castell et&nbsp;al. 2014, 83–84) — is the ecological ethics of Mumford translated into pedagogy. A <strong>production pedagogy</strong> refuses the distribution of the sensible that consigns teachers and students to consumers of purchased capacity, the way text-based “specialized” tools once rendered teachers consumers where they had been producers (de Castell et&nbsp;al. 2014, 84–85). It insists, with Kress and the New London Group’s “critical making,” that we need not critical <em>consumers</em> but critical <em>designers</em>; that “in a process of enlightenment, there can only be participants” (Habermas 1975, 40, qtd in de Castell et&nbsp;al. 2014, 87); and that a system which produces its own future capacity is sustainable in a way a system that buys that capacity never is. That is Mumford’s hope — the passage “from power to plenitude,” megatechnics replaced by biotechnics, the machine brought back under human and organic harmony (Mumford 1970, 395, qtd in Strate &amp; Lum 2000, 76–77) — arrived at in a classroom.</p>
+
+    <p>So the empty room in these three panels is not a void. It is a blueprint with the workers removed, waiting. The probes move through it the way a counter-environment moves through a sleeper: not to depict the child, the bell, or the draft, but to make you <em>see the water</em>. The container becomes an interface only when its inhabitants look up from inhabiting it and begin, together, to rebuild it. That is the right question media ecology lets us ask — and, as de Castell’s closing line insists, the only answer that is “no education at all” if we do not live it (de Castell et&nbsp;al. 2014, 87).</p>
+
+  </article>
+
+  <footer class="refs">
+    <h2>Works cited (as gathered in the Week 1 readings)</h2>
+    <ol>
+      <li>de Castell, S., Droumeva, M., &amp; Jenson, J. (2014). Building as interface: Sustainable educational ecologies. <em>MedienPädagogik, 24</em>, 75–93. [quotes McLuhan 1964/1965/1967; Postman 1970; Nystrom 1973; Fuller 1970; Franklin 1990; Gandini 1998; Habermas 1975; Kress 2003; New London Group 1996; Egan 2008/2011]</li>
+      <li>Lum, C. M. K. (2000). Introduction: The intellectual roots of media ecology. <em>The New Jersey Journal of Communication, 8</em>(1), 1–7. [quotes Strate 1999; Nystrom, personal communication 2000 / 1973; Postman 1988; Gerbner 1983]</li>
+      <li>Strate, L., &amp; Lum, C. M. K. (2000). Lewis Mumford and the ecology of technics. <em>The New Jersey Journal of Communication, 8</em>(1), 56–78. [quotes Mumford 1934/1952/1961/1967/1970; Nystrom 1973; Kuhns 1971; Carey 1989/1997; Miller 1989]</li>
+      <li>Primary works quoted <em>within</em> the above, cited as “qtd in”: Ellul 1965; Innis 1950/1951; McLuhan 1962/1964/1967; Postman 1970/1988/1992; Mumford 1934/1961/1967/1970; Nystrom 1973; Habermas 1975; Gandini 1998; Fuller 1970; Franklin 1990; Kress 2003; New London Group 1996; Egan 2008/2011; Kuhns 1971; Carey 1989/1997.</li>
+    </ol>
+  </footer>
+
+</div>
+</body>
+</html>
