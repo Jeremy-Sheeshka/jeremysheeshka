@@ -32,5 +32,6 @@ export default new Map([
 ["src/content/post/2026-07-26-blog-improvement-suggestions.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fpost%2F2026-07-26-blog-improvement-suggestions.mdx&astroContentModuleFlag=true")],
 ["src/content/post/2026-08-09-curator-introduction.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fpost%2F2026-08-09-curator-introduction.mdx&astroContentModuleFlag=true")],
 ["src/content/post/2026-08-16-etec522-participation-portfolio.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fpost%2F2026-08-16-etec522-participation-portfolio.mdx&astroContentModuleFlag=true")],
-["src/content/post/2026-10-20-etec534-ip1.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fpost%2F2026-10-20-etec534-ip1.mdx&astroContentModuleFlag=true")]]);
+["src/content/post/2026-09-20-etec534-ip1.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fpost%2F2026-09-20-etec534-ip1.mdx&astroContentModuleFlag=true")],
+["src/content/post/2026-09-26-etec534-ip2.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fpost%2F2026-09-26-etec534-ip2.mdx&astroContentModuleFlag=true")]]);
 		
