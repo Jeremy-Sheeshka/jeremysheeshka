@@ -4,6 +4,7 @@ import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 import { getAllPosts } from "@/data/post";
 import BlogPost from "@/layouts/BlogPost.astro";
 import ImmersivePost from "@/layouts/ImmersivePost.astro";
+import PresentationPost from "@/layouts/PresentationPost.astro";
 // Notice the capital M here
 import WebMentions from "@/components/blog/webmentions/index.astro";
 
@@ -22,7 +23,10 @@ const { Content } = await render(post);
 ---
 
 {
-    post.data.immersive ? (
+    post.data.presentation ? (
+        /* The deck is the page — no cover, no link out to the real thing. */
+        <PresentationPost post={post} />
+    ) : post.data.immersive ? (
         /* The piece is the page; the writing lives below it. */
         <ImmersivePost post={post}>
             <Content />

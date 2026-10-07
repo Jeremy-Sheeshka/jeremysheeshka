@@ -1,0 +1,706 @@
+/* ==========================================================================
+   whiteout.css — ETEC 534 IP#2
+   "Painting Over the Mistake: A Look at White-Out as an Educational Technology"
+
+   The deck is made out of the thing it is about. Every slide is a sheet of
+   ruled loose-leaf, turned like a page. What is on it is typed, written by
+   hand, cut out of a photograph and stuck down, or painted over with
+   correction fluid. Nothing is drawn as an icon.
+
+   There are four "inks", and each one stands for someone:
+
+     black ink      the page as it was written
+     white          the patch — the mistake is covered, never removed
+     blue ballpoint what gets written on top of a patch once it is dry
+     red pen        the teacher's or examiner's mark, which leaves the mistake
+                    legible on purpose
+   plus grey pencil for margin notes.
+
+   The page is laid out on its own rules: they fall every 32px from y = 104 on
+   the 1280 x 720 slide, the drawings start on the first one, and handwriting
+   sits on them (see #lined-page in deck-parts.include.html).
+
+   Three typefaces. Special Elite is the typewriter, white-out's first home.
+   Courier Prime is the same machine with a fresh ribbon, for the small print.
+   Caveat is the hand; deck-script.include.html loosens it letter by letter.
+   ========================================================================== */
+
+@font-face {
+  font-family: "Caveat";
+  src: url("fonts/Caveat-var.woff2") format("woff2");
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: block;
+}
+@font-face {
+  font-family: "Special Elite";
+  src: url("fonts/SpecialElite-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+@font-face {
+  font-family: "Courier Prime";
+  src: url("fonts/CourierPrime-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+@font-face {
+  font-family: "Courier Prime";
+  src: url("fonts/CourierPrime-Italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: block;
+}
+@font-face {
+  font-family: "Courier Prime";
+  src: url("fonts/CourierPrime-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: block;
+}
+
+:root {
+  --desk:     #41474e;   /* what the pages are lying on */
+  --paper:    #f8f9f8;
+  --ink:      #23262b;   /* black pen */
+  --ink-soft: #454a52;
+  --muted:    #5a6068;   /* the small print: 5.9:1 on the paper */
+  --pencil:   #6f747c;
+  --white:    #ffffff;   /* the patch */
+  --blue:     #1f48a6;   /* ballpoint, written over a patch */
+  --red:      #c0392b;   /* the marking pen */
+  --rule:     #9bbbe2;   /* the printed lines */
+  --note:     #fbe873;   /* sticky-note yellow */
+
+  --hand:  "Caveat", "Segoe Print", "Bradley Hand", cursive;
+  --typed: "Special Elite", "Courier Prime", "Courier New", Courier, monospace;
+  --small: "Courier Prime", "Courier New", Courier, monospace;
+
+  --notes-w: clamp(320px, 31vw, 470px);
+}
+
+/* ---------- the desk ----------------------------------------------------- */
+
+html, body, .reveal-viewport {
+  background: radial-gradient(120% 90% at 38% 30%, #4b525a 0%, var(--desk) 55%, #363b41 100%) fixed !important;
+}
+
+.reveal {
+  font-family: var(--small);
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--ink);
+}
+
+.reveal .slides { text-align: left; }
+
+/* ---------- a page -------------------------------------------------------- */
+
+/* "section" and not "> section": in the printed version and in reveal's scroll
+   view each slide is wrapped in a page element of its own. There are no nested
+   (vertical) slides in this deck, so the looser selector is safe.
+
+   Every page is laid out all the time, not just the one on top: the next page
+   is lying underneath the one being turned, and has to look right there. */
+.reveal .slides section {
+  box-sizing: border-box;
+  height: 100%;
+  padding: 20px 32px 26px 124px;      /* left: the holes and the margin line */
+  color: var(--ink);
+  display: flex !important;
+  flex-direction: column;
+}
+
+/* The sheet itself: ruled, punched, lying on two more (deck-parts.include.html). */
+.reveal .slides section > svg.sheet {
+  position: absolute;
+  left: 16px;
+  top: 8px;
+  width: 1248px;
+  height: 704px;
+  z-index: 0;
+  overflow: visible;
+  pointer-events: none;
+  filter: drop-shadow(1px 5px 8px rgba(0, 0, 0, 0.42));
+}
+.reveal .slides section > *:not(.sheet):not(aside) { position: relative; z-index: 1; }
+
+.sheet .smudge { fill: #4d5158; opacity: 0.03; filter: blur(9px); }
+.sheet .ear-gap { fill: #e3e6e8; }
+.sheet .ear { fill: #eef0f0; stroke: #b9bec4; stroke-width: 0.8; }
+.sheet .ring { fill: none; stroke: #7b5a36; stroke-width: 5; opacity: 0.13; stroke-dasharray: 250 26 60 30; filter: blur(1.2px); }
+.sheet .ring.thin { stroke-width: 1.3; opacity: 0.26; stroke-dasharray: 190 40 80 55; filter: blur(0.5px); }
+.sheet .drip { fill: #ffffff; stroke: #9aa0a6; stroke-opacity: 0.4; stroke-width: 0.5; }
+
+/* ---------- turning the page ----------------------------------------------
+   The pages are hinged where the holes are. The one on top swings up and over
+   to the left; the next one is already lying there. Going back, it comes down
+   again. (reveal's overview and its printed and scrolling layouts place the
+   slides themselves, so none of this applies there.)
+   ---------------------------------------------------------------------- */
+
+html:not(.reveal-print):not(.reveal-scroll) .reveal:not(.overview) .slides {
+  perspective: 3200px;
+  perspective-origin: 8% 50%;
+}
+html:not(.reveal-print):not(.reveal-scroll) .reveal:not(.overview) .slides > section {
+  transform-origin: 0 50%;
+  backface-visibility: hidden;
+  transform: none !important;
+  opacity: 1 !important;
+  transition: transform 0.9s cubic-bezier(0.45, 0.05, 0.3, 1), opacity 0.05s linear 0s !important;
+}
+html:not(.reveal-print):not(.reveal-scroll) .reveal:not(.overview) .slides > section.past {
+  transform: rotateY(-96deg) !important;
+  opacity: 0 !important;
+  transition: transform 0.9s cubic-bezier(0.45, 0.05, 0.3, 1), opacity 0.1s linear 0.78s !important;
+}
+
+/* Opened part-way through (a link to a later page): the pages before it are
+   simply already turned, not all turned at once in front of the reader. */
+html:not(.deck-ready):not(.reveal-print):not(.reveal-scroll) .reveal:not(.overview) .slides > section,
+html:not(.deck-ready):not(.reveal-print):not(.reveal-scroll) .reveal:not(.overview) .slides > section.past {
+  transition: none !important;
+}
+
+/* ---------- on the page --------------------------------------------------- */
+
+.reveal h1, .reveal h2, .reveal h3 {
+  font-family: var(--hand);
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: 0;
+  text-transform: none;
+  text-shadow: none;
+  margin: 0;
+}
+/* The title is written across the top of the page, on the first line. */
+.reveal h2 {
+  flex: none;
+  height: 60px;
+  line-height: 60px;
+  font-size: 56px;
+  top: 11px;
+  transform-origin: 0 80%;
+  transform: rotate(-0.5deg);
+  white-space: nowrap;
+}
+.reveal .slides section:nth-of-type(odd) > h2 { transform: rotate(0.4deg); }
+
+.reveal p { margin: 0; line-height: 1.4; }
+.reveal a { color: var(--blue); text-decoration: underline; text-underline-offset: 2px; }
+.reveal b, .reveal strong { font-weight: 700; }
+
+/* Typed in the top margin: which of the five this is, and which theory. */
+.reveal .slides section[data-kicker]::before {
+  content: attr(data-kicker);
+  order: -1;
+  flex: none;
+  display: block;
+  position: relative;
+  z-index: 1;
+  height: 24px;
+  line-height: 24px;
+  font-family: var(--typed);
+  font-size: 13.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+/* Every drawing is 1124 x 480 (15 lines of the page), starting on the first rule. */
+.draw {
+  display: block;
+  flex: none;
+  width: 100%;
+  aspect-ratio: 1124 / 480;
+  overflow: visible;
+}
+
+/* The footnote, typed along the bottom. */
+.cite-line {
+  flex: none;
+  margin-top: auto !important;
+  font-family: var(--small);
+  font-size: 11.6px;
+  line-height: 1.4;
+  color: var(--muted);
+  margin-bottom: 0 !important;
+}
+.cite-line i { font-style: italic; }
+
+/* ---------- writing inside the drawings ---------------------------------- */
+
+.draw text { fill: var(--ink); }
+
+.hand   { font-family: var(--hand); font-weight: 600; font-size: 34px; }
+.hand.xl { font-size: 44px; font-weight: 700; }
+.hand.l { font-size: 38px; }
+.hand.s { font-size: 27px; }
+.hand.xs { font-size: 22px; }
+.hand.b { font-weight: 700; }
+
+.typed  { font-family: var(--typed); font-size: 15px; }
+.small  { font-family: var(--small); font-size: 11.6px; }
+.lbl {
+  font-family: var(--typed);
+  font-size: 13.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.draw text.lbl { fill: var(--ink-soft); }
+
+.draw text.blue, .blue { fill: var(--blue); color: var(--blue); }
+.draw text.red,  .red  { fill: var(--red);  color: var(--red); }
+.draw text.soft, .soft { fill: var(--ink-soft); color: var(--ink-soft); }
+.draw text.mute, .mute { fill: var(--muted); color: var(--muted); }
+.draw text.pencil, .pencil { fill: var(--pencil); color: var(--pencil); }
+
+/* Rough.js output: pen lines. They keep their weight when a drawing is scaled,
+   and the ink does not take quite evenly. */
+.r path { vector-effect: non-scaling-stroke; }
+.r { filter: url(#pencil); }
+
+/* A photograph cut out with scissors and stuck down, a strip cut from a typed
+   sheet, and something that can be picked up to look at. */
+.cut { filter: url(#cut-shadow); }
+.strip { fill: #ffffff; filter: url(#cut-shadow); }
+.zoom { cursor: zoom-in; }
+.zoom:focus-visible { outline: 2px dashed var(--blue); outline-offset: 3px; }
+
+/* ---------- the patch ----------------------------------------------------
+   Each brush stroke is one path, hidden by pushing its dash off the end. Adding
+   the slide's "painted" class pulls the dashes back, one stroke after another.
+   The mistake underneath stays in the document the whole time.
+   ---------------------------------------------------------------------- */
+
+.patch path {
+  fill: none;
+  stroke-linecap: round;
+  stroke-dasharray: 1 2;
+  stroke-dashoffset: 1.06;
+  transition: stroke-dashoffset 0.34s cubic-bezier(0.3, 0.6, 0.4, 1);
+  transition-delay: calc(var(--i, 0) * 0.07s);
+}
+.patch-shadow path { stroke: rgba(40, 44, 52, 0.4); }
+.patch-shadow { transform: translate(0.8px, 1.9px); }
+.patch-paint path { stroke: var(--white); }
+.patch-wet path { stroke: #dfe6ef; }
+
+.painted .patch path {
+  stroke-dashoffset: 0;
+  transition-delay: calc(var(--i, 0) * 0.24s);
+}
+
+/* Wet fluid is thin, a little grey and shiny, and what it covers still shows
+   through. As the solvent leaves it turns matte and white and stops being
+   see-through. That takes as long as the slide's drying time (--dry, set by
+   deck-script.include.html), so the patch can be watched drying. */
+.patch-paint { opacity: 0.8; }
+.patch-wet { opacity: 0.85; }
+.painted .patch-paint { animation: fluid-cure var(--dry, 3.4s) ease-in both; }
+.painted .patch-wet { animation: fluid-shine var(--dry, 3.4s) ease-in both; }
+@keyframes fluid-cure {
+  from { opacity: 0.8; }
+  to { opacity: var(--cover, 1); }
+}
+@keyframes fluid-shine {
+  from { opacity: 0.85; }
+  55% { opacity: 0.62; }
+  to { opacity: 0; }
+}
+/* Arrived at already dry: stepping back into the slide, a deep link, print. */
+.dry .patch-paint { animation: none; opacity: var(--cover, 1); }
+.dry .patch-wet { animation: none; opacity: 0; }
+
+/* A patch that was already on the page when it was handed in. */
+.patch.set path { stroke-dashoffset: 0; transition: none; }
+.patch.set .patch-paint { opacity: var(--cover, 1); animation: none; }
+.patch.set .patch-wet { opacity: 0; animation: none; }
+
+/* What gets written on the patch, in ballpoint. */
+.pen {
+  font-family: var(--hand);
+  font-weight: 600;
+  fill: var(--blue) !important;
+  opacity: 0;
+  clip-path: inset(-20% 100% -20% -5%);
+  transition: clip-path 0.55s ease-out, opacity 0.12s linear;
+}
+/* Patches that correct themselves: the fix is written as soon as it is dry. */
+.auto-write.painted.dry .pen,
+.written .pen,
+.pen.set {
+  opacity: 1;
+  clip-path: inset(-20% -8% -20% -5%);
+}
+.reveal .fragment.marker { display: none; }
+
+/* ---------- the speaker notes: a sticky note beside the pages ------------- */
+
+.reveal aside.notes { font-family: var(--small); }
+
+#notes-panel {
+  position: fixed;
+  top: 0; right: 0; bottom: 0;
+  width: var(--notes-w);
+  box-sizing: border-box;
+  display: none;
+  padding: 20px 22px 24px 8px;
+  z-index: 40;
+  filter: drop-shadow(2px 7px 9px rgba(0, 0, 0, 0.45));
+}
+.notes-open #notes-panel { display: block; }
+.notes-open .reveal { width: calc(100% - var(--notes-w)) !important; }
+
+#notes-panel .np-note {
+  box-sizing: border-box;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 30px 22px 16px 26px;
+  color: #2b2a20;
+  background:
+    linear-gradient(315deg, #d6c350 0, #e9d966 11px, rgba(251, 232, 115, 0) 30px),
+    linear-gradient(180deg, #f1e172 0, #fdf08e 46px, var(--note) 100%);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 26px), calc(100% - 20px) 100%, 0 100%);
+  transform: rotate(0.45deg);
+  transform-origin: 50% 0;
+}
+
+#notes-panel header {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex: none;
+  padding-bottom: 6px;
+  border-bottom: 1.5px solid rgba(60, 55, 20, 0.22);
+}
+#notes-panel .np-title { font-family: var(--hand); font-weight: 700; font-size: 31px; line-height: 1; }
+#notes-panel .np-where {
+  font-family: var(--typed);
+  font-size: 11.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #6a6226;
+  flex: 1 1 auto;
+}
+#notes-panel .np-close,
+#notes-tab {
+  font-family: var(--hand);
+  font-weight: 700;
+  font-size: 21px;
+  line-height: 1;
+  color: var(--ink);
+  background: #fdf08e;
+  border: 0;
+  border-radius: 0;
+  padding: 6px 12px 7px;
+  cursor: pointer;
+  transform: rotate(-2deg);
+  box-shadow: 1px 3px 4px rgba(0, 0, 0, 0.35);
+}
+#notes-panel .np-close { background: #ffffff; box-shadow: 1px 2px 2px rgba(60, 55, 20, 0.3); font-size: 19px; padding: 4px 10px 5px; }
+#notes-panel .np-close:hover { background: #f4f4f4; }
+#notes-tab:hover { background: #fff6a8; }
+#notes-panel .np-close:focus-visible, #notes-tab:focus-visible { outline: 2px dashed var(--blue); outline-offset: 3px; }
+
+#notes-tab { position: fixed; top: 14px; right: 18px; z-index: 41; }
+.notes-open #notes-tab { display: none; }
+
+#notes-panel .np-body {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(60, 55, 20, 0.35) transparent;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 12px 8px 12px 0;
+  font-family: var(--small);
+  font-size: 13.6px;
+  line-height: 1.5;
+}
+#notes-panel .np-body p { margin: 0 0 0.8em; }
+#notes-panel .np-body em { font-style: italic; color: #5d5722; }
+#notes-panel .np-body strong { font-weight: 700; }
+#notes-panel footer {
+  flex: none;
+  padding: 8px 18px 0 0;
+  border-top: 1.5px solid rgba(60, 55, 20, 0.22);
+  font-family: var(--small);
+  font-size: 11px;
+  line-height: 1.6;
+  color: #6a6226;
+}
+#notes-panel footer a { color: var(--blue); white-space: nowrap; }
+#notes-panel kbd {
+  font-family: var(--small);
+  font-size: 10.5px;
+  font-weight: 700;
+  border: 1px solid rgba(60, 55, 20, 0.45);
+  border-radius: 2px;
+  padding: 0 4px;
+  background: #fffbe0;
+  color: var(--ink);
+}
+
+@media (max-width: 860px) {
+  .notes-open .reveal { width: 100% !important; height: 54% !important; }
+  #notes-panel { top: auto; left: 0; width: 100%; height: 46%; padding: 10px 14px 14px; }
+  #notes-panel .np-note { padding: 18px 18px 12px 20px; transform: none; }
+}
+
+/* ---------- a clipping picked up to look at ------------------------------- */
+
+#zoom-box {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 3vmin;
+  box-sizing: border-box;
+  background: rgba(30, 33, 38, 0.86);
+  cursor: zoom-out;
+}
+#zoom-box[hidden] { display: none; }
+#zoom-box figure {
+  margin: 0;
+  padding: 12px 12px 10px;
+  background: #fbfbf9;
+  box-shadow: 3px 10px 26px rgba(0, 0, 0, 0.55);
+  transform: rotate(-0.5deg);
+  display: flex;
+  flex-direction: column;
+  max-width: 94vw;
+}
+#zoom-box img {
+  display: block;
+  max-width: min(90vw, 1500px);
+  max-height: 80vh;
+  width: auto;
+  height: auto;
+}
+/* The caption is as wide as the picture and no wider. */
+#zoom-box figcaption {
+  width: 0;
+  min-width: 100%;
+  margin-top: 8px;
+  font-family: var(--small);
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: var(--muted);
+}
+#zoom-box figcaption:empty { display: none; }
+#zoom-box .zoom-close {
+  font-family: var(--hand);
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 1;
+  color: var(--ink);
+  background: #fdf08e;
+  border: 0;
+  padding: 6px 14px 7px;
+  cursor: pointer;
+  transform: rotate(1.5deg);
+  box-shadow: 1px 3px 4px rgba(0, 0, 0, 0.4);
+}
+
+/* ---------- reveal chrome ------------------------------------------------ */
+
+.reveal .progress { color: #d9dde2; height: 3px; background: rgba(255, 255, 255, 0.12); }
+.reveal .controls { color: #e4e7ea; }
+
+/* ==========================================================================
+   The pages
+   ========================================================================== */
+
+/* ---------- cover -------------------------------------------------------- */
+
+/* The cover has no title line of its own: its drawing is the whole page, 19
+   lines of it, starting two lines above where the others do. */
+.cover { padding-top: 72px !important; }
+.cover .draw { aspect-ratio: 1124 / 608; }
+/* The heading is in the outline and for screen readers; the drawing is the title. */
+.reveal .cover > h2 {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.cover .title-typed { font-family: var(--typed); font-size: 60px; }
+.cover .hint { transition: opacity 0.3s ease; }
+.cover.painted .hint { opacity: 0; }
+
+/* ---------- 1: the tetrad ------------------------------------------------ */
+
+/* Put on too thick: it cracks, a piece comes away, and what was underneath shows. */
+.tetrad .crack { fill: none; stroke: #555a61; stroke-width: 0.8; stroke-linejoin: round; }
+.tetrad .chip { fill: var(--paper); stroke: #8f959c; stroke-width: 0.5; }
+.tetrad .under { fill: none; stroke: var(--ink); stroke-width: 1.5; stroke-linecap: round; }
+.tetrad .flake { fill: #ffffff; stroke: #8f959c; stroke-width: 0.5; filter: url(#cut-shadow); }
+
+/* ---------- 2: the scale ------------------------------------------------- */
+
+/* The beam, pans and everything on them tip together about the pivot. */
+.scale-arm {
+  transform-box: view-box;
+  transform-origin: 562px 88px;
+  transition: transform 1.1s cubic-bezier(0.34, 1.42, 0.5, 1);
+}
+.struck .scale-arm { transform: rotate(7.5deg); }
+.strike-note { opacity: 0; transition: opacity 0.25s ease; }
+.struck .strike-note { opacity: 1; }
+.scale .slip-typed { font-family: var(--typed); font-size: 19px; }
+
+/* ---------- 3: prescription ---------------------------------------------- */
+
+.prescription .typed-line { font-family: var(--typed); font-size: 27px; }
+.prescription .rule-text { font-family: var(--typed); font-size: 14.2px; fill: #2e2c1c; }
+.prescription .quote { font-size: 31px; }
+
+/* The captions under the specimen take turns. */
+.prescription .cap { opacity: 0; transition: opacity 0.25s ease; }
+.painted:not(.dry):not(.written) .cap-wet { opacity: 1; }
+.painted.dry:not(.written) .cap-dry { opacity: 1; }
+.written:not(.smudged) .cap-done { opacity: 1; }
+.smudged .cap-smudge { opacity: 1; }
+
+/* Written too soon: the ballpoint drags the wet fluid with it. */
+.smudged .pen { filter: url(#smear); }
+.gouge { fill: none; stroke: #ffffff; stroke-width: 7; stroke-linecap: round; opacity: 0; transition: opacity 0.2s ease 0.3s; }
+.smudged .gouge { opacity: 0.92; }
+
+/* ---------- 4: object to thing ------------------------------------------- */
+
+.thing .assembly { opacity: 0; transition: opacity 0.7s ease 0.5s; }
+.thing.painted .assembly { opacity: 1; }
+.thing .label-typed { font-family: var(--typed); font-size: 21px; }
+.thing .fact-line { transition: opacity 0.4s ease; }
+.thing.painted .fact-line { opacity: 0; }
+/* As an object the bottle has the page to itself. When the assembly gathers it
+   steps back, standing on the same spot, and its other forms turn up beside it. */
+.thing .the-bottle {
+  transform-box: view-box;
+  transform-origin: 562px 276px;
+  transition: transform 0.9s cubic-bezier(0.3, 0.1, 0.2, 1);
+}
+.thing.painted .the-bottle { transform: scale(0.66); }
+
+/* ---------- 5: two lenses ------------------------------------------------ */
+
+.lenses-slide .circled { fill: none; }
+
+/* ---------- references ---------------------------------------------------- */
+
+/* A typed sheet, paper-clipped to the page. */
+.refs-slide h2 { font-size: 46px; }
+.refs-sheet {
+  flex: 1 1 auto;
+  min-height: 0;
+  margin: 8px 4px 0 -8px;
+  padding: 28px 20px 10px 22px;
+  background: #ffffff;
+  box-shadow: 1px 3px 5px rgba(30, 34, 40, 0.3);
+  transform: rotate(-0.25deg);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.refs-sheet > svg.clip {
+  position: absolute;
+  right: 54px;
+  top: -30px;
+  width: 26px;
+  height: 62px;
+  overflow: visible;
+}
+.refs {
+  columns: 3;
+  column-gap: 26px;
+  font-family: var(--small);
+  font-size: 9.9px;
+  line-height: 1.36;
+  flex: 1 1 auto;
+}
+.refs p {
+  margin: 0 0 0.5em;
+  padding-left: 1.6em;
+  text-indent: -1.6em;
+  break-inside: avoid;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+.refs .group {
+  font-family: var(--typed);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  padding-left: 0;
+  text-indent: 0;
+  margin-top: 0.3em;
+}
+.refs .group:first-child { margin-top: 0; }
+.colophon {
+  flex: none;
+  border-top: 1px dashed rgba(35, 38, 43, 0.35);
+  padding-top: 6px;
+  font-family: var(--small);
+  font-size: 9.9px;
+  line-height: 1.38;
+  color: var(--ink-soft);
+}
+.colophon p + p { margin-top: 0.35em; }
+
+/* ---------- less motion --------------------------------------------------
+   The drying time on slide 3 is the point of that slide and is kept. Everything
+   that is only movement is not.
+   ---------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .patch path, .pen, .scale-arm, .strike-note, .prescription .cap, .gouge,
+  .thing .assembly, .thing .fact-line, .thing .the-bottle, .cover .hint { transition-duration: 0.01s !important; transition-delay: 0s !important; }
+  html:not(.reveal-print):not(.reveal-scroll) .reveal:not(.overview) .slides > section,
+  html:not(.reveal-print):not(.reveal-scroll) .reveal:not(.overview) .slides > section.past { transition: none !important; }
+}
+
+/* ---------- print -------------------------------------------------------- */
+
+/* reveal's print layout (?print-pdf) puts every slide on a page of its own.
+   Each one is still the same column of margin line, title, drawing and
+   footnote, at the same size. */
+html.reveal-print .reveal .slides .pdf-page > section {
+  display: flex !important;
+  flex-direction: column;
+  width: 1280px !important;
+  height: 720px !important;
+  min-height: 0 !important;
+  padding: 20px 32px 26px 124px !important;
+}
+html.reveal-print .reveal .slides .pdf-page > section.cover { padding-top: 72px !important; }
+html.reveal-print, html.reveal-print body { background: var(--desk) !important; }
+html.reveal-print .cover .hint { display: none; }
+/* Soft shadows and textures are bitmap effects: free on screen, but in a PDF
+   each one turns its element into a picture. */
+html.reveal-print .sheet,
+html.reveal-print .patch-shadow,
+html.reveal-print .r,
+html.reveal-print .sheet .smudge,
+html.reveal-print .sheet .ring { filter: none !important; }
+
+/* ?print-pdf&showNotes=separate-page puts each slide's notes on a page after it. */
+html.reveal-print .reveal .speaker-notes-pdf { padding: 34px 48px; font-family: var(--small); color: var(--ink); background: #fff; }
+html.reveal-print .reveal .speaker-notes-pdf p { margin: 0 0 0.8em; line-height: 1.5; }
+
+@media print {
+  #notes-panel, #notes-tab, #zoom-box { display: none !important; }
+  .reveal { width: 100% !important; }
+  html, body, .reveal-viewport, .pdf-page { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}

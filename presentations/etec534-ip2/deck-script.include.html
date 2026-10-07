@@ -1,0 +1,691 @@
+<!--
+  deck-script.include.html — included after <body> by Quarto.
+
+  Small jobs, none of which the slides need in order to be readable:
+
+    1. Redraw every shape marked data-r with Rough.js, so the lines look drawn
+       with a pen. The slide source stays plain geometry.
+    2. Lay a sheet of ruled paper under every slide, a little worn.
+    3. Loosen the lettering, so handwriting is not a row of identical letters
+       and typing is not perfectly level.
+    4. Paint the correction-fluid patches, stroke by stroke, and keep track of
+       whether they have dried.
+    5. Show the speaker notes beside the slides, on a sticky note.
+    6. Let the comics and photographs be clicked to look at them larger.
+-->
+<script src="vendor/rough.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  var SVG = "http://www.w3.org/2000/svg";
+  var INK = "#23262b";
+  var PRINTING = /print-pdf/.test(window.location.search);
+
+  function svgEl(name, attrs) {
+    var node = document.createElementNS(SVG, name);
+    for (var key in attrs) node.setAttribute(key, attrs[key]);
+    return node;
+  }
+
+  function each(list, fn) { Array.prototype.forEach.call(list, fn); }
+
+  /* Rough.js jitters with Math.random unless it is given a seed. Seeding from
+     the shape's own markup means the drawing is identical on every load: the
+     slides should look drawn, not look different each time someone opens them. */
+  function hash(text) {
+    var h = 2166136261;
+    for (var i = 0; i < text.length; i++) {
+      h ^= text.charCodeAt(i);
+      h = Math.imul(h, 16777619);
+    }
+    return ((h >>> 0) % 2147483000) + 1;
+  }
+
+  function prng(seed) {
+    var a = seed >>> 0;
+    return function () {
+      a = (a + 0x6d2b79f5) | 0;
+      var t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  /* ---------------------------------------------------------------- 1. ink */
+
+  var KEEP = ["class", "id", "transform", "opacity", "style", "data-state", "data-fragment-index"];
+
+  function numberOf(el, name) {
+    return parseFloat(el.getAttribute(name) || "0");
+  }
+
+  function pointsOf(el) {
+    var flat = (el.getAttribute("points") || "").trim().split(/[\s,]+/).map(Number);
+    var pairs = [];
+    for (var i = 0; i + 1 < flat.length; i += 2) pairs.push([flat[i], flat[i + 1]]);
+    return pairs;
+  }
+
+  function arrowHead(rc, from, to, options) {
+    var angle = Math.atan2(to[1] - from[1], to[0] - from[0]);
+    var size = 13, spread = 0.48;
+    var head = svgEl("g", {});
+    [-spread, spread].forEach(function (offset, i) {
+      head.appendChild(rc.line(
+        to[0], to[1],
+        to[0] - size * Math.cos(angle + offset),
+        to[1] - size * Math.sin(angle + offset),
+        { stroke: options.stroke, strokeWidth: options.strokeWidth, roughness: 0.7, seed: options.seed + 5 + i }
+      ));
+    });
+    return head;
+  }
+
+  function roughen() {
+    if (!window.rough) return;
+    var shapes = document.querySelectorAll("svg [data-r]");
+    each(shapes, function (el, index) {
+      var svg = el.ownerSVGElement;
+      if (!svg) return;
+      var rc = window.rough.svg(svg);
+      var d = el.dataset;
+      var options = {
+        roughness: parseFloat(d.r) || 1,
+        bowing: d.bow === undefined ? 1 : parseFloat(d.bow),
+        stroke: el.getAttribute("stroke") || INK,
+        strokeWidth: parseFloat(el.getAttribute("stroke-width") || "2"),
+        seed: hash(el.outerHTML + "#" + index)
+      };
+      var fill = el.getAttribute("fill");
+      if (fill && fill !== "none") {
+        options.fill = fill;
+        options.fillStyle = d.fill || "hachure";
+        options.hachureGap = parseFloat(d.gap || "5");
+        options.fillWeight = parseFloat(d.weight || "1.2");
+        if (d.angle) options.hachureAngle = parseFloat(d.angle);
+      }
+      if (d.single !== undefined) options.disableMultiStroke = true;
+      if (d.dash) options.strokeLineDash = d.dash.split(",").map(Number);
+
+      var drawn;
+      var from, to;
+      switch (el.tagName.toLowerCase()) {
+        case "line":
+          from = [numberOf(el, "x1"), numberOf(el, "y1")];
+          to = [numberOf(el, "x2"), numberOf(el, "y2")];
+          drawn = rc.line(from[0], from[1], to[0], to[1], options);
+          break;
+        case "rect":
+          drawn = rc.rectangle(numberOf(el, "x"), numberOf(el, "y"), numberOf(el, "width"), numberOf(el, "height"), options);
+          break;
+        case "circle":
+          drawn = rc.circle(numberOf(el, "cx"), numberOf(el, "cy"), numberOf(el, "r") * 2, options);
+          break;
+        case "ellipse":
+          drawn = rc.ellipse(numberOf(el, "cx"), numberOf(el, "cy"), numberOf(el, "rx") * 2, numberOf(el, "ry") * 2, options);
+          break;
+        case "polygon":
+          drawn = rc.polygon(pointsOf(el), options);
+          break;
+        case "polyline":
+          drawn = rc.linearPath(pointsOf(el), options);
+          break;
+        case "path":
+          drawn = rc.path(el.getAttribute("d"), options);
+          break;
+      }
+      if (!drawn) return;
+
+      if (from && d.arrow) {
+        if (d.arrow === "end" || d.arrow === "both") drawn.appendChild(arrowHead(rc, from, to, options));
+        if (d.arrow === "start" || d.arrow === "both") drawn.appendChild(arrowHead(rc, to, from, options));
+      }
+      KEEP.forEach(function (name) {
+        if (el.hasAttribute(name)) drawn.setAttribute(name, el.getAttribute(name));
+      });
+      drawn.classList.add("r");
+      el.parentNode.replaceChild(drawn, el);
+    });
+  }
+
+  /* -------------------------------------------------------------- 2. paper */
+
+  /* Not "> section": printing and the scroll view each wrap the slides in page
+     elements. The deck has no nested slides, so every section is a slide. */
+  function slides() {
+    return Array.prototype.slice.call(document.querySelectorAll(".reveal .slides section"));
+  }
+
+  /* What a few weeks in a binder does to a page. Each sheet gets a different
+     mix, chosen by its place in the deck, in the sheet's own 1248 x 704 units
+     (see #lined-page in deck-parts.include.html). */
+  function wear(sheet, index) {
+    var random = prng(4321 + index * 97);
+    var marks = svgEl("g", { "class": "wear" });
+    var n = 2 + (index % 2);
+    for (var i = 0; i < n; i++) {            /* where a hand rested: faint grey */
+      marks.appendChild(svgEl("ellipse", {
+        cx: (140 + random() * 980).toFixed(0), cy: (90 + random() * 540).toFixed(0),
+        rx: (50 + random() * 90).toFixed(0), ry: (16 + random() * 26).toFixed(0),
+        transform: "rotate(" + (random() * 50 - 25).toFixed(0) + ")", "class": "smudge"
+      }));
+    }
+    if (index % 3 === 1) {                    /* a corner that got folded over */
+      marks.appendChild(svgEl("polygon", { points: "1240,668 1240,696 1210,696", "class": "ear-gap" }));
+      marks.appendChild(svgEl("polygon", { points: "1240,668 1210,696 1214,672", "class": "ear" }));
+    }
+    if (index === 2) {                        /* where a mug was put down */
+      marks.appendChild(svgEl("circle", { cx: 1176, cy: 92, r: 58, "class": "ring" }));
+      marks.appendChild(svgEl("circle", { cx: 1178, cy: 93, r: 55, "class": "ring thin" }));
+    }
+    if (index % 2 === 1) {                    /* fluid that went where it was not meant to */
+      for (var k = 0; k < 3; k++) {
+        marks.appendChild(svgEl("ellipse", {
+          cx: (18 + random() * 58).toFixed(1), cy: (200 + random() * 420).toFixed(1),
+          rx: (2.5 + random() * 5).toFixed(1), ry: (2 + random() * 3.5).toFixed(1), "class": "drip"
+        }));
+      }
+    }
+    sheet.appendChild(marks);
+  }
+
+  /* One sheet per section rather than one behind the deck, so the overview,
+     the printed version and the presenter view all get their paper as well. */
+  function addSheets() {
+    slides().forEach(function (section, index) {
+      if (section.querySelector(":scope > svg.sheet")) return;
+      var sheet = svgEl("svg", {
+        "class": "sheet", "aria-hidden": "true", focusable: "false",
+        viewBox: "0 0 1248 704", preserveAspectRatio: "none"
+      });
+      sheet.appendChild(svgEl("use", { href: "#lined-page", x: "0", y: "0", width: "1248", height: "704" }));
+      wear(sheet, index);
+      section.insertBefore(sheet, section.firstChild);
+      /* Pages lie in a pile with the first on top, so that when one is turned
+         the next is already there underneath it. */
+      if (!PRINTING) section.style.zIndex = String(60 - index);
+    });
+  }
+
+  /* ---------------------------------------------------------- 3. lettering */
+
+  /* A font sets every "e" the same and every line dead level, which is the
+     giveaway. SVG lets each letter be nudged and turned on its own (the dy and
+     rotate lists), so handwriting gets an uneven baseline and a slight lean
+     from letter to letter, and typing gets the small unevenness of a worn
+     typewriter. Seeded from the text, so it is the same on every load. */
+  function loosen() {
+    var texts = document.querySelectorAll(
+      ".reveal .slides svg.draw text.hand, .reveal .slides svg.draw text.pen, .reveal .slides svg.draw text.typed-worn");
+    each(texts, function (el, index) {
+      if (el.dataset.loose) return;
+      var count = 0;
+      try { count = el.getNumberOfChars(); } catch (e) { return; }
+      if (!count) return;
+      el.dataset.loose = "1";
+      var typed = el.classList.contains("typed-worn");
+      var random = prng(hash(el.textContent + "#" + index));
+      var wobble = typed ? 0 : (random() - 0.5) * 2.4;
+      var phase = random() * 6.28;
+      var dy = [], turn = [], previous = 0;
+      for (var i = 0; i < count; i++) {
+        var offset = typed
+          ? (random() - 0.5) * 1.5
+          : (random() - 0.5) * 1.5 + Math.sin(phase + i * 0.3) * wobble * 0.5;
+        dy.push((offset - previous).toFixed(2));
+        previous = offset;
+        turn.push(((random() - 0.5) * (typed ? 1.3 : 4.4)).toFixed(1));
+      }
+      el.setAttribute("dy", dy.join(" "));
+      el.setAttribute("rotate", turn.join(" "));
+      if (!typed && !el.hasAttribute("transform") && !el.classList.contains("pen")) {
+        var lean = (random() - 0.5) * 1.1;
+        el.setAttribute("transform", "rotate(" + lean.toFixed(2) + " " + (el.getAttribute("x") || 0) + " " + (el.getAttribute("y") || 0) + ")");
+      }
+    });
+  }
+
+  /* ------------------------------------------------------------ 4. patches */
+
+  /* <g class="patch"> becomes a stack of fat white strokes, one per pass of the
+     brush. Each stroke is a single path drawn with a dash offset, so "painting"
+     is the stroke being laid down, and stepping back lifts it off again. The
+     brush goes back and forth, the way a hand does. Whatever is under the patch
+     is never touched: it is covered, which is the argument of the deck.
+
+     Where it goes is either data-box="x,y,w,h" or, more often, data-over="#id":
+     the word to cover, wherever the typeface has put it. data-pad="x,y" is how
+     far past the word the brush goes, data-extra="left,right" widens it, and
+     data-ghost="0.92" leaves the patch slightly see-through once dry, as one
+     thin coat is.
+
+     The strokes are plain geometry. What makes them look like correction fluid
+     is three small filters made for each patch (see fluidFilters): the edge is
+     pushed about so it is not a tidy pill shape, the dried paint is lit from
+     the top left so it has a thickness and faint brush ridges, and the wet
+     paint is a cooler grey with a shine on it. */
+  function fluidFilters(id, seed, region) {
+    var open = ' filterUnits="userSpaceOnUse" x="' + region.x + '" y="' + region.y +
+               '" width="' + region.w + '" height="' + region.h + '" color-interpolation-filters="sRGB">';
+    var edge = '<feTurbulence type="fractalNoise" baseFrequency="0.035 0.09" numOctaves="2" seed="' + seed + '" result="warp"/>' +
+               '<feDisplacementMap in="SourceGraphic" in2="warp" scale="5" xChannelSelector="R" yChannelSelector="G" result="shape"/>';
+    return (
+      '<filter id="' + id + '-shadow"' + open + edge +
+        '<feGaussianBlur in="shape" stdDeviation="0.9"/></filter>' +
+      '<filter id="' + id + '-dry"' + open + edge +
+        '<feTurbulence type="fractalNoise" baseFrequency="0.006 0.11" numOctaves="2" seed="' + (seed + 5) + '" result="bristle"/>' +
+        '<feColorMatrix in="bristle" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  1 0 0 0 0" result="ridges"/>' +
+        '<feGaussianBlur in="shape" stdDeviation="1.4" result="soft"/>' +
+        '<feComposite in="ridges" in2="soft" operator="arithmetic" k1="0.15" k2="0" k3="0.85" k4="0" result="bump"/>' +
+        '<feDiffuseLighting in="bump" surfaceScale="2.5" diffuseConstant="1.19" lighting-color="#ffffff" result="light">' +
+          '<feDistantLight azimuth="235" elevation="57"/></feDiffuseLighting>' +
+        '<feComposite in="light" in2="shape" operator="in"/></filter>' +
+      '<filter id="' + id + '-wet"' + open + edge +
+        '<feGaussianBlur in="shape" stdDeviation="2.4" result="soft"/>' +
+        '<feSpecularLighting in="soft" surfaceScale="5" specularConstant="1.1" specularExponent="26" lighting-color="#ffffff" result="shine">' +
+          '<feDistantLight azimuth="235" elevation="48"/></feSpecularLighting>' +
+        '<feComposite in="shine" in2="shape" operator="in" result="shineIn"/>' +
+        '<feMerge><feMergeNode in="shape"/><feMergeNode in="shineIn"/></feMerge></filter>'
+    );
+  }
+
+  function boxOf(patch) {
+    if (patch.dataset.box) return patch.dataset.box.split(",").map(Number);
+    var word = patch.ownerSVGElement.querySelector(patch.dataset.over);
+    if (!word) return null;
+    var line = word.tagName.toLowerCase() === "tspan" ? word.parentNode : word;
+    var size = parseFloat(window.getComputedStyle(word).fontSize) || 20;
+    /* Where the word starts and how long it is, asked of the text itself.
+       (getBBox on a <tspan> is not the word's own box in Firefox.) */
+    var start, length;
+    try {
+      start = word.getStartPositionOfChar(0).x;
+      length = word.getComputedTextLength();
+    } catch (e) { return null; }
+    if (!length) return null;
+    var pad = (patch.dataset.pad || "6,3").split(",").map(Number);
+    var extra = (patch.dataset.extra || "0,0").split(",").map(Number);
+    var baseline = parseFloat(line.getAttribute("y") || "0");
+    return [
+      start - pad[0] - extra[0],
+      baseline - size * 0.8 - pad[1],
+      length + pad[0] * 2 + extra[0] + extra[1],
+      size * 1.02 + pad[1] * 2
+    ];
+  }
+
+  function buildPatches() {
+    var patches = document.querySelectorAll("svg g.patch");
+    each(patches, function (patch, index) {
+      if (patch.querySelector(".patch-paint")) return;
+      var box = boxOf(patch);
+      if (!box) return;
+      var x = box[0], y = box[1], w = box[2], h = box[3];
+      patch._box = box;
+      var rows = parseInt(patch.dataset.rows || "0", 10) || Math.max(2, Math.round(h / 15));
+      var seed = hash((patch.dataset.box || patch.dataset.over) + "#" + index);
+      var random = prng(seed);
+      var rowHeight = h / rows;
+      var brush = rowHeight * 1.5;
+
+      var id = "fluid-" + index;
+      var pad = Math.ceil(brush + 10);
+      var defs = svgEl("defs", {});
+      defs.innerHTML = fluidFilters(id, (seed % 89) + 1, { x: x - pad, y: y - pad, w: w + pad * 2, h: h + pad * 2 });
+      if (patch.dataset.ghost) patch.style.setProperty("--cover", patch.dataset.ghost);
+
+      var layers = ["shadow", "paint", "wet"].map(function (name) {
+        var layer = svgEl("g", { "class": "patch-" + name });
+        /* Print gets the plain strokes: a filter would turn each patch into a picture. */
+        if (!PRINTING) layer.setAttribute("filter", "url(#" + id + "-" + (name === "paint" ? "dry" : name) + ")");
+        return layer;
+      });
+      for (var i = 0; i < rows; i++) {
+        var yy = y + rowHeight * (i + 0.5) + (random() - 0.5) * 2.2;
+        var x0 = x + brush * 0.3 + (random() - 0.5) * 7;
+        var x1 = x + w - brush * 0.3 + (random() - 0.5) * 9;
+        var bow = (random() - 0.5) * 5;
+        var end = yy + (random() - 0.5) * 2.4;
+        /* Odd passes come back the other way. */
+        var from = i % 2 ? [x1, end] : [x0, yy];
+        var to = i % 2 ? [x0, yy] : [x1, end];
+        var path = "M " + from[0].toFixed(1) + " " + from[1].toFixed(1) +
+                   " Q " + ((x0 + x1) / 2).toFixed(1) + " " + (yy + bow).toFixed(1) +
+                   " " + to[0].toFixed(1) + " " + to[1].toFixed(1);
+        for (var l = 0; l < layers.length; l++) {
+          var stroke = svgEl("path", { d: path, pathLength: "1", "stroke-width": brush.toFixed(1) });
+          stroke.style.setProperty("--i", String(i));
+          layers[l].appendChild(stroke);
+        }
+      }
+      for (var k = layers.length - 1; k >= 0; k--) patch.insertBefore(layers[k], patch.firstChild);
+      patch.insertBefore(defs, patch.firstChild);
+    });
+
+    /* What gets written on a patch sits in the middle of it, wherever the patch
+       ended up: <text class="pen" data-patch="id">. */
+    each(document.querySelectorAll("svg text.pen[data-patch], svg path.gouge[data-patch]"), function (mark) {
+      if (mark.dataset.placed) return;
+      var patch = mark.ownerSVGElement.querySelector("#" + mark.dataset.patch);
+      var box = patch && patch._box;
+      if (!box) return;
+      mark.dataset.placed = "1";
+      var cx = box[0] + box[2] / 2, cy = box[1] + box[3] / 2;
+      if (mark.tagName.toLowerCase() === "path") {
+        /* The line a pen ploughs through wet fluid, and on past the end of it. */
+        mark.setAttribute("d", "M " + (box[0] + box[2] * 0.2).toFixed(1) + " " + (cy + 1).toFixed(1) +
+          " Q " + cx.toFixed(1) + " " + (cy - 7).toFixed(1) + " " + (box[0] + box[2] + 2).toFixed(1) + " " + (cy + 2).toFixed(1) +
+          " T " + (box[0] + box[2] + 24).toFixed(1) + " " + (cy - 2).toFixed(1));
+        return;
+      }
+      var size = parseFloat(mark.getAttribute("font-size") || "30");
+      mark.setAttribute("text-anchor", "middle");
+      mark.setAttribute("x", cx.toFixed(1));
+      mark.setAttribute("y", (cy + size * 0.27).toFixed(1));
+      mark.setAttribute("transform", "rotate(" + (mark.dataset.tilt || "-2") + " " + cx.toFixed(1) + " " + cy.toFixed(1) + ")");
+    });
+  }
+
+  /* A fragment marked data-state="name" switches the class "name" on its slide.
+     The slide's CSS does the rest. "live" is true when the audience watched it
+     happen, false when the slide was arrived at with the fragment already shown
+     (stepping backwards into it, a deep link, the printed version). */
+  var DRYING_MS = 3400;
+
+  function applyStates(section, live) {
+    if (!section || !section.querySelectorAll) return;
+    var markers = section.querySelectorAll(".fragment[data-state]");
+    each(markers, function (marker) {
+      var name = marker.dataset.state;
+      /* On paper there is no stepping through: show every slide finished. */
+      var on = PRINTING || marker.classList.contains("visible");
+      if (section.classList.contains(name) === on) return;
+      section.classList.toggle(name, on);
+      stateChanged(section, name, on, live);
+    });
+  }
+
+  function stateChanged(section, name, on, live) {
+    if (name === "painted") {
+      clearTimeout(section._drying);
+      section.classList.remove("dry", "smudged");
+      if (!on) return;
+      var wait = live ? parseInt(section.dataset.dry || DRYING_MS, 10) : 0;
+      if (wait <= 0) {
+        section.classList.add("dry");
+      } else {
+        /* The shine goes off the patch over exactly as long as it takes to dry. */
+        section.style.setProperty("--dry", wait + "ms");
+        section._drying = setTimeout(function () { section.classList.add("dry"); }, wait);
+      }
+    }
+    if (name === "written") {
+      /* Writing on the patch before it has dried drags the pen through it.
+         The bottle's script is "wait", and this is what ignoring it costs. */
+      section.classList.toggle("smudged", on && live && !section.classList.contains("dry"));
+    }
+  }
+
+  function sectionOf(node) {
+    while (node && !(node.tagName && node.tagName.toLowerCase() === "section")) node = node.parentNode;
+    return node;
+  }
+
+  function onFragment(event) {
+    var list = event.fragments || (event.fragment ? [event.fragment] : []);
+    if (list.length) applyStates(sectionOf(list[0]), true);
+  }
+
+  /* Chromium sizes the letters of SVG text for the zoom the page has at that
+     moment, and does not notice when reveal rescales the slide around them
+     afterwards (the notes opening, the window being resized). The drawing
+     changes size and its lettering does not. Taking each drawing out of the
+     page and putting it straight back makes the browser set the text again. It
+     happens inside one frame, so nothing is seen to flicker. */
+  function resetLettering() {
+    var drawings = document.querySelectorAll(".reveal .slides section svg.draw");
+    each(drawings, function (svg) {
+      var shown = svg.style.display;
+      svg.style.display = "none";
+      void svg.getBoundingClientRect();
+      svg.style.display = shown;
+    });
+  }
+
+  /* ---------------------------------------------------------------- 5. notes */
+
+  function setupNotes(Reveal) {
+    var query = window.location.search;
+    /* Not inside the presenter view's own preview frames, and not in print. */
+    if (/[?&]receiver/.test(query) || PRINTING) return;
+
+    var root = document.documentElement;
+    var panel = document.createElement("aside");
+    panel.id = "notes-panel";
+    panel.setAttribute("aria-label", "Speaker notes");
+    panel.innerHTML =
+      '<div class="np-note">' +
+      '<header><span class="np-title">speaker notes</span><span class="np-where"></span>' +
+      '<button type="button" class="np-close" title="Hide the notes (T)">hide</button></header>' +
+      '<div class="np-body" tabindex="0"></div>' +
+      '<footer><kbd>T</kbd> show or hide notes · <kbd>S</kbd> presenter view' +
+      ' · <a href="/posts/2026-09-26-etec534-ip2/" target="_top">back to the post</a></footer>' +
+      '</div>';
+    var tab = document.createElement("button");
+    tab.id = "notes-tab";
+    tab.type = "button";
+    tab.title = "Show the speaker notes (T)";
+    tab.textContent = "speaker notes";
+    document.body.appendChild(panel);
+    document.body.appendChild(tab);
+
+    var body = panel.querySelector(".np-body");
+    var where = panel.querySelector(".np-where");
+
+    function render() {
+      var slide = Reveal.getCurrentSlide();
+      var notes = slide && slide.querySelector("aside.notes");
+      body.innerHTML = notes ? notes.innerHTML : "<p>No notes for this slide.</p>";
+      body.scrollTop = 0;
+      where.textContent = slide && slide.dataset.where ? slide.dataset.where : "";
+    }
+
+    function remember(value) {
+      try { window.sessionStorage.setItem("ip2-notes", value); } catch (e) { /* sandboxed frame */ }
+    }
+
+    function recall() {
+      try { return window.sessionStorage.getItem("ip2-notes"); } catch (e) { return null; }
+    }
+
+    function setOpen(open, keep) {
+      root.classList.toggle("notes-open", open);
+      tab.setAttribute("aria-expanded", String(open));
+      if (keep) remember(open ? "1" : "0");
+      Reveal.layout();
+    }
+
+    function toggle() { setOpen(!root.classList.contains("notes-open"), true); }
+
+    tab.addEventListener("click", toggle);
+    panel.querySelector(".np-close").addEventListener("click", toggle);
+    Reveal.addKeyBinding({ keyCode: 84, key: "T", description: "Show or hide the speaker notes" }, toggle);
+    Reveal.on("slidechanged", render);
+    render();
+
+    /* The slides carry very little text on purpose, so the notes are where the
+       argument is. On a screen wide enough to hold both, start with them open. */
+    var stored = recall();
+    setOpen(stored === null ? window.innerWidth >= 1000 : stored === "1", false);
+  }
+
+  /* ----------------------------------------------------------------- 6. zoom */
+
+  /* Anything with class="zoom" and data-zoom="ph-name" can be clicked (or
+     reached with Tab and opened with Enter) to see that photograph larger, the
+     way you would pick a clipping up off the page to read it. The picture is
+     the one already in photo-parts.include.html, so nothing is loaded twice. */
+  function setupZoom() {
+    if (PRINTING || document.getElementById("zoom-box")) return;
+    var box = document.createElement("div");
+    box.id = "zoom-box";
+    box.hidden = true;
+    box.setAttribute("role", "dialog");
+    box.setAttribute("aria-modal", "true");
+    box.setAttribute("aria-label", "Enlarged picture");
+    box.innerHTML = '<figure><img alt=""><figcaption></figcaption></figure>' +
+                    '<button type="button" class="zoom-close">put it back</button>';
+    document.body.appendChild(box);
+    var picture = box.querySelector("img");
+    var caption = box.querySelector("figcaption");
+    var opener = null;
+
+    function open(el) {
+      var symbol = document.getElementById(el.dataset.zoom);
+      var image = symbol && symbol.querySelector("image");
+      if (!image) return;
+      picture.src = image.getAttribute("href");
+      picture.alt = el.getAttribute("aria-label") || "";
+      caption.textContent = el.dataset.caption || "";
+      opener = el;
+      box.hidden = false;
+      box.querySelector(".zoom-close").focus();
+    }
+
+    function close() {
+      if (box.hidden) return;
+      box.hidden = true;
+      picture.removeAttribute("src");
+      if (opener && opener.focus) opener.focus();
+      opener = null;
+    }
+
+    each(document.querySelectorAll(".reveal .slides .zoom[data-zoom]"), function (el) {
+      el.setAttribute("tabindex", "0");
+      el.setAttribute("role", "button");
+    });
+
+    document.addEventListener("click", function (event) {
+      if (!box.hidden) { close(); event.stopPropagation(); return; }
+      var el = event.target.closest ? event.target.closest(".zoom[data-zoom]") : null;
+      if (el) { open(el); event.stopPropagation(); }
+    }, true);
+
+    /* While a picture is up, the keyboard belongs to it: any of the keys that
+       would turn the page put the picture back instead. */
+    window.addEventListener("keydown", function (event) {
+      if (box.hidden) {
+        var target = event.target;
+        if ((event.key === "Enter" || event.key === " ") && target && target.matches && target.matches(".zoom[data-zoom]")) {
+          open(target);
+          event.preventDefault();
+          event.stopImmediatePropagation();
+        }
+        return;
+      }
+      close();
+      event.preventDefault();
+      event.stopImmediatePropagation();
+    }, true);
+  }
+
+  /* ------------------------------------------------------------------ start */
+
+  /* In a PDF, the paper grain makes the browser give up on drawing the page as
+     shapes and store each sheet as a picture instead. It has to come out of
+     the artwork itself: styling it away does not reach the copies that <use>
+     makes. On screen nothing changes. */
+  function lightenForPrint() {
+    var parts = PRINTING && document.getElementById("deck-parts");
+    if (!parts) return;
+    each(parts.querySelectorAll(".page-grain"), function (grain) {
+      grain.parentNode.removeChild(grain);
+    });
+  }
+
+  /* Everything this script adds to the slides. Safe to run again: each step
+     only touches what it has not already done. The lettering and the patches
+     are measured from the text, so they wait until the typefaces are in. */
+  var fontsIn = false;
+
+  function dress() {
+    roughen();
+    addSheets();
+    if (fontsIn) {
+      loosen();
+      buildPatches();
+    }
+    slides().forEach(function (section) { applyStates(section, false); });
+  }
+
+  lightenForPrint();
+  dress();
+
+  function whenFontsIn() {
+    if (fontsIn) return;
+    fontsIn = true;
+    dress();
+    resetLettering();
+  }
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(function () {
+      /* "ready" can resolve before the first text has asked for its face. Ask
+         for the three by name, then go. */
+      var faces = ['600 30px "Caveat"', '30px "Special Elite"', '14px "Courier Prime"'];
+      Promise.all(faces.map(function (face) { return document.fonts.load(face); })).then(whenFontsIn, whenFontsIn);
+    });
+    setTimeout(whenFontsIn, 2500);
+  } else {
+    setTimeout(whenFontsIn, 300);
+  }
+
+  /* reveal can put the slides back the way they were first written — leaving
+     its scroll view does exactly that — which undoes all of the above. Watch
+     for the slides being replaced and dress them again. */
+  var deck = document.querySelector(".reveal .slides");
+  if (deck && window.MutationObserver) {
+    var pending = null;
+    new MutationObserver(function () {
+      clearTimeout(pending);
+      pending = setTimeout(dress, 0);
+    }).observe(deck, { childList: true });
+  }
+
+  document.addEventListener("fragmentshown", onFragment);
+  document.addEventListener("fragmenthidden", onFragment);
+  document.addEventListener("slidechanged", function (event) {
+    applyStates(event.previousSlide, false);
+    applyStates(event.currentSlide, false);
+  });
+
+  (function whenReady() {
+    var Reveal = window.Reveal;
+    if (!Reveal || !Reveal.isReady) return void setTimeout(whenReady, 40);
+    if (!Reveal.isReady()) return void Reveal.on("ready", whenReady);
+    /* reveal 5 turns a narrow screen into one long scrolling page. These slides
+       are stepped through on purpose (the patch is painted, then has to dry),
+       so a phone gets the same deck, scaled down. Quarto has no option for
+       this, and 0 is the value reveal reads as "never". */
+    Reveal.configure({ scrollActivationWidth: 0 });
+    Reveal.layout();
+    dress();
+    ["resize", "overviewshown", "overviewhidden"].forEach(function (name) {
+      Reveal.on(name, resetLettering);
+    });
+    setupNotes(Reveal);
+    setupZoom();
+    resetLettering();
+    var settle = function () {
+      document.documentElement.classList.add("deck-ready");
+    };
+    if (fontsIn) settle(); else {
+      var waited = 0;
+      (function poll() {
+        if (fontsIn || waited > 3000) return settle();
+        waited += 50; setTimeout(poll, 50);
+      })();
+    }
+  })();
+})();
+</script>

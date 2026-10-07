@@ -33,6 +33,20 @@ pnpm-debug.log*
 .env.*
 .astro/.astro/
 
+# Quarto render cache and intermediates for the slide decks in presentations/
+.quarto-cache/
+presentations/**/.quarto/
+presentations/**/*_files/
+# The rendered deck is a build artifact. public/etec534-ip2/index.html is the
+# staged copy the site actually serves, and IS committed.
+presentations/**/*.html
+!presentations/**/*.include.html
+
+# scratch directories used while building and verifying
+.tmp-shots/
+.tmp-chrome/
+.tmp-quarto/
+
 # local working artifacts (redundant copies from tooling; safe to ignore)
 .pnpm-store/
 node_modules.prev/

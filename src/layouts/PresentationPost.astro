@@ -1,0 +1,234 @@
+---
+/**
+ * PresentationPost — for posts whose body is a slide deck built elsewhere.
+ *
+ * The deck is a self-contained Quarto/reveal.js HTML file staged under public/.
+ * It is loaded in an iframe rather than inlined, and that is deliberate: reveal
+ * ships its own reset, its own layout engine and its own CSS custom properties,
+ * and inlining it would put all of that into the same document as Tailwind and
+ * the blog's global.css. The iframe is the isolation boundary that lets both
+ * stylesheets exist without either one winning.
+ *
+ * What the reader gets is the deck and nothing else. The post page, the cover
+ * and the "click here to open the presentation" button do not exist — the route
+ * IS the presentation. The title, date, tags, description, RSS entry, tag page
+ * listing and OG image all still come from the .mdx frontmatter, so nothing is
+ * lost by not rendering a post page around it.
+ *
+ * A small nav sits in the bottom-left corner at low opacity and comes up to
+ * full strength on hover or keyboard focus. It is the only way back to the
+ * blog, so it must not be hidden outright — just quiet.
+ *
+ * Opt in per post with a `presentation: { href: "/deck-path/" }` frontmatter key.
+ */
+import type { CollectionEntry } from "astro:content";
+import BaseHead from "@/components/BaseHead.astro";
+import { siteConfig } from "@/site.config";
+
+interface Props {
+	post: CollectionEntry<"post">;
+}
+
+const { post } = Astro.props;
+const { title, description, ogImage, updatedDate, publishDate, presentation } = post.data;
+
+/*
+ * Astro's dev server does not resolve a directory request against public/ the
+ * way a static host does: "/deck/" returns 404 under `astro dev` while
+ * "/deck/index.html" returns the file, and in production both work because every
+ * static host maps a directory to its index. Normalising here means frontmatter
+ * can say either thing and behave the same — otherwise writing the natural
+ * "/deck/" silently strands the iframe on a 404 that never appears in a build.
+ */
+const rawHref = presentation?.href ?? "/";
+const shell = presentation?.background ?? "#181511";
+const src = rawHref.endsWith("/") ? `${rawHref}index.html` : rawHref;
+const socialImage = ogImage ?? `/og-image/${post.id}.png`;
+const articleDate = updatedDate?.toISOString() ?? publishDate.toISOString();
+const deckUrl = new URL(src, Astro.site ?? "https://example.com").href;
+---
+
+<!doctype html>
+<html lang={siteConfig.lang} class="pp-root" style={`--shell:${shell}`}>
+	<head>
+		<BaseHead
+			articleDate={articleDate}
+			description={description}
+			ogImage={socialImage}
+			title={title}
+		/>
+		<style is:global>
+			/*
+			 * The shell takes the deck's own surround colour from the first paint
+			 * (frontmatter `presentation.background`, set as --shell on <html>,
+			 * which also carries it down to .pp-frame). Without this the browser
+			 * flashes the blog's ground before the iframe has anything to show,
+			 * which reads as a broken page rather than a loading one.
+			 *
+			 * !important because global.css is imported by BaseHead and its
+			 * ordering relative to this block is not something this file should
+			 * have to depend on.
+			 *
+			 * Scoped to .pp-root, which only this layout puts on <html>. The
+			 * post route imports this file for every post, and Astro ships a
+			 * route's imported styles whether or not the component rendered —
+			 * unscoped, this rule stopped every ordinary post from scrolling.
+			 */
+			html.pp-root,
+			html.pp-root body {
+				margin: 0 !important;
+				padding: 0 !important;
+				height: 100% !important;
+				overflow: hidden !important;
+				background: var(--shell) !important;
+				background-image: none !important;
+			}
+		</style>
+	</head>
+	<body>
+		{/* Present for assistive tech and for anything that reads the DOM; not
+		    rendered visually, because a visible title would be the cover page
+		    this layout exists to avoid. */}
+		<h1 class="pp-sr">{title}</h1>
+
+		<iframe
+			id="pp-deck"
+			class="pp-frame"
+			src={src}
+			title={`${title} — presentation`}
+			allow="fullscreen"
+			allowfullscreen
+			loading="eager"
+		></iframe>
+
+		<nav class="pp-nav" aria-label="Presentation controls">
+			<a href="/posts/">← Blog</a>
+			<a href={deckUrl} target="_blank" rel="noopener noreferrer">Open ↗</a>
+			<button id="pp-fs" type="button">Full screen</button>
+		</nav>
+
+		<script>
+			const frame = document.getElementById("pp-deck") as HTMLIFrameElement | null;
+			const fsButton = document.getElementById("pp-fs");
+
+			/*
+			 * Hand the iframe the keyboard on load. Without this the arrow keys
+			 * go to the parent document and nothing advances until the reader
+			 * clicks inside the deck first — which reads as a broken deck.
+			 */
+			/*
+			 * Forward a slide hash from the post URL into the deck. The deck runs
+			 * in its own document, so "/posts/slug/#/4" would otherwise land on
+			 * slide 1 while the address bar claimed otherwise. Doing it before
+			 * load means reveal boots straight onto the right slide instead of
+			 * animating there.
+			 */
+			if (frame && window.location.hash.startsWith("#/")) {
+				frame.src += window.location.hash;
+			}
+
+			frame?.addEventListener("load", () => {
+				try {
+					frame.focus();
+				} catch {
+					/* Cross-origin or not yet painted; the click-to-focus path still works. */
+				}
+			});
+
+			fsButton?.addEventListener("click", () => {
+				if (!frame) return;
+				// Prefer fullscreening the frame itself, so reveal's own scaling
+				// recomputes against the real screen instead of a letterboxed box.
+				if (document.fullscreenElement) {
+					void document.exitFullscreen();
+				} else {
+					void frame.requestFullscreen?.();
+				}
+			});
+
+			document.addEventListener("fullscreenchange", () => {
+				if (fsButton) {
+					fsButton.textContent = document.fullscreenElement ? "Exit full screen" : "Full screen";
+				}
+			});
+		</script>
+
+		<style>
+			.pp-sr {
+				position: absolute;
+				width: 1px;
+				height: 1px;
+				padding: 0;
+				margin: -1px;
+				overflow: hidden;
+				clip-path: inset(50%);
+				white-space: nowrap;
+				border: 0;
+			}
+
+			.pp-frame {
+				position: fixed;
+				inset: 0;
+				display: block;
+				width: 100%;
+				height: 100%;
+				border: 0;
+				background: var(--shell);
+			}
+
+			.pp-nav {
+				position: fixed;
+				left: 16px;
+				bottom: 16px;
+				z-index: 50;
+				display: flex;
+				gap: 8px;
+				/* Quiet by default so it never competes with the deck, present on
+				   hover, focus or touch so it is never actually lost. */
+				opacity: 0.2;
+				transition: opacity 220ms ease;
+			}
+
+			.pp-nav:hover,
+			.pp-nav:focus-within {
+				opacity: 1;
+			}
+
+			.pp-nav a,
+			.pp-nav button {
+				font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+				font-size: 11px;
+				letter-spacing: 0.1em;
+				text-transform: uppercase;
+				color: #f2ede0;
+				background: rgba(24, 21, 17, 0.86);
+				border: 1px solid rgba(242, 237, 224, 0.24);
+				border-radius: 3px;
+				padding: 7px 11px;
+				text-decoration: none;
+				cursor: pointer;
+				backdrop-filter: blur(6px);
+				transition:
+					border-color 160ms ease,
+					color 160ms ease;
+			}
+
+			.pp-nav a:hover,
+			.pp-nav button:hover {
+				color: #c9a227;
+				border-color: #c9a227;
+			}
+
+			@media (max-width: 640px) {
+				/* On a phone the deck is short and the nav would sit on top of the
+				   slide number, so give it a little more clearance and let it wrap. */
+				.pp-nav {
+					left: 10px;
+					bottom: 10px;
+					flex-wrap: wrap;
+					max-width: calc(100vw - 20px);
+				}
+			}
+		</style>
+	</body>
+</html>

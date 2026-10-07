@@ -54,6 +54,23 @@
       "default": false,
       "type": "boolean"
     },
+    "presentation": {
+      "type": "object",
+      "properties": {
+        "href": {
+          "type": "string",
+          "pattern": "^\\/.*"
+        },
+        "background": {
+          "default": "#181511",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$"
+        }
+      },
+      "required": [
+        "href"
+      ]
+    },
     "$schema": {
       "type": "string"
     }

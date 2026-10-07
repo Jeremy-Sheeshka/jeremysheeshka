@@ -1,0 +1,15 @@
+{
+  "name": "etec534-ip2-sketch-parts",
+  "private": true,
+  "type": "module",
+  "description": "Build-time tooling for the IP#2 deck: renders sketchbook-ui components to static SVG and vendors Rough.js. Not part of the blog build.",
+  "scripts": {
+    "parts": "node build-parts.mjs"
+  },
+  "dependencies": {
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "roughjs": "^4.6.6",
+    "sketchbook-ui": "1.0.1"
+  }
+}

@@ -1,0 +1,109 @@
+<!--
+  deck-parts.include.html — the paper, the tape, the sticky note and the filters.
+  Written by hand. (The photographs are in photo-parts.include.html, which is
+  generated from img/ by make-photo-parts.mjs.)
+
+  Shapes marked data-r are plain geometry. deck-script.include.html redraws each one
+  with Rough.js when the page loads, so nothing here needs to look hand-drawn.
+-->
+<svg id="deck-parts" width="0" height="0" aria-hidden="true" focusable="false"
+     style="position:absolute;width:0;height:0;overflow:hidden;pointer-events:none">
+  <defs>
+    <!-- Ink dragged through correction fluid that has not dried yet. -->
+    <filter id="smear" x="-30%" y="-60%" width="180%" height="220%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.035 0.42" numOctaves="2" seed="11" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="15" xChannelSelector="R" yChannelSelector="G" result="pulled"/>
+      <feGaussianBlur in="pulled" stdDeviation="1.7 0.5"/>
+    </filter>
+
+    <!-- Pen and pencil lines: a slightly ragged edge, and ink that does not take evenly. -->
+    <filter id="pencil" x="-4%" y="-4%" width="108%" height="108%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="2" seed="5" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="1.5" xChannelSelector="R" yChannelSelector="G" result="d"/>
+      <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.15 1.42" result="gaps"/>
+      <feComposite in="d" in2="gaps" operator="in"/>
+    </filter>
+
+    <!-- The fibre in the paper. -->
+    <filter id="grain" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="8"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.42  0 0 0 0 0.44  0 0 0 0 0.46  0 0 0 0.34 -0.1"/>
+    </filter>
+
+    <!-- A cut-out photograph lying on the page, and a sticky note lifting off it. -->
+    <filter id="cut-shadow" x="-12%" y="-12%" width="124%" height="130%">
+      <feDropShadow dx="0.8" dy="1.8" stdDeviation="1.5" flood-color="#20242a" flood-opacity="0.34"/>
+    </filter>
+    <filter id="note-shadow" x="-12%" y="-12%" width="124%" height="136%">
+      <feDropShadow dx="1" dy="3.2" stdDeviation="2.6" flood-color="#20242a" flood-opacity="0.3"/>
+    </filter>
+
+    <linearGradient id="postit-yellow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f6e77c"/>
+      <stop offset="0.16" stop-color="#fdf08e"/>
+      <stop offset="1" stop-color="#fbe873"/>
+    </linearGradient>
+    <linearGradient id="postit-curl" x1="1" y1="1" x2="0.55" y2="0.5">
+      <stop offset="0" stop-color="#d9c552"/>
+      <stop offset="1" stop-color="#fbe873" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="page-age" cx="0.5" cy="0.5" r="0.75">
+      <stop offset="0.62" stop-color="#8a7a50" stop-opacity="0"/>
+      <stop offset="1" stop-color="#8a7a50" stop-opacity="0.085"/>
+    </radialGradient>
+
+    <!-- Three holes for the binder rings. The desk shows through them. -->
+    <mask id="page-holes" maskUnits="userSpaceOnUse" x="0" y="0" width="1248" height="704">
+      <rect x="0" y="0" width="1248" height="704" fill="#fff"/>
+      <circle cx="38" cy="124" r="11.5" fill="#000"/>
+      <circle cx="38" cy="352" r="11.5" fill="#000"/>
+      <circle cx="38" cy="580" r="11.5" fill="#000"/>
+    </mask>
+  </defs>
+
+  <!--
+    A sheet of ruled loose-leaf, lying on two more. It is drawn 1248 x 704 and
+    placed at 16,8 on the slide, so its rules fall on slide y = 104, 136, 168 ...
+    (every 32) and its margin line on x = 104. The drawings are laid out on that
+    same grid: their top edge is the first rule.
+  -->
+  <symbol id="lined-page" viewBox="0 0 1248 704" preserveAspectRatio="none">
+    <rect x="9" y="11" width="1236" height="692" rx="2" fill="#dfe2e4" transform="rotate(0.3 624 352)"/>
+    <rect x="5" y="6" width="1238" height="694" rx="2" fill="#eceeef" transform="rotate(-0.18 624 352)"/>
+    <g mask="url(#page-holes)">
+      <rect x="0" y="0" width="1240" height="696" rx="2" fill="#f8f9f8"/>
+      <rect class="page-grain" x="0" y="0" width="1240" height="696" filter="url(#grain)"/>
+      <rect x="0" y="0" width="1240" height="696" fill="url(#page-age)"/>
+      <g stroke="#9bbbe2" stroke-width="1.05" opacity="0.78">
+        <line x1="0" y1="96" x2="1240" y2="96"/><line x1="0" y1="128" x2="1240" y2="128"/>
+        <line x1="0" y1="160" x2="1240" y2="160"/><line x1="0" y1="192" x2="1240" y2="192"/>
+        <line x1="0" y1="224" x2="1240" y2="224"/><line x1="0" y1="256" x2="1240" y2="256"/>
+        <line x1="0" y1="288" x2="1240" y2="288"/><line x1="0" y1="320" x2="1240" y2="320"/>
+        <line x1="0" y1="352" x2="1240" y2="352"/><line x1="0" y1="384" x2="1240" y2="384"/>
+        <line x1="0" y1="416" x2="1240" y2="416"/><line x1="0" y1="448" x2="1240" y2="448"/>
+        <line x1="0" y1="480" x2="1240" y2="480"/><line x1="0" y1="512" x2="1240" y2="512"/>
+        <line x1="0" y1="544" x2="1240" y2="544"/><line x1="0" y1="576" x2="1240" y2="576"/>
+        <line x1="0" y1="608" x2="1240" y2="608"/><line x1="0" y1="640" x2="1240" y2="640"/>
+        <line x1="0" y1="672" x2="1240" y2="672"/>
+      </g>
+      <line x1="88" y1="0" x2="88" y2="696" stroke="#e58c8c" stroke-width="1.3" opacity="0.85"/>
+    </g>
+    <g fill="none" stroke="#3c4148" stroke-opacity="0.22" stroke-width="1.2">
+      <circle cx="38" cy="124" r="11.5"/><circle cx="38" cy="352" r="11.5"/><circle cx="38" cy="580" r="11.5"/>
+    </g>
+  </symbol>
+
+  <!-- A torn-off length of masking tape. -->
+  <symbol id="tape" viewBox="0 0 120 30" preserveAspectRatio="none" overflow="visible">
+    <polygon points="2,1 7,0 12,2 108,0 113,2 118,0 120,6 117,11 120,16 117,22 119,29 112,28 106,30 14,29 8,30 1,28 3,22 0,16 3,10 0,5"
+             fill="#efe6b9" fill-opacity="0.74" stroke="#8d7f4a" stroke-opacity="0.28" stroke-width="0.6"/>
+    <rect x="4" y="5" width="112" height="3" fill="#fff" fill-opacity="0.22"/>
+  </symbol>
+
+  <!-- A yellow sticky note. Stretch it to whatever size is needed. -->
+  <symbol id="postit" viewBox="0 0 200 200" preserveAspectRatio="none">
+    <polygon points="0,0 200,0 200,176 188,200 0,200" fill="url(#postit-yellow)"/>
+    <polygon points="200,176 188,200 150,200 200,150" fill="url(#postit-curl)"/>
+    <rect x="0" y="0" width="200" height="30" fill="#e9d866" fill-opacity="0.35"/>
+  </symbol>
+</svg>

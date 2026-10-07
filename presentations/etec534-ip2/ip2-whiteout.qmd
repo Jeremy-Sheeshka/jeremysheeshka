@@ -1,0 +1,466 @@
+---
+# HOW THIS FILE IS LAID OUT
+#
+# Each slide is a "## Heading", one drawing, and its speaker notes.
+#
+# Every slide is a sheet of ruled paper. The drawings are plain SVG inside
+# ```{=html} fences, in a 1124 x 480 box where one unit is one pixel on the
+# slide and the page's rules fall on y = 0, 32, 64 ... 480. Handwriting is given
+# a y on (or a pixel above) one of those, so it sits on the line.
+#
+#   data-r                        a line to be redrawn as a pen stroke (Rough.js)
+#   <use href="#ph-name">         a photograph from img/ (make-photo-parts.mjs)
+#   class="cut"                   ...cut out and stuck down
+#   class="zoom" data-zoom="..."  ...that can be clicked to look at it larger
+#   <g class="patch" data-over="#id">   correction fluid over that word
+#   <text class="pen" data-patch="id">  what gets written on that patch
+#
+# The speaker notes are the ::: {.notes} blocks. They are ordinary Markdown and
+# are the part most worth editing.
+#
+# (Nothing may come between this header and the first "##": anything that does
+# becomes a blank slide of its own.)
+pagetitle: "Painting Over the Mistake — White-Out as an Educational Technology"
+author: "Jeremy Sheeshka"
+date: "October 2026"
+lang: en-CA
+format:
+  revealjs:
+    theme: default
+    css: whiteout.css
+    # photo-parts.include.html is generated (make-photo-parts.mjs, run by
+    # render.sh); the other two are written by hand. The script runs last.
+    include-after-body:
+      - photo-parts.include.html
+      - deck-parts.include.html
+      - deck-script.include.html
+    embed-resources: true
+    # There is no math in the deck. Without this, reveal's math plugin fetches
+    # MathJax from a CDN on every visit — the only thing the file would not
+    # already contain.
+    html-math-method: plain
+    width: 1280
+    height: 720
+    margin: 0
+    center: false
+    auto-stretch: false
+    controls: true
+    controls-layout: bottom-right
+    controls-tutorial: false
+    progress: true
+    # The assignment is five slides. The cover and the reference list are not
+    # two of them, so reveal's own "3 / 7" counter would say the wrong thing.
+    # Each counted slide carries "n of 5" in its top margin instead.
+    slide-number: false
+    menu: false
+    hash: true
+    history: false
+    navigation-mode: linear
+    # The page turn is in whiteout.css; reveal's own transitions are off.
+    transition: none
+    background-transition: none
+    pdf-separate-fragments: false
+---
+
+## Painting Over the Mistake {.cover .auto-write data-dry="1700" data-where="cover"}
+
+```{=html}
+<svg class="draw" viewBox="0 0 1124 608" role="img" aria-labelledby="cover-desc">
+<desc id="cover-desc">A sheet of ruled paper. The title is typed across it: Painting Over the Mistkae, with the last word misspelt. Advancing the slide brushes white correction fluid over the misspelt word, and once it has dried the word Mistake is written on the patch in blue pen. Stuck to the page are cut-out photographs of a bottle of Wite-Out, a correction pen and a correction tape dispenser, and a photograph of the same kind of fix made on a real printed page.</desc>
+<text class="hand s" x="6" y="30">Jeremy Sheeshka</text>
+<text class="hand s" x="262" y="30">ETEC 534, IP #2</text>
+<text class="hand s" x="500" y="30">October 2026</text>
+
+<text class="title-typed typed-worn" x="4" y="191" xml:space="preserve">Painting Over the <tspan id="t-typo">Mistkae</tspan></text>
+<g class="patch" id="p-title" data-over="#t-typo" data-pad="12,5" data-rows="4"></g>
+<text class="pen" data-patch="p-title" font-size="80" data-tilt="-2.2">Mistake</text>
+<g class="hint">
+<text class="hand s blue" x="548" y="112">oops. press → to fix it</text>
+<line data-r="0.9" data-arrow="end" x1="664" y1="122" x2="680" y2="142" stroke="#1f48a6" stroke-width="1.8"/>
+</g>
+
+<text class="hand xl" x="6" y="286">a look at white-out as an educational technology</text>
+<text class="hand s pencil" x="6" y="318">an artifact of the space between the typewriter and the undo button</text>
+
+<g transform="rotate(-1.4 250 468)">
+<use href="#ph-page" x="38" y="392" width="424" height="152" class="cut zoom" data-zoom="ph-page" aria-label="A close-up photograph of a printed page of placeholder text. One phrase has been painted over with white correction fluid, and the words sit amet auctor are written on the dried patch by hand in blue-green ballpoint." data-caption="Correction fluid on a printed page, with the fix written over it. Photograph: Bill (2008), public domain. Cropped and colour-balanced."/>
+<use href="#tape" x="8" y="384" width="76" height="21" transform="rotate(-32 46 394)"/>
+<use href="#tape" x="420" y="530" width="76" height="21" transform="rotate(-27 458 540)"/>
+</g>
+<text class="hand xs pencil" x="64" y="576">what it looks like on a real page (click it)</text>
+
+<use href="#ph-bottle" x="962" y="14" width="134" height="235" class="cut" transform="rotate(3 1029 131)"/>
+<use href="#ph-pen" x="792" y="340" width="300" height="106" class="cut" transform="rotate(-13 942 393)"/>
+<use href="#ph-tape" x="888" y="456" width="172" height="102" class="cut" transform="rotate(8 974 507)"/>
+
+<text class="small mute" x="1118" y="603" text-anchor="end">Photographs: page, Bill (2008); bottle, J B (2009); pen, Chiesa (2007); tape, Creative Tools (2010). Credits on the last page.</text>
+<g class="fragment marker" data-state="painted"></g>
+</svg>
+```
+
+::: {.notes}
+For this presentation I am looking at white-out (correction fluid) as an educational technology.
+
+The title has a typo in it on purpose. *(Click.)* The typo gets painted over, and once the patch has dried the fix gets written on top of it in pen. The typo was never deleted, though. It is still in the file underneath the patch, and this is what the rest of the slides build on: the placement of white-out is surface level, where the writing still exists underneath and is just hidden.
+
+*(The cover and the reference list are not counted in the five slides. The comics and the photo of the page can be clicked to see them larger.)*
+:::
+
+## White-Out through McLuhan's tetrad {.tetrad data-kicker="1 of 5 · Media ecology" data-where="1 of 5"}
+
+```{=html}
+<svg class="draw" viewBox="0 0 1124 480" role="img" aria-labelledby="tetrad-desc">
+<desc id="tetrad-desc">McLuhan's tetrad written on ruled paper as a cross, with a cut-out photograph of a bottle of Wite-Out stuck at the centre. Top left, enhances: a clean page, fixed in private, where the word clean is written on a patch of correction fluid. Top right, reverses into: a cover-up, the patch is all you see, beside a thick cracked patch. Bottom left, retrieves: the painter's fix, paint over it, with a photograph of the brush from a bottle cap. Bottom right, obsolesces: the typing eraser, retyping the whole page. Underneath, a line through time with a photograph at each point: a typewriter eraser; Liquid Paper bottles, for white-out in Dallas in 1954 to 1956; IBM's correcting Selectric typewriter of 1973; a correction tape dispenser; and a keyboard's Control key beside a key marked Undo.</desc>
+<line data-r="1.4" x1="562" y1="6" x2="562" y2="312" stroke-width="1.7"/>
+<line data-r="1.4" x1="12" y1="160" x2="1112" y2="160" stroke-width="1.7"/>
+<use href="#ph-bottle" x="524" y="92" width="76" height="133" class="cut" transform="rotate(-4 562 158)"/>
+
+<text class="lbl" x="34" y="26">enhances</text>
+<text class="hand l" x="34" y="63">a <tspan id="t-messy">messy</tspan><tspan dx="9"> page,</tspan></text>
+<g class="patch set" id="p-clean" data-over="#t-messy" data-pad="0,0" data-rows="3" data-ghost="0.9"></g>
+<text class="pen set" data-patch="p-clean" font-size="38" data-tilt="-2">clean</text>
+<text class="hand l" x="34" y="95">fixed in private</text>
+
+<text class="lbl" x="596" y="26">reverses into</text>
+<text class="hand l" x="596" y="63">a cover-up:</text>
+<text class="hand l" x="596" y="95">the patch is all you see</text>
+<path data-r="1.8" d="M 984 62 q 12 -16 24 2 t 24 -4 t 24 6 t 22 -6" stroke-width="1.6"/>
+<g class="patch set" data-box="970,30,124,62" data-rows="4"></g>
+<polyline class="crack" points="976,53 990,59 1000,50 1013,61 1026,56 1039,67 1054,59 1067,71 1086,65"/>
+<polyline class="crack" points="1013,61 1009,45 1017,33"/>
+<polyline class="crack" points="1039,67 1034,79 1041,93"/>
+<polyline class="crack" points="1067,71 1073,83 1069,93"/>
+<polyline class="crack" points="984,76 997,82 1005,73"/>
+<polygon class="chip" points="1049,73 1064,70 1069,84 1056,89 1046,81"/>
+<path class="under" d="M 1048 80 q 8 -9 18 -2"/>
+<polygon class="flake" points="1052,104 1065,100 1069,110 1057,114"/>
+<polygon class="flake" points="1080,108 1088,106 1090,113 1083,115"/>
+<polygon class="flake" points="1020,106 1027,104 1029,110 1022,111"/>
+
+<text class="lbl" x="34" y="186">retrieves</text>
+<text class="hand l" x="34" y="223">the painter's fix:</text>
+<text class="hand l" x="34" y="255">paint over it</text>
+<use href="#ph-brush" x="408" y="170" width="56" height="141" class="cut" transform="rotate(13 436 240)"/>
+
+<text class="lbl" x="596" y="186">obsolesces</text>
+<text class="hand l" x="596" y="223">the typing eraser,</text>
+<text class="hand l" x="596" y="255">retyping the whole page</text>
+
+<text class="lbl" x="12" y="338">before it</text>
+<text class="lbl" x="1112" y="338" text-anchor="end">after it</text>
+<line data-r="1" data-arrow="end" x1="12" y1="416" x2="1112" y2="416" stroke-width="1.7"/>
+<circle data-r="0.8" cx="110" cy="416" r="5" fill="#ffffff" data-fill="solid" stroke-width="1.6"/>
+<circle data-r="0.8" cx="330" cy="416" r="7" fill="#23262b" data-fill="solid" stroke-width="1.6"/>
+<circle data-r="0.8" cx="562" cy="416" r="5" fill="#ffffff" data-fill="solid" stroke-width="1.6"/>
+<circle data-r="0.8" cx="800" cy="416" r="5" fill="#ffffff" data-fill="solid" stroke-width="1.6"/>
+<circle data-r="0.8" cx="1010" cy="416" r="5" fill="#ffffff" data-fill="solid" stroke-width="1.6"/>
+<use href="#ph-eraser" x="78" y="344" width="64" height="65" class="cut" transform="rotate(-8 110 376)"/>
+<use href="#ph-liquidpaper" x="288" y="334" width="86" height="76" class="cut" transform="rotate(3 331 372)"/>
+<use href="#ph-selectric" x="504" y="340" width="116" height="70" class="cut" transform="rotate(-2 562 375)"/>
+<use href="#ph-tape" x="748" y="346" width="106" height="63" class="cut" transform="rotate(5 801 377)"/>
+<use href="#ph-keys" x="952" y="352" width="116" height="54" class="cut" transform="rotate(-3 1010 379)"/>
+<text class="typed" x="110" y="443" text-anchor="middle">typing eraser</text>
+<text class="small mute" x="110" y="461" text-anchor="middle">or retype the page</text>
+<text class="typed" x="330" y="443" text-anchor="middle">white-out</text>
+<text class="small mute" x="330" y="461" text-anchor="middle">Dallas, 1954–56</text>
+<text class="typed" x="562" y="443" text-anchor="middle">lift-off tape</text>
+<text class="small mute" x="562" y="461" text-anchor="middle">IBM's correcting Selectric, 1973</text>
+<text class="typed" x="800" y="443" text-anchor="middle">correction tape</text>
+<text class="small mute" x="800" y="461" text-anchor="middle">goes on dry</text>
+<text class="typed" x="1010" y="443" text-anchor="middle">undo</text>
+<text class="small mute" x="1010" y="461" text-anchor="middle">Ctrl + Z</text>
+</svg>
+<p class="cite-line">Tetrad arranged as in McLuhan &amp; McLuhan (1988, p. 129). Dates: Jones (2025); IBM (n.d.). Photographs, cut out: bottle, J B (2009); brush, 8joKeaton (2021); eraser, Takkk (2010); Liquid Paper bottles at The Women's Museum, Dallas, FA2010 (2009); Selectric, Tekniska museet (2011); tape, Creative Tools (2010); keys, Yrithinnd (2007).</p>
+```
+
+::: {.notes}
+White-out comes out of the typewriter office before it ever shows up in a classroom. Bette Nesmith Graham worked in Dallas as a secretary and a freelance artist, and in 1954 she "stopped erasing typing errors and began using tempera paint to cover them" (Jones, 2025). Two years later she was sharing it with other secretaries as Mistake Out, and by 1958 it had been renamed Liquid Paper.
+
+From the office it made its way into pencil cases, which is where I see it becoming a learning tool. In 2008 it was banned from schools in Seychelles, where students had been using it on their mistakes and on the furniture ("Correction Fluid Banned in Schools," 2008), and today a candidate is not allowed to use it in a Cambridge English exam (Cambridge English, n.d.). So the users I follow here are typists, students, teachers, examiners and, at the end, a cartoonist.
+
+I put the four parts of the tetrad up at once, the way McLuhan and McLuhan (1988) print theirs (p. 129), since it "presents not a sequential process, but rather four simultaneous ones" (p. 99). White-out **enhances** a clean page that you fixed yourself, in private. It **obsolesces** the typing eraser and retyping the whole page. It **retrieves** the painter's way of fixing things, which is to paint over it (retrieval needs "some translation or metamorphosis" (p. 101), and here a studio habit comes back as an office supply). Pushed to its limit it **reverses into** a cover-up, where a patch put on too thick cracks and flakes and is the first thing you see, which is where it ends up banned on exams and forms.
+
+The line along the bottom is where it sits in time, with the eraser and the retyped page before it, then IBM's correcting Selectric in 1973, which lifted the mistake off of the page with sticky tape (IBM, n.d.), then correction tape, and then the undo button. I see white-out as a little artifact of the space between the typewriter and digital text. There is less of a need for its original purpose now, but it still serves me.
+:::
+
+## What we handed to the bottle {.scale data-kicker="2 of 5 · Actor-network theory · Delegation" data-where="2 of 5"}
+
+```{=html}
+<svg class="draw" viewBox="0 0 1124 480" role="img" aria-labelledby="scale-desc">
+<desc id="scale-desc">A balance scale drawn in pen on ruled paper. On the left pan sits a cut-out photograph of an open bottle of correction fluid with its brush beside it, labelled dab, wait, write over it. On the right pan are three slips of paper: retype the page, copy it out again, and, in red, the teacher marks it. The two sides balance. On the next step a yellow sticky note reading on strike, it dried out, lands on the bottle and the scale tips toward the slips of paper.</desc>
+<text class="hand xl" x="562" y="62" text-anchor="middle">delegation</text>
+<line data-r="1.2" x1="562" y1="88" x2="562" y2="412" stroke-width="2.4"/>
+<polygon data-r="1.2" points="504,446 620,446 562,406" fill="#23262b" data-fill="hachure" data-gap="4" stroke-width="1.8"/>
+<line data-r="1" x1="424" y1="448" x2="700" y2="448" stroke-width="1.8"/>
+
+<g class="scale-arm">
+<line data-r="1" x1="232" y1="88" x2="892" y2="88" stroke-width="3"/>
+<line data-r="0.9" x1="242" y1="88" x2="180" y2="262" stroke-width="1.5"/>
+<line data-r="0.9" x1="242" y1="88" x2="304" y2="262" stroke-width="1.5"/>
+<line data-r="1" x1="166" y1="262" x2="318" y2="262" stroke-width="2"/>
+<path data-r="1" d="M 170 262 Q 242 306 314 262" stroke-width="2"/>
+<line data-r="0.9" x1="882" y1="88" x2="776" y2="262" stroke-width="1.5"/>
+<line data-r="0.9" x1="882" y1="88" x2="988" y2="262" stroke-width="1.5"/>
+<line data-r="1" x1="762" y1="262" x2="1002" y2="262" stroke-width="2"/>
+<path data-r="1" d="M 766 262 Q 882 312 998 262" stroke-width="2"/>
+
+<use href="#ph-misnon" x="196" y="156" width="58" height="107" class="cut" transform="rotate(-2 225 210)"/>
+<use href="#ph-brush" x="258" y="184" width="31" height="78" class="cut" transform="rotate(9 273 223)"/>
+
+<g transform="rotate(-1.4 882 244)">
+<polygon class="strip" points="770,226 995,224 996,262 771,263"/>
+<text class="slip-typed" x="882" y="251" text-anchor="middle">retype the page</text>
+</g>
+<g transform="rotate(1.3 884 206)">
+<polygon class="strip" points="774,188 998,187 999,225 773,226"/>
+<text class="hand s pencil" x="886" y="216" text-anchor="middle">copy it out again</text>
+</g>
+<g transform="rotate(-1 880 168)">
+<polygon class="strip" points="768,150 992,149 993,187 769,188"/>
+<text class="hand s red" x="880" y="178" text-anchor="middle">the teacher marks it</text>
+</g>
+
+<g class="strike-note" transform="rotate(-7 350 190)">
+<use href="#postit" x="274" y="136" width="150" height="110" filter="url(#note-shadow)"/>
+<text class="hand b" x="349" y="186" text-anchor="middle">on strike!</text>
+<text class="hand xs" x="349" y="216" text-anchor="middle">(it dried out)</text>
+</g>
+</g>
+
+<circle data-r="0.8" cx="562" cy="88" r="7" fill="#23262b" data-fill="solid" stroke-width="1.8"/>
+
+<text class="lbl" x="242" y="378" text-anchor="middle">with the bottle</text>
+<text class="hand" x="242" y="415" text-anchor="middle">dab · wait · write over it</text>
+<text class="lbl" x="882" y="378" text-anchor="middle">without it</text>
+<text class="hand" x="882" y="415" text-anchor="middle">somebody has to do all this</text>
+<g class="fragment marker" data-state="struck"></g>
+</svg>
+<p class="cite-line">After Latour (1992): two columns that make “a scale where tiny efforts balance out mighty weights” (p. 229); delegates as “lieutenants … holding the place of, for, someone else” (p. 239); the notice on the door, “The Groom Is On Strike” (p. 227). Photographs, cut out: 8joKeaton (2021).</p>
+```
+
+::: {.notes}
+Latour (1992) has a simple way of working out what a nonhuman does, which is to "imagine what other humans or other nonhumans would have to do were this character not present" (p. 229). He has the reader put the work people would have to do without a door in one column and the "gentle pushing" in the other, and calls the result "a scale where tiny efforts balance out mighty weights" (p. 229), so I drew the scale.
+
+On the left is the bottle (dab, wait, write over it), and on the right is the work it stands in for: the typist retypes the page, the student copies it out again, and the teacher finds the mistake and marks it. Latour's word for handing work over like this is delegation, and he calls the stand-ins "lieutenants", from the French for "holding the place of, for, someone else" (p. 239).
+
+The question for me is which job got handed over. The bottle doesn't erase anything (the mistake is still on the page underneath the paint), so what we delegated was the hiding, and it is now the student who decides what the teacher gets to see. When correction fluid was banned in schools in Seychelles, one of the reasons given was that crossing out instead "allows teachers to see what kind of errors students are making and address them accordingly" ("Correction Fluid Banned in Schools," 2008). The student gets a clean page out of this, and the teacher loses what those mistakes would have told them.
+
+*(Click.)* Delegates can also fail. Latour's door starts with a notice that reads "The Groom Is On Strike, For God's Sake, Keep The Door Closed" (p. 227), and a bottle of white-out does the same thing when it dries out and becomes useless, at which point all of the work on the right comes back.
+:::
+
+## What it hands back {.prescription data-kicker="3 of 5 · Actor-network theory · Prescription" data-where="3 of 5"}
+
+```{=html}
+<svg class="draw" viewBox="0 0 1124 480" role="img" aria-labelledby="presc-desc">
+<desc id="presc-desc">A strip cut from a typed page is stuck to the ruled paper. It reads: The results was inconclusive. The first step brushes correction fluid over the word was, and a pencilled note says wait for it to dry. The second step writes were on the patch in blue pen. If that step is taken before the patch has dried, the word smudges. Below it, a cut-out photograph of a bottle of Wite-Out with a speech balloon: shake me, one thin coat, now wait. Beside that, a correction tape dispenser with the note: tape goes on dry, no waiting. On the right, an advertisement taped to the page and an exam rule on a yellow sticky note. Along the bottom, in handwriting, Latour's sentence about social relations being prescribed back to us by nonhumans.</desc>
+<polygon class="strip" points="10,40 572,36 574,94 12,97"/>
+<text class="typed-line typed-worn" x="36" y="77" xml:space="preserve">The results <tspan id="t-was">was</tspan> inconclusive.</text>
+<g class="patch" id="p-was" data-over="#t-was" data-pad="5,2" data-rows="3" data-ghost="0.92"></g>
+<path class="gouge" data-patch="p-was" d="M 0 0"/>
+<text class="pen" data-patch="p-was" font-size="32" data-tilt="-3">were</text>
+
+<text class="hand s pencil cap cap-wet" x="36" y="127">…wait for it to dry</text>
+<text class="hand s pencil cap cap-dry" x="36" y="127">dry. now you can write on it.</text>
+<text class="hand s pencil cap cap-done" x="36" y="127">“was” is still under there.</text>
+<text class="hand s red cap cap-smudge" x="36" y="127">didn't wait. go back and try again.</text>
+
+<text class="lbl" x="150" y="182">the bottle's script</text>
+<use href="#ph-bottle" x="26" y="170" width="92" height="161" class="cut" transform="rotate(-5 72 250)"/>
+<ellipse data-r="1.2" cx="352" cy="262" rx="198" ry="56" fill="#ffffff" data-fill="solid" stroke-width="1.8"/>
+<polygon points="168,248 124,240 170,276" fill="#ffffff" stroke="none"/>
+<line data-r="0.9" x1="169" y1="247" x2="122" y2="240" stroke-width="1.8"/>
+<line data-r="0.9" x1="122" y1="240" x2="172" y2="277" stroke-width="1.8"/>
+<text class="hand" x="354" y="256" text-anchor="middle">shake me. one thin coat.</text>
+<text class="hand b" x="354" y="290" text-anchor="middle">now wait.</text>
+
+<use href="#ph-tape" x="150" y="338" width="96" height="57" class="cut" transform="rotate(-7 198 366)"/>
+<text class="hand s pencil" x="262" y="383">tape goes on dry. no waiting.</text>
+
+<text class="lbl" x="664" y="12">the ad says</text>
+<g transform="rotate(0.9 870 166)">
+<use href="#ph-ad" x="664" y="26" width="412" height="280" class="cut zoom" data-zoom="ph-ad" aria-label="A print advertisement for Paper Mate Liquid Paper, drawn like a panel from a 1950s romance comic. A priest says: If anybody has any objections, speak now or forever hold your peace. A guest at the back has stood up, and his speech balloon has been painted over with correction fluid and rewritten by hand in blue pen: Congratulations!! A bottle in the corner carries the line: If it's written, you can take it back." data-caption="“Marriage”, a print advertisement for Paper Mate Liquid Paper. Giovanni+Draftfcb (2012); illustration by Julius Ohta."/>
+<use href="#tape" x="826" y="14" width="88" height="23" transform="rotate(-3 870 25)"/>
+</g>
+<text class="hand xs pencil" x="1078" y="14" text-anchor="end">(click it to read it)</text>
+
+<g transform="rotate(-1.6 872 378)">
+<use href="#postit" x="676" y="322" width="392" height="116" filter="url(#note-shadow)"/>
+<text class="lbl" x="696" y="346">the exam says</text>
+<text class="rule-text" x="696" y="370">“You are not allowed to use correction fluid,</text>
+<text class="rule-text" x="696" y="389">correction tape, or erasable pen … please just</text>
+<text class="rule-text" x="696" y="408">strike through the work that you do not want</text>
+<text class="rule-text" x="696" y="427">us to mark.”</text>
+</g>
+
+<text class="hand quote" x="6" y="477">“…what defines our social relations is, for the most part, prescribed back to us by nonhumans.”</text>
+<g class="fragment marker" data-state="painted"></g>
+<g class="fragment marker" data-state="written"></g>
+</svg>
+<p class="cite-line">Quotation: Johnson [Latour] (1988, p. 310). Advertisement: Giovanni+Draftfcb (2012), for Paper Mate Liquid Paper, illustrated by Julius Ohta. Exam rule: Cambridge English (n.d.). Photographs, cut out: bottle, J B (2009); tape, Creative Tools (2010).</p>
+```
+
+::: {.notes}
+If delegation is the work we hand over, prescription is what comes back to us. Latour (1992) defines it as "the behavior imposed back onto the human by nonhuman delegates" (p. 232), and says you can hear it by putting the machine's silence into sentences, usually in the imperative: "do this, do that, behave this way" (p. 232). The bottle's sentences would be shake me, one thin coat, now wait.
+
+Waiting for it to dry is like having to reflect on your mistake for a few seconds, and I built that into this slide. *(Click once to paint over "was", and click again to write on it.)* If you write on the patch before it has dried, the pen drags through it and smudges, and you have to go back and do it properly. Latour's version is the door with the strong spring where, if you aren't quick, "your nose will get shorter and bloody" (p. 232). Correction tape goes on dry and the undo button has no wait at all, so both of those take the pause away.
+
+The assignment asks what Latour means by "what defines our social relations is, for the most part, prescribed back to us by nonhumans" (Johnson [Latour], 1988, p. 310). I take it to mean that once we have handed our jobs over to things, the things start setting the terms for how we deal with each other. My example is on the right. The ad promises "If it's written, you can take it back" (Giovanni+Draftfcb, 2012), which is white-out being used to hide something and not just to correct a mistake. An exam board says the opposite, "You are not allowed to use correction fluid, correction tape, or erasable pen", partly because the fluid "can cause issues when scanning" (Cambridge English, n.d.). So what a candidate is allowed to do with their own mistake ends up being settled between a bottle and a scanner. I suppose the expectation of a clean page, where the fix is invisible instead of going with the mistake, is something the bottle hands back to us as well.
+:::
+
+## From object to thing {.thing .auto-write data-dry="1500" data-kicker="4 of 5 · Latour · Matters of concern" data-where="4 of 5"}
+
+```{=html}
+<svg class="draw" viewBox="0 0 1124 480" role="img" aria-labelledby="thing-desc">
+<desc id="thing-desc">A cut-out photograph of a bottle of Wite-Out is stuck to the ruled paper with a typed label under it: object, matter of fact. On the next step the words object and fact are painted over and rewritten by hand as thing and concern, a correction tape and a correction pen turn up beside the bottle, and seven parties gather in a pencilled ring around it, each saying something different. The teacher: I need to see the mistakes. The exam scanner: I can't read through it. The school desks: it's all over us. The ozone layer: what is in the solvent? The health officer: who is breathing it in? The cartoonist: it won't show in print. The student: nobody has to see it.</desc>
+<g class="assembly">
+<ellipse data-r="1.5" data-single cx="562" cy="226" rx="310" ry="128" stroke="#7c8188" stroke-width="1.8"/>
+<circle data-r="0.9" cx="562" cy="98" r="7" fill="#23262b" data-fill="solid" stroke-width="1.5"/>
+<circle data-r="0.9" cx="804" cy="146" r="7" fill="#23262b" data-fill="solid" stroke-width="1.5"/>
+<circle data-r="0.9" cx="857" cy="266" r="7" fill="#23262b" data-fill="solid" stroke-width="1.5"/>
+<circle data-r="0.9" cx="692" cy="342" r="7" fill="#23262b" data-fill="solid" stroke-width="1.5"/>
+<circle data-r="0.9" cx="432" cy="342" r="7" fill="#23262b" data-fill="solid" stroke-width="1.5"/>
+<circle data-r="0.9" cx="267" cy="266" r="7" fill="#23262b" data-fill="solid" stroke-width="1.5"/>
+<circle data-r="0.9" cx="320" cy="146" r="7" fill="#23262b" data-fill="solid" stroke-width="1.5"/>
+
+<text class="hand b" x="562" y="31" text-anchor="middle">the teacher</text>
+<text class="hand s soft" x="562" y="63" text-anchor="middle">“I need to see the mistakes”</text>
+
+<text class="hand b" x="830" y="127">the exam scanner</text>
+<text class="hand s soft" x="830" y="159">“I can't read through it”</text>
+
+<text class="hand b" x="884" y="255">the school desks</text>
+<text class="hand s soft" x="884" y="287">“it's all over us”</text>
+
+<text class="hand b" x="718" y="383">the ozone layer</text>
+<text class="hand s soft" x="718" y="415">“what is in the solvent?”</text>
+
+<text class="hand b" x="406" y="383" text-anchor="end">the health officer</text>
+<text class="hand s soft" x="406" y="415" text-anchor="end">“who is breathing it in?”</text>
+
+<text class="hand b" x="240" y="255" text-anchor="end">the cartoonist</text>
+<text class="hand s soft" x="240" y="287" text-anchor="end">“it won't show in print”</text>
+
+<text class="hand b" x="294" y="127" text-anchor="end">the student</text>
+<text class="hand s soft" x="294" y="159" text-anchor="end">“nobody has to see it”</text>
+
+<use href="#ph-tape" x="404" y="212" width="84" height="50" class="cut" transform="rotate(-9 446 237)"/>
+<use href="#ph-pen" x="622" y="198" width="136" height="48" class="cut" transform="rotate(-24 690 222)"/>
+
+<text class="hand" x="562" y="477" text-anchor="middle">“the issue that brings people together because it divides them”</text>
+</g>
+
+<g class="the-bottle"><use href="#ph-bottle" x="493" y="34" width="138" height="242" class="cut"/></g>
+<polygon class="strip" points="398,284 756,281 758,319 400,322"/>
+<text class="label-typed typed-worn" x="416" y="309" xml:space="preserve"><tspan id="t-object">OBJECT</tspan> · matter of <tspan id="t-fact">fact</tspan></text>
+<g class="patch" id="p-object" data-over="#t-object" data-pad="6,1" data-rows="2"></g>
+<text class="pen" data-patch="p-object" font-size="35" data-tilt="-2">Thing</text>
+<g class="patch" id="p-fact" data-over="#t-fact" data-pad="6,1" data-extra="0,40" data-rows="2"></g>
+<text class="pen" data-patch="p-fact" font-size="31" data-tilt="-1.5">concern</text>
+
+<text class="small mute fact-line" x="562" y="345" text-anchor="middle">a small bottle of white fluid for covering mistakes</text>
+<g class="fragment marker" data-state="painted"></g>
+</svg>
+<p class="cite-line">Quotation: Latour (2005, p. 13). Photographs, cut out: bottle, J B (2009); tape, Creative Tools (2010); pen, Chiesa (2007). Around the ring: “Correction Fluid Banned in Schools” (2008); Cambridge English (n.d.); King et al. (1985); Environment and Climate Change Canada (2025); Fagan (2024).</p>
+```
+
+::: {.notes}
+As an object, white-out is easy to describe: it is a small bottle of white fluid for covering mistakes. Latour (2005) calls that kind of description a matter of fact, and he thinks that for too long "objects have been wrongly portrayed as matters-of-fact" (p. 9).
+
+*(Click.)* His other word is thing. The old word Thing (or Ding) was first the name for a kind of assembly (p. 12), and for centuries it meant "the issue that brings people together because it divides them" (p. 13). In his words, objects become things "when matters of fact give way to their complicated entanglements and become matters of concern" (p. 31). I painted over the typed words on purpose here, so "object" and "fact" are still under there.
+
+This is the assembly that the bottle has gathered, and I gave seats to nonhumans as well, since Latour wants a politics that "is no longer limited to humans" (p. 31). The student wants a clean page. The teacher needs to see the mistakes, and students were using it "to write or draw on the furniture", which were both reasons given for the Seychelles ban ("Correction Fluid Banned in Schools," 2008). The exam scanner can't read through a patch (Cambridge English, n.d.). A 1985 report of four sudden deaths in adolescents who had been sniffing it asked for school health officials to be alerted, and one of the solvents in most of those fluids was later phased out worldwide because it depletes the ozone layer (King et al., 1985; Environment and Climate Change Canada, 2025). The cartoonist only needs it not to show in print, which is the next slide.
+
+None of these parties agree on what the bottle is for, and that is what makes it a thing for me. It also won't hold still, since it comes as tape and pens now, and it has been called Mistake Out, Liquid Paper, Wite-Out or Tipp-Ex depending on who made it.
+:::
+
+## Two lenses, one page {.lenses-slide data-kicker="5 of 5 · Metatheory · Can the two speak to each other?" data-where="5 of 5"}
+
+```{=html}
+<svg class="draw" viewBox="0 0 1124 480" role="img" aria-labelledby="lenses-desc">
+<desc id="lenses-desc">Two photographs of the original art for a comic strip are taped to the ruled paper: the whole first panel, small, and a large detail from it with the correction fluid circled in blue pen and labelled the Wite-Out. On the left, media ecology asks: what was this page made for? It was made for print, where the patch never showed. On the right, actor-network theory asks: who is doing the work? Fagan, pen, Wite-Out, camera, syndicate, reader, and now a phone. Below: McLuhan sees an extension of us. Latour sees a stand-in for us.</desc>
+<g transform="rotate(-0.7 562 177)">
+<use href="#ph-drabble-detail" x="384" y="10" width="356" height="334" class="cut zoom" data-zoom="ph-drabble-panel" aria-label="Detail from the original art for a Drabble comic strip dated June 19, 1989. Above a stone wishing well, thick white correction fluid has been brushed over part of the drawing. Faint outlines of what was drawn there first, two upright posts and a bar across the top, still show through the paint. A cloud has been inked on top of the dried fluid." data-caption="K. Fagan, original art for Drabble, June 19, 1989, first panel (© 1989 United Feature Syndicate), as photographed and posted in Fagan (2024). Unretouched."/>
+<use href="#tape" x="352" y="2" width="74" height="21" transform="rotate(-38 389 12)"/>
+<use href="#tape" x="700" y="330" width="74" height="21" transform="rotate(-34 737 340)"/>
+</g>
+<g transform="rotate(1.6 292 75)">
+<use href="#ph-drabble-panel" x="236" y="10" width="112" height="129" class="cut zoom" data-zoom="ph-drabble-panel" aria-label="The whole first panel of the same strip. Wendy stands at a wishing well beside Norman and says: Norman, my wish is that we will fall in love and get married." data-caption="K. Fagan, original art for Drabble, June 19, 1989, first panel (© 1989 United Feature Syndicate), as photographed and posted in Fagan (2024). Unretouched."/>
+<rect data-r="0.9" x="239" y="52" width="53" height="49" stroke="#c0392b" stroke-width="1.6"/>
+</g>
+<text class="hand xs pencil" x="292" y="166" text-anchor="middle">(click to read it)</text>
+<ellipse class="circled" data-r="1.5" cx="548" cy="178" rx="120" ry="146" stroke="#1f48a6" stroke-width="2.4"/>
+<text class="hand b blue" x="782" y="62">the Wite-Out</text>
+<line data-r="0.9" data-arrow="end" x1="776" y1="58" x2="662" y2="92" stroke="#1f48a6" stroke-width="1.8"/>
+
+<text class="lbl" x="6" y="182">media ecology asks</text>
+<text class="hand l" x="6" y="223">what was this</text>
+<text class="hand l" x="6" y="255">page made for?</text>
+<text class="hand s pencil" x="6" y="287">for print, where the</text>
+<text class="hand s pencil" x="6" y="319">patch never showed.</text>
+
+<text class="lbl" x="778" y="182">actor-network theory asks</text>
+<text class="hand l" x="778" y="223">who is doing</text>
+<text class="hand l" x="778" y="255">the work?</text>
+<text class="hand s pencil" x="778" y="287">Fagan → pen → Wite-Out →</text>
+<text class="hand s pencil" x="778" y="319">camera → syndicate →</text>
+<text class="hand s pencil" x="778" y="351">reader … and now a phone.</text>
+
+<text class="hand" x="562" y="415" text-anchor="middle">“This original made me smile (in spite of all the Wite-Out)!”</text>
+<text class="hand s soft" x="562" y="447" text-anchor="middle">McLuhan sees an extension of us. Latour sees a stand-in for us.</text>
+</svg>
+<p class="cite-line">Images and quotation: K. Fagan, original art for <i>Drabble</i>, June 19, 1989 (© 1989 United Feature Syndicate), as posted in Fagan (2024); unretouched. “Extension”: McLuhan &amp; McLuhan (1988, p. 93). “Stand-in”: Latour (1992, p. 239).</p>
+```
+
+::: {.notes}
+This is the original art for a *Drabble* comic strip from June 19, 1989. Kevin Fagan, who draws the strip, posted a photo of the original 35 years later and wrote "This original made me smile (in spite of all the Wite-Out)!" (Fagan, 2024). The detail shows it brushed on above the wishing well, and to my eye something was drawn there first and then painted out, where you can still see the outline of it. It was hidden, but it wasn't erased.
+
+Media ecology would ask about the environment the page was made for. This board was made to be photographed and printed in newspapers, and I take it the Wite-Out is there so that the change wouldn't show in print, which means it only shows now, on a screen. McLuhan and McLuhan (1988) write that "Nothing is as stale as yesterday's newspaper - until it can be retrieved as valuable documentary evidence or nostalgic treat" (p. 100), and a post of old originals is that kind of retrieval.
+
+ANT would ask who is doing the work, and the network I picture here is Fagan, a pen, a bottle holding the place of redrawing the whole panel, the camera that shot the board for the newspapers, the syndicate and a reader who never knew. Latour (1992) says that most of what a delegate seems to do "depends on lines of other setups being aligned" (p. 240), which is to say that if you put an exam scanner where that camera was, the same patch becomes a problem.
+
+Where I see the two connecting is that neither one treats the bottle as a neutral tool. In tetrad form the artefact is "not neutral or passive, but an active logos or utterance" (McLuhan & McLuhan, 1988, p. 99). Where they disconnect is in what the bottle is to us: for McLuhan it is an extension "of the physical human body or the mind" (p. 93), while for Latour it is somebody else, a stand-in that can go on strike. They also differ in method, since McLuhan finds the same "four-part logos-structure" in every artefact (p. 127) while Latour says "for the analysis of artifacts we do not have a structure" (1992, p. 250).
+
+Each of them also conceals something, a bit like the white-out does. The tetrad shows me the long arc from the typewriter to undo but paints over Fagan's own hand, while ANT shows me that hand and paints over the arc. I suppose I needed both of them to see this page properly, the same way it took a phone camera to see the Wite-Out.
+:::
+
+## References {.refs-slide data-where="references"}
+
+```{=html}
+<div class="refs-sheet">
+<svg class="clip" viewBox="0 0 26 62" aria-hidden="true" focusable="false"><path d="M 8 58 L 8 12 Q 8 3 14 3 Q 20 3 20 12 L 20 46 Q 20 52 15.5 52 Q 11 52 11 46 L 11 16" fill="none" stroke="#8d949c" stroke-width="2.2" stroke-linecap="round"/></svg>
+<div class="refs">
+<p class="group">Course readings</p>
+<p>Johnson, J. [Latour, B.]. (1988). Mixing humans and nonhumans together: The sociology of a door-closer. <i>Social Problems, 35</i>(3), 298–310.</p>
+<p>Latour, B. (1992). Where are the missing masses? The sociology of a few mundane artifacts. In W. E. Bijker &amp; J. Law (Eds.), <i>Shaping technology/building society: Studies in sociotechnical change</i> (pp. 225–258). MIT Press.</p>
+<p>Latour, B. (2005). From Realpolitik to Dingpolitik, or how to make things public. In B. Latour &amp; P. Weibel (Eds.), <i>Making things public: Atmospheres of democracy</i> (pp. 14–41). MIT Press. [Page numbers in this deck are those printed in the course PDF, which runs 4–31.]</p>
+<p>McLuhan, M., &amp; McLuhan, E. (1988). <i>Laws of media: The new science</i>. University of Toronto Press.</p>
+<p class="group">White-out</p>
+<p>Cambridge English. (n.d.). <i>Can I use correction fluid, correction tape, or erasable pen?</i> Retrieved October 5, 2026, from https://support.cambridgeenglish.org/hc/en-gb/articles/205802836</p>
+<p>Correction fluid banned in schools. (2008, May 29). <i>Seychelles Nation</i>. https://nation.sc/archive/219719/correction-fluid-banned-in-schools</p>
+<p>Environment and Climate Change Canada. (2025, June 2). <i>1,1,1-Trichloroethane (methyl chloroform)</i>. Government of Canada. https://www.canada.ca/en/environment-climate-change/services/canadian-environmental-protection-act-registry/substances-list/toxic/schedule-1/trichloroethane.html</p>
+<p>Fagan, K. (2024, June 19). <i>This day in Drabble history: June 19th &amp; 20th</i> [Photographs of original comic strip art]. Drabble. https://drabble.substack.com/p/this-day-in-drabble-history-june-51d</p>
+<p>Giovanni+Draftfcb. (2012). <i>Marriage</i> [Print advertisement for Paper Mate Liquid Paper; illustration by J. Ohta]. Ads of the World. https://www.adsoftheworld.com/campaigns/marriage-f950fd6e-3b11-4b27-b45a-04fc6af78998</p>
+<p>IBM. (n.d.). <i>The IBM Selectric</i>. Retrieved October 5, 2026, from https://www.ibm.com/history/selectric</p>
+<p>Jones, N. B. (2025). Graham, Bette Clair McMurray. In <i>Handbook of Texas online</i>. Texas State Historical Association. (Original work published 1995). https://www.tshaonline.org/handbook/entries/graham-bette-clair-mcmurray</p>
+<p>King, G. S., Smialek, J. E., &amp; Troutman, W. G. (1985). Sudden death in adolescents resulting from the inhalation of typewriter correction fluid. <i>JAMA, 253</i>(11), 1604–1606.</p>
+<p class="group">Photographs (Wikimedia Commons)</p>
+<p>8joKeaton. (2021, June 22). <i>Misnon</i> [Photograph]. CC BY-SA 4.0. https://commons.wikimedia.org/wiki/File:Misnon.jpg</p>
+<p>Bill. (2008, November 20). <i>Spelling correction example</i> [Photograph]. Public domain. https://commons.wikimedia.org/wiki/File:Spelling_Correction_Example.jpg</p>
+<p>Chiesa, L. (2007, March 15). <i>Penna bianchetto</i> [Photograph]. CC BY-SA 3.0. https://commons.wikimedia.org/wiki/File:Penna_bianchetto.jpg</p>
+<p>Creative Tools. (2010, September 16). <i>Tipp-Ex Pocket Mouse</i> [Photograph]. CC BY 2.0. https://commons.wikimedia.org/wiki/File:CreativeTools.se_-_PackshotCreator_-_Tipp-Ex_Pocket_Mouse_(5078486344).jpg</p>
+<p>FA2010. (2009, October). <i>Liquid Paper products, Women's Museum</i> [Photograph]. Public domain. https://commons.wikimedia.org/wiki/File:Liquid_paper_products_Womens_Museum.jpg</p>
+<p>J B. (2009, March 20). <i>Wite-Out and shadow</i> [Photograph]. CC BY 2.0. https://commons.wikimedia.org/wiki/File:Wite-Out_and_Shadow_(3373550912).jpg</p>
+<p>Takkk. (2010). <i>Triumph: Typewriter eraser, 1960</i> [Photograph]. CC BY-SA 3.0. https://commons.wikimedia.org/wiki/File:Triumph_-_Typewriter_Eraser_1960.jpg</p>
+<p>Tekniska museet. (2011, February 4). <i>IBM Correcting Selectric II</i> [Photograph]. CC BY 4.0. https://commons.wikimedia.org/wiki/File:IBM_Correcting_Selectric_II_(1).jpg</p>
+<p>Yrithinnd. (2007, June 12). <i>Ctrl Z</i> [Photograph]. CC BY-SA 3.0. https://commons.wikimedia.org/wiki/File:Ctrl_Z.JPG</p>
+</div>
+<div class="colophon">
+<p><b>Colophon.</b> I had used reveal.js before for a previous assignment in another course, but I decided to go out on a limb and try learning a bit about Quarto to extend my abilities beyond reveal.js. The pen lines are drawn with Rough.js (P. Shihn, MIT licence) and the type is Caveat, Special Elite and Courier Prime (open licences). The photographs were cut out and, in two cases, had their backgrounds evened or their colour balanced, and the cut-outs of the CC BY-SA photographs are shared under those same licences. The comic and the advertisement are shown for commentary and credited to their makers.</p>
+<p><b>AI and tooling.</b> The topic, the readings and the notes this deck grew out of are mine. I used Claude (Anthropic, in Claude Code) to build the slides and animations, to find and check the quotations and page numbers in the readings, to find and verify the sources and photographs on correction fluid, and to draft the speaker notes from my notes, which we then reworked together. An earlier layout was drafted with DeepSeek Harness. My full AI statement is on the post that links to this deck: <a href="/posts/2026-09-26-etec534-ip2/" target="_top">jeremysheeshka.ca/posts/2026-09-26-etec534-ip2</a>.</p>
+</div>
+</div>
+```
+
+::: {.notes}
+The reference list and the colophon. This is not one of the five slides.
+:::
