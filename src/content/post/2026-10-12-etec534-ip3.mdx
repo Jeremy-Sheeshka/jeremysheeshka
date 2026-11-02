@@ -1,0 +1,75 @@
+---
+title: "ETEC 534: IP#3: Ivan Illich and the Paradigms Chart"
+description: "Adding a column for Ivan Illich to de Castell and Luke's paradigms chart, along with a row for the tools."
+publishDate: 2026-10-12
+tags: ["etec534"]
+draft: true
+---
+
+import Disclosure from "../../components/blocks/Disclosure.astro";
+import Figure from "../../components/blocks/Figure.astro";
+import Ip3ParadigmChart from "../../components/etec534/Ip3ParadigmChart.astro";
+import tableAsPrinted from "@/assets/images/blog/etec534-ip3-table-as-printed.jpg";
+
+For Intellectual Production #3 I added a column for Ivan Illich to the paradigms chart in de Castell and Luke (1986). Their three printed columns are retyped from pages 90 and 91, and the typed strips taped on are mine. Illich does not sit inside any one column, as he keeps the classical schoolmaster's drill for a learner who asks for it (Illich, 1971/1973a, p. 20) and the progressive trust in a learner's own interests, while writing mostly against the technocratic package.
+
+<Ip3ParadigmChart />
+
+## The tools, and what they were meant to replace
+
+The tools Illich puts forward are ordinary ones, chosen because "technology is available to develop either independence and learning or bureaucracy and teaching" (p. 80): tape recorders where governments were buying TV stations, the telephone and the mail, a computer that only matches people asking about the same book, and a rented guitar with "taped guitar lessons and illustrated chord charts" (pp. 26, 79–80, 89). These were meant to replace the school itself, which he counts as a tool as much as a drill or a power station (Illich, 1973b, ch. 2), along with its graded curriculum and its certificates. The teaching machine is not on that list though, as he writes that tapes and programmed instruction "tend to reduce the need for recourse to human teachers of many skills" (1973a, p. 94).
+
+His warning is that deschooling "could mean the advent of a 'brave new world' dominated by well-intentioned administrators of programmed instruction" (1973a, p. 104). Going by Watters's (2021) conclusion, where personalized learning software shapes behaviour "through nudges and rewards" (pp. 253–254), I would wonder if what came after the technocratic column is closer to that warning than to his learning webs.
+
+## What the chart leaves out
+
+<Figure
+    src={tableAsPrinted}
+    alt="A photocopy of two facing book pages. Table 6-1 is printed on its side, running up the page, with the columns Classical, Progressive and Technocratic and the rows Philosophy through Outcome split across the two pages. A black band from the photocopier runs down the left edge."
+    caption="Table 6-1 as it is printed in my copy of the reading, on its side and across two pages (de Castell & Luke, 1986, pp. 90–91)."
+    float="right"
+    float-at="lg"
+/>
+
+Several of Illich's cells could only be filled in by writing what he would take away, and I suppose that is the constraint of the chart showing, since its rows are a school's own categories. It also has no row for tools, even though both readings are full of them, so I taped one along the bottom. I have not added an Indigenous column, as de Castell and Luke (1986) end on the difference between a literacy that is "imposed" and one that is "derived" (p. 107), and a column written by me into a Western school's rows would be another imposed one.
+
+{/* Jeremy: this disclosure says what Claude did while drafting. Add what you changed or rewrote
+    after reading it, and your usual closing line, before this is published. */}
+
+<Disclosure title="AI &amp; Tooling Disclosure" variant="warning" class="mt-12 clear-both">
+
+My workflow for this task consisted of saving the two required readings and handing them to Claude (Opus 5.5 via Claude Code) along with the assignment criteria. I asked it to suggest a theorist from the list that matched the interests in my earlier posts, and it suggested Ivan Illich. Claude then found and checked the quotations and page numbers in *Deschooling Society* and *Tools for Conviviality*, drafted the Illich column, the added row and the written comments, and built the chart for my blog as a photocopy with typed strips taped on, following the look of my IP#2 slides. The three printed columns are retyped from Table 6-1 in de Castell and Luke (1986).
+
+</Disclosure>
+
+## References
+
+{/* Hand-written on purpose: components/blocks/References.astro uses React’s
+    dangerouslySetInnerHTML, which Astro does not implement, so it renders empty. */}
+
+<div class="mt-8 flex flex-col gap-4 border-t border-gray-200 pt-8 text-sm leading-relaxed text-gray-700 dark:border-gray-700 dark:text-gray-300">
+  <div class="flex gap-3">
+    <span class="flex-none pt-0.5 font-mono text-xs text-gray-500">[1]</span>
+    <p class="m-0">
+      <b>de Castell, S., &amp; Luke, A. (1986).</b> Models of literacy in North American schools: Social and historical conditions and consequences. In S. de Castell, A. Luke, &amp; K. Egan (Eds.), <i>Literacy, society, and schooling: A reader</i> (pp. 87–109). Cambridge University Press.
+    </p>
+  </div>
+  <div class="flex gap-3">
+    <span class="flex-none pt-0.5 font-mono text-xs text-gray-500">[2]</span>
+    <p class="m-0">
+      <b>Illich, I. (1973a).</b> <i>Deschooling society</i>. Penguin Education. (Original work published 1971) <a href="https://archive.org/details/730131-deschooling-society-by-illich-1973" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">https://archive.org/details/730131-deschooling-society-by-illich-1973</a>
+    </p>
+  </div>
+  <div class="flex gap-3">
+    <span class="flex-none pt-0.5 font-mono text-xs text-gray-500">[3]</span>
+    <p class="m-0">
+      <b>Illich, I. (1973b).</b> <i>Tools for conviviality</i>. Harper &amp; Row. <a href="https://archive.org/details/illich-conviviality" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">https://archive.org/details/illich-conviviality</a>
+    </p>
+  </div>
+  <div class="flex gap-3">
+    <span class="flex-none pt-0.5 font-mono text-xs text-gray-500">[4]</span>
+    <p class="m-0">
+      <b>Watters, A. (2021).</b> <i>Teaching machines: The history of personalized learning</i>. MIT Press.
+    </p>
+  </div>
+</div>

@@ -1,0 +1,610 @@
+---
+/**
+ * Ip3ParadigmChart — ETEC 534, IP#3.
+ *
+ * Table 6-1 from de Castell & Luke (1986, pp. 90–91), retyped, with two things
+ * added to it: a column for Ivan Illich and a row for tools and technologies.
+ *
+ * It is drawn as the thing it is in the reading: a photocopied page. The three
+ * columns that belong to the authors are set the way the book sets them (serif,
+ * a double rule above and below, hanging indents, no vertical rules). Anything
+ * that is mine is typed on a strip of index card and taped on, so the reader can
+ * always tell the printed chart from what was added to it.
+ *
+ * It stays a real <table>, so the words can be selected, searched and read by a
+ * screen reader. Under 1100px the five columns will not fit, and each category
+ * becomes its own block with the column names written beside the entries; the
+ * ARIA roles keep it a table for assistive tech once `display` has changed. The
+ * empty corner cell stays a cell, so the column headers line up with the body.
+ *
+ * The paper keeps its own colours in every site theme, light or dark, the same
+ * way a photograph would.
+ *
+ * Page references inside the typed strips:
+ *   DS = Deschooling Society, Penguin Education edition (Illich, 1971/1973)
+ *   TC = Tools for Conviviality (Illich, 1973), by chapter
+ *   W  = Watters (2021)
+ *   plain numbers in the bottom row = de Castell & Luke (1986)
+ */
+
+type Row = {
+	label: string;
+	classical: string;
+	progressive: string;
+	/** The two entries the book prints between Progressive and Technocratic. */
+	between?: string;
+	technocratic: string;
+	illich: string;
+};
+
+const ref = (s: string) => `<span class="ref">(${s})</span>`;
+
+const rows: Row[] = [
+	{
+		label: "Philosophy",
+		classical:
+			"Education as cultivation of the “civilized” person with the “instincts of a gentleman”",
+		progressive: "Education as “growth”–the natural “unfolding” of the child",
+		technocratic: "Education as effective performance, behavior modification",
+		illich: `Learning as "unhampered participation in a meaningful setting" ${ref("DS 44")}, a right that is "curtailed by the obligation to attend school" ${ref("DS 7")}.`,
+	},
+	{
+		label: "Psychology",
+		classical:
+			"Plato: Faculty psychology: reason, will, emotion. Learning by imitation. Reason must subdue the passions",
+		progressive:
+			"Dewey: The mind as unfolding organism, social theory of mind (organism/<wbr>environment transaction)",
+		between: "Thorndike: Empiricism, testing",
+		technocratic:
+			"Skinner: The mind as mechanism, learning through reinforcement (behavior modification)",
+		illich: `No psychologist to name. He has no theory of the mind, only of what institutions do to it: "psychological impotence, the inability to fend for themselves" ${ref("DS 11")}. "Most learning happens casually" ${ref("DS 20")}.`,
+	},
+	{
+		label: "Sociology",
+		classical: "Aristocracy",
+		progressive: "Democracy",
+		technocratic: "Individualism/<wbr>pluralism",
+		illich: `Conviviality: "the most autonomous action by means of tools least controlled by others" ${ref("TC ch. 2")}. School disestablished, as a state church once was ${ref("DS 18")}.`,
+	},
+	{
+		label: "Conception of literacy",
+		classical:
+			"Literacy as literature, detailed analysis of exemplary texts, specification of precise rules and principles, explicit attention to rhetorical appropriateness",
+		progressive: "Literacy as self-expression, communication as social interaction",
+		technocratic: "Functional literacy, “survival skills,” minimum competence",
+		illich: `A skill like any other: drilled on request, or picked up through use ${ref("DS 20")}. An adult "can begin to read in a matter of forty hours if the first words he deciphers are charged with political meaning" ${ref("DS 25, on Freire")}.`,
+	},
+	{
+		label: "Attitude to education",
+		classical: "Intrinsic worth",
+		progressive: "Subjective/<wbr>social significance",
+		technocratic: "Instrumental value",
+		illich: `Distrust. Packaged and certified, "learning thus becomes a commodity" ${ref("TC ch. 3")}, and the pupil is schooled to confuse "a diploma with competence" ${ref("DS 9")}.`,
+	},
+	{
+		label: "Curriculum",
+		classical:
+			"Exemplary texts: (1) the Bible; (2) the Classics; (3) the English literature “greats”; (4) North American “classics,” grammar texts, handwriting, spelling, pronunciation",
+		progressive:
+			"“Adventure” stories; civics; self-generated text; idiom of “ordinary language”",
+		technocratic:
+			"Decontextualized subskills of literate competence. Systematic programmed instruction guided by behavioral objectives",
+		illich: `None that is obligatory. The first question changes from "What should someone learn?" to "What kinds of things and people might learners want to be in contact with in order to learn?" ${ref("DS 80")}.`,
+	},
+	{
+		label: "Pedagogy",
+		classical:
+			"Rote learning: oral recitation; copying; imitation of “correct speech and writing”; direct instruction",
+		progressive:
+			"Projects: “experiential” education; teacher/<wbr>pupil interaction; teacher as “guide”; “discovery” method. Socialized instruction",
+		between: "Vocational education",
+		technocratic:
+			"Streaming; “mastery learning” of common set of objectives. Learning “packages” with teacher as (preprogrammed) facilitator. Programmed instruction",
+		illich: `Four learning webs: reference services to educational objects, skill exchanges, peer-matching, reference services to educators-at-large ${ref("DS 81")}. No one may "oblige another person to attend a meeting" ${ref("DS 95")}.`,
+	},
+	{
+		label: "Evaluation",
+		classical: "Connoisseurship model: oration; oral reading; direct questioning",
+		progressive:
+			"Local, classroom tests; written tests stressed over oration; products (of “projects”); social skills stressed",
+		technocratic:
+			"Meeting behavioral objectives. Objective standardized testing (mass-scale)",
+		illich: `No grades or diplomas. Tests only of a present skill, like typing or driving, and "not on the basis of educational pedigree" ${ref("DS 93")}. Personal growth "is not a measurable entity" ${ref("DS 45")}.`,
+	},
+	{
+		label: "Outcome",
+		classical: "Domestication",
+		progressive: "Socialization",
+		technocratic: "Individualism/<wbr>commoditization",
+		illich: `Conviviality. Or, in his own warning, "a 'brave new world' dominated by well-intentioned administrators of programmed instruction" ${ref("DS 104")}.`,
+	},
+];
+
+/* The row the chart does not have. All four entries are mine, so all four are typed. */
+const tools = {
+	label: "Tools and technologies",
+	classical: `The Horn Book ${ref("88")}; the Bible, the Irish readers, Webster's speller ${ref("92-93")}; copying for "finger style" penmanship ${ref("94")}; reading aloud to an examiner ${ref("94-95")}; the spelling "bee" ${ref("99")}.`,
+	progressive: `Dick and Jane ${ref("98")}; silent "work-type" reading, school and public libraries, the Thorndike-McCall Silent Reading Test, spelling progress charts ${ref("99")}; "moving pictures" and radio talked about in class ${ref("98")}.`,
+	technocratic: `Packaged reading systems (SRA, DISTAR, Ginn 720) with worksheets and diagnostic tests ${ref("101-102")}; the teaching machine and programmed instruction ${ref("W 9, 14-15")}; the IBM punch card ${ref("W 230")}.`,
+	illich: `Tape recorders where governments bought TV ${ref("DS 79-80")}; the telephone, the mail, and a computer that only matches names ${ref("DS 26, 95")}; libraries, tool shops, storefront depots ${ref("DS 86")}; a rented guitar with "taped guitar lessons and illustrated chord charts" ${ref("DS 89")}.`,
+};
+---
+
+<figure class="pc not-prose">
+	<div class="pc-sheet">
+		<table class="pc-table" role="table" aria-describedby="pc-caption">
+			<caption>Table 6-1.</caption>
+			<thead role="rowgroup">
+				<tr role="row">
+					<td class="corner" role="cell"></td>
+					<th scope="col" role="columnheader">Classical</th>
+					<th scope="col" role="columnheader">Progressive</th>
+					<th scope="col" role="columnheader" class="mid">
+						<span class="sr-only">Between Progressive and Technocratic</span>
+					</th>
+					<th scope="col" role="columnheader">Technocratic</th>
+					<th scope="col" role="columnheader" class="strip il head">
+						<span class="tape tape-a" aria-hidden="true"></span>
+						Illich
+						<small>column added</small>
+					</th>
+				</tr>
+			</thead>
+			<tbody role="rowgroup">
+				{
+					rows.map((r) => (
+						<tr role="row">
+							<th scope="row" role="rowheader">
+								{r.label}
+							</th>
+							<td role="cell" data-col="Classical" set:html={r.classical} />
+							<td role="cell" data-col="Progressive" set:html={r.progressive} />
+							{r.between ? (
+								<td role="cell" class="mid" data-col="Between the two" set:html={r.between} />
+							) : (
+								<td role="cell" class="mid is-empty" />
+							)}
+							<td role="cell" data-col="Technocratic" set:html={r.technocratic} />
+							<td role="cell" class="strip il" data-col="Illich" set:html={r.illich} />
+						</tr>
+					))
+				}
+				<tr role="row" class="added">
+					<th scope="row" role="rowheader" class="strip">
+						<span class="tape tape-b" aria-hidden="true"></span>
+						{tools.label}
+						<small>row added</small>
+					</th>
+					<td role="cell" class="strip" data-col="Classical" set:html={tools.classical} />
+					<td role="cell" class="strip" data-col="Progressive" set:html={tools.progressive} />
+					<td role="cell" class="strip mid is-empty" />
+					<td role="cell" class="strip" data-col="Technocratic" set:html={tools.technocratic} />
+					<td role="cell" class="strip il" data-col="Illich">
+						<Fragment set:html={tools.illich} />
+						<span class="tape tape-c" aria-hidden="true"></span>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<figcaption id="pc-caption">
+		Table 6-1 from de Castell and Luke (1986, pp. 90–91), retyped. The typed column and the typed
+		bottom row are my additions. DS is <cite>Deschooling Society</cite> (Illich, 1971/1973a), TC is <cite
+			>Tools for Conviviality</cite
+		> (Illich, 1973b) and W is Watters (2021). Plain numbers in the bottom row are pages in de Castell
+		and Luke.
+	</figcaption>
+</figure>
+
+<style>
+	/* The typewriter, self-hosted. The same two faces as the IP#2 deck. */
+	@font-face {
+		font-family: "Special Elite";
+		src: url("/fonts/special-elite.woff2") format("woff2");
+		font-weight: 400;
+		font-style: normal;
+		font-display: swap;
+	}
+	@font-face {
+		font-family: "Courier Prime";
+		src: url("/fonts/courier-prime.woff2") format("woff2");
+		font-weight: 400;
+		font-style: normal;
+		font-display: swap;
+	}
+	@font-face {
+		font-family: "Courier Prime";
+		src: url("/fonts/courier-prime-bold.woff2") format("woff2");
+		font-weight: 700;
+		font-style: normal;
+		font-display: swap;
+	}
+
+	.pc {
+		--toner: #141414;
+		--copy-paper: #f1f2f0;
+		--card: #fcfcfb;
+		--card-rule: rgba(52, 108, 176, 0.2);
+		--card-edge: rgba(0, 0, 0, 0.28);
+		--tape: rgba(214, 196, 150, 0.82);
+		--printed: "Times New Roman", Times, "Nimbus Roman", "Liberation Serif", serif;
+		--typed: "Special Elite", "Courier Prime", "Courier New", Courier, monospace;
+		--small: "Courier Prime", "Courier New", Courier, monospace;
+		margin: 2.5rem auto 2.75rem;
+		max-width: 76rem;
+	}
+
+	/* ---- the photocopy ------------------------------------------------- */
+
+	.pc-sheet {
+		position: relative;
+		color-scheme: light;
+		color: var(--toner);
+		background-color: var(--copy-paper);
+		/* Toner speckle, and the dark band a book's gutter leaves on a copy. */
+		background-image:
+			radial-gradient(circle at 12% 18%, rgba(0, 0, 0, 0.55) 0 0.6px, transparent 0.9px),
+			radial-gradient(circle at 71% 6%, rgba(0, 0, 0, 0.5) 0 0.7px, transparent 1px),
+			radial-gradient(circle at 38% 83%, rgba(0, 0, 0, 0.45) 0 0.5px, transparent 0.9px),
+			radial-gradient(circle at 88% 61%, rgba(0, 0, 0, 0.5) 0 0.6px, transparent 0.9px),
+			linear-gradient(
+				90deg,
+				rgba(8, 8, 8, 0.92) 0,
+				rgba(8, 8, 8, 0.86) 5px,
+				rgba(8, 8, 8, 0.3) 9px,
+				rgba(8, 8, 8, 0.08) 15px,
+				transparent 26px
+			);
+		background-size:
+			173px 211px,
+			257px 149px,
+			199px 283px,
+			311px 197px,
+			100% 100%;
+		padding: clamp(1.1rem, 2.6vw, 2.1rem) clamp(0.9rem, 2.2vw, 1.9rem) clamp(1.4rem, 3vw, 2.4rem)
+			clamp(1.9rem, 3.4vw, 2.9rem);
+		box-shadow:
+			0 1px 1px rgba(0, 0, 0, 0.2),
+			0 14px 30px -16px rgba(0, 0, 0, 0.55);
+	}
+
+	.pc-table {
+		width: 100%;
+		border-collapse: separate;
+		border-spacing: 0;
+		table-layout: fixed;
+		font-family: var(--printed);
+		font-size: 0.95rem;
+		line-height: 1.3;
+		color: var(--toner);
+	}
+
+	.pc-table caption {
+		caption-side: top;
+		text-align: left;
+		font-family: var(--printed);
+		font-size: 1.2rem;
+		padding: 0 0 0.4rem;
+		color: var(--toner);
+	}
+
+	.pc-table th,
+	.pc-table td {
+		padding: 0.5rem 0.75rem 0.5rem 0;
+		text-align: left;
+		vertical-align: top;
+		font-weight: 400;
+		color: var(--toner);
+		border: 0;
+		background: none;
+		overflow-wrap: normal;
+		word-break: normal;
+	}
+
+	/* Column widths. The table is fixed-layout, so these are the whole story. */
+	.pc-table thead .corner {
+		width: 11.5%;
+	}
+	.pc-table thead th:nth-child(2) {
+		width: 18%;
+	}
+	.pc-table thead th:nth-child(3) {
+		width: 16.5%;
+	}
+	.pc-table thead th.mid {
+		width: 10.5%;
+	}
+	.pc-table thead th:nth-child(5) {
+		width: 18%;
+	}
+	.pc-table thead th.il {
+		width: 25.5%;
+	}
+	.pc-table td.mid:not(.strip) {
+		padding-right: 0.4rem;
+	}
+
+	/* The book's rules: double above the header, single under it, double at the foot. */
+	.pc-table thead th:not(.strip),
+	.pc-table thead .corner {
+		border-top: 3px double var(--toner);
+		border-bottom: 1px solid var(--toner);
+		padding-top: 0.35rem;
+		padding-bottom: 0.35rem;
+	}
+	.pc-table tbody tr:nth-last-child(2) > :not(.strip) {
+		border-bottom: 3px double var(--toner);
+		padding-bottom: 0.7rem;
+	}
+
+	/* Hanging indent, as printed. */
+	.pc-table tbody td:not(.strip) {
+		padding-left: 1.05em;
+		text-indent: -1.05em;
+	}
+
+	/* ---- what was taped on --------------------------------------------- */
+
+	.pc-table .strip {
+		position: relative;
+		font-family: var(--typed);
+		font-size: 0.84rem;
+		line-height: 1.5;
+		letter-spacing: 0.005em;
+		color: #1b1b1b;
+		background-color: var(--card);
+		/* Ruled like an index card. */
+		background-image: linear-gradient(to bottom, transparent calc(100% - 1px), var(--card-rule) 0);
+		background-size: 100% 1.5em;
+		background-position: 0 calc(0.5rem - 0.2em);
+		padding: 0.5rem 0.8rem 0.6rem 0.85rem;
+	}
+
+	/* The column: one strip of card down the right-hand side. */
+	.pc-table .il {
+		box-shadow:
+			-1px 0 0 var(--card-edge),
+			-9px 0 10px -9px rgba(0, 0, 0, 0.45);
+	}
+	.pc-table thead th.il {
+		font-size: 1.02rem;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		padding-top: 0.7rem;
+		border-bottom: 1.5px solid rgba(190, 44, 44, 0.6);
+		background-image: none;
+	}
+	/* The card runs a little past the printed rule at the top. */
+	.pc-table thead th.il::before {
+		content: "";
+		position: absolute;
+		inset: -0.7rem 0 100% 0;
+		background: var(--card);
+		box-shadow:
+			-1px 0 0 var(--card-edge),
+			-9px 0 10px -9px rgba(0, 0, 0, 0.45);
+	}
+
+	.pc-table small {
+		display: block;
+		font-family: var(--small);
+		font-size: 0.7rem;
+		letter-spacing: 0.02em;
+		text-transform: none;
+		opacity: 0.72;
+		margin-top: 0.1rem;
+	}
+
+	/* The row: a second strip along the bottom, under the closing rule. */
+	.pc-table tr.added > * {
+		border-top: 0;
+		box-shadow:
+			0 -1px 0 var(--card-edge),
+			0 -7px 8px -7px rgba(0, 0, 0, 0.4);
+	}
+	.pc-table tr.added > .il {
+		box-shadow:
+			0 -1px 0 var(--card-edge),
+			-1px 0 0 rgba(0, 0, 0, 0.12);
+	}
+	.pc-table tr.added > th {
+		padding-left: 0.6rem;
+	}
+	.pc-table tbody tr:nth-last-child(2) > .il {
+		padding-bottom: 0.9rem;
+	}
+
+	.pc-table .ref {
+		font-family: var(--small);
+		font-size: 0.74rem;
+		white-space: nowrap;
+		opacity: 0.78;
+	}
+
+	/* Masking tape. */
+	.tape {
+		position: absolute;
+		z-index: 2;
+		width: 4.6rem;
+		height: 1.25rem;
+		background: var(--tape);
+		background-image: linear-gradient(
+			90deg,
+			rgba(255, 255, 255, 0.22) 0 8%,
+			transparent 8% 92%,
+			rgba(0, 0, 0, 0.06) 92%
+		);
+		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.22);
+		pointer-events: none;
+	}
+	.tape-a {
+		top: -1.25rem;
+		left: -2.1rem;
+		transform: rotate(-7deg);
+	}
+	.tape-b {
+		top: -1rem;
+		left: -2.7rem;
+		transform: rotate(-38deg);
+	}
+	.tape-c {
+		right: -1.3rem;
+		bottom: -0.55rem;
+		transform: rotate(-33deg);
+	}
+
+	.pc figcaption {
+		margin: 1.1rem auto 0;
+		max-width: 60rem;
+		padding: 0 1rem;
+		text-align: center;
+		font-size: 0.875rem;
+		font-style: italic;
+		line-height: 1.6;
+		color: var(--theme-text, #4b5563);
+		opacity: 0.82;
+	}
+	.pc figcaption cite {
+		font-style: normal;
+	}
+
+	.sr-only {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		margin: -1px;
+		padding: 0;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border: 0;
+	}
+
+	/* ---- a little less room: smaller type before the layout gives up ---- */
+
+	@media (max-width: 1300px) {
+		.pc-table {
+			font-size: 0.9rem;
+		}
+		.pc-table .strip {
+			font-size: 0.8rem;
+		}
+	}
+
+	/* ---- narrow screens: one block per category -------------------------
+	   Five columns stop fitting at about 1100px. Each category then becomes a
+	   block: its name, the three printed entries side by side while there is
+	   room for them (and one above the other when there is not), and the typed
+	   card underneath. */
+
+	@media (max-width: 1099px) {
+		.pc-sheet {
+			padding: 1.1rem 0.9rem 1.3rem 1.6rem;
+		}
+		.pc-table,
+		.pc-table tbody,
+		.pc-table caption {
+			display: block;
+			width: auto;
+		}
+		.pc-table {
+			font-size: 0.95rem;
+		}
+		/* The header row is read out by the data-col labels instead. */
+		.pc-table thead {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			overflow: hidden;
+			clip: rect(0, 0, 0, 0);
+		}
+		.pc-table tbody tr {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0 1.1rem;
+			padding-bottom: 1.1rem;
+		}
+		.pc-table tbody th,
+		.pc-table tbody td {
+			display: block;
+			width: auto;
+		}
+		.pc-table tbody th[scope="row"] {
+			flex: 0 0 100%;
+			border-top: 3px double var(--toner);
+			border-bottom: 1px solid var(--toner);
+			padding: 0.3rem 0;
+			margin-bottom: 0.35rem;
+			font-size: 1.05rem;
+		}
+		.pc-table tbody tr:nth-last-child(2) > :not(.strip) {
+			border-bottom: 0;
+			padding-bottom: 0.35rem;
+		}
+		.pc-table tbody tr:nth-last-child(2) > th[scope="row"] {
+			border-bottom: 1px solid var(--toner);
+			padding-bottom: 0.3rem;
+		}
+		.pc-table tbody td {
+			flex: 1 1 0;
+			min-width: 9.5rem;
+			padding: 0.3rem 0 0.35rem;
+		}
+		.pc-table tbody td.mid {
+			flex: 0.7 1 0;
+			min-width: 7rem;
+		}
+		.pc-table tbody td.is-empty {
+			display: none;
+		}
+		.pc-table tbody td:not(.strip) {
+			padding-left: 0;
+			text-indent: 0;
+		}
+		.pc-table tbody td::before {
+			content: attr(data-col);
+			display: block;
+			font-family: var(--small);
+			font-size: 0.7rem;
+			letter-spacing: 0.08em;
+			text-transform: uppercase;
+			text-indent: 0;
+			opacity: 0.7;
+		}
+		.pc-table tbody .strip {
+			font-size: 0.84rem;
+			margin-top: 0.5rem;
+			padding: 0.5rem 0.75rem 0.6rem;
+			box-shadow:
+				0 0 0 1px rgba(0, 0, 0, 0.14),
+				0 3px 6px -3px rgba(0, 0, 0, 0.4);
+		}
+		.pc-table tbody td.il {
+			flex: 0 0 100%;
+		}
+		/* The added row: a label, then its four typed cards. */
+		.pc-table tr.added {
+			gap: 0 0.8rem;
+		}
+		.pc-table tr.added > th.strip {
+			border-top: 0;
+			border-bottom: 0;
+			margin: 0.6rem 0 0;
+			padding: 0.5rem 0.75rem;
+			font-size: 0.95rem;
+		}
+		.pc-table tr.added > td.strip {
+			min-width: 13rem;
+		}
+		.tape {
+			display: none;
+		}
+	}
+
+	@media print {
+		.pc-sheet {
+			transform: none;
+			box-shadow: none;
+		}
+	}
+</style>

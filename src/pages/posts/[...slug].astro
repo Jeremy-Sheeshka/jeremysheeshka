@@ -5,8 +5,6 @@ import { getAllPosts } from "@/data/post";
 import BlogPost from "@/layouts/BlogPost.astro";
 import ImmersivePost from "@/layouts/ImmersivePost.astro";
 import PresentationPost from "@/layouts/PresentationPost.astro";
-// Notice the capital M here
-import WebMentions from "@/components/blog/webmentions/index.astro";
 
 export const getStaticPaths = (async () => {
     const blogEntries = await getAllPosts();
@@ -32,13 +30,11 @@ const { Content } = await render(post);
             <Content />
         </ImmersivePost>
     ) : (
+        /* The layout shows the replies and likes itself, unless the post sets webmentions: false. */
         <BlogPost post={post}>
             <div class="prose-base dark:prose-invert max-w-none">
                 <Content />
             </div>
-
-            {/* Use the capital M here to match the import above */}
-            <WebMentions />
         </BlogPost>
     )
 }

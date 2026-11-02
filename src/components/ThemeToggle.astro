@@ -1,8 +1,5 @@
 ---
-// ThemeToggle.astro — hand-drawn line-art incandescent bulb.
-// Organic screw base, looping filament, two-tone amber interior, sunburst rays.
-// Broken state: jagged V-chip bottom, branching crack, snapped filament, smoke.
-// Three states: light (lit) → dark (ember) → raw (broken) → light.
+// Original pen-drawn bulb: light → dark → raw (broken) → light.
 ---
 
 <theme-toggle>
@@ -13,507 +10,256 @@
 		aria-pressed="true"
 	>
 		<svg
-			width="690"
-			height="930"
-			viewBox="0 0 690 930"
-			fill="none"
+			class="lightbulb"
+			width="78"
+			height="117"
+			viewBox="0 0 88 132"
 			xmlns="http://www.w3.org/2000/svg"
 			aria-hidden="true"
-			class="lightbulb"
 		>
-			<defs>
-				<linearGradient id="tt-smoke" x1="0%" y1="0%" x2="100%" y2="100%">
-					<stop offset="0%" stop-color="#777d84" stop-opacity=".78" />
-					<stop offset="50%" stop-color="#b7bcc2" stop-opacity=".58" />
-					<stop offset="100%" stop-color="#e2e4e6" stop-opacity=".18" />
-				</linearGradient>
-			</defs>
-
-			<g class="bulb-hang">
-			<g class="bulb-assembly">
-				<circle class="cord-ring" cx="340" cy="13" r="7.5" fill="none" stroke="var(--line)" stroke-width="9" />
-				<path class="cord" d="M340,0 C340,110 304,200 318,262 C326,300 340,360 340,428" fill="none" stroke="var(--line)" stroke-width="9" stroke-linecap="round" />
-
-				<g transform="translate(0, 170)">
-					<g class="rays" fill="none" stroke="var(--line)" stroke-width="9" stroke-linecap="round">
-						<path d="M427.5 368.4L446.5 335.5" />
-						<path d="M491.6 432.5L519.3 416.5" />
-						<path d="M515 520L563 520" />
-						<path d="M491.6 607.5L519.3 623.5" />
-						<path d="M427.5 671.6L446.5 704.5" />
-						<path d="M340 695L340 727" />
-						<path d="M252.5 671.6L233.5 704.5" />
-						<path d="M188.4 607.5L160.7 623.5" />
-						<path d="M165 520L117 520" />
-						<path d="M188.4 432.5L160.7 416.5" />
-						<path d="M252.5 368.4L233.5 335.5" />
-					</g>
-
-					<g class="glow">
-						<circle cx="340" cy="520" r="130" fill="#eea75e" />
-						<circle cx="340" cy="525" r="100" fill="#f2a93d" />
-					</g>
-
-					<g class="socket" fill="none" stroke="var(--line)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-						<path d="M292 280 C295 272 315 268 340 269 C365 270 385 274 388 282 C390 290 380 294 365 294 C340 295 315 293 292 288 C288 285 289 282 292 280 Z" />
-						<path d="M288 310 C290 303 312 299 340 300 C368 301 390 305 392 312 C394 320 382 324 365 324 C340 325 312 322 288 317 C284 314 285 312 288 310 Z" />
-						<path d="M285 340 C287 333 310 329 340 330 C370 331 393 335 395 342 C397 350 385 354 365 354 C340 355 310 352 285 347 C281 344 282 342 285 340 Z" />
-					</g>
-
-					<path class="bulb-glass" d="M288,365 C220,377 197,420 197,488 C197,590 260,680 340,680 C420,680 483,590 483,488 C483,420 460,377 392,365" fill="none" stroke="var(--glass-line)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" />
-					<path class="glass-tint" d="M288,365 C220,377 197,420 197,488 C197,590 260,680 340,680 C420,680 483,590 483,488 C483,420 460,377 392,365" fill="#16130f" stroke="var(--glass-line)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" />
-
-					<path class="filament" d="M320,368 C310,400 285,420 270,460 C332.7,415 254,415 316.7,460 C379.3,415 300.7,415 363.3,460 C426,415 347.3,415 410,460 C395,420 370,400 360,368" fill="none" stroke="var(--filament)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
-
-					<path class="broken-glass" d="M288 365 C220 377 197 420 197 488 C197 560 220 620 260 660 L280 630 L300 670 L320 620 L340 660 L360 610 L380 650 L400 600 C430 580 460 540 460 488 C460 420 440 377 392 365" fill="none" stroke="var(--glass-line)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" />
-
-					<g class="cracks" fill="none" stroke="#777d83" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
-						<path d="M340 660L332 615L348 585L328 545L342 505" />
-						<path d="M332 615L308 595L318 565" />
-						<path d="M348 585L372 565L362 535" />
-					</g>
-
-					<g class="filament-broken" fill="none" stroke="var(--filament)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
-						<path d="M320 368C310 400 285 420 270 460L275 475L265 485L285 495" />
-						<path d="M360 368C370 400 390 420 400 450L390 470L400 480L380 490" />
-					</g>
-
-					<g class="smoke">
-						<ellipse cx="290" cy="690" rx="20" ry="13" fill="url(#tt-smoke)" />
-						<ellipse cx="340" cy="710" rx="24" ry="15" fill="url(#tt-smoke)" />
-						<ellipse cx="390" cy="688" rx="19" ry="12" fill="url(#tt-smoke)" />
-					</g>
-				</g>
-			</g>
-			</g>
-
-			<g class="bulb-fx" aria-hidden="true">
-				<circle class="fx-flash" cx="340" cy="584" r="42" />
-			</g>
-		</svg>
+			<g class="hang">
+				<path d="M44-2C43 9 46 17 43.5 28S43 40 44 45"></path>
+				<path d="M38 45Q43 43.5 50 45L50.5 57Q44 59 37.5 57Z"></path>
+				<path d="M38 48.5L50 47M38 52L50 50.5M38 55.5L50 54" stroke-width="1.2"></path>
+				<path
+					class="wash"
+					d="M38 59C30 62 24 68 25 79C25 94 35 105 45 104C57 103 64 94 63 79C63 68 57 61 50 59Z"
+				></path>
+				<g class="whole"
+					><path
+						class="glass"
+						d="M37.5 57.5C36 64 24 63 23.5 78C22 92 32 107 44 107.5C58 108 66 94 65 80C65 66 53 63 50.5 57"
+					></path><path class="echo" d="M26 72C20 87 31 109 45 110M64 85C64 97 56 106 50 107"
+					></path></g
+				>
+				<path class="highlight" d="M30 75Q27 83 30 88"></path>
+				<path
+					class="filament"
+					d="M40 59L37 80C36 86 42 87 44 81C46 75 37 75 40 81C43 88 50 84 49 79L47 59"
+					stroke-width="1.25"></path>
+				<g class="rays"><path d="M16 72L11 69M12 91L6 93M73 72L78 68M75 94L81 97"></path></g>
+				<path
+					class="broken"
+					d="M37.5 57.5C36 64 24 63 23.5 78C23 87 27 97 33 102L38 96L42 106L47 99L53 104C62 98 66 89 65 80C65 66 53 63 50.5 57M57 89L53 84L57 78"
+				></path>
+				<path class="snapped" d="M40 59L37 80L40 84M47 59L49 78L46 80" stroke-width="1.25"></path>
+				<path class="smoke" d="M43 92C35 88 49 85 43 80M52 96Q58 91 53 88"></path>
+			</g></svg
+		>
 	</button>
 </theme-toggle>
 
 <style>
-	/* --- STATE PALETTE --- */
-
 	theme-toggle {
-		--line: #2e2a24;
-		--filament: #2e2a24;
-		--glass-line: #2e2a24;
+		--ink: #39352d;
 	}
-
 	:global([data-theme="dark"]) theme-toggle {
-		--line: #c6cbd0;
-		--filament: #f2a93d;
-		--glass-line: #9a9a9a;
+		--ink: #d2cdc0;
 	}
-
 	:global([data-theme="raw"]) theme-toggle {
-		--line: #3a3a3a;
-		--filament: #3a3a3a;
-		--glass-line: #3a3a3a;
+		--ink: #343434;
 	}
-
-	/* --- BUTTON / HANGING GEOMETRY --- */
-
 	.theme-toggle-btn {
 		position: absolute;
 		top: 0;
 		right: 1.25rem;
 		z-index: 60;
-		width: 90px;
-		height: 122px;
+		width: 78px;
+		height: 117px;
 		display: flex;
-		justify-content: center;
 		align-items: flex-start;
-		background: none;
-		border: none;
 		padding: 0;
 		margin: 0;
-		cursor: grab;
-		pointer-events: auto;
+		border: 0;
+		background: none;
+		cursor: pointer;
+		touch-action: manipulation;
+		color: var(--ink);
 	}
-
-	.theme-toggle-btn:active {
-		cursor: grabbing;
-	}
-
 	.theme-toggle-btn:focus-visible {
-		outline: 2px solid #f2a93d;
-		outline-offset: 4px;
-		border-radius: 9999px;
+		outline: 2px solid currentColor;
+		outline-offset: 3px;
+		border-radius: 8px;
 	}
-
 	.lightbulb {
-		width: 90px;
+		width: 100%;
 		height: auto;
 		display: block;
 		pointer-events: none;
 		overflow: visible;
+		fill: none;
+		stroke: var(--ink);
+		stroke-width: 1.65;
+		stroke-linecap: round;
+		stroke-linejoin: round;
 	}
-
-	/* --- STATIC ART --- */
-
-	.cord,
-	.cord-ring,
-	.socket,
+	.hang {
+		transform-box: view-box;
+		transform-origin: 44px 0;
+	}
+	.wash {
+		fill: #edba5a;
+		stroke: none;
+		opacity: 0.55;
+	}
+	.echo {
+		opacity: 0.22;
+		stroke-width: 0.85;
+	}
+	.highlight {
+		stroke: #fffaf0;
+		stroke-width: 2.5;
+		opacity: 0.8;
+	}
 	.rays {
-		transition: stroke 0.5s ease;
+		stroke-width: 1.45;
 	}
-
-	.filament {
-		transition: stroke 0.5s ease;
+	.whole,
+	.wash,
+	.rays,
+	.filament,
+	.broken,
+	.snapped,
+	.highlight {
+		transition: opacity 180ms ease;
 	}
-
-	.bulb-glass {
-		transition:
-			stroke 0.5s ease,
-			opacity 0.45s ease;
-	}
-
-	.glass-tint {
+	.broken,
+	.snapped,
+	.smoke {
 		opacity: 0;
-		transition: opacity 0.5s ease;
 	}
-
-	.glow {
-		opacity: 0.95;
-		transition: opacity 0.6s ease;
+	.smoke {
+		stroke-width: 1.1;
 	}
-
-	.broken-glass {
+	:global([data-theme="dark"]) .wash,
+	:global([data-theme="dark"]) .rays,
+	:global([data-theme="raw"]) .wash,
+	:global([data-theme="raw"]) .rays,
+	:global([data-theme="raw"]) .whole,
+	:global([data-theme="raw"]) .filament,
+	:global([data-theme="raw"]) .highlight {
 		opacity: 0;
-		transition: opacity 0.45s ease;
 	}
-
-	.cracks path {
-		opacity: 0;
-		transition: opacity 0.4s ease;
+	:global([data-theme="dark"]) .filament {
+		stroke: #aaa18e;
 	}
-
-	.filament-broken {
-		opacity: 0;
-		transition: opacity 0.4s ease;
-	}
-
-	.smoke ellipse {
-		opacity: 0;
-		transform: translateY(18px) scale(0.75);
-		transform-box: fill-box;
-		transform-origin: 50% 100%;
-		transition:
-			opacity 0.55s ease,
-			transform 0.55s ease;
-	}
-
-	/* --- DARK STATE --- */
-
-	:global([data-theme="dark"]) .glass-tint {
+	:global([data-theme="raw"]) .broken,
+	:global([data-theme="raw"]) .snapped {
 		opacity: 1;
 	}
-
-	:global([data-theme="dark"]) .glow,
-	:global([data-theme="dark"]) .rays {
-		opacity: 0;
+	@media (hover: hover) {
+		.theme-toggle-btn:hover .hang {
+			transform: rotate(2deg);
+		}
 	}
-
-	/* --- RAW STATE --- */
-
-	:global([data-theme="raw"]) .glow,
-	:global([data-theme="raw"]) .rays {
-		opacity: 0;
+	:global(theme-toggle[data-anim="off"]) .hang,
+	:global(theme-toggle[data-anim="reform"]) .hang {
+		animation: tt-settle 0.64s ease-out;
 	}
-
-	:global([data-theme="raw"]) .glass-tint {
-		opacity: 0;
+	:global(theme-toggle[data-anim="break"]) .hang {
+		animation: tt-pop 0.4s ease-out;
 	}
-
-	:global([data-theme="raw"]) .bulb-glass {
-		opacity: 0;
+	:global(theme-toggle[data-anim="break"]) .smoke {
+		animation: tt-wisp 0.7s ease-out;
 	}
-
-	:global([data-theme="raw"]) .filament {
-		opacity: 0;
+	:global(theme-toggle[data-anim="reform"]) .rays {
+		animation: tt-spark 0.55s ease-out;
 	}
-
-	:global([data-theme="raw"]) .broken-glass {
-		opacity: 1;
+	:global(theme-toggle[data-anim="reform"]) .wash {
+		animation: tt-warm 0.45s ease-out;
 	}
-
-	:global([data-theme="raw"]) .cracks path {
-		opacity: 1;
-	}
-
-	:global([data-theme="raw"]) .filament-broken {
-		opacity: 1;
-	}
-
-	:global([data-theme="raw"]) .smoke ellipse {
-		opacity: 1;
-		transform: translateY(0) scale(1);
-	}
-
-	:global([data-theme="raw"]) .cracks path:nth-child(1) {
-		transition-delay: 0.25s;
-	}
-	:global([data-theme="raw"]) .cracks path:nth-child(2) {
-		transition-delay: 0.33s;
-	}
-	:global([data-theme="raw"]) .cracks path:nth-child(3) {
-		transition-delay: 0.41s;
-	}
-
-	:global([data-theme="raw"]) .smoke ellipse:nth-child(1) {
-		transition-delay: 0.2s;
-	}
-	:global([data-theme="raw"]) .smoke ellipse:nth-child(2) {
-		transition-delay: 0.36s;
-	}
-	:global([data-theme="raw"]) .smoke ellipse:nth-child(3) {
-		transition-delay: 0.52s;
-	}
-
-	/* --- SWING / MOTION --- */
-
-	.bulb-hang {
-		transform-box: view-box;
-		transform-origin: 340px 0px;
-	}
-
-	.bulb-assembly {
-		transform-box: view-box;
-		transform-origin: 340px 0px;
-	}
-
-	.theme-toggle-btn:hover .bulb-hang {
-		animation: tt-nudge 0.5s ease both;
-	}
-
-	.theme-toggle-btn:hover .glow {
-		opacity: 1;
-	}
-
-	@keyframes tt-nudge {
+	@keyframes tt-settle {
 		0% {
-			transform: rotate(0deg);
-		}
-		50% {
-			transform: rotate(5deg);
-		}
-		100% {
-			transform: rotate(3deg);
-		}
-	}
-
-	:global([data-anim="off"]) .bulb-assembly,
-	:global([data-anim="reform"]) .bulb-assembly {
-		animation: tt-swing 0.7s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
-	}
-
-	:global([data-anim="break"]) .bulb-assembly {
-		animation: tt-shake 0.7s ease both;
-	}
-
-	:global([data-anim="off"]) .filament,
-	:global([data-anim="reform"]) .filament {
-		animation: tt-flicker 0.5s ease both;
-	}
-
-	:global([data-anim="break"]) .filament-broken {
-		animation: tt-flicker-violent 0.9s ease both;
-	}
-
-	:global([data-anim="break"]) .fx-flash {
-		animation: tt-flash 0.5s ease-out both;
-	}
-
-	:global([data-anim="reform"]) .glow {
-		animation: tt-glow 0.7s ease-out both;
-	}
-
-	/* --- FX --- */
-
-	.fx-flash {
-		fill: #fff7d0;
-		opacity: 0;
-		transform-box: fill-box;
-		transform-origin: center;
-	}
-
-	/* --- KEYFRAMES --- */
-
-	@keyframes tt-swing {
-		0% {
-			transform: rotate(0deg);
+			transform: translateY(0) rotate(0);
 		}
 		18% {
-			transform: rotate(5deg);
+			transform: translateY(3px) rotate(4deg);
 		}
-		40% {
-			transform: rotate(-3.8deg);
-		}
-		60% {
-			transform: rotate(2.4deg);
-		}
-		78% {
-			transform: rotate(-1.2deg);
-		}
-		92% {
-			transform: rotate(0.5deg);
-		}
-		100% {
-			transform: rotate(0deg);
-		}
-	}
-
-	@keyframes tt-shake {
-		0%,
-		100% {
-			transform: rotate(0deg);
-		}
-		20% {
-			transform: rotate(-2.6deg);
-		}
-		40% {
-			transform: rotate(2.3deg);
-		}
-		60% {
-			transform: rotate(-1.9deg);
-		}
-		80% {
-			transform: rotate(1.1deg);
-		}
-	}
-
-	@keyframes tt-flicker {
-		0%,
-		100% {
-			opacity: 1;
-		}
-		20% {
-			opacity: 0.3;
-		}
-		40% {
-			opacity: 1;
-		}
-		55% {
-			opacity: 0.5;
-		}
-		70% {
-			opacity: 1;
-		}
-	}
-
-	@keyframes tt-flicker-violent {
-		0% {
-			opacity: 1;
-		}
-		8% {
-			opacity: 0.1;
-		}
-		16% {
-			opacity: 1;
-		}
-		24% {
-			opacity: 0.2;
-		}
-		32% {
-			opacity: 0.9;
-		}
-		40% {
-			opacity: 0.05;
-		}
-		50% {
-			opacity: 0.8;
-		}
-		60% {
-			opacity: 0.15;
+		46% {
+			transform: rotate(-3deg);
 		}
 		72% {
-			opacity: 0.7;
-		}
-		85% {
-			opacity: 0.4;
+			transform: rotate(1.4deg);
 		}
 		100% {
-			opacity: 0.9;
+			transform: rotate(0);
 		}
 	}
-
-	@keyframes tt-flash {
+	@keyframes tt-pop {
+		20% {
+			transform: rotate(-3deg);
+		}
+		45% {
+			transform: rotate(3deg);
+		}
+		70% {
+			transform: rotate(-1deg);
+		}
+	}
+	@keyframes tt-wisp {
+		15% {
+			opacity: 0.6;
+			transform: translateY(2px);
+		}
+		100% {
+			opacity: 0;
+			transform: translateY(-9px);
+		}
+	}
+	@keyframes tt-spark {
 		0% {
 			opacity: 0;
-			transform: scale(0.4);
 		}
-		30% {
-			opacity: 1;
-			transform: scale(2.2);
+		45% {
+			opacity: 0.2;
 		}
 		100% {
-			opacity: 0;
-			transform: scale(2.8);
+			opacity: 1;
 		}
 	}
-
-	@keyframes tt-glow {
+	@keyframes tt-warm {
 		0% {
 			opacity: 0;
-			transform: scale(0.7);
 		}
-		60% {
-			opacity: 1;
-			transform: scale(1.08);
+		45% {
+			opacity: 0.2;
 		}
 		100% {
-			opacity: 0.95;
-			transform: scale(1);
+			opacity: 0.55;
 		}
 	}
-
-	/* --- RESPONSIVE --- */
-
 	@media (max-width: 1024px) {
 		.theme-toggle-btn {
 			right: 0.5rem;
-			width: 74px;
-			height: 100px;
-		}
-		.lightbulb {
-			width: 74px;
+			width: 70px;
+			height: 105px;
 		}
 	}
-
 	@media (max-width: 768px) {
 		.theme-toggle-btn {
-			right: 0rem;
+			right: 0;
 			width: 58px;
-			height: 78px;
-		}
-		.lightbulb {
-			width: 58px;
+			height: 87px;
 		}
 	}
-
-	/* Respect users who'd rather not see motion */
 	@media (prefers-reduced-motion: reduce) {
-		.bulb-hang,
-		.bulb-assembly,
-		.filament,
-		.filament-broken,
-		.glow,
-		.fx-flash,
-		.cord,
-		.cord-ring,
-		.socket,
+		.hang,
+		.wash,
 		.rays,
-		.bulb-glass,
-		.glass-tint,
-		.broken-glass,
-		.cracks path,
-		.smoke ellipse {
+		.smoke {
 			animation: none !important;
+		}
+		.whole,
+		.wash,
+		.rays,
+		.filament,
+		.broken,
+		.snapped,
+		.highlight {
 			transition: none !important;
+		}
+		.theme-toggle-btn:hover .hang {
+			transform: none;
 		}
 	}
 </style>
@@ -660,7 +406,7 @@
 				}),
 			);
 
-			const duration = reducedMotion ? 0 : anim === "break" ? 1700 : 900;
+			const duration = reducedMotion ? 0 : 750;
 			this._timer = window.setTimeout(() => {
 				this.removeAttribute("data-anim");
 				this._locked = false;

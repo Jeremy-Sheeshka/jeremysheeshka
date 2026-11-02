@@ -1,0 +1,95 @@
+---
+title: "ETEC 534: IP#4: A Vote and a Badge"
+description: "A five-minute video on two readings about pedagogic communication: clickers in the lecture hall and gamification in early childhood."
+publishDate: 2026-10-12
+tags: ["etec534"]
+draft: true
+---
+
+import { Image } from "astro:assets";
+import Disclosure from "../../components/blocks/Disclosure.astro";
+import deckCover from "@/assets/images/blog/etec534-ip4-cover.jpg";
+
+For Intellectual Production #4 I chose two of the readings on pedagogic communication, Caldwell's (2007) review of clickers in large lecture classes and Nolan and McBride's (2014) paper on gamification and game-based learning in early childhood. The video goes through seven slides, where I look at who gets to talk to whom through a vote and through a badge.
+
+{/* Jeremy: the video goes here once it is recorded. Open /etec534-ip4/ in the browser, press S to
+    put the script in its own window, record the slide window and your voice (about 4:40 at a normal
+    reading pace; the limit is 5:00), then replace this box with the embed. The transcript below is
+    the same text as the notes inside public/etec534-ip4/index.html, so change both if you reword. */}
+
+<div class="not-prose my-8 rounded-2xl border-2 border-dashed border-gray-400 p-6 text-center text-sm text-gray-600 dark:border-gray-600 dark:text-gray-300">
+  Video to be recorded over the slides and embedded here.
+</div>
+
+<div class="not-prose my-8">
+  <a
+    href="/etec534-ip4/index.html"
+    class="block overflow-hidden rounded-2xl border border-gray-200 shadow-sm transition duration-200 hover:shadow-md dark:border-gray-700"
+    aria-label="Open the slides, A Vote and a Badge"
+  >
+    <Image
+      src={deckCover}
+      alt="The cover of the slides, a sheet of ruled paper on a grey desk. A typed title reads A Vote and a Badge. Under it, in handwriting: two readings on pedagogic communication, who gets to talk to whom? Typed below: Caldwell (2007), on clickers in the large classroom, and Nolan and McBride (2014), on gamification in early childhood. Taped to the page are photographs of a classroom clicker on a wooden desk and a scout sash covered in merit badges."
+      class="block h-auto w-full"
+    />
+  </a>
+  <div class="mt-6">
+    <a
+      href="/etec534-ip4/index.html"
+      class="inline-flex w-fit items-center rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white no-underline shadow-lg shadow-blue-600/20 transition duration-200 hover:-translate-y-0.5 hover:bg-blue-500 active:translate-y-0"
+    >
+      Open the slides
+    </a>
+  </div>
+</div>
+
+<Disclosure title="Transcript" variant="note" class="mt-8">
+
+For Intellectual Production #4 I picked two of the readings on pedagogic communication: Caldwell's review of clickers in large lectures, and Nolan and McBride's paper on gamification in early childhood. One is about a vote and the other is about a badge, and for both I am asking who gets to talk to whom.
+
+With a clicker, the instructor posts a multiple-choice question, every student presses a button, and the answers are shown back to the room as a histogram. Caldwell writes that many instructors adopted them "to compensate for the passive, one-way communication inherent in lecturing". The instructor hears from the whole room instead of from "a small but vocal minority". In one example Caldwell quotes, 48 percent of a class could apply a rule correctly, and after arguing it out with their neighbours and voting again, over 90 percent could.
+
+The first idea I take from Caldwell is formative feedback: the instructor finds out what every student thinks while there is still time to change the lecture. The second is that the handset does not do the teaching. Caldwell quotes another review that calls clicker questions "best understood as a tool rather than a teaching approach", and the gains are strongest when they are paired with peer discussion. The same handset also takes attendance and feeds the gradebook, and the abstract calls it "a management tool".
+
+My representative quote is from Caldwell's conclusion: clickers "simulate a one-to-many dialogue and make it easier for both instructors and students to receive prompt feedback". It stands for the whole article because the review is about adding feedback to the lecture without taking the lecture apart. The word that interests me is "simulate". A student is speaking, but only by choosing among answers the instructor has already written. I would wonder how much of a class's thinking fits inside five options.
+
+Nolan and McBride start from the other end, with children's play at home. There the play is "organized and directed by the child rather than a teacher", and when someone is stuck, "another child takes the role of teacher". Gamification in school runs the other way. Points, badges and rewards are added on top of the existing curriculum as a "game layer", and the message travels down from the institution to the child. The adults they would rather see are playing alongside, in what they call "parallel and co-play".
+
+Their first big idea is that this gamified version fits the school's hidden curriculum of competition, achievement and reward. In their words it is "more gamified than gameful". The second is the null curriculum, which is what school leaves out, and they name four things: autonomy, play, affinity and space. In their table the kinds of play that schools keep are progress, power and identity. The ones that get dropped are the imaginary, the self, frivolity and fate, which they say are the ones players care about most.
+
+The quote I chose is from their conclusion. Without a critical pedagogy for games, they write, "we risk turning back the clock on decades of critical pedagogy and social research to replace the sandbox of play with a Skinner box of behavioural conditioning". It is representative because the whole paper is this contrast between play that a child chooses and behaviour that a system rewards. It interests me because the math game I built for my own classroom, Math Champion, is a head-to-head race to the first correct answer, which sits on the side of the table that schools already keep.
+
+My question for the two readings together is this. Both the clicker and the game layer let a teacher hear from every student at once, but only through answers and rewards that were set in advance. Who is that communication for, the learner or the record? And more generally, across the lecture, the seminar, the essay, the textbook, the clicker and the game, which of these forms leaves room for a student to say something the teacher did not plan for?
+
+</Disclosure>
+
+{/* Jeremy: this disclosure says what Claude did while drafting. Add what you changed, how you
+    recorded the video, and your usual closing line before this is published. */}
+
+<Disclosure title="AI &amp; Tooling Disclosure" variant="warning" class="mt-6">
+
+My workflow for this task consisted of handing the assignment criteria to Claude (Opus 5.5 via Claude Code) and asking it to find the readings and to choose two that matched the interests in my earlier posts. Claude could only open the two articles that are open access (Caldwell, 2007, and Nolan and McBride, 2014), so those are the two it chose and read in full. It then drafted the script, checked the quotations and page numbers against the two PDFs, found the photographs on Wikimedia Commons, and built the slides as a single web page in the same ruled-paper look as my IP#2 slides.
+
+</Disclosure>
+
+## References
+
+{/* Hand-written on purpose: components/blocks/References.astro uses React’s
+    dangerouslySetInnerHTML, which Astro does not implement, so it renders empty. */}
+
+<div class="mt-8 flex flex-col gap-4 border-t border-gray-200 pt-8 text-sm leading-relaxed text-gray-700 dark:border-gray-700 dark:text-gray-300">
+  <div class="flex gap-3">
+    <span class="flex-none pt-0.5 font-mono text-xs text-gray-500">[1]</span>
+    <p class="m-0">
+      <b>Caldwell, J. E. (2007).</b> Clickers in the large classroom: Current research and best-practice tips. <i>CBE—Life Sciences Education</i>, <i>6</i>(1), 9–20. <a href="https://doi.org/10.1187/cbe.06-12-0205" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">https://doi.org/10.1187/cbe.06-12-0205</a>
+    </p>
+  </div>
+  <div class="flex gap-3">
+    <span class="flex-none pt-0.5 font-mono text-xs text-gray-500">[2]</span>
+    <p class="m-0">
+      <b>Nolan, J., &amp; McBride, M. (2014).</b> Beyond gamification: Reconceptualizing game-based learning in early childhood environments. <i>Information, Communication &amp; Society</i>, <i>17</i>(5), 594–608. <a href="https://doi.org/10.1080/1369118X.2013.808365" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">https://doi.org/10.1080/1369118X.2013.808365</a>
+    </p>
+  </div>
+</div>
+
+Photograph credits are on the last slide.

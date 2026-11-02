@@ -30,6 +30,8 @@ const post = defineCollection({
 			pinned: z.boolean().default(false),
 			// Render the piece as the page itself instead of a post with chrome.
 			immersive: z.boolean().default(false),
+			// Show other people's replies and likes under the post.
+			webmentions: z.boolean().default(true),
 			/*
 			 * A slide deck built elsewhere (Quarto + reveal.js) and staged as a
 			 * self-contained HTML file in public/. The post keeps all of its

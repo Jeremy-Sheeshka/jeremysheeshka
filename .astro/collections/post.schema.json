@@ -54,6 +54,10 @@
       "default": false,
       "type": "boolean"
     },
+    "webmentions": {
+      "default": true,
+      "type": "boolean"
+    },
     "presentation": {
       "type": "object",
       "properties": {

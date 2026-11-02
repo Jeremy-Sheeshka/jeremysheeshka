@@ -32,7 +32,7 @@ interface Props {
 }
 
 const { post } = Astro.props;
-const { ogImage, title, description, updatedDate, publishDate } = post.data;
+const { ogImage, title, description, updatedDate, publishDate, webmentions } = post.data;
 const socialImage = ogImage ?? `/og-image/${post.id}.png`;
 const articleDate = updatedDate?.toISOString() ?? publishDate.toISOString();
 
@@ -86,9 +86,11 @@ try {
                 <div class="prose dark:prose-invert prose-sm prose-headings:font-semibold me-post max-w-none">
                     <slot />
                 </div>
-                <div class="mt-16">
-                    <WebMentions />
-                </div>
+                {webmentions && (
+                    <div class="mt-16">
+                        <WebMentions />
+                    </div>
+                )}
             </div>
         </div>
     </article>

@@ -1,0 +1,282 @@
+---
+/**
+ * Ip10Repaint — ETEC 534, IP#10.
+ *
+ * Three sentences from the IP#2 speaker notes, typed on a sheet of loose-leaf,
+ * with the part I would now change painted over in correction fluid and the new
+ * wording written on the patch by hand. Nothing is deleted: pressing a patch
+ * (or hovering over it) lets the old words show through, the same way the typo
+ * on the IP#2 cover is still in the file under the paint.
+ *
+ * Each patch is a real <button>, so it works from the keyboard, and each one
+ * carries a visually hidden note of the words painted over, for screen readers.
+ * Hovering only uncovers a patch on devices that can hover, so on a phone or
+ * tablet a second tap paints it over again.
+ */
+type Line = {
+	/** Where the sentence comes from in the IP#2 deck. */
+	from: string;
+	before: string;
+	/** The words that get painted over. */
+	old: string;
+	/** What is written on the patch. */
+	now: string;
+	after: string;
+	tilt: number;
+};
+
+const lines: Line[] = [
+	{
+		from: "slide 2, delegation",
+		before: "The bottle doesn't erase anything, so what we",
+		old: "delegated",
+		now: "made together",
+		after: "was the hiding.",
+		tilt: -1.6,
+	},
+	{
+		from: "slide 3, prescription",
+		before: "Waiting for it to dry is like having to",
+		old: "reflect on your mistake",
+		now: "go at the fluid's speed",
+		after: "for a few seconds.",
+		tilt: 1.1,
+	},
+	{
+		from: "slide 4, object to thing",
+		before: "This is the assembly that the bottle has gathered, and I",
+		old: "gave seats to",
+		now: "would follow the",
+		after: "nonhumans as well.",
+		tilt: -0.9,
+	},
+];
+---
+
+<figure class="rp not-prose">
+	<div class="rp-sheet">
+		<p class="rp-head">from my IP#2 notes, painted over</p>
+		{
+			lines.map((l) => (
+				<p class="rp-line">
+					<span class="rp-from">{l.from}</span>
+					<span class="rp-typed">
+						{l.before}{" "}
+						<button type="button" class="rp-patch" aria-pressed="false" style={`--tilt:${l.tilt}deg`}>
+							<span class="rp-old" aria-hidden="true">
+								{l.old}
+							</span>
+							<span class="rp-paint" aria-hidden="true" />
+							<span class="rp-new">{l.now}</span>
+							<span class="rp-sr">(painted over: {l.old})</span>
+						</button>{" "}
+						{l.after}
+					</span>
+				</p>
+			))
+		}
+		<p class="rp-add">
+			<span aria-hidden="true">+</span> and where does the solvent go once the patch is dry?
+		</p>
+	</div>
+	<figcaption>
+		Three lines from the speaker notes of my IP#2 slides, with what I would change now painted over
+		and rewritten. Press or hover over a patch to see what is still underneath it.
+	</figcaption>
+</figure>
+
+<script>
+	document.querySelectorAll<HTMLButtonElement>(".rp-patch").forEach((b) => {
+		b.addEventListener("click", () => {
+			b.setAttribute("aria-pressed", b.getAttribute("aria-pressed") === "true" ? "false" : "true");
+		});
+	});
+</script>
+
+<style>
+	@font-face {
+		font-family: "Special Elite";
+		src: url("/fonts/special-elite.woff2") format("woff2");
+		font-display: swap;
+	}
+	@font-face {
+		font-family: "Courier Prime";
+		src: url("/fonts/courier-prime.woff2") format("woff2");
+		font-display: swap;
+	}
+	@font-face {
+		font-family: "Caveat";
+		src: url("/fonts/caveat.woff2") format("woff2");
+		font-weight: 400 700;
+		font-display: swap;
+	}
+
+	.rp {
+		--paper: #fbfcfa;
+		--rule: #c5d5ea;
+		--margin: #e0a0a0;
+		--ink: #1d1d1f;
+		--pen: #1f48a6;
+		--pencil: #5d6066;
+		--line: 2.6rem;
+		margin: 2.25rem auto 2.5rem;
+		max-width: 54rem;
+	}
+
+	.rp-sheet {
+		position: relative;
+		color-scheme: light;
+		color: var(--ink);
+		padding: calc(var(--line) * 0.5) 1.5rem calc(var(--line) * 0.9) 4.6rem;
+		background-color: var(--paper);
+		background-image:
+			linear-gradient(90deg, transparent 3.4rem, var(--margin) 3.4rem, var(--margin) calc(3.4rem + 2px), transparent calc(3.4rem + 2px)),
+			repeating-linear-gradient(to bottom, transparent 0 calc(var(--line) - 1px), var(--rule) calc(var(--line) - 1px) var(--line));
+		box-shadow:
+			0 1px 2px rgba(0, 0, 0, 0.28),
+			0 16px 28px -16px rgba(0, 0, 0, 0.5);
+	}
+
+	.rp-sheet p {
+		margin: 0;
+		color: var(--ink);
+	}
+
+	.rp-head {
+		font: 600 1.45rem / var(--line) "Caveat", "Segoe Print", cursive;
+		color: var(--pencil) !important;
+	}
+
+	.rp-line {
+		position: relative;
+		padding-top: var(--line);
+	}
+
+	.rp-from {
+		position: absolute;
+		top: calc(var(--line) * 0.45);
+		left: 0;
+		font: 400 0.7rem/1 "Courier Prime", "Courier New", monospace;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: var(--pencil);
+	}
+
+	.rp-typed {
+		font: 400 1.18rem / var(--line) "Special Elite", "Courier Prime", "Courier New", monospace;
+	}
+
+	/* ---- the patch ---- */
+	.rp-patch {
+		position: relative;
+		display: inline-block;
+		margin: 0;
+		padding: 0 0.5em;
+		border: 0;
+		background: none;
+		font: inherit;
+		color: inherit;
+		line-height: inherit;
+		vertical-align: baseline;
+		cursor: pointer;
+		white-space: nowrap;
+	}
+	.rp-old {
+		white-space: nowrap;
+	}
+	/* Correction fluid: slightly cooler and brighter than the paper, with an
+	   uneven edge and the ridge a brush leaves along one side. */
+	.rp-paint {
+		position: absolute;
+		left: -0.18em;
+		right: -0.18em;
+		top: 50%;
+		height: 1.7em;
+		background:
+			linear-gradient(178deg, rgba(255, 255, 255, 0.95), rgba(244, 246, 248, 0.98) 60%, rgba(226, 229, 233, 0.98)),
+			#fff;
+		border-radius: 0.55em 0.85em 0.6em 0.8em / 0.75em 0.55em 0.8em 0.6em;
+		box-shadow:
+			0 1px 0 rgba(0, 0, 0, 0.2),
+			0 2px 3px -1px rgba(0, 0, 0, 0.18),
+			inset 0 -2px 2px rgba(0, 0, 0, 0.07),
+			inset 2px 2px 2px rgba(255, 255, 255, 0.9);
+		transform: translateY(-52%) rotate(var(--tilt, -1deg));
+		transition: opacity 0.25s ease;
+	}
+	.rp-new {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -54%) rotate(var(--tilt, -1deg));
+		font: 700 1.5rem/1 "Caveat", "Segoe Print", cursive;
+		color: var(--pen);
+		white-space: nowrap;
+		transition: opacity 0.25s ease;
+	}
+	.rp-patch[aria-pressed="true"] .rp-paint {
+		opacity: 0.16;
+	}
+	.rp-patch[aria-pressed="true"] .rp-new {
+		opacity: 0.22;
+	}
+	/* A touch screen keeps :hover after a tap, which would stop a second tap covering the patch again. */
+	@media (hover: hover) {
+		.rp-patch:hover .rp-paint {
+			opacity: 0.16;
+		}
+		.rp-patch:hover .rp-new {
+			opacity: 0.22;
+		}
+	}
+	.rp-patch:focus-visible {
+		outline: 2px solid var(--pen);
+		outline-offset: 3px;
+	}
+
+	.rp-add {
+		padding-top: var(--line);
+		font: 600 1.5rem / var(--line) "Caveat", "Segoe Print", cursive;
+		color: var(--pen) !important;
+	}
+
+	.rp-sr {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+	}
+
+	.rp figcaption {
+		margin: 1rem auto 0;
+		padding: 0 1rem;
+		text-align: center;
+		font-size: 0.875rem;
+		font-style: italic;
+		line-height: 1.6;
+		color: var(--theme-text, #4b5563);
+		opacity: 0.82;
+	}
+
+	@media (max-width: 640px) {
+		.rp {
+			--line: 2.3rem;
+		}
+		.rp-sheet {
+			padding-left: 3.2rem;
+			padding-right: 0.9rem;
+			background-image:
+				linear-gradient(90deg, transparent 2.3rem, var(--margin) 2.3rem, var(--margin) calc(2.3rem + 2px), transparent calc(2.3rem + 2px)),
+				repeating-linear-gradient(to bottom, transparent 0 calc(var(--line) - 1px), var(--rule) calc(var(--line) - 1px) var(--line));
+		}
+		.rp-typed {
+			font-size: 1rem;
+		}
+		.rp-new {
+			font-size: 1.3rem;
+		}
+	}
+</style>
