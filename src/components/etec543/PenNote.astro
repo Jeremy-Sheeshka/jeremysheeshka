@@ -1,0 +1,46 @@
+---
+/**
+ * A note written in blue pen. Put it at the end of the paragraph or list item
+ * it is about: on a wide screen it moves out into the sheet's right margin,
+ * level with that line; on a narrow one it sits just under it.
+ */
+---
+
+<span class="pen-note"><slot /></span>
+
+<style is:global>
+	.report-sheet .pen-note {
+		display: block;
+		margin: 0.3rem 0 0.15rem 0.5rem;
+		color: var(--pen);
+		font-family: "Caveat", "Segoe Print", "Bradley Hand", cursive;
+		font-size: 1.32rem;
+		font-weight: 600;
+		line-height: 1.12;
+		text-indent: 0;
+		transform: rotate(-1.4deg);
+		transform-origin: left top;
+	}
+
+	.report-sheet .pen-note--inline {
+		display: inline-block;
+		margin: 0 0 0 0.4rem;
+		font-size: 1.15rem;
+	}
+
+	@media (min-width: 1024px) {
+		.report-sheet--stapled .pen-note {
+			position: absolute;
+			top: 0.1rem;
+			left: calc(100% + 2.25rem);
+			width: 16rem;
+			margin: 0;
+		}
+	}
+
+	@media (min-width: 1280px) {
+		.report-sheet--stapled .pen-note {
+			width: 20rem;
+		}
+	}
+</style>

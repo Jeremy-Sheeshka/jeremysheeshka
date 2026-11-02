@@ -5,140 +5,90 @@ publishDate: 2026-11-01
 tags: ["etec543"]
 ---
 
-import Disclosure from "../../components/blocks/Disclosure.astro";
-import Area from "../../components/etec543/Area.astro";
-import AreaList from "../../components/etec543/AreaList.astro";
-import CardGrid from "../../components/etec543/CardGrid.astro";
-import ConcernCard from "../../components/etec543/ConcernCard.astro";
-import GapCard from "../../components/etec543/GapCard.astro";
-import QuoteCard from "../../components/etec543/QuoteCard.astro";
+import PenNote from "../../components/etec543/PenNote.astro";
+import ReportSheet from "../../components/etec543/ReportSheet.astro";
+import StickyNote from "../../components/etec543/StickyNote.astro";
 
-{/* The report as submitted for ETEC 543 Task 4B (988 words, title through the
-    mini-scenario). The cards only lay out the report's own wording. */}
+{/* The report as submitted for ETEC 543 Task 4B, set as a printed copy. The
+    typed text is the report's own wording; the pen notes and the sticky note
+    compare it with Jisc's web version updated 9 September 2026 (the course
+    copy is module4/m4rr3.md). */}
+
+<ReportSheet stapled>
+
+<StickyNote>
+Jisc updated the code online on 9 Sept 2026. My blue pen notes show where that version differs from the July 2023 PDF I reviewed (<a href="https://www.jisc.ac.uk/guides/code-of-practice-for-learning-analytics" target="_blank" rel="noopener noreferrer">Sclater &amp; Bailey, 2026</a>).
+</StickyNote>
+
+<p class="sheet-title">Reviewing the Jisc Code of Practice for Learning Analytics</p>
+<p class="sheet-subtitle">ETEC 543 – Task 4B</p>
 
 ## Setting the scene
 
-<div class="font-serif text-[1.0625rem] leading-[1.9]">
-
 I teach Grade 4/5 in School District 52 (SD52) in Prince Rupert, BC, after a year of teaching Grade 2 and eight to nine years teaching high school music. In my current professional context, learning analytics take place through attendance and proficiency assessment reporting applications including MyEducation BC, province-wide Foundation Skills Assessments and Microsoft 365. Often when these analytics are received, the information travels upstream to administrators at the School Board Office and Ministry of Education levels where it is used to shape the classroom supports a child receives. While district-licensed software does exist, I have not had the opportunity to regularly engage with it, primarily due to a lack of on-site technological resources alongside large class sizes (i.e., 19 iPads for 27 students).
-
-</div>
 
 ## Summary of the Jisc code
 
-<div class="font-serif text-[1.0625rem] leading-[1.9]">
-
 Summarizing Jisc’s (July 2023) Code of Practice for Learning Analytics, written for UK colleges and universities, I have identified seven areas for school district policy writers to consider:
 
-</div>
+- **Responsibility: who becomes accountable?** Name a point of contact, assign responsibility for collecting, anonymizing, analyzing, acting on and retaining data, consult students and staff, and require information security training for anyone with access.
+- **Transparency, legal basis and consent: what do people know?** List what data is collected and why, where it comes from, how it is measured, who can access it and its limitations. While legitimate interests form the main legal basis, consent must be easy to withdraw and is required for student-supplied data, ethnicity and (normally) personal interventions.
+- **Privacy: who can see what?** Limit access to a legitimate need. How is data protected and where is it held by software contractors? When is external sharing allowable, and when might privacy be overridden for a student at risk?
+- **Validity: can we trust it?** Monitor the data for accuracy, incomplete datasets and irregularities, and ensure qualified staff validate the algorithms used.
+- **Access: can learners see it?** Students should be able to review and correct their own data, and harmful results may be withheld (but acknowledged) by default and shown on request through a teacher rather than an automated response. <PenNote>2026: students can also view “the metrics and labels attached to them”</PenNote>
+- **Minimize adverse impacts: could this data cause harm?** Use labels that do not bias staff or reinforce discriminatory perspectives, protect learner autonomy, and avoid surveillance practices that may discourage participation.
+- **Stewardship of data: how long is it kept?** Establish clear data collection and retention policies and delete or anonymize data on request (except fields required for educational purposes).
 
-<AreaList>
-<Area n={1} name="Responsibility" question="Who becomes accountable?">
-Name a point of contact, assign responsibility for collecting, anonymizing, analyzing, acting on and retaining data, consult students and staff, and require information security training for anyone with access.
-</Area>
-<Area n={2} name="Transparency, legal basis and consent" question="What do people know?">
-List what data is collected and why, where it comes from, how it is measured, who can access it and its limitations. While legitimate interests form the main legal basis, consent must be easy to withdraw and is required for student-supplied data, ethnicity and (normally) personal interventions.
-</Area>
-<Area n={3} name="Privacy" question="Who can see what?">
-Limit access to a legitimate need. How is data protected and where is it held by software contractors? When is external sharing allowable, and when might privacy be overridden for a student at risk?
-</Area>
-<Area n={4} name="Validity" question="Can we trust it?">
-Monitor the data for accuracy, incomplete datasets and irregularities, and ensure qualified staff validate the algorithms used.
-</Area>
-<Area n={5} name="Access" question="Can learners see it?">
-Students should be able to review and correct their own data, and harmful results may be withheld (but acknowledged) by default and shown on request through a teacher rather than an automated response.
-</Area>
-<Area n={6} name="Minimize adverse impacts" question="Could this data cause harm?">
-Use labels that do not bias staff or reinforce discriminatory perspectives, protect learner autonomy, and avoid surveillance practices that may discourage participation.
-</Area>
-<Area n={7} name="Stewardship of data" question="How long is it kept?">
-Establish clear data collection and retention policies and delete or anonymize data on request (except fields required for educational purposes).
-</Area>
-</AreaList>
+As related to district-licensed software (in SD52 this might be IXL or Raz-Kids apps), analytics should serve <mark>“formative rather than summative purposes”</mark> (Jisc, 2023, p. 3), prompting instructor feedback rather than a final judgement of a student’s proficiency. <PenNote>2026 goes further: it “must not be used for assessing, grading, or profiling”</PenNote>
 
-<CardGrid>
-<QuoteCard cite="Jisc (2023), p. 3">
-As related to district-licensed software (in SD52 this might be IXL or Raz-Kids apps), analytics should serve <mark>“formative rather than summative purposes”</mark> (Jisc, 2023, p. 3), prompting instructor feedback rather than a final judgement of a student’s proficiency.
-</QuoteCard>
-<QuoteCard cite="Jisc (2023), p. 6">
 What teachers understand from their relationships with students <mark>“must be a significant contributor to any intervention”</mark> (Jisc, 2023, p. 6). This especially matters in elementary schools, where teachers see a child across the whole school day.
-</QuoteCard>
-</CardGrid>
 
 ## Critical reflection
 
-<div class="font-serif text-[1.0625rem] leading-[1.9]">
-
 I chose Jisc because it is a broad, sector-wide code rather than any one university’s policy, so its principles can be adapted to a district like SD52. While Jisc goes into detail about protecting and governing collected data, I found it worth considering that these protections mean little if an inferred risk score or label is later misinterpreted and allowed to shape a child’s future educational opportunities.
-
-</div>
 
 ### Comparison with SD52
 
-<div class="font-serif text-[1.0625rem] leading-[1.9]">
-
 SD52’s Privacy Policy and Privacy Management Program cover accountability, necessary collection, limited sharing, security, privacy impact assessments (PIAs), breach response and training (School District 52, n.d., 2023). SD52’s policies seem geared towards legal grounding, whereas Jisc is stronger on validity and labelling, so I encourage SD52 to integrate Jisc’s validity and adverse impact questions into its PIAs for tools that score or flag students. Jisc’s legitimate interest basis may not carry over, though, since BC’s Freedom of Information and Protection of Privacy Act (FIPPA, 1996) has no such ground (s. 26).
-
-</div>
 
 ### Gaps and additions
 
-<div class="not-prose my-6 grid gap-4 lg:grid-cols-3">
-<GapCard title="Children and families">
-Jisc assumes students consent for themselves and never mentions parents, though Dutch regulators found that Snappet, a tablet program for 7 to 9 year olds, needed parents’ consent (Griffiths et al., 2016, p. 4). I would separate required records from optional tools needing guardian permission and child assent, making sure declining never reduces educational support.
-</GapCard>
-<GapCard title="Indigenous data">
-More than half of SD52 students are Indigenous (British Columbia Ministry of Education and Child Care, 2026), and while Jisc handles ethnicity through individual consent, the OCAP® principles assert First Nations’ collective ownership, control, access and possession of their data (First Nations Information Governance Centre, n.d.), so analytics about Indigenous learners should be co-governed with local First Nations.
-</GapCard>
-<GapCard title="Vendors and AI">
-Jisc’s July 2023 code gives third parties one sentence (p. 6) and never mentions AI, so software licences should specify storage, deletion and breach notification, and bar advertising and AI training on student data.
-</GapCard>
-</div>
+- **Children and families.** Jisc assumes students consent for themselves and never mentions parents, though Dutch regulators found that Snappet, a tablet program for 7 to 9 year olds, needed parents’ consent (Griffiths et al., 2016, p. 4). I would separate required records from optional tools needing guardian permission and child assent, making sure declining never reduces educational support. <PenNote>still nothing on parents in the 2026 version</PenNote>
+- **Indigenous data.** More than half of SD52 students are Indigenous (British Columbia Ministry of Education and Child Care, 2026), and while Jisc handles ethnicity through individual consent, the OCAP principles assert First Nations’ collective ownership, control, access and possession of their data (First Nations Information Governance Centre, n.d.), so analytics about Indigenous learners should be co-governed with local First Nations. <PenNote>2026 adds fairness checks across groups of students, but nothing on collective data</PenNote>
+- **Vendors and AI.** Jisc’s July 2023 code gives third parties one sentence (p. 6) and never mentions AI, so software licences should specify storage, deletion and breach notification, and bar advertising and AI training on student data. <PenNote>2026 adds AI throughout and an AI appendix; contracts still get one sentence</PenNote>
 
 ### Unclear or vague
 
-<div class="font-serif text-[1.0625rem] leading-[1.9]">
-
-Jisc (2023) never actually defines who is qualified to validate algorithms and leaves open when consent may be overridden (p. 5). I would be interested in having reviewers named, examples of safeguarding exceptions, and expiry dates for categorizations and labels, since a learner’s identity is temporal and context-bound (Slade & Prinsloo, 2013).
-
-</div>
+Jisc (2023) never actually defines who is qualified to validate algorithms and leaves open when consent may be overridden (p. 5). I would be interested in having reviewers named, examples of safeguarding exceptions, and expiry dates for categorizations and labels, since a learner’s identity is temporal and context-bound (Slade & Prinsloo, 2013). <PenNote>2026 still says “qualified staff” and “legal, safeguarding or other circumstances”</PenNote>
 
 ## Implementation mini-scenario
 
-<div class="font-serif text-[1.0625rem] leading-[1.9]">
-
 At a staff meeting, I would introduce the adapted code through a one-term IXL pilot for Grade 4/5 math and expect these concerns:
 
-</div>
+- **“Is this more work?”** The district would need to provide training and review time first, as once data is collected “it becomes unethical not to act upon it” (Rets et al., 2023, p. 159). <PenNote>2026 now names staff workload and training</PenNote>
+- **“The app says one thing, but I know the child.”** Jisc (2023) agrees (p. 6), so a flag would only prompt a look at classroom evidence and a family conversation. Low IXL engagement might reflect spotty home internet in a northern community, inaccessible tasks or waiting for one of 19 iPads to load or charge, rather than actual effort. <PenNote>2026: AI output is “supporting material, with judgement remaining with skilled staff”</PenNote>
 
-<CardGrid>
-<ConcernCard concern="“Is this more work?”">
-The district would need to provide training and review time first, as once data is collected “it becomes unethical not to act upon it” (Rets et al., 2023, p. 159).
-</ConcernCard>
-<ConcernCard concern="“The app says one thing, but I know the child.”">
-Jisc (2023) agrees (p. 6), so a flag would only prompt a look at classroom evidence and a family conversation. Low IXL engagement might reflect spotty home internet in a northern community, inaccessible tasks or waiting for one of 19 iPads to load or charge, rather than actual effort.
-</ConcernCard>
-</CardGrid>
+</ReportSheet>
 
-<Disclosure title="AI &amp; Tooling Disclosure" variant="warning" class="mt-12">
-I used ChatGPT (OpenAI) to evaluate my draft against the rubric, revise it substantially, check claims against the Jisc PDF and public sources, and develop examples and recommendations. I then used Claude (Anthropic) to review that revision against the task and rubric, check each citation against its source (rewording claims that did not match their sources), condense the report to the word limit, and suggest the points on Indigenous data governance and FIPPA’s legal basis. After I rewrote the first half in my own words, I used Claude again to reformat the report, correct and trim my sections, check its quotations and page numbers against the sources, rewrite the sections from the SD52 comparison onward to match my writing style, add links to the Module 4 readings (including the Snappet case from Griffiths et al., 2016) and condense the report again to the 1,000-word limit. I then made further edits myself and used Claude to review them, correct errors and trim the report back under the word limit. I also used Claude to format the report into this blog post. I reviewed every change; the professional context and final judgements are my own.
-</Disclosure>
+<ReportSheet>
 
 ## References
 
-{/* Hand-written on purpose: components/blocks/References.astro relies on
-    dangerouslySetInnerHTML, which Astro does not implement, so it renders empty. */}
+<ul class="refs">
+  <li>British Columbia Ministry of Education and Child Care. (2026). <i>Interim operating grants overview: 2025/26 school year, School District 52 (Prince Rupert)</i>. <a href="https://www2.gov.bc.ca/assets/gov/education/administration/resource-management/k12funding/25-26/25-26-sd52-april-2026.pdf" target="_blank" rel="noopener noreferrer">https://www2.gov.bc.ca/assets/gov/education/administration/resource-management/k12funding/25-26/25-26-sd52-april-2026.pdf</a></li>
+  <li>First Nations Information Governance Centre. (n.d.). <i>The First Nations principles of OCAP</i> [Brochure]. <a href="https://fnigc.ca/wp-content/uploads/2022/10/OCAP_Brochure_20220927_web.pdf" target="_blank" rel="noopener noreferrer">https://fnigc.ca/wp-content/uploads/2022/10/OCAP_Brochure_20220927_web.pdf</a></li>
+  <li>Freedom of Information and Protection of Privacy Act, R.S.B.C. 1996, c. 165. <a href="https://www.bclaws.gov.bc.ca/civix/document/id/complete/statreg/96165_00_multi" target="_blank" rel="noopener noreferrer">https://www.bclaws.gov.bc.ca/civix/document/id/complete/statreg/96165_00_multi</a></li>
+  <li>Griffiths, D., Drachsler, H., Kickmeier-Rust, M., Steiner, C., Hoel, T., &amp; Greller, W. (2016). <i>Is privacy a show-stopper for learning analytics? A review of current issues and solutions</i> (Learning Analytics Review 6). Learning Analytics Community Exchange.</li>
+  <li>Jisc. (2023). <i>Code of practice for learning analytics</i>.</li>
+  <li>Rets, I., Herodotou, C., &amp; Gillespie, A. (2023). Six practical recommendations enabling ethical use of predictive learning analytics in distance education. <i>Journal of Learning Analytics, 10</i>(1), 149–167. <a href="https://doi.org/10.18608/jla.2023.7743" target="_blank" rel="noopener noreferrer">https://doi.org/10.18608/jla.2023.7743</a></li>
+  <li>School District 52. (n.d.). <i>Privacy management program</i>. <a href="https://rupertschools.ca/privacy-management-program-3/" target="_blank" rel="noopener noreferrer">https://rupertschools.ca/privacy-management-program-3/</a></li>
+  <li>School District 52. (2023, October 16). <i>Privacy policy</i> (Policy 6720). <a href="https://sd52policy.com/index.php/policies-regulations-and-forms/policies/privacy-policy" target="_blank" rel="noopener noreferrer">https://sd52policy.com/index.php/policies-regulations-and-forms/policies/privacy-policy</a></li>
+  <li>Sclater, N., &amp; Bailey, P. (2026, September 9). <i>Code of practice for learning analytics</i>. Jisc. <a href="https://www.jisc.ac.uk/guides/code-of-practice-for-learning-analytics" target="_blank" rel="noopener noreferrer">https://www.jisc.ac.uk/guides/code-of-practice-for-learning-analytics</a> <span class="pen-note pen-note--inline">added for the pen notes</span></li>
+  <li>Slade, S., &amp; Prinsloo, P. (2013). Learning analytics: Ethical issues and dilemmas. <i>American Behavioral Scientist, 57</i>(10), 1510–1529. <a href="https://doi.org/10.1177/0002764213479366" target="_blank" rel="noopener noreferrer">https://doi.org/10.1177/0002764213479366</a></li>
+</ul>
 
-<div class="not-prose mt-6 text-sm leading-relaxed text-[var(--theme-text)] [overflow-wrap:anywhere]">
-  <ul class="space-y-3">
-    <li class="pl-8 -indent-8">British Columbia Ministry of Education and Child Care. (2026). <i>Interim operating grants overview: 2025/26 school year, School District 52 (Prince Rupert)</i>. <a href="https://www2.gov.bc.ca/assets/gov/education/administration/resource-management/k12funding/25-26/25-26-sd52-april-2026.pdf" target="_blank" rel="noopener noreferrer" class="underline decoration-stone-400 underline-offset-2 hover:decoration-[var(--color-link)] dark:decoration-zinc-500">https://www2.gov.bc.ca/assets/gov/education/administration/resource-management/k12funding/25-26/25-26-sd52-april-2026.pdf</a></li>
-    <li class="pl-8 -indent-8">First Nations Information Governance Centre. (n.d.). <i>The First Nations principles of OCAP®</i> [Brochure]. <a href="https://fnigc.ca/wp-content/uploads/2022/10/OCAP_Brochure_20220927_web.pdf" target="_blank" rel="noopener noreferrer" class="underline decoration-stone-400 underline-offset-2 hover:decoration-[var(--color-link)] dark:decoration-zinc-500">https://fnigc.ca/wp-content/uploads/2022/10/OCAP_Brochure_20220927_web.pdf</a></li>
-    <li class="pl-8 -indent-8">Freedom of Information and Protection of Privacy Act, R.S.B.C. 1996, c. 165. <a href="https://www.bclaws.gov.bc.ca/civix/document/id/complete/statreg/96165_00_multi" target="_blank" rel="noopener noreferrer" class="underline decoration-stone-400 underline-offset-2 hover:decoration-[var(--color-link)] dark:decoration-zinc-500">https://www.bclaws.gov.bc.ca/civix/document/id/complete/statreg/96165_00_multi</a></li>
-    <li class="pl-8 -indent-8">Griffiths, D., Drachsler, H., Kickmeier-Rust, M., Steiner, C., Hoel, T., &amp; Greller, W. (2016). <i>Is privacy a show-stopper for learning analytics? A review of current issues and solutions</i> (Learning Analytics Review 6). Learning Analytics Community Exchange.</li>
-    <li class="pl-8 -indent-8">Jisc. (2023). <i>Code of practice for learning analytics</i>.</li>
-    <li class="pl-8 -indent-8">Rets, I., Herodotou, C., &amp; Gillespie, A. (2023). Six practical recommendations enabling ethical use of predictive learning analytics in distance education. <i>Journal of Learning Analytics, 10</i>(1), 149–167. <a href="https://doi.org/10.18608/jla.2023.7743" target="_blank" rel="noopener noreferrer" class="underline decoration-stone-400 underline-offset-2 hover:decoration-[var(--color-link)] dark:decoration-zinc-500">https://doi.org/10.18608/jla.2023.7743</a></li>
-    <li class="pl-8 -indent-8">School District 52. (n.d.). <i>Privacy management program</i>. <a href="https://rupertschools.ca/privacy-management-program-3/" target="_blank" rel="noopener noreferrer" class="underline decoration-stone-400 underline-offset-2 hover:decoration-[var(--color-link)] dark:decoration-zinc-500">https://rupertschools.ca/privacy-management-program-3/</a></li>
-    <li class="pl-8 -indent-8">School District 52. (2023, October 16). <i>Privacy policy</i> (Policy 6720). <a href="https://sd52policy.com/index.php/policies-regulations-and-forms/policies/privacy-policy" target="_blank" rel="noopener noreferrer" class="underline decoration-stone-400 underline-offset-2 hover:decoration-[var(--color-link)] dark:decoration-zinc-500">https://sd52policy.com/index.php/policies-regulations-and-forms/policies/privacy-policy</a></li>
-    <li class="pl-8 -indent-8">Slade, S., &amp; Prinsloo, P. (2013). Learning analytics: Ethical issues and dilemmas. <i>American Behavioral Scientist, 57</i>(10), 1510–1529. <a href="https://doi.org/10.1177/0002764213479366" target="_blank" rel="noopener noreferrer" class="underline decoration-stone-400 underline-offset-2 hover:decoration-[var(--color-link)] dark:decoration-zinc-500">https://doi.org/10.1177/0002764213479366</a></li>
-  </ul>
-</div>
+## Generative AI use statement
+
+I used ChatGPT (OpenAI) to evaluate my draft against the rubric, revise it substantially, check claims against the Jisc PDF and public sources, and develop examples and recommendations. I then used Claude (Anthropic) to review that revision against the task and rubric, check each citation against its source (rewording claims that did not match their sources), condense the report to the word limit, and suggest the points on Indigenous data governance and FIPPA’s legal basis. After I rewrote the first half in my own words, I used Claude again to reformat the report, correct and trim my sections, check its quotations and page numbers against the sources, rewrite the sections from the SD52 comparison onward to match my writing style, add links to the Module 4 readings (including the Snappet case from Griffiths et al., 2016) and condense the report again to the 1,000-word limit. I then made further edits myself and used Claude to review them, correct errors and trim the report back under the word limit. I also used Claude to format the report into this blog post and to draft the pen notes comparing it with Jisc’s September 2026 update. I reviewed every change; the professional context and final judgements are my own.
+
+</ReportSheet>
