@@ -1,0 +1,18 @@
+---
+/**
+ * The seven areas of the Jisc code, laid out like the ETEC 522 portfolio's
+ * timeline: a rule down the left, a dot for each area and a card beside it.
+ * The rule is neutral rather than blue so it still shows on the royal-blue
+ * page theme; the blue lives inside the cards, which are always white.
+ */
+---
+
+<div class="not-prose relative my-8">
+	<span
+		class="absolute bottom-3 left-[7px] top-3 w-0.5 rounded-full bg-stone-300 dark:bg-zinc-700"
+		aria-hidden="true"
+	></span>
+	<ol class="space-y-5">
+		<slot />
+	</ol>
+</div>
