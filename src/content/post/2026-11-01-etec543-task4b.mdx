@@ -6,6 +6,7 @@ tags: ["etec543"]
 ---
 
 import Disclosure from "../../components/blocks/Disclosure.astro";
+import Cite from "../../components/widgets/Cite.astro";
 
 ## Setting the scene
 
@@ -35,7 +36,7 @@ I teach Grade 4/5 in School District 52 (SD52) in Prince Rupert, BC, after a yea
 
 <div class="font-serif text-[1.0625rem] leading-[1.9]">
 
-Summarizing Jisc’s (July 2023) Code of Practice for Learning Analytics, written for UK colleges and universities, I have identified seven areas for school district policy writers to consider:
+Summarizing Jisc’s (July 2023) Code of Practice for Learning Analytics<Cite n={5} title="Jisc (2023)" />, written for UK colleges and universities, I have identified seven areas for school district policy writers to consider:
 
 - **Responsibility: who becomes accountable?** Name a point of contact, assign responsibility for collecting, anonymizing, analyzing, acting on and retaining data, consult students and staff, and require information security training for anyone with access.
 - **Transparency, legal basis and consent: what do people know?** List what data is collected and why, where it comes from, how it is measured, who can access it and its limitations. While legitimate interests form the main legal basis, consent must be easy to withdraw and is required for student-supplied data.
@@ -45,9 +46,9 @@ Summarizing Jisc’s (July 2023) Code of Practice for Learning Analytics, writte
 - **Minimize adverse impacts: could this data cause harm?** Use labels that do not bias staff or reinforce discriminatory perspectives, protect learner autonomy, and avoid surveillance practices that may discourage participation.
 - **Stewardship of data: how long is it kept?** Establish clear data collection and retention policies and delete or anonymize data on request (except fields required for educational purposes).
 
-As related to district-licensed software (in SD52 this might be IXL or Raz-Kids apps), analytics should serve “formative rather than summative purposes” (Jisc, 2023, p. 3), prompting instructor feedback rather than a final judgement of a student’s proficiency.
+As related to district-licensed software (in SD52 this might be IXL or Raz-Kids apps), analytics should serve “formative rather than summative purposes” (Jisc, 2023, p. 3)<Cite n={5} title="Jisc (2023)" />, prompting instructor feedback rather than a final judgement of a student’s proficiency.
 
-What teachers understand from their relationships with students “must be a significant contributor to any intervention” (Jisc, 2023, p. 6). This especially matters in elementary schools, where teachers see a child across the whole school day.
+What teachers understand from their relationships with students “must be a significant contributor to any intervention” (Jisc, 2023, p. 6)<Cite n={5} title="Jisc (2023)" />. This especially matters in elementary schools, where teachers see a child across the whole school day.
 
 </div>
 
@@ -62,16 +63,16 @@ I chose Jisc because it is a broad, sector-wide code rather than any one univers
 ### Comparison with SD52
 
 <div class="font-serif text-[1.0625rem] leading-[1.9]">
-SD52's Privacy Policy and Privacy Management Program cover accountability, necessary collection, limited sharing, security, privacy impact assessments (PIAs), breach response and training (School District 52, n.d., 2023). SD52's policies seem primarily geared towards legal grounding, whereas Jisc's code appears to be oriented towards validity and labelling. I recommend that SD52 integrate Jisc's validity and adverse impact questions into its PIAs for digital tools that may score or flag students. While Jisc relies on an institution's legitimate interest to justify collecting data, BC's Freedom of Information and Protection of Privacy Act (FIPPA, 1996) does not include that reason (s. 26).
+SD52's Privacy Policy and Privacy Management Program cover accountability, necessary collection, limited sharing, security, privacy impact assessments (PIAs), breach response and training (School District 52, n.d., 2023)<Cite n={7} title="School District 52 (n.d.)" /><Cite n={8} title="School District 52 (2023)" />. SD52's policies seem primarily geared towards legal grounding, whereas Jisc's code appears to be oriented towards validity and labelling. I recommend that SD52 integrate Jisc's validity and adverse impact questions into its PIAs for digital tools that may score or flag students. While Jisc relies on an institution's legitimate interest to justify collecting data, BC's Freedom of Information and Protection of Privacy Act (FIPPA, 1996)<Cite n={3} title="Freedom of Information and Protection of Privacy Act (1996)" /> does not include that reason (s. 26).
 </div>
 
 ### Gaps and additions
 
 <div class="font-serif text-[1.0625rem] leading-[1.9]">
 
-- **Children and families.** Jisc assumes students consent for themselves and never mentions parents, likely because it was written for older college and university students. However, Dutch regulators found that Snappet, a tablet program for 7 to 9 year olds, needed parents' consent (Griffiths et al., 2016, p. 4). I would separate required records from optional tools needing guardian permission and child assent, making sure opting out never reduces a child's educational supports.
-- **Indigenous data.** More than half of SD52 students are Indigenous (British Columbia Ministry of Education and Child Care, 2026), and while Jisc handles ethnicity through individual consent, the OCAP principles assert First Nations’ collective ownership, control, access and possession of their data (First Nations Information Governance Centre, n.d.), so analytics about Indigenous learners should be co-governed with local First Nations governments.
-- **Vendors and AI.** Jisc’s July 2023 code gives third parties one sentence (p. 6) and never mentions AI, so software licences should specify storage, deletion and breach notification, as well as clearly bar advertising and AI training on any/all student data that is collected.
+- **Children and families.** Jisc assumes students consent for themselves and never mentions parents, likely because it was written for older college and university students. However, Dutch regulators found that Snappet, a tablet program for 7 to 9 year olds, needed parents' consent (Griffiths et al., 2016, p. 4)<Cite n={4} title="Griffiths et al. (2016)" />. I would separate required records from optional tools needing guardian permission and child assent, making sure opting out never reduces a child's educational supports.
+- **Indigenous data.** More than half of SD52 students are Indigenous (British Columbia Ministry of Education and Child Care, 2026)<Cite n={1} title="BC Ministry of Education and Child Care (2026)" />, and while Jisc handles ethnicity through individual consent, the OCAP principles assert First Nations’ collective ownership, control, access and possession of their data (First Nations Information Governance Centre, n.d.)<Cite n={2} title="First Nations Information Governance Centre (n.d.)" />, so analytics about Indigenous learners should be co-governed with local First Nations governments.
+- **Vendors and AI.** Jisc’s July 2023 code gives third parties one sentence (p. 6)<Cite n={5} title="Jisc (2023)" /> and never mentions AI, so software licences should specify storage, deletion and breach notification, as well as clearly bar advertising and AI training on any/all student data that is collected.
 
 </div>
 
@@ -79,7 +80,7 @@ SD52's Privacy Policy and Privacy Management Program cover accountability, neces
 
 <div class="font-serif text-[1.0625rem] leading-[1.9]">
 
-Jisc (2023) never actually defines who is qualified to validate algorithms and leaves open when consent may be overridden (p. 5). I would be interested in having reviewers named, examples of safeguarding exceptions, and expiry dates for categorizations and labels, since a learner’s identity is temporal and context-bound (Slade & Prinsloo, 2013).
+Jisc (2023) never actually defines who is qualified to validate algorithms and leaves open when consent may be overridden (p. 5)<Cite n={5} title="Jisc (2023)" />. I would be interested in having reviewers named, examples of safeguarding exceptions, and expiry dates for categorizations and labels, since a learner’s identity is temporal and context-bound (Slade & Prinsloo, 2013)<Cite n={10} title="Slade & Prinsloo (2013)" />.
 
 </div>
 
@@ -89,8 +90,8 @@ Jisc (2023) never actually defines who is qualified to validate algorithms and l
 
 At a staff meeting, I would introduce the adapted code through a one-term IXL pilot for Grade 4/5 math and expect the following concerns to arise:
 
-- **“Is this more work?”** The district would need to provide training and review time first, as once data is collected “it becomes unethical not to act upon it” (Rets et al., 2023, p. 159).
-- **“The app says one thing, but I actually know the child.”** Jisc (2023) agrees that teacher knowledge must shape any intervention (p. 6), so a flag would only prompt a look at classroom evidence and potentially a family conversation. Low IXL engagement might reflect spotty home/school internet in a northern community, inaccessible tasks or errors, or delays due to insufficient access to technological resources for large class sizes, rather than a lack of student effort.
+- **“Is this more work?”** The district would need to provide training and review time first, as once data is collected “it becomes unethical not to act upon it” (Rets et al., 2023, p. 159)<Cite n={6} title="Rets et al. (2023)" />.
+- **“The app says one thing, but I actually know the child.”** Jisc (2023) agrees that teacher knowledge must shape any intervention (p. 6)<Cite n={5} title="Jisc (2023)" />, so a flag would only prompt a look at classroom evidence and potentially a family conversation. Low IXL engagement might reflect spotty home/school internet in a northern community, inaccessible tasks or errors, or delays due to insufficient access to technological resources for large class sizes, rather than a lack of student effort.
 
 </div>
 
@@ -98,7 +99,7 @@ At a staff meeting, I would introduce the adapted code through a one-term IXL pi
 
 <div class="font-serif text-[1.0625rem] leading-[1.9]">
 
-While my report exclusively looks at the July 2023 PDF of the code, Jisc has since <a href="https://www.jisc.ac.uk/guides/code-of-practice-for-learning-analytics" target="_blank" rel="noopener noreferrer">updated their online version (Sclater & Bailey, 2026)</a> to accommodate the evolving landscape of AI usage in the practice of learning analytics. 
+While my report exclusively looks at the July 2023 PDF of the code, Jisc has since <a href="https://www.jisc.ac.uk/guides/code-of-practice-for-learning-analytics" target="_blank" rel="noopener noreferrer">updated their online version (Sclater & Bailey, 2026)</a><Cite n={9} title="Sclater & Bailey (2026)" /> to accommodate the evolving landscape of AI usage in the practice of learning analytics. 
 
 </div>
 
@@ -111,15 +112,45 @@ In completing Task 4B, I used Claude (Opus 5.5) to help revise my wording so tha
 
 <div class="not-prose mt-6 text-sm leading-relaxed text-[var(--theme-text)] [overflow-wrap:anywhere]">
   <ul class="space-y-3">
-    <li class="pl-8 -indent-8">British Columbia Ministry of Education and Child Care. (2026). <i>Interim operating grants overview: 2025/26 school year, School District 52 (Prince Rupert)</i>. <a href="https://www2.gov.bc.ca/assets/gov/education/administration/resource-management/k12funding/25-26/25-26-sd52-april-2026.pdf" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">https://www2.gov.bc.ca/assets/gov/education/administration/resource-management/k12funding/25-26/25-26-sd52-april-2026.pdf</a></li>
-    <li class="pl-8 -indent-8">First Nations Information Governance Centre. (n.d.). <i>The First Nations principles of OCAP</i> [Brochure]. <a href="https://fnigc.ca/wp-content/uploads/2022/10/OCAP_Brochure_20220927_web.pdf" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">https://fnigc.ca/wp-content/uploads/2022/10/OCAP_Brochure_20220927_web.pdf</a></li>
-    <li class="pl-8 -indent-8">Freedom of Information and Protection of Privacy Act, R.S.B.C. 1996, c. 165. <a href="https://www.bclaws.gov.bc.ca/civix/document/id/complete/statreg/96165_00_multi" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">https://www.bclaws.gov.bc.ca/civix/document/id/complete/statreg/96165_00_multi</a></li>
-    <li class="pl-8 -indent-8">Griffiths, D., Drachsler, H., Kickmeier-Rust, M., Steiner, C., Hoel, T., &amp; Greller, W. (2016). <i>Is privacy a show-stopper for learning analytics? A review of current issues and solutions</i> (Learning Analytics Review 6). Learning Analytics Community Exchange.</li>
-    <li class="pl-8 -indent-8">Jisc. (2023). <i>Code of practice for learning analytics</i>.</li>
-    <li class="pl-8 -indent-8">Rets, I., Herodotou, C., &amp; Gillespie, A. (2023). Six practical recommendations enabling ethical use of predictive learning analytics in distance education. <i>Journal of Learning Analytics, 10</i>(1), 149–167. <a href="https://doi.org/10.18608/jla.2023.7743" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">https://doi.org/10.18608/jla.2023.7743</a></li>
-    <li class="pl-8 -indent-8">School District 52. (n.d.). <i>Privacy management program</i>. <a href="https://rupertschools.ca/privacy-management-program-3/" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">https://rupertschools.ca/privacy-management-program-3/</a></li>
-    <li class="pl-8 -indent-8">School District 52. (2023, October 16). <i>Privacy policy</i> (Policy 6720). <a href="https://sd52policy.com/index.php/policies-regulations-and-forms/policies/privacy-policy" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">https://sd52policy.com/index.php/policies-regulations-and-forms/policies/privacy-policy</a></li>
-    <li class="pl-8 -indent-8">Sclater, N., &amp; Bailey, P. (2026, September 9). <i>Code of practice for learning analytics</i>. Jisc. <a href="https://www.jisc.ac.uk/guides/code-of-practice-for-learning-analytics" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">https://www.jisc.ac.uk/guides/code-of-practice-for-learning-analytics</a></li>
-    <li class="pl-8 -indent-8">Slade, S., &amp; Prinsloo, P. (2013). Learning analytics: Ethical issues and dilemmas. <i>American Behavioral Scientist, 57</i>(10), 1510–1529. <a href="https://doi.org/10.1177/0002764213479366" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">https://doi.org/10.1177/0002764213479366</a></li>
+    <li id="ref-1" class="flex gap-3 scroll-mt-24">
+      <a href="#cite-1" class="flex-none w-8 text-right font-mono text-xs text-blue-600 pt-1 hover:underline hover:font-bold" title="Jump back to citation">[1]</a>
+      <div class="pl-8 -indent-8">British Columbia Ministry of Education and Child Care. (2026). <i>Interim operating grants overview: 2025/26 school year, School District 52 (Prince Rupert)</i>. <a href="https://www2.gov.bc.ca/assets/gov/education/administration/resource-management/k12funding/25-26/25-26-sd52-april-2026.pdf" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">https://www2.gov.bc.ca/assets/gov/education/administration/resource-management/k12funding/25-26/25-26-sd52-april-2026.pdf</a></div>
+    </li>
+    <li id="ref-2" class="flex gap-3 scroll-mt-24">
+      <a href="#cite-2" class="flex-none w-8 text-right font-mono text-xs text-blue-600 pt-1 hover:underline hover:font-bold" title="Jump back to citation">[2]</a>
+      <div class="pl-8 -indent-8">First Nations Information Governance Centre. (n.d.). <i>The First Nations principles of OCAP</i> [Brochure]. <a href="https://fnigc.ca/wp-content/uploads/2022/10/OCAP_Brochure_20220927_web.pdf" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">https://fnigc.ca/wp-content/uploads/2022/10/OCAP_Brochure_20220927_web.pdf</a></div>
+    </li>
+    <li id="ref-3" class="flex gap-3 scroll-mt-24">
+      <a href="#cite-3" class="flex-none w-8 text-right font-mono text-xs text-blue-600 pt-1 hover:underline hover:font-bold" title="Jump back to citation">[3]</a>
+      <div class="pl-8 -indent-8">Freedom of Information and Protection of Privacy Act, R.S.B.C. 1996, c. 165. <a href="https://www.bclaws.gov.bc.ca/civix/document/id/complete/statreg/96165_00_multi" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">https://www.bclaws.gov.bc.ca/civix/document/id/complete/statreg/96165_00_multi</a></div>
+    </li>
+    <li id="ref-4" class="flex gap-3 scroll-mt-24">
+      <a href="#cite-4" class="flex-none w-8 text-right font-mono text-xs text-blue-600 pt-1 hover:underline hover:font-bold" title="Jump back to citation">[4]</a>
+      <div class="pl-8 -indent-8">Griffiths, D., Drachsler, H., Kickmeier-Rust, M., Steiner, C., Hoel, T., &amp; Greller, W. (2016). <i>Is privacy a show-stopper for learning analytics? A review of current issues and solutions</i> (Learning Analytics Review 6). Learning Analytics Community Exchange.</div>
+    </li>
+    <li id="ref-5" class="flex gap-3 scroll-mt-24">
+      <a href="#cite-5" class="flex-none w-8 text-right font-mono text-xs text-blue-600 pt-1 hover:underline hover:font-bold" title="Jump back to citation">[5]</a>
+      <div class="pl-8 -indent-8">Jisc. (2023). <i>Code of practice for learning analytics</i>.</div>
+    </li>
+    <li id="ref-6" class="flex gap-3 scroll-mt-24">
+      <a href="#cite-6" class="flex-none w-8 text-right font-mono text-xs text-blue-600 pt-1 hover:underline hover:font-bold" title="Jump back to citation">[6]</a>
+      <div class="pl-8 -indent-8">Rets, I., Herodotou, C., &amp; Gillespie, A. (2023). Six practical recommendations enabling ethical use of predictive learning analytics in distance education. <i>Journal of Learning Analytics, 10</i>(1), 149–167. <a href="https://doi.org/10.18608/jla.2023.7743" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">https://doi.org/10.18608/jla.2023.7743</a></div>
+    </li>
+    <li id="ref-7" class="flex gap-3 scroll-mt-24">
+      <a href="#cite-7" class="flex-none w-8 text-right font-mono text-xs text-blue-600 pt-1 hover:underline hover:font-bold" title="Jump back to citation">[7]</a>
+      <div class="pl-8 -indent-8">School District 52. (n.d.). <i>Privacy management program</i>. <a href="https://rupertschools.ca/privacy-management-program-3/" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">https://rupertschools.ca/privacy-management-program-3/</a></div>
+    </li>
+    <li id="ref-8" class="flex gap-3 scroll-mt-24">
+      <a href="#cite-8" class="flex-none w-8 text-right font-mono text-xs text-blue-600 pt-1 hover:underline hover:font-bold" title="Jump back to citation">[8]</a>
+      <div class="pl-8 -indent-8">School District 52. (2023, October 16). <i>Privacy policy</i> (Policy 6720). <a href="https://sd52policy.com/index.php/policies-regulations-and-forms/policies/privacy-policy" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">https://sd52policy.com/index.php/policies-regulations-and-forms/policies/privacy-policy</a></div>
+    </li>
+    <li id="ref-9" class="flex gap-3 scroll-mt-24">
+      <a href="#cite-9" class="flex-none w-8 text-right font-mono text-xs text-blue-600 pt-1 hover:underline hover:font-bold" title="Jump back to citation">[9]</a>
+      <div class="pl-8 -indent-8">Sclater, N., &amp; Bailey, P. (2026, September 9). <i>Code of practice for learning analytics</i>. Jisc. <a href="https://www.jisc.ac.uk/guides/code-of-practice-for-learning-analytics" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">https://www.jisc.ac.uk/guides/code-of-practice-for-learning-analytics</a></div>
+    </li>
+    <li id="ref-10" class="flex gap-3 scroll-mt-24">
+      <a href="#cite-10" class="flex-none w-8 text-right font-mono text-xs text-blue-600 pt-1 hover:underline hover:font-bold" title="Jump back to citation">[10]</a>
+      <div class="pl-8 -indent-8">Slade, S., &amp; Prinsloo, P. (2013). Learning analytics: Ethical issues and dilemmas. <i>American Behavioral Scientist, 57</i>(10), 1510–1529. <a href="https://doi.org/10.1177/0002764213479366" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">https://doi.org/10.1177/0002764213479366</a></div>
+    </li>
   </ul>
 </div>
