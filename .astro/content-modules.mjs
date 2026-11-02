@@ -37,5 +37,6 @@ export default new Map([
 ["src/content/post/2026-10-12-etec534-ip10.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fpost%2F2026-10-12-etec534-ip10.mdx&astroContentModuleFlag=true")],
 ["src/content/post/2026-10-12-etec534-ip3.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fpost%2F2026-10-12-etec534-ip3.mdx&astroContentModuleFlag=true")],
 ["src/content/post/2026-10-12-etec534-ip4.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fpost%2F2026-10-12-etec534-ip4.mdx&astroContentModuleFlag=true")],
-["src/content/post/2026-10-12-etec534-tiktok-theory.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fpost%2F2026-10-12-etec534-tiktok-theory.mdx&astroContentModuleFlag=true")]]);
+["src/content/post/2026-10-12-etec534-tiktok-theory.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fpost%2F2026-10-12-etec534-tiktok-theory.mdx&astroContentModuleFlag=true")],
+["src/content/post/2026-11-01-etec543-task4b.mdx", () => import("astro:content-layer-deferred-module?astro%3Acontent-layer-deferred-module=&fileName=src%2Fcontent%2Fpost%2F2026-11-01-etec543-task4b.mdx&astroContentModuleFlag=true")]]);
 		

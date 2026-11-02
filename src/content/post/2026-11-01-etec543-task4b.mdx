@@ -7,10 +7,6 @@ tags: ["etec543"]
 
 import Disclosure from "../../components/blocks/Disclosure.astro";
 
-{/* The report as submitted for ETEC 543 Task 4B. The note on the 2026 update
-    comes from Jisc's web version updated 9 September 2026 (course copy:
-    module4/m4rr3.md). */}
-
 ## Setting the scene
 
 <div class="font-serif text-[1.0625rem] leading-[1.9]">
@@ -26,7 +22,7 @@ I teach Grade 4/5 in School District 52 (SD52) in Prince Rupert, BC, after a yea
 Summarizing Jisc’s (July 2023) Code of Practice for Learning Analytics, written for UK colleges and universities, I have identified seven areas for school district policy writers to consider:
 
 - **Responsibility: who becomes accountable?** Name a point of contact, assign responsibility for collecting, anonymizing, analyzing, acting on and retaining data, consult students and staff, and require information security training for anyone with access.
-- **Transparency, legal basis and consent: what do people know?** List what data is collected and why, where it comes from, how it is measured, who can access it and its limitations. While legitimate interests form the main legal basis, consent must be easy to withdraw and is required for student-supplied data, ethnicity and (normally) personal interventions.
+- **Transparency, legal basis and consent: what do people know?** List what data is collected and why, where it comes from, how it is measured, who can access it and its limitations. While legitimate interests form the main legal basis, consent must be easy to withdraw and is required for student-supplied data.
 - **Privacy: who can see what?** Limit access to a legitimate need. How is data protected and where is it held by software contractors? When is external sharing allowable, and when might privacy be overridden for a student at risk?
 - **Validity: can we trust it?** Monitor the data for accuracy, incomplete datasets and irregularities, and ensure qualified staff validate the algorithms used.
 - **Access: can learners see it?** Students should be able to review and correct their own data, and harmful results may be withheld (but acknowledged) by default and shown on request through a teacher rather than an automated response.
@@ -43,25 +39,23 @@ What teachers understand from their relationships with students “must be a sig
 
 <div class="font-serif text-[1.0625rem] leading-[1.9]">
 
-I chose Jisc because it is a broad, sector-wide code rather than any one university’s policy, so its principles can be adapted to a district like SD52. While Jisc goes into detail about protecting and governing collected data, I found it worth considering that these protections mean little if an inferred risk score or label is later misinterpreted and allowed to shape a child’s future educational opportunities.
+I chose Jisc because it is a broad, sector-wide code rather than any one university’s policy, so its principles can be adapted to a school district like SD52. While Jisc goes into detail about protecting and governing collected data, I found it worth considering that these protections mean little if an inferred risk score or label is later misinterpreted and allowed to shape a child’s future educational opportunities.
 
 </div>
 
 ### Comparison with SD52
 
 <div class="font-serif text-[1.0625rem] leading-[1.9]">
-
-SD52’s Privacy Policy and Privacy Management Program cover accountability, necessary collection, limited sharing, security, privacy impact assessments (PIAs), breach response and training (School District 52, n.d., 2023). SD52’s policies seem geared towards legal grounding, whereas Jisc is stronger on validity and labelling, so I encourage SD52 to integrate Jisc’s validity and adverse impact questions into its PIAs for tools that score or flag students. Jisc’s legitimate interest basis may not carry over, though, since BC’s Freedom of Information and Protection of Privacy Act (FIPPA, 1996) has no such ground (s. 26).
-
+SD52's Privacy Policy and Privacy Management Program cover accountability, necessary collection, limited sharing, security, privacy impact assessments (PIAs), breach response and training (School District 52, n.d., 2023). SD52's policies seem primarily geared towards legal grounding, whereas Jisc's code appears to be oriented towards validity and labelling. I recommend that SD52 integrate Jisc's validity and adverse impact questions into its PIAs for digital tools that may score or flag students. While Jisc relies on an institution's legitimate interest to justify collecting data, BC's Freedom of Information and Protection of Privacy Act (FIPPA, 1996) does not include that reason (s. 26).
 </div>
 
 ### Gaps and additions
 
 <div class="font-serif text-[1.0625rem] leading-[1.9]">
 
-- **Children and families.** Jisc assumes students consent for themselves and never mentions parents, though Dutch regulators found that Snappet, a tablet program for 7 to 9 year olds, needed parents’ consent (Griffiths et al., 2016, p. 4). I would separate required records from optional tools needing guardian permission and child assent, making sure declining never reduces educational support.
-- **Indigenous data.** More than half of SD52 students are Indigenous (British Columbia Ministry of Education and Child Care, 2026), and while Jisc handles ethnicity through individual consent, the OCAP principles assert First Nations’ collective ownership, control, access and possession of their data (First Nations Information Governance Centre, n.d.), so analytics about Indigenous learners should be co-governed with local First Nations.
-- **Vendors and AI.** Jisc’s July 2023 code gives third parties one sentence (p. 6) and never mentions AI, so software licences should specify storage, deletion and breach notification, and bar advertising and AI training on student data.
+- **Children and families.** Jisc assumes students consent for themselves and never mentions parents, likely because it was written for older college and university students. However, Dutch regulators found that Snappet, a tablet program for 7 to 9 year olds, needed parents' consent (Griffiths et al., 2016, p. 4). I would separate required records from optional tools needing guardian permission and child assent, making sure opting out never reduces a childs' educational supports.
+- **Indigenous data.** More than half of SD52 students are Indigenous (British Columbia Ministry of Education and Child Care, 2026), and while Jisc handles ethnicity through individual consent, the OCAP principles assert First Nations’ collective ownership, control, access and possession of their data (First Nations Information Governance Centre, n.d.), so analytics about Indigenous learners should be co-governed with local First Nations governments.
+- **Vendors and AI.** Jisc’s July 2023 code gives third parties one sentence (p. 6) and never mentions AI, so software licences should specify storage, deletion and breach notification, as well as clearly bar advertising and AI training on any/all student data that is collected.
 
 </div>
 
@@ -77,10 +71,10 @@ Jisc (2023) never actually defines who is qualified to validate algorithms and l
 
 <div class="font-serif text-[1.0625rem] leading-[1.9]">
 
-At a staff meeting, I would introduce the adapted code through a one-term IXL pilot for Grade 4/5 math and expect these concerns:
+At a staff meeting, I would introduce the adapted code through a one-term IXL pilot for Grade 4/5 math and expect the following concerns to take place:
 
 - **“Is this more work?”** The district would need to provide training and review time first, as once data is collected “it becomes unethical not to act upon it” (Rets et al., 2023, p. 159).
-- **“The app says one thing, but I know the child.”** Jisc (2023) agrees (p. 6), so a flag would only prompt a look at classroom evidence and a family conversation. Low IXL engagement might reflect spotty home internet in a northern community, inaccessible tasks or waiting for one of 19 iPads to load or charge, rather than actual effort.
+- **“The app says one thing, but I actually know the child.”** Jisc (2023) agrees that teacher knowledge must shape any intervention (p. 6), so a flag would only prompt a look at classroom evidence and potentially a family conversation. Low IXL engagement might reflect spotty home/school internet in a northern community, inaccessible tasks or errors, or delays due to insufficient access technological resources for large class sizes rather than a lack of student effort.
 
 </div>
 
@@ -88,18 +82,16 @@ At a staff meeting, I would introduce the adapted code through a one-term IXL pi
 
 <div class="font-serif text-[1.0625rem] leading-[1.9]">
 
-My report looks at the July 2023 PDF of the code, though Jisc has since updated the online version (Sclater & Bailey, 2026). The newer version covers AI throughout (including an AI appendix), lets students view “the metrics and labels attached to them,” names staff workload and training, and is firmer that learning analytics “must not be used for assessing, grading, or profiling.” While some of the gaps I raised are now addressed, the update still says nothing about parents or collective Indigenous data, gives vendor contracts one sentence, and leaves “qualified staff” and “legal, safeguarding or other circumstances” undefined.
+My report looks at the July 2023 PDF of the code, though Jisc has since updated the online version (Sclater & Bailey, 2026). The newer version covers AI throughout (including an AI appendix), lets students view “the metrics and labels attached to them,” names staff workload and training, and is firmer that learning analytics “must not be used for assessing, grading, or profiling.” While some of the gaps I raised are now addressed, the updated version still says nothing about parents or the collection of Indigenous students' data. In addition, the definitions surrounding "qualified staff" and "legal, safeguarding or other circumstances" remains undefined.
 
 </div>
 
 <Disclosure title="AI &amp; Tooling Disclosure" variant="warning" class="mt-12">
-I used ChatGPT (OpenAI) to evaluate my draft against the rubric, revise it substantially, check claims against the Jisc PDF and public sources, and develop examples and recommendations. I then used Claude (Anthropic) to review that revision against the task and rubric, check each citation against its source (rewording claims that did not match their sources), condense the report to the word limit, and suggest the points on Indigenous data governance and FIPPA’s legal basis. After I rewrote the first half in my own words, I used Claude again to reformat the report, correct and trim my sections, check its quotations and page numbers against the sources, rewrite the sections from the SD52 comparison onward to match my writing style, add links to the Module 4 readings (including the Snappet case from Griffiths et al., 2016) and condense the report again to the 1,000-word limit. I then made further edits myself and used Claude to review them, correct errors and trim the report back under the word limit. I also used Claude to format the report into this blog post and to draft the note on Jisc’s September 2026 update. I reviewed every change; the professional context and final judgements are my own.
+In completing Task 2b, I used Claude (Opus 5.5) to help revise my wording so that my blog post fit the required word count. My process began with selecting and reading a learning analytics policy, drafting notes and initial thoughts on it, and connecting the material to my own perspective and context. After creating my draft, AI was used to iteratively refine my the wording in order to sharpen my understanding and express it clearly. When I was content with my work, I used AI assistance to organize, design, stage, and deploy my final essay as a functional blog post within my Astro blog. AI was also used to cite and align the comparison between Jisc and SD52 through FIPPA reference, aswell as the sourcing of the OCAP principals reference. With that in mind, all final ideas, arguments, and decisions made presented within the context of this assignment are of my own choosing and represent my personal reflection and understanding of the ethical implementation of learning analytics in my current professional context.
 </Disclosure>
 
 ## References
 
-{/* Hand-written on purpose: components/blocks/References.astro relies on
-    dangerouslySetInnerHTML, which Astro does not implement, so it renders empty. */}
 
 <div class="not-prose mt-6 text-sm leading-relaxed text-[var(--theme-text)] [overflow-wrap:anywhere]">
   <ul class="space-y-3">
