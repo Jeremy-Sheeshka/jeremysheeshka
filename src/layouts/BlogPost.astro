@@ -2,6 +2,7 @@
 import { type CollectionEntry, render, getCollection } from "astro:content";
 import Masthead from "@/components/blog/Masthead.astro";
 import WebMentions from "@/components/blog/webmentions/index.astro";
+import PostJsonLd from "@/components/PostJsonLd.astro";
 import BaseLayout from "./Base.astro";
 import { collectionDateSort } from "@/utils/date";
 // 1. ADD THIS IMPORT
@@ -12,9 +13,12 @@ interface Props {
 }
 
 const { post } = Astro.props;
-const { ogImage, title, description, updatedDate, publishDate, webmentions } = post.data;
+const { ogImage, title, description, updatedDate, publishDate, webmentions, mentions } = post.data;
 const socialImage = ogImage ?? `/og-image/${post.id}.png`;
 const articleDate = updatedDate?.toISOString() ?? publishDate.toISOString();
+
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site).href;
+const jsonLdImage = new URL(socialImage, Astro.site).href;
 
 const { headings, remarkPluginFrontmatter } = await render(post);
 const readingTime: string = remarkPluginFrontmatter.readingTime;
@@ -37,6 +41,15 @@ const prevPost = currentIndex < sortedPosts.length - 1 ? sortedPosts[currentInde
         title,
     }}
 >
+    <PostJsonLd
+        title={title}
+        description={description}
+        url={canonicalUrl}
+        datePublished={articleDate}
+        dateModified={updatedDate?.toISOString()}
+        image={jsonLdImage}
+        mentions={mentions}
+    />
     <article class="grow break-words overflow-hidden" data-pagefind-body>
         <div id="blog-hero" class="mb-12 px-6 sm:px-8 lg:px-12">
             <Masthead content={post} readingTime={readingTime} />

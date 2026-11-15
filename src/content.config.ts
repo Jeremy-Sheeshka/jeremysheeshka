@@ -28,6 +28,8 @@ const post = defineCollection({
 			publishDate: z.coerce.date(),
 			updatedDate: z.coerce.date().optional(),
 			pinned: z.boolean().default(false),
+			// People the post refers to, surfaced as schema.org `mentions` JSON-LD.
+			mentions: z.array(z.string()).default([]),
 			// Render the piece as the page itself instead of a post with chrome.
 			immersive: z.boolean().default(false),
 			// Show other people's replies and likes under the post.

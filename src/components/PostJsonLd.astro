@@ -1,0 +1,32 @@
+---
+import { siteConfig } from "@/site.config";
+
+interface Props {
+	title: string;
+	description: string;
+	url: string;
+	datePublished: string;
+	dateModified?: string | undefined;
+	image: string;
+	mentions?: string[];
+}
+
+const { title, description, url, datePublished, dateModified, image, mentions = [] } = Astro.props;
+
+const structuredData = {
+	"@context": "https://schema.org",
+	"@type": "BlogPosting",
+	headline: title,
+	description,
+	url,
+	mainEntityOfPage: { "@type": "WebPage", "@id": url },
+	datePublished,
+	...(dateModified ? { dateModified } : {}),
+	image,
+	author: { "@type": "Person", name: siteConfig.author },
+	publisher: { "@type": "Person", name: siteConfig.author },
+	...(mentions.length ? { mentions: mentions.map((name) => ({ "@type": "Person", name })) } : {}),
+};
+---
+
+<script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />

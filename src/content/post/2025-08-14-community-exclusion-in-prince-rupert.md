@@ -3,6 +3,7 @@ title: "Community Exclusion and the Ethics of Participation in Prince Rupert"
 description: "A reflection on exclusion, power, and participation in Prince Rupert's community arts scene, from a Lester Centre musical to the suspended community band."
 publishDate: 2023-11-30
 tags: ["community", "community music", "community arts", "prince rupert"]
+mentions: ["Kristy Tillman", "Michael Gurney", "Dawn Quast"]
 draft: true
 webmentions: false
 ---
