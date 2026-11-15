@@ -41,15 +41,17 @@ const prevPost = currentIndex < sortedPosts.length - 1 ? sortedPosts[currentInde
         title,
     }}
 >
-    <PostJsonLd
-        title={title}
-        description={description}
-        url={canonicalUrl}
-        datePublished={articleDate}
-        dateModified={updatedDate?.toISOString()}
-        image={jsonLdImage}
-        mentions={mentions}
-    />
+    {mentions.length > 0 && (
+        <PostJsonLd
+            title={title}
+            description={description}
+            url={canonicalUrl}
+            datePublished={articleDate}
+            dateModified={updatedDate?.toISOString()}
+            image={jsonLdImage}
+            mentions={mentions}
+        />
+    )}
     <article class="grow break-words overflow-hidden" data-pagefind-body>
         <div id="blog-hero" class="mb-12 px-6 sm:px-8 lg:px-12">
             <Masthead content={post} readingTime={readingTime} />
