@@ -50,6 +50,13 @@
       "default": false,
       "type": "boolean"
     },
+    "mentions": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
     "immersive": {
       "default": false,
       "type": "boolean"

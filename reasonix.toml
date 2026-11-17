@@ -1,0 +1,2 @@
+[permissions]
+allow = ["Bash(cd /home/sheeshka/Desktop/jeremysheeshka && ls src/content/ && sed -n 1,200p src/content.config.ts 2>/dev/null || sed -n 1,200p src/content/config.ts)"]
