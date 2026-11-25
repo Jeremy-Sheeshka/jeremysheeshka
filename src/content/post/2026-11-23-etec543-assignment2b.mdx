@@ -1,0 +1,284 @@
+---
+title: "ETEC 543: Assignment 2b: Institutional Policy Shifts Towards the Ethical Use of AI-Enhanced Reporting Tools and Workflows"
+description: "What an AI-ready policy and implementation plan for report card comment tools and workflows could look like in School District 52 (Prince Rupert), worked out from public documents and the SHEILA framework."
+publishDate: 2026-11-23
+tags: ["etec543"]
+draft: true
+---
+
+import Disclosure from "../../components/blocks/Disclosure.astro";
+
+## Abstract
+
+<div class="font-serif text-[1.0625rem] leading-[1.9]">
+
+For my learning analytics adventure I asked what an AI-ready policy and implementation plan for report card tools would look like in my district, SD52, across three workflows: teacher comment banks, comments drafted or adjusted by AI, and automated entry into MyEducation BC. Working from public documents, the analysis described what BC law, Ministry guidance and SD52's rules already settle, compared the SHEILA framework ([Tsai et al., 2018](#ref-tsai)) with three other frameworks, and used the SHEILA handout to draft a policy and plan. What I found was that BC already says who answers for a comment and what a comment must do, but nothing says what those duties mean once software drafts or enters the words. The safeguards for tools all start from a district bringing one in, which leaves a teacher-built tool almost unseen, and none of the four frameworks gives a procedure for any issue tested. The draft keeps the teacher as author, gives four questions to ask of every assisted comment, and puts review with a working group.
+
+</div>
+
+## Why I chose this adventure
+
+<div class="font-serif text-[1.0625rem] leading-[1.9]">
+
+I teach Grade 4/5 in School District 52 (SD52) in Prince Rupert, BC, a small district. Learning analytics is usually defined as the "measurement, collection, analysis and reporting of data about learners" ([Long & Siemens, 2011](#ref-long), p. 34), and in my professional context the reporting end of that definition is the report card, which in BC is called a learning update. Three times a year a teacher's marks and notes become written feedback that is meant to help a child learn ([British Columbia Ministry of Education and Child Care [BC Ministry], 2023](#ref-bc-2023)).
+
+For each child a written update holds a rating on a four-point proficiency scale and written feedback for each course, across eight required areas of learning ([Learning Update Order](#ref-luo), 2023, s. 6; [Required Areas of Learning Order](#ref-m295), 1995, s. 2), and the teacher enters all of it into MyEducation BC, the province's student information system, one cell at a time while waiting for each to save ([BC Ministry, n.d.-c](#ref-bc-ndc)). Its manual lets teachers keep a bank of comments ([MyEducation BC Operations and Standards Committee, 2025](#ref-myed)), where a made-up entry might read "[Name] can explain how they solved a multi-step problem." Many teachers, in my experience, save, reuse and recycle these, so a comment bank could now be used alongside AI that drafts or adjusts comments from marks and notes, and browser automation tools or AI agents that enter them under the teacher's direction. What is at stake is that a family could read a comment that is fluent, signed by the teacher and not true of their child. I could not find an AI-use policy in my district for learning updates, and the Ministry's guidance on choosing AI tools never mentions report cards or locally hosted tools ([BC Ministry, n.d.-a](#ref-bc-nda)).
+
+My main question was what an AI-ready policy and implementation plan for reporting tools and workflows would look like in SD52, where by AI-ready I mean one that still works when software drafts or enters the words, and by plan I mean who does what, and in what order. My guiding questions were:
+
+1. What do SHEILA, the Ministry's AI guidance and reporting policy, and SD52's privacy and technology rules already cover, and what do they miss?
+2. What should SD52 ask before approving a reporting tool or workflow (vendor-sold, built into MyEducation BC, or teacher-built), and who should be part of that decision?
+3. How could the policy keep current as local AI models and data-entry tools emerge, and who reviews it?
+
+</div>
+
+## What the literature says
+
+<div class="font-serif text-[1.0625rem] leading-[1.9]">
+
+SHEILA adapts ROMA ([Young et al., 2014](#ref-roma)), an approach for getting evidence into policy, to learning analytics in higher education ([Tsai et al., 2018](#ref-tsai), pp. 8–9). [Macfadyen (2022)](#ref-macfadyen) calls it "the most promising" of the implementation frameworks (p. 173), for a reason the whole lineage shares: institutions are complex systems that resist change, so evidence alone does not move them ([Macfadyen & Dawson, 2012](#ref-md2012), p. 157; Macfadyen, 2022, p. 180).
+
+Where the sources differ is on whether a process is enough. [Márquez et al. (2024)](#ref-marquez) found that SHEILA shows an institution its challenges without giving it activities to work on them (p. 452). [Morales Tirado et al. (2024)](#ref-morales) leave SHEILA out because it is about planning and policy processes (p. 4), and [Jin et al. (2024)](#ref-jin) found a plan for evaluation in only seven of the 40 university AI policies they read (p. 13). My answer to Márquez et al. was to use SHEILA for its questions and look for the content elsewhere.
+
+A second debate is about direction. Macfadyen (2022) describes institutions that impose analytics from the top and others where it emerges from instructors (p. 176). A tool a teacher builds for their own report cards is the emergent kind, and nobody above the classroom sees it.
+
+A third is about what good feedback is. [Gašević et al. (2015)](#ref-gasevic) describe instructors who, once an analytics tool had flagged students, sent summative messages with little instructive feedback and no effect on learning (p. 65), which is the risk I see in a fluent, generic comment. None of the language-model tools [Yan et al. (2024)](#ref-yan) reviewed was transparent to teachers or parents (p. 102). [Slade and Prinsloo (2013)](#ref-slade) argue that a student's performance is temporal, so data about a learner should have an agreed life span and expiry date (p. 1520), a point I extend to recycled comments, and [Prinsloo et al. (2022)](#ref-prinsloo) argue that privacy is not only a technological problem (p. 877), which matters for the idea that a locally hosted model settles privacy.
+
+Almost all of this work is about universities, in a literature with a "very limited focus on schools" (Macfadyen, 2022, p. 181), and two things do not transfer. Their learners are adults who consent for themselves, while mine are children whose parents read the output, and none of it deals with a teachers' collective agreement or a ministerial order that says what a comment must do.
+
+</div>
+
+## How I went about it
+
+<div class="font-serif text-[1.0625rem] leading-[1.9]">
+
+My method was a document analysis of the kind Jin et al. (2024) apply to university policies, using only public documents. An AI coding assistant (Claude Code) retrieved and searched the documents, did the coding, built the tables, drafted the policy and this text under my direction, and checked each claim against its page or section. No student, family or staff data was collected or entered into any AI tool, and nothing was tested against MyEducation BC.
+
+1. What exists: starting from the documents named in my proposal, each was followed to the law it rests on, and SD52's policy manual and teachers' collective agreement were searched for reporting, privacy and technology (Table 1). The first pass stopped there and reported that none addressed a comment's accuracy, its author or what families are told. A second AI session that I asked to review that draft brought in the School Act, the Order and the collective agreement, and once each point was checked against its source the finding changed.
+2. Comparing frameworks: eight of the ten issues came from the candidate list in my research plan, one (keeping current) from guiding question 3, and one (who keeps a comment bank) was added in revision. Each was coded for SHEILA's six dimensions, the Ministry's seven categories, the seven principles in Morales Tirado et al. (2024) and the policy themes in Jin et al. (2024) as *silent*, *names* (raises it as a risk, principle or question), *assigns* (says who must act) or *procedure* (steps usable as written). None of the four is about report comments, so every code is by analogy: the Ministry's "Keep parents and caregivers informed about the use of AI in the classroom" was coded as assigns for telling families. A second AI agent that had not seen the first codes then coded every cell again. The two agreed on 28 of 40 cells (kappa = 0.54), and where they differed the second was always higher, so those passages were re-read and all but one settled at the higher code (Table 2).
+3. Applying SHEILA: the handout's action, challenge and policy boxes ([SHEILA Project, n.d.](#ref-sheila)) were filled in for SD52 (Table 3).
+
+The limitations are that documents show what is written and not what is practised, that academic sources were limited to my course readings, that both codings and the checking were done by AI and no person re-coded, that nobody was consulted although SHEILA is meant for a group, and that my reading of legislation is not legal advice.
+
+</div>
+
+## What I found
+
+<div class="font-serif text-[1.0625rem] leading-[1.9]">
+
+### What already exists
+
+***Table 1.*** *What BC and SD52 documents already settle, and where they stop*
+
+<div class="overflow-x-auto text-[0.9375rem] leading-normal">
+
+| Document | What it already settles | Where it stops |
+|---|---|---|
+| [School Act](#ref-schoolact) and [School Regulation](#ref-schoolreg) | The teacher assesses, evaluates and reports to parents (s. 17; Reg. s. 4(1)); families may examine records (s. 9) | How the words are produced |
+| [Learning Update Order](#ref-luo) | A comment must describe learning against the standard, focus on strengths, support specific goals and be clear to student and parent (s. 4) | Who or what drafts it |
+| [FIPPA](#ref-fippa) and SD52's privacy regulation ([2023](#ref-sd52-2023)) | A privacy impact assessment for a district initiative; accuracy and correction (ss. 28, 29, 69) | Whether one teacher's tool is an "initiative" |
+| Ministry AI guidance ([n.d.-a](#ref-bc-nda), marked for discussion) and parent sheet ([n.d.-b](#ref-bc-ndb)) | Teacher oversight of assessment, a process for AI errors, keeping parents informed | Reporting, and any tool a district did not select |
+| MyEducation BC manual ([2025](#ref-myed)) | Comment banks; consent before information goes to a third party | AI drafting and automated entry |
+| SD52 technology regulations ([2017a](#ref-sd52-2017a), [2017b](#ref-sd52-2017b), [2017d](#ref-sd52-2017d)) | IT authorizes software, the principal devices; users answer for their logins | Criteria for saying yes |
+| SD52 teachers' collective agreement ([2024](#ref-ca)) | Notice to the union of Board-introduced technological change (Art. D.26); professional autonomy in evaluation (Art. F.23) | A tool the teacher introduces |
+| SD52 reporting regulation ([2017c](#ref-sd52-2017c)), strategic plan ([2022](#ref-sd52-2022)) and learning report ([2025](#ref-sd52-2025)) | Nothing on the three workflows | |
+
+</div>
+
+What I found was that BC already assigns these duties to the teacher and gives families ways to ask ([BC Ministry, n.d.-b](#ref-bc-ndb)), but nothing says what the duties mean once software drafts or enters the words. Every safeguard that is about tools starts from a district bringing one in, so a script or local model that one teacher builds falls to 2017 regulations that forbid it unless authorized and give no criteria.
+
+Automated entry is the least covered workflow. A browser script replays clicks and keystrokes and an AI agent reads the screen and chooses them, both signed in as the teacher. What reaches this was written for people: the Ministry's tip sheet warns that moving too fast between cells causes save errors ([BC Ministry, n.d.-c](#ref-bc-ndc), p. 3), SD52 holds users responsible for everything done under their login ([School District 52, 2017d](#ref-sd52-2017d)), and the MyEducation BC manual, for a system the province runs, says nothing about scripts or agents.
+
+### Comparing the frameworks
+
+***Table 2.*** *How far four frameworks go on ten issues, by workflow (all codes by analogy)*
+
+<div class="overflow-x-auto text-[0.9375rem] leading-normal">
+
+| Issue | SHEILA | Ministry guidance | Morales Tirado et al. | Jin et al. |
+|---|---|---|---|---|
+| Banks: a reused comment | Names (6) | Names (4) | Assigns (9) | Silent |
+| Banks: who keeps the bank | Names (2) | Assigns (11) | Names (3) | Names (6) |
+| Drafting: accuracy | Names (8) | Assigns (8) | Assigns (6) | Assigns (12) |
+| Drafting: authorship | Names (3) | Assigns (13) | Assigns (8) | Assigns (12) |
+| Drafting: telling families | Names (3) | Assigns (7) | Names (11) | Assigns (6) |
+| Drafting: where data goes | Names (2) | Assigns (5) | Names (6) | Assigns (6) |
+| Entry: the teacher's login | Names (2) | Names (11) | Names (9) | Silent |
+| Entry: a record of entries | Silent | Names (11) | Names (9) | Silent |
+| All: teacher workload | Names (7) | Assigns (8) | Silent | Silent |
+| All: keeping current | Names (9) | Assigns (8) | Assigns (4) | Assigns (6) |
+
+</div>
+
+*Note.* Brackets give pages (for SHEILA, version 2 of the framework, [SHEILA Project, n.d.](#ref-sheila); for the Ministry's guidance, PDF pages, since it is unnumbered).
+
+No cell reaches a procedure, and the nearest is the Ministry's reminder that a district must do a privacy impact assessment. SHEILA only names issues, since it is a set of questions, and the other three do assign duties, though to a district choosing a tool, an institution running predictive models and students doing coursework. None of the four deals with:
+
+- a comment as a document sent home in a teacher's name,
+- a tool a teacher builds,
+- software signed in as the teacher (the nearest is who may access data), or
+- wording reused from year to year (the nearest is disposing of data and keeping it current).
+
+### A draft policy and plan
+
+***Table 3.*** *A draft SD52 policy and plan for assisted reporting, by SHEILA dimension*
+
+<div class="overflow-x-auto text-[0.9375rem] leading-normal">
+
+| Dimension | Draft clause | Who and when |
+|---|---|---|
+| 1. Political context | Approved workflows may help word, draft and enter comments. Deciding a proficiency level is never delegated. | The Board, when it revises its 2017 reporting regulation |
+| 2. Key stakeholders | The teacher who signs a learning update is the author of every comment in it. A working group, not the Privacy Officer alone, reviews each workflow before the Superintendent approves it. | Formed first: teachers named by the union, a principal, the Privacy Officer, the IT Manager, and invited members of the district parents' advisory council and Indigenous education council ([School Act](#ref-schoolact), ss. 8.5, 87.001) |
+| 3. Desired behaviour changes | Of each assisted comment the teacher asks: is it true of this child on this year's evidence, does it describe learning against the standard, does it name a strength and a next goal, and would the parent understand it? Any "no" means a rewrite. Banked comments carry no names and the year written. | Teachers, each reporting period |
+| 4. Engagement strategy | Families are told each year, in plain language, how tools assist comments. | Schools, each September. Workflows come in order: comment banks, AI drafting (made-up data, then a privacy impact assessment), and automated entry only if the province allows it |
+| 5. Internal capacity | The district takes stock of what is in use: a teacher may declare a tool without penalty, and the district stands behind a teacher who followed the policy when a tool errs. | The IT Manager keeps a register from the first term |
+| 6. Monitoring | Approvals last one school year. A new model triggers a check of sample comments, a new data location a privacy assessment, and a MyEducation BC change a check of entry. | Working group, each September and on any trigger |
+
+</div>
+
+An approval asks five questions, the first taken from the Ministry ([BC Ministry, n.d.-a](#ref-bc-nda)):
+
+1. Is the workflow better for students and staff overall than the current process?
+2. What student information goes in, and where is it processed and stored?
+3. How does the teacher check each comment against the four questions, and how is a wrong one corrected?
+4. For a vendor's or MyEducation BC's tool, who controls comments and prompts, and is notice given before the model changes?
+5. For a teacher-built tool, has IT authorized the software and the principal the device, and does it use the teacher's own login without storing the password?
+
+</div>
+
+## What this means
+
+<div class="font-serif text-[1.0625rem] leading-[1.9]">
+
+To me, the most significant finding is that the risk the documents cover best is not the only one. Privacy at least has a process, yet a teacher running a local model on their own comment bank could keep every record inside the district and still send home a comment that fails the Order's tests, or one first written about another child in another year. The law already makes that teacher answerable, so the policy's work is to say how the checking is done and to protect a teacher who did it. That checking may use up the time a tool saves, which is why the first approval question asks whether the workflow is better overall.
+
+The harder problem is how a district learns about a tool nobody procures. The 2017 regulations would stop such a tool only if someone asked first. All four cases [Tsai et al. (2018)](#ref-tsai) describe set up a working group (p. 13), yet none had defined how it would monitor (p. 16), and I am not sure a district of just under 2,000 students ([School District 52, 2022](#ref-sd52-2022)) can sustain even a yearly review, since privacy is already one part of a senior administrator's job ([School District 52, n.d.](#ref-sd52-nd)). If it cannot, what remains is the part of the draft that needs no committee, the teacher's four questions.
+
+</div>
+
+## What I learned, and what should happen next
+
+<div class="font-serif text-[1.0625rem] leading-[1.9]">
+
+What I learned from this adventure is that an AI-ready policy for reporting has more to do with authorship, accuracy and review than with AI itself, and that searching documents for a word is not the same as searching for a duty. Next time I would start from the legislation and read other districts' AI guidance.
+
+The draft should go first to the Privacy Officer and the union, since they hold the two existing processes it leans on. A trial on made-up data should then test whether checking AI drafts against the four questions is any faster than writing from a comment bank. The Ministry could also be asked to add reporting to its AI guidance.
+
+</div>
+
+## What was most challenging to do without AI
+
+<div class="font-serif text-[1.0625rem] leading-[1.9]">
+
+**[STUDENT: write this from your own experience. From the work log: AI could not judge which workflows are realistic in a school, and could not open three readings behind library logins.]**
+
+</div>
+
+<Disclosure title="AI &amp; Tooling Disclosure" variant="warning" class="mt-12">
+
+In completing this assignment, I used Claude Code (Anthropic's Claude Fable 5.2) for the research and the first draft of this report. Working from my submitted proposal and plan, it downloaded and searched the public documents, read the course readings I had saved, built the comparison tables and approval questions, drafted the text to match the style of my earlier posts, and formatted it for this blog. To verify the AI-generated text, it checked each factual claim and quotation against the page or section of its source and kept a claim-by-claim list, and no student, family or staff information was entered into any AI tool. **[STUDENT: add what you re-read, changed or rewrote yourself.]**
+
+</Disclosure>
+
+## References
+
+<div class="not-prose mt-6 text-sm leading-relaxed text-[var(--theme-text)] [overflow-wrap:anywhere]">
+  <ul class="space-y-3">
+    <li id="ref-bc-nda" class="scroll-mt-24">
+      <div class="pl-8 -indent-8">British Columbia Ministry of Education and Child Care. (n.d.-a). <i>Considerations for using AI tools in K-12 schools</i>. Retrieved November 23, 2026, from <a href="https://www2.gov.bc.ca/assets/gov/education/administration/kindergarten-to-grade-12/ai-in-education/considerations-for-using-ai-tools-in-k-12-schools.pdf" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">https://www2.gov.bc.ca/assets/gov/education/administration/kindergarten-to-grade-12/ai-in-education/considerations-for-using-ai-tools-in-k-12-schools.pdf</a></div>
+    </li>
+    <li id="ref-bc-ndb" class="scroll-mt-24">
+      <div class="pl-8 -indent-8">British Columbia Ministry of Education and Child Care. (n.d.-b). <i>Information for parents and caregivers: All about artificial intelligence</i>. Retrieved November 23, 2026, from <a href="https://www2.gov.bc.ca/assets/gov/education/administration/kindergarten-to-grade-12/ai-in-education/all-about-artificial-intelligence-information-for-parents-and-caregivers.pdf" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">https://www2.gov.bc.ca/assets/gov/education/administration/kindergarten-to-grade-12/ai-in-education/all-about-artificial-intelligence-information-for-parents-and-caregivers.pdf</a></div>
+    </li>
+    <li id="ref-bc-ndc" class="scroll-mt-24">
+      <div class="pl-8 -indent-8">British Columbia Ministry of Education and Child Care. (n.d.-c). <i>Learning updates tips and tricks: Getting the best out of MyEducation BC</i>. Retrieved November 23, 2026, from <a href="https://www2.gov.bc.ca/assets/gov/education/administration/kindergarten-to-grade-12/myeducation-bc/learning_updates_tips_and_tricks_for_myeducation_bc.pdf" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">https://www2.gov.bc.ca/assets/gov/education/administration/kindergarten-to-grade-12/myeducation-bc/learning_updates_tips_and_tricks_for_myeducation_bc.pdf</a></div>
+    </li>
+    <li id="ref-bc-2023" class="scroll-mt-24">
+      <div class="pl-8 -indent-8">British Columbia Ministry of Education and Child Care. (2023). <i>K-12 student reporting policy</i>. Retrieved November 23, 2026, from <a href="https://www2.gov.bc.ca/gov/content/education-training/k-12/administration/legislation-policy/public-schools/student-reporting" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">https://www2.gov.bc.ca/gov/content/education-training/k-12/administration/legislation-policy/public-schools/student-reporting</a></div>
+    </li>
+    <li id="ref-ca" class="scroll-mt-24">
+      <div class="pl-8 -indent-8">British Columbia Public School Employers' Association &amp; British Columbia Teachers' Federation. (2024). <i>Local and provincial matters agreement: A working document as it applies in S.D. #52 (Prince Rupert), effective July 1, 2022 to June 30, 2025</i>. <a href="https://bcpsea.bc.ca/wp-content/uploads/2024/08/52-Working-Document-2022-2025-FINAL-2024-05-17.pdf" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">https://bcpsea.bc.ca/wp-content/uploads/2024/08/52-Working-Document-2022-2025-FINAL-2024-05-17.pdf</a></div>
+    </li>
+    <li id="ref-fippa" class="scroll-mt-24">
+      <div class="pl-8 -indent-8">Freedom of Information and Protection of Privacy Act, R.S.B.C. 1996, c. 165. <a href="https://www.bclaws.gov.bc.ca/civix/document/id/complete/statreg/96165_00_multi" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">https://www.bclaws.gov.bc.ca/civix/document/id/complete/statreg/96165_00_multi</a></div>
+    </li>
+    <li id="ref-gasevic" class="scroll-mt-24">
+      <div class="pl-8 -indent-8">Gašević, D., Dawson, S., &amp; Siemens, G. (2015). Let’s not forget: Learning analytics are about learning. <i>TechTrends, 59</i>(1), 64–71. <a href="https://doi.org/10.1007/s11528-014-0822-x" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">https://doi.org/10.1007/s11528-014-0822-x</a></div>
+    </li>
+    <li id="ref-jin" class="scroll-mt-24">
+      <div class="pl-8 -indent-8">Jin, Y., Yan, L., Echeverria, V., Gašević, D., &amp; Martinez-Maldonado, R. (2024). <i>Generative AI in higher education: A global perspective of institutional adoption policies and guidelines</i>. arXiv. <a href="https://doi.org/10.48550/arXiv.2405.11800" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">https://doi.org/10.48550/arXiv.2405.11800</a></div>
+    </li>
+    <li id="ref-luo" class="scroll-mt-24">
+      <div class="pl-8 -indent-8">Learning Update Order, Ministerial Order M184/23 (B.C.). <a href="https://www2.gov.bc.ca/assets/gov/education/administration/legislation-policy/legislation/schoollaw/e/m184-23.pdf" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">https://www2.gov.bc.ca/assets/gov/education/administration/legislation-policy/legislation/schoollaw/e/m184-23.pdf</a></div>
+    </li>
+    <li id="ref-long" class="scroll-mt-24">
+      <div class="pl-8 -indent-8">Long, P., &amp; Siemens, G. (2011, September/October). Penetrating the fog: Analytics in learning and education. <i>EDUCAUSE Review, 46</i>(5), 30–40. <a href="https://er.educause.edu/articles/2011/9/penetrating-the-fog-analytics-in-learning-and-education" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">https://er.educause.edu/articles/2011/9/penetrating-the-fog-analytics-in-learning-and-education</a></div>
+    </li>
+    <li id="ref-macfadyen" class="scroll-mt-24">
+      <div class="pl-8 -indent-8">Macfadyen, L. P. (2022). Institutional implementation of learning analytics: Current state, challenges, and guiding frameworks. In C. Lang, G. Siemens, A. F. Wise, D. Gašević, &amp; A. Merceron (Eds.), <i>The handbook of learning analytics</i> (2nd ed., pp. 173–186). Society for Learning Analytics Research. <a href="https://doi.org/10.18608/hla22.017" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">https://doi.org/10.18608/hla22.017</a></div>
+    </li>
+    <li id="ref-md2012" class="scroll-mt-24">
+      <div class="pl-8 -indent-8">Macfadyen, L. P., &amp; Dawson, S. (2012). Numbers are not enough. Why e-learning analytics failed to inform an institutional strategic plan. <i>Educational Technology &amp; Society, 15</i>(3), 149–163.</div>
+    </li>
+    <li id="ref-marquez" class="scroll-mt-24">
+      <div class="pl-8 -indent-8">Márquez, L., Henríquez, V., Chevreux, H., Scheihing, E., &amp; Guerra, J. (2024). Adoption of learning analytics in higher education institutions: A systematic literature review. <i>British Journal of Educational Technology, 55</i>(2), 439–459. <a href="https://doi.org/10.1111/bjet.13385" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">https://doi.org/10.1111/bjet.13385</a></div>
+    </li>
+    <li id="ref-morales" class="scroll-mt-24">
+      <div class="pl-8 -indent-8">Morales Tirado, A., Mulholland, P., &amp; Fernandez, M. (2024). <i>Towards an operational responsible AI framework for learning analytics in higher education</i>. arXiv. <a href="https://doi.org/10.48550/arXiv.2410.05827" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">https://doi.org/10.48550/arXiv.2410.05827</a></div>
+    </li>
+    <li id="ref-myed" class="scroll-mt-24">
+      <div class="pl-8 -indent-8">MyEducation BC Operations and Standards Committee. (2025). <i>MyEducation BC standards manual: A manual for managing student information</i>. Retrieved November 23, 2026, from <a href="https://mytrainingbc.ca/myedbcstandards/" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">https://mytrainingbc.ca/myedbcstandards/</a></div>
+    </li>
+    <li id="ref-prinsloo" class="scroll-mt-24">
+      <div class="pl-8 -indent-8">Prinsloo, P., Slade, S., &amp; Khalil, M. (2022). The answer is (not only) technological: Considering student data privacy in learning analytics. <i>British Journal of Educational Technology, 53</i>(4), 876–893. <a href="https://doi.org/10.1111/bjet.13216" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">https://doi.org/10.1111/bjet.13216</a></div>
+    </li>
+    <li id="ref-m295" class="scroll-mt-24">
+      <div class="pl-8 -indent-8">Required Areas of Learning in an Educational Program Order, Ministerial Order M295/95 (B.C.). <a href="https://www2.gov.bc.ca/assets/gov/education/administration/legislation-policy/legislation/schoollaw/e/m295_95.pdf" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">https://www2.gov.bc.ca/assets/gov/education/administration/legislation-policy/legislation/schoollaw/e/m295_95.pdf</a></div>
+    </li>
+    <li id="ref-schoolact" class="scroll-mt-24">
+      <div class="pl-8 -indent-8">School Act, R.S.B.C. 1996, c. 412. <a href="https://www.bclaws.gov.bc.ca/civix/document/id/complete/statreg/96412_00_multi" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">https://www.bclaws.gov.bc.ca/civix/document/id/complete/statreg/96412_00_multi</a></div>
+    </li>
+    <li id="ref-sd52-nd" class="scroll-mt-24">
+      <div class="pl-8 -indent-8">School District 52. (n.d.). <i>Privacy management program</i>. Retrieved November 23, 2026, from <a href="https://rupertschools.ca/privacy-management-program-3/" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">https://rupertschools.ca/privacy-management-program-3/</a></div>
+    </li>
+    <li id="ref-sd52-2017a" class="scroll-mt-24">
+      <div class="pl-8 -indent-8">School District 52. (2017a). <i>Bring your own device regulation</i> (Regulation 3350-25). <a href="https://sd52policy.com/index.php/policies-regulations-and-forms/regulations/bring-your-own-device" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">https://sd52policy.com/index.php/policies-regulations-and-forms/regulations/bring-your-own-device</a></div>
+    </li>
+    <li id="ref-sd52-2017b" class="scroll-mt-24">
+      <div class="pl-8 -indent-8">School District 52. (2017b). <i>Data security and privacy regulation</i> (Regulation 3350-40). <a href="https://sd52policy.com/index.php/policies-regulations-and-forms/regulations/data-security-and-privacy" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">https://sd52policy.com/index.php/policies-regulations-and-forms/regulations/data-security-and-privacy</a></div>
+    </li>
+    <li id="ref-sd52-2017c" class="scroll-mt-24">
+      <div class="pl-8 -indent-8">School District 52. (2017c). <i>Student reporting regulation</i> (Regulation 1140-10). <a href="https://sd52policy.com/index.php/policies-regulations-and-forms/regulations/student-reporting-regulation" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">https://sd52policy.com/index.php/policies-regulations-and-forms/regulations/student-reporting-regulation</a></div>
+    </li>
+    <li id="ref-sd52-2017d" class="scroll-mt-24">
+      <div class="pl-8 -indent-8">School District 52. (2017d). <i>User accounts and passwords regulation</i> (Regulation 3350-10). <a href="https://sd52policy.com/index.php/policies-regulations-and-forms/regulations/acceptable-use-of-technology" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">https://sd52policy.com/index.php/policies-regulations-and-forms/regulations/acceptable-use-of-technology</a></div>
+    </li>
+    <li id="ref-sd52-2022" class="scroll-mt-24">
+      <div class="pl-8 -indent-8">School District 52. (2022). <i>Strategic plan 2021-2026</i>. <a href="https://rupertschools.ca/wp-content/uploads/2022/03/Strat-Plan-03182022.pdf" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">https://rupertschools.ca/wp-content/uploads/2022/03/Strat-Plan-03182022.pdf</a></div>
+    </li>
+    <li id="ref-sd52-2023" class="scroll-mt-24">
+      <div class="pl-8 -indent-8">School District 52. (2023). <i>Privacy impact assessments regulations</i> (Regulation 6720-20). <a href="https://sd52policy.com/index.php/policies-regulations-and-forms/regulations/privacy-impact-assessments-regulations" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">https://sd52policy.com/index.php/policies-regulations-and-forms/regulations/privacy-impact-assessments-regulations</a></div>
+    </li>
+    <li id="ref-sd52-2025" class="scroll-mt-24">
+      <div class="pl-8 -indent-8">School District 52. (2025). <i>Enhancing student learning report, September 2025. Part 1: Review data and evidence</i>. <a href="https://rupertschools.ca/wp-content/uploads/2025/10/Prince-Rupert-School-District-ESLR-Sept-30-2025.pdf" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">https://rupertschools.ca/wp-content/uploads/2025/10/Prince-Rupert-School-District-ESLR-Sept-30-2025.pdf</a></div>
+    </li>
+    <li id="ref-schoolreg" class="scroll-mt-24">
+      <div class="pl-8 -indent-8">School Regulation, B.C. Reg. 265/89. <a href="https://www.bclaws.gov.bc.ca/civix/document/id/complete/statreg/265_89" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">https://www.bclaws.gov.bc.ca/civix/document/id/complete/statreg/265_89</a></div>
+    </li>
+    <li id="ref-sheila" class="scroll-mt-24">
+      <div class="pl-8 -indent-8">SHEILA Project. (n.d.). <i>SHEILA framework</i>. Retrieved November 23, 2026, from <a href="https://sheilaproject.eu/sheila-framework/" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">https://sheilaproject.eu/sheila-framework/</a></div>
+    </li>
+    <li id="ref-slade" class="scroll-mt-24">
+      <div class="pl-8 -indent-8">Slade, S., &amp; Prinsloo, P. (2013). Learning analytics: Ethical issues and dilemmas. <i>American Behavioral Scientist, 57</i>(10), 1510–1529. <a href="https://doi.org/10.1177/0002764213479366" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">https://doi.org/10.1177/0002764213479366</a></div>
+    </li>
+    <li id="ref-tsai" class="scroll-mt-24">
+      <div class="pl-8 -indent-8">Tsai, Y.-S., Moreno-Marcos, P. M., Jivet, I., Scheffel, M., Tammets, K., Kollom, K., &amp; Gašević, D. (2018). The SHEILA framework: Informing institutional strategies and policy processes of learning analytics. <i>Journal of Learning Analytics, 5</i>(3), 5–20. <a href="https://doi.org/10.18608/jla.2018.53.2" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">https://doi.org/10.18608/jla.2018.53.2</a></div>
+    </li>
+    <li id="ref-yan" class="scroll-mt-24">
+      <div class="pl-8 -indent-8">Yan, L., Sha, L., Zhao, L., Li, Y., Martinez-Maldonado, R., Chen, G., Li, X., Jin, Y., &amp; Gašević, D. (2024). Practical and ethical challenges of large language models in education: A systematic scoping review. <i>British Journal of Educational Technology, 55</i>(1), 90–112. <a href="https://doi.org/10.1111/bjet.13370" target="_blank" rel="noopener noreferrer" class="underline underline-offset-2">https://doi.org/10.1111/bjet.13370</a></div>
+    </li>
+    <li id="ref-roma" class="scroll-mt-24">
+      <div class="pl-8 -indent-8">Young, J., Shaxson, L., Jones, H., Hearn, S., Datta, A., &amp; Cassidy, C. (2014). <i>ROMA: A guide to policy engagement and influence</i>. Overseas Development Institute.</div>
+    </li>
+  </ul>
+</div>
